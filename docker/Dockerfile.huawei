@@ -1,14 +1,13 @@
-FROM librenms/librenms:latest
+ARG LIBRENMS_IMAGE=librenms/librenms:26.5.1
+FROM ${LIBRENMS_IMAGE}
 
 USER root
 
-RUN mkdir -p /opt/librenms/mib-archives /opt/librenms/mib-reports /opt/librenms/docker/snmptrapd
+RUN mkdir -p /opt/librenms/mib-archives /opt/librenms/docs-custom /opt/librenms/docker/snmptrapd
 
 COPY mibs /opt/librenms/mibs
 COPY mib-archives /opt/librenms/mib-archives
-COPY mib-reports /opt/librenms/mib-reports
+COPY docs-custom /opt/librenms/docs-custom
 COPY scripts/huawei-mib-workflow.php /opt/librenms/scripts/huawei-mib-workflow.php
 
 RUN chmod +x /opt/librenms/scripts/huawei-mib-workflow.php
-
-USER librenms

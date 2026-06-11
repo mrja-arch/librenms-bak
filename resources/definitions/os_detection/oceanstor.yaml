@@ -6,6 +6,7 @@ group: huawei
 over:
     - { graph: device_bits, text: 'Device Traffic' }
     - { graph: device_storage, text: 'Storage Usage' }
+mib_dir: huawei
 discovery:
     -
         sysObjectID:

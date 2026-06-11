@@ -1,14 +1,16 @@
 {
-  "schema": "librenms-huawei-mib-manifest-v1",
+  "schema": "librenms-huawei-mib-manifest-v1-manual",
   "baseline_version": "V600R025C00SPC600",
   "future_router_version": "V800R025C00SPC600",
   "scope": "operational subset for supported LibreNMS Huawei device families",
   "active_dir": "mibs/huawei",
   "archive_dir": "mib-archives/huawei",
+  "docs_dir": "docs-custom",
   "notes": [
     "Only mibs/huawei is loaded at runtime.",
     "Archived vendor drops must stay outside runtime MIBDIRS.",
-    "Refresh the full manifest with scripts/huawei-mib-workflow.php manifest when PHP is available."
+    "Refresh the full manifest with scripts/huawei-mib-workflow.php manifest when PHP is available.",
+    "The authoritative deployment and maintenance documents live in docs-custom/."
   ],
   "managed_modules": {
     "HUAWEI-MIB": {

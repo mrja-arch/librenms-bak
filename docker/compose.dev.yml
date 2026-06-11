@@ -1,0 +1,20 @@
+services:
+  librenms:
+    volumes:
+      - ../:/opt/librenms
+      - librenms-data:/data
+
+  dispatcher:
+    volumes:
+      - ../:/opt/librenms
+      - librenms-data:/data
+
+  snmptrapd:
+    volumes:
+      - ../:/opt/librenms
+      - librenms-data:/data
+
+  syslogng:
+    volumes:
+      - ../:/opt/librenms
+      - librenms-data:/data

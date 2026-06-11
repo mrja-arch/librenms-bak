@@ -6,12 +6,12 @@ declare(strict_types=1);
 $root = dirname(__DIR__);
 $huaweiDir = $root . '/mibs/huawei';
 $rootMibDir = $root . '/mibs';
-
+$docsRoot = 'docs-custom';
 $command = $argv[1] ?? 'help';
 
 switch ($command) {
     case 'manifest':
-        writeJson(buildManifest($huaweiDir));
+        writeJson(buildManifest($root, $huaweiDir));
         break;
     case 'trap-modules':
         echo implode(PHP_EOL, trapModules($huaweiDir)) . PHP_EOL;
@@ -30,15 +30,17 @@ Usage:
   php scripts/huawei-mib-workflow.php manifest > mibs/huawei-manifest.json
   php scripts/huawei-mib-workflow.php trap-modules > mibs/huawei-trap-modules.list
   php scripts/huawei-mib-workflow.php audit
-  php scripts/huawei-mib-workflow.php diff-template V600R025C00SPC600 V800R025C00SPC600
+  php scripts/huawei-mib-workflow.php diff-template V600R025C00SPC600 V800R025C00SPC600 > {$docsRoot}/reports/huawei/HUAWEI_MIB_DIFF_*.md
 
 TXT);
         exit(1);
 }
 
-function buildManifest(string $huaweiDir): array
+function buildManifest(string $root, string $huaweiDir): array
 {
+    $references = scanCodeReferences($root);
     $modules = [];
+
     foreach (sortedMibFiles($huaweiDir) as $file) {
         $name = basename($file);
         $families = moduleFamilies($name);
@@ -49,16 +51,17 @@ function buildManifest(string $huaweiDir): array
             'source_version' => moduleSourceVersion($name),
             'sha256' => hash_file('sha256', $file),
             'device_families' => $families,
-            'references' => moduleReferences($families, $name),
+            'references' => $references[$name] ?? moduleReferences($families, $name),
         ];
     }
 
     return [
-        'schema' => 'librenms-huawei-mib-manifest-v1',
+        'schema' => 'librenms-huawei-mib-manifest-v2',
         'baseline_version' => 'V600R025C00SPC600',
         'future_router_version' => 'V800R025C00SPC600',
         'active_dir' => 'mibs/huawei',
         'archive_dir' => 'mib-archives/huawei',
+        'docs_dir' => 'docs-custom',
         'generated_at' => gmdate('c'),
         'modules' => $modules,
     ];
@@ -69,36 +72,25 @@ function runAudit(string $root, string $rootMibDir, string $huaweiDir): array
     $rootFiles = array_flip(array_map('basename', glob($rootMibDir . '/*') ?: []));
     $huaweiFiles = array_map('basename', sortedMibFiles($huaweiDir));
     $duplicateFiles = array_values(array_filter($huaweiFiles, static fn ($file) => isset($rootFiles[$file])));
+    sort($duplicateFiles);
 
-    $referencedModules = [];
-    foreach (familyDefinitions() as $family => $definitionFiles) {
-        foreach ($definitionFiles as $definitionFile) {
-            foreach (referencedMibs($root . '/' . $definitionFile) as $module) {
-                $referencedModules[$module]['families'][$family] = true;
-                $referencedModules[$module]['references'][$definitionFile] = true;
-            }
-        }
-    }
-
-    foreach (trapModules($huaweiDir) as $module) {
-        $referencedModules[$module]['families']['trap'] = true;
-        $referencedModules[$module]['references']['config/snmptraps.php'] = true;
-    }
-
+    $references = scanCodeReferences($root);
     $missing = [];
-    foreach ($referencedModules as $module => $metadata) {
-        if (! file_exists($huaweiDir . '/' . $module) && ! file_exists($rootMibDir . '/' . $module)) {
-            $missing[$module] = [
-                'device_families' => array_keys($metadata['families']),
-                'references' => array_keys($metadata['references']),
-            ];
+    foreach ($references as $module => $moduleReferences) {
+        if (! fileExistsInMibSet($rootMibDir, $huaweiDir, $module)) {
+            $missing[$module] = $moduleReferences;
         }
     }
+    ksort($missing);
 
     return [
         'baseline_version' => 'V600R025C00SPC600',
-        'duplicate_files_in_huawei_dir' => array_values($duplicateFiles),
+        'active_dir' => 'mibs/huawei',
+        'archive_dir' => 'mib-archives/huawei',
+        'docs_dir' => 'docs-custom',
+        'duplicate_files_in_huawei_dir' => $duplicateFiles,
         'missing_referenced_modules' => $missing,
+        'referenced_modules' => array_keys($references),
         'trap_modules' => trapModules($huaweiDir),
     ];
 }
@@ -176,6 +168,122 @@ function renderDiffTemplate(string $from, string $to): string
 MD;
 }
 
+function scanCodeReferences(string $root): array
+{
+    $references = [];
+
+    foreach (referenceFiles($root) as $relativePath => $path) {
+        $contents = @file_get_contents($path);
+        if ($contents === false) {
+            continue;
+        }
+
+        foreach (extractReferencedModules($contents) as $module) {
+            $references[$module][] = $relativePath;
+        }
+    }
+
+    foreach ($references as $module => $files) {
+        $files = array_values(array_unique($files));
+        sort($files);
+        $references[$module] = $files;
+    }
+
+    ksort($references);
+
+    return $references;
+}
+
+function referenceFiles(string $root): array
+{
+    $files = [];
+    foreach (glob($root . '/resources/definitions/os_detection/*.yaml') ?: [] as $path) {
+        $files[str_replace('\\', '/', substr($path, strlen($root) + 1))] = $path;
+    }
+    foreach (glob($root . '/resources/definitions/os_discovery/*.yaml') ?: [] as $path) {
+        $files[str_replace('\\', '/', substr($path, strlen($root) + 1))] = $path;
+    }
+    foreach (glob($root . '/LibreNMS/OS/*.php') ?: [] as $path) {
+        $files[str_replace('\\', '/', substr($path, strlen($root) + 1))] = $path;
+    }
+    foreach (glob($root . '/LibreNMS/Snmptrap/Handlers/*.php') ?: [] as $path) {
+        $files[str_replace('\\', '/', substr($path, strlen($root) + 1))] = $path;
+    }
+    foreach (recursiveFiles($root . '/includes/discovery', 'php') as $path) {
+        $files[str_replace('\\', '/', substr($path, strlen($root) + 1))] = $path;
+    }
+    foreach (recursiveFiles($root . '/includes/polling', 'php') as $path) {
+        $files[str_replace('\\', '/', substr($path, strlen($root) + 1))] = $path;
+    }
+    foreach (glob($root . '/tests/Feature/SnmpTraps/*.php') ?: [] as $path) {
+        $files[str_replace('\\', '/', substr($path, strlen($root) + 1))] = $path;
+    }
+    $files['config/snmptraps.php'] = $root . '/config/snmptraps.php';
+
+    ksort($files);
+
+    return $files;
+}
+
+function recursiveFiles(string $dir, string $extension): array
+{
+    if (! is_dir($dir)) {
+        return [];
+    }
+
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS)
+    );
+
+    $files = [];
+    foreach ($iterator as $file) {
+        if ($file->isFile() && strtolower($file->getExtension()) === strtolower($extension)) {
+            $files[] = $file->getPathname();
+        }
+    }
+
+    sort($files);
+
+    return $files;
+}
+
+function extractReferencedModules(string $contents): array
+{
+    $modules = [];
+
+    if (preg_match_all('/^mib:\s*(.+)$/mi', $contents, $matches)) {
+        foreach ($matches[1] as $mibLine) {
+            foreach (preg_split('/:+/', $mibLine) ?: [] as $module) {
+                $module = trim($module);
+                if (isHuaweiModule($module)) {
+                    $modules[$module] = true;
+                }
+            }
+        }
+    }
+
+    if (preg_match_all('/\b([A-Z0-9-]+-MIB)::/', $contents, $matches)) {
+        foreach ($matches[1] as $module) {
+            if (isHuaweiModule($module)) {
+                $modules[$module] = true;
+            }
+        }
+    }
+
+    return array_keys($modules);
+}
+
+function isHuaweiModule(string $module): bool
+{
+    return (bool) preg_match('/^(HUAWEI|HWMUSA|OPTIX|ISM|NQA)-?[A-Z0-9-]*MIB$/', $module)
+        || (bool) preg_match('/^(HUAWEI|HWMUSA|OPTIX|ISM|NQA)-[A-Z0-9-]+$/', $module);
+}
+
+function fileExistsInMibSet(string $rootMibDir, string $huaweiDir, string $module): bool
+{
+    return is_file($huaweiDir . '/' . $module) || is_file($rootMibDir . '/' . $module);
+}
+
 function sortedMibFiles(string $dir): array
 {
     $files = glob($dir . '/*') ?: [];
@@ -190,17 +298,21 @@ function familyDefinitions(): array
         'vrp' => [
             'resources/definitions/os_detection/vrp.yaml',
             'resources/definitions/os_discovery/vrp.yaml',
+            'LibreNMS/OS/Vrp.php',
         ],
         'yunshan' => [
             'resources/definitions/os_detection/yunshan.yaml',
             'resources/definitions/os_discovery/yunshan.yaml',
+            'LibreNMS/OS/Yunshan.php',
         ],
         'smartax' => [
             'resources/definitions/os_detection/smartax.yaml',
             'resources/definitions/os_discovery/smartax.yaml',
+            'LibreNMS/OS/Smartax.php',
         ],
         'smartax-mdu' => [
             'resources/definitions/os_detection/smartax-mdu.yaml',
+            'LibreNMS/OS/SmartaxMdu.php',
         ],
         'ibmc' => [
             'resources/definitions/os_detection/ibmc.yaml',
@@ -225,53 +337,18 @@ function familyDefinitions(): array
     ];
 }
 
-function referencedMibs(string $file): array
-{
-    if (! is_file($file)) {
-        return [];
-    }
-
-    $contents = file_get_contents($file);
-    if ($contents === false) {
-        return [];
-    }
-
-    if (! preg_match('/^mib:\s*(.+)$/m', $contents, $matches)) {
-        return [];
-    }
-
-    return array_values(array_filter(array_map('trim', preg_split('/:+/', $matches[1]) ?: [])));
-}
-
-function trapModules(string $huaweiDir): array
-{
-    $modules = [
-        'HUAWEI-BASE-TRAP-MIB',
-        'HUAWEI-ENTITY-TRAP-MIB',
-        'HUAWEI-FWD-RES-TRAP-MIB',
-        'HUAWEI-LDT-MIB',
-        'HUAWEI-NTP-TRAP-MIB',
-        'HUAWEI-SNMP-NOTIFICATION-MIB',
-    ];
-
-    $modules = array_values(array_filter($modules, static fn ($module) => is_file($huaweiDir . '/' . $module)));
-    sort($modules);
-
-    return $modules;
-}
-
 function moduleFamilies(string $module): array
 {
     $mapping = [
-        'vrp' => ['HUAWEI-WLAN-CONFIGURATION-MIB', 'HUAWEI-WAN-MIB', 'HUAWEI-ENTITY-EXTENT-MIB', 'HUAWEI-ENERGYMNGT-MIB', 'HUAWEI-STACK-MIB'],
-        'yunshan' => ['HUAWEI-WAN-MIB'],
+        'vrp' => ['HUAWEI-WLAN-CONFIGURATION-MIB', 'HUAWEI-WAN-MIB', 'HUAWEI-ENTITY-EXTENT-MIB', 'HUAWEI-ENERGYMNGT-MIB', 'HUAWEI-STACK-MIB', 'HUAWEI-POE-MIB'],
+        'yunshan' => ['HUAWEI-WLAN-CONFIGURATION-MIB', 'HUAWEI-WAN-MIB', 'HUAWEI-ENTITY-EXTENT-MIB', 'HUAWEI-ENERGYMNGT-MIB', 'HUAWEI-STACK-MIB', 'HUAWEI-POE-MIB'],
         'smartax' => ['HUAWEI-DEVICE-MIB', 'HUAWEI-POWER-MIB', 'HWMUSA-DEV-MIB', 'HUAWEI-XPON-MIB', 'HUAWEI-XPON-COMMON-MIB'],
         'smartax-mdu' => ['HUAWEI-DEVICE-MIB'],
         'ibmc' => ['HUAWEI-SERVER-IBMC-MIB'],
         'huawei-smu' => ['HUAWEI-SITE-MONITOR-MIB'],
         'huawei-optixrtn' => ['OPTIX-BOARD-MANAGE-MIB', 'OPTIX-MISC-MIB', 'OPTIX-NE-MIB', 'OPTIX-OID-MIB', 'OPTIX-RTN-ODU-MGR-MIB'],
         'oceanstor' => ['ISM-HUAWEI-MIB', 'ISM-STORAGE-SVC-MIB', 'HUAWEI-STORAGE-HARDWARE-MIB', 'HUAWEI-STORAGE-SPACE-MIB', 'ISM-PERFORMANCE-MIB'],
-        'trap' => ['HUAWEI-LDT-MIB', 'HUAWEI-BASE-TRAP-MIB', 'HUAWEI-ENTITY-TRAP-MIB', 'HUAWEI-FWD-RES-TRAP-MIB', 'HUAWEI-NTP-TRAP-MIB', 'HUAWEI-SNMP-NOTIFICATION-MIB'],
+        'trap' => ['HUAWEI-LDT-MIB', 'HUAWEI-BASE-TRAP-MIB', 'HUAWEI-ENTITY-TRAP-MIB', 'HUAWEI-FWD-RES-TRAP-MIB', 'HUAWEI-NTP-TRAP-MIB', 'HUAWEI-SNMP-NOTIFICATION-MIB', 'ISM-HUAWEI-MIB'],
     ];
 
     $families = [];
@@ -292,6 +369,7 @@ function moduleReferences(array $families, string $module): array
     foreach ($families as $family) {
         if ($family === 'trap') {
             $references[] = 'config/snmptraps.php';
+            $references[] = 'LibreNMS/Snmptrap/Handlers';
             continue;
         }
 
@@ -309,6 +387,24 @@ function moduleReferences(array $families, string $module): array
     sort($references);
 
     return $references;
+}
+
+function trapModules(string $huaweiDir): array
+{
+    $modules = [
+        'HUAWEI-BASE-TRAP-MIB',
+        'HUAWEI-ENTITY-TRAP-MIB',
+        'HUAWEI-FWD-RES-TRAP-MIB',
+        'HUAWEI-LDT-MIB',
+        'HUAWEI-NTP-TRAP-MIB',
+        'HUAWEI-SNMP-NOTIFICATION-MIB',
+        'ISM-HUAWEI-MIB',
+    ];
+
+    $modules = array_values(array_filter($modules, static fn ($module) => is_file($huaweiDir . '/' . $module)));
+    sort($modules);
+
+    return $modules;
 }
 
 function moduleStatus(string $module): string
@@ -376,6 +472,7 @@ function dependencyModules(): array
         'HUAWEI-TASK-MIB',
         'HUAWEI-VLAN-MIB',
         'HUAWEI-USA-MIB',
+        'ISM-TC-MIB',
     ];
 }
 

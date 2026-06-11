@@ -29,6 +29,7 @@ namespace LibreNMS\OS;
 use LibreNMS\Device\Processor;
 use LibreNMS\Interfaces\Discovery\ProcessorDiscovery;
 use LibreNMS\OS;
+use SnmpQuery;
 
 class Smartax extends OS implements ProcessorDiscovery
 {
@@ -40,26 +41,21 @@ class Smartax extends OS implements ProcessorDiscovery
      */
     public function discoverProcessors()
     {
-        $proc_oid = '1.3.6.1.4.1.2011.2.6.7.1.1.2.1.5.0';
-        $descr_oid = '1.3.6.1.4.1.2011.2.6.7.1.1.2.1.7.0';
-
-        $data = snmpwalk_array_num($this->getDeviceArray(), $proc_oid);
-        $descr_data = snmpwalk_array_num($this->getDeviceArray(), $descr_oid);
-
-        // remove first array
-        $data = reset($data);
-        $descr_data = reset($descr_data);
-
         $processors = [];
-        foreach ($data as $index => $value) {
+        $procOid = '.1.3.6.1.4.1.2011.2.6.7.1.1.2.1.5.0';
+        $descrOid = '.1.3.6.1.4.1.2011.2.6.7.1.1.2.1.7.0';
+
+        $data = SnmpQuery::walk([$procOid, $descrOid])->table(1);
+        foreach ($data as $index => $entry) {
+            $value = $entry[$procOid] ?? null;
             if ($value != -1) {
-                $proc_desc = $descr_data[$index];
+                $procDesc = $entry[$descrOid] ?? "Slot $index";
                 $processors[] = Processor::discover(
                     'smartax',
                     $this->getDeviceId(),
-                    "$proc_oid.$index",
+                    "$procOid.$index",
                     $index,
-                    "$proc_desc processor",
+                    "$procDesc processor",
                     1,
                     $value
                 );
