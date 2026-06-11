@@ -1,9 +1,9 @@
 -- ==================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI MSTP MIB
 -- Reference:
--- Version:     V2.19
+-- Version: V2.21
 -- History:     2008-06-14  MSTP Process
 -- History:     2008-10-08  MSTP Process- v3     
 -- History:     2009-3-01  MSTP Process- v4
@@ -37,7 +37,7 @@
         
         
                 hwMstp MODULE-IDENTITY
-                        LAST-UPDATED "202208041000Z"
+                        LAST-UPDATED "202503101000Z"
                         ORGANIZATION
                                 "Huawei Technologies Co.,Ltd."
                         CONTACT-INFO
@@ -51,6 +51,15 @@
                         DESCRIPTION
                                 "This module include the information about MSTP protocol in the bridge.
                                 The information can be read and some of them can be set."
+
+                        REVISION    "202503101000Z"
+                        DESCRIPTION "modified description"
+
+                        REVISION    "202502101000Z"
+                        DESCRIPTION "Add for : hwMstpVstpMasterMac
+                                               hwMstpVstpBackupMac
+                                               hwMstpVstpMacDiffRising
+                                               hwMstpVstpMacDiffResume"
                         REVISION    "202208041000Z"
                         DESCRIPTION "Add for : hwMstpProLoopDetectedRising
                                                hwMstpProLoopDetectedResume"
@@ -2786,6 +2795,24 @@
                         DESCRIPTION
                                 "source macaddress"
                         ::= { hwMstpObjects 37 } 
+                
+                -- 1.3.6.1.4.1.2011.5.25.42.4.1.38
+                hwMstpVstpMasterMac OBJECT-TYPE
+                        SYNTAX MacAddress
+                        MAX-ACCESS accessible-for-notify
+                        STATUS current
+                        DESCRIPTION
+                                "Bridge MAC addresses of master device in V-STP mode."
+                        ::= { hwMstpObjects 38 }
+
+                -- 1.3.6.1.4.1.2011.5.25.42.4.1.39
+                hwMstpVstpBackupMac OBJECT-TYPE
+                        SYNTAX MacAddress
+                        MAX-ACCESS accessible-for-notify
+                        STATUS current
+                        DESCRIPTION
+                                "Bridge MAC addresses of backup device in V-STP mode."
+                        ::= { hwMstpObjects 39 }
 
                 hwMstpPortTcSnoopingEntry OBJECT-TYPE
                         SYNTAX HwMstpPortTcSnoopingEntry
@@ -3127,7 +3154,23 @@
                         STATUS current
                         DESCRIPTION
                                 "This notification indicates that loopback of protocol packets is not detected on the port for a long time."
-                        ::= { hwMstpTraps 36 } 			
+                        ::= { hwMstpTraps 36 } 
+                
+                -- 1.3.6.1.4.1.2011.5.25.42.4.2.37
+                hwMstpVstpMacDiffRising NOTIFICATION-TYPE
+                        OBJECTS { hwMstpVstpMasterMac, hwMstpVstpBackupMac }
+                        STATUS current
+                        DESCRIPTION
+                                "This notification indicates that the configured bridge MAC addresses of master and backup devices in V-STP mode are different. "
+                        ::= { hwMstpTraps 37 }
+
+                -- 1.3.6.1.4.1.2011.5.25.42.4.2.38
+                hwMstpVstpMacDiffResume NOTIFICATION-TYPE
+                        OBJECTS { hwMstpVstpMasterMac, hwMstpVstpBackupMac }
+                        STATUS current
+                        DESCRIPTION
+                                "This notification indicates that the configured bridge MAC addresses of master and backup devices in V-STP mode are the same."
+                        ::= { hwMstpTraps 38 }
 						
                 hwMstpConformance OBJECT IDENTIFIER ::= { hwMstp 3 }
                 
@@ -3138,7 +3181,8 @@
                                 hwMstpMasterPathCost, hwMstpBpduGuard, hwMstpAdminFormatSelector, hwMstpAdminRegionName, hwMstpAdminRevisionLevel, 
                                 hwMstpOperFormatSelector, hwMstpOperRegionName, hwMstpOperRevisionLevel, hwMstpRegionConfActive, hwMstpDefaultVlanAllo, 
                                 hwMstpDefaultRegionName, hwMstpPathCostStandard, hwMstpSnooping, hwMstpTcGuard, hwMstpTcGuardThreshold, hwMstpEdgedPortDefault, 
-                                hwMstpBpduFilterPortDefault, hwMstpTransmitLimitDefault, hwMstpPortCountUpperThreshold, hwMstpPortCountLowerThreshold }
+                                hwMstpBpduFilterPortDefault, hwMstpTransmitLimitDefault, hwMstpPortCountUpperThreshold, hwMstpPortCountLowerThreshold,
+                                hwMstpVstpMasterMac, hwMstpVstpBackupMac }
                         STATUS current
                         DESCRIPTION
                                 "A collection of objects indicating the necessary
@@ -3191,7 +3235,8 @@
                                 hwMstpiPortLoopGuarded, hwMstpiEdgePortChanged, hwMstpiTcGuarded, hwMstpProPortLoopGuarded, hwMstpProPortRootGuarded, hwMstpProBridgeLostRootPrimary,
                                 hwMstpProPortStateDiscarding, hwMstpProPortStateForwarding, hwMstpProLoopbackDetected, hwMstpProEdgePortChanged, hwMstpProPortBpduGuarded, 
                                 hwMstpPortCountExceedThreshold, hwMstpPortCountExceedThresholdResume, hwMstpProRootLost, hwMstpProRootResume,hwMstpProRootShake,hwMstpProRootShakeResume,
-                                hwMstpProTcFlap, hwMstpProTcFlapResume, hwMstpProRcvTcFlap, hwMstpProLoopDetectedRising, hwMstpProLoopDetectedResume}
+                                hwMstpProTcFlap, hwMstpProTcFlapResume, hwMstpProRcvTcFlap, hwMstpProLoopDetectedRising, hwMstpProLoopDetectedResume,
+                                hwMstpVstpMacDiffRising, hwMstpVstpMacDiffResume }
                         STATUS current
                         DESCRIPTION
                                 "Notification."

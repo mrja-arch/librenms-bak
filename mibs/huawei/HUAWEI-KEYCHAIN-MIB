@@ -1,12 +1,12 @@
 -- ==================================================================
--- Copyright (C) 2021 by HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2024 by HUAWEI TECHNOLOGIES. All rights reserved.
 -- Description:  HUAWEI LAN Switch KEYCHAIN MIB
 -- Reference:
--- Version: V1.02
+-- Version: V2.01
 -- Revision history: 
---     REVISION     "203203240000Z"        
---     DESCRIPTION  "V1.00, INIT"
---     V1.00 2021-03-24 Created
+--     REVISION     "202402220000Z"        
+--     DESCRIPTION  "V2.01, modify HWKeychainAlgorithm"
+--     V2.01 2024-02-22 Modify HWKeychainAlgorithm
 -- ==================================================================
 
     HUAWEI-KEYCHAIN-MIB DEFINITIONS ::= BEGIN
@@ -22,7 +22,7 @@
                 FROM SNMPv2-TC;
 
         hwKeychain MODULE-IDENTITY 
-            LAST-UPDATED "202110200000Z"
+            LAST-UPDATED "202402220000Z"
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -37,6 +37,12 @@
                 "Keychain is a centralized application that provides authentication 
                  functionality to all applications that require them. It also provides 
                  dynamic change of authentication keys to all required applications."
+            REVISION     "202402220000Z"
+            DESCRIPTION
+               "modify HWKeychainAlgorithm"
+            REVISION     "202303050000Z"
+            DESCRIPTION
+               "modify HWKeychainAlgorithm"
             REVISION     "202110200000Z"        
             DESCRIPTION
                "modify HWKeychainAlgorithm"
@@ -55,16 +61,17 @@
                 {
                 notConfigured(0),
                 md5(1),
-                sha_1(2),
-                hmac_md5(3),
-                hmac_sha1_12(4),
-                hmac_sha1_20(5),
-                hmac_sha_256(6),
-                sha_256(7),
+                sha1(2),
+                hmacMd5(3),
+                hmacSha112(4),
+                hmacSha120(5),
+                hmacSha256(6),
+                sha256(7),
                 sm3(8),
-                aes_128_cmac(9),
-                hmac_sha_384(10),
-                hmac_sha_512(11)
+                aes128Cmac(9),
+                hmacSha384(10),
+                hmacSha512(11),
+                hmacSm3(12)
                 }
         HWKeychainMode ::= TEXTUAL-CONVENTION
             STATUS current

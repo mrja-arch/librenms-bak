@@ -1,8 +1,8 @@
 -- ============================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- Description: 
 -- Reference: None
--- Version:   V3.82
+-- Version: V4.06
 -- ============================================================================
 --
 -- HUAWEI-ENTITY-EXTENT-MIB.mib
@@ -33,7 +33,7 @@
 
         -- 1.3.6.1.4.1.2011.5.25.31
         hwEntityExtentMIB MODULE-IDENTITY 
-            LAST-UPDATED "202209130000Z"
+            LAST-UPDATED "202507310000Z"
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -46,6 +46,66 @@
  "          
              DESCRIPTION 
                 "The private mib file includes the general extent information of the device."
+ 
+            REVISION     "202507310000Z"
+            DESCRIPTION  "V4.06 modify hwEntityOpticalBandWidth"
+ 
+            REVISION     "202506050000Z"
+            DESCRIPTION  "V4.05, Updated the hwEntityPortType, add fiber2500(22)"
+
+            REVISION     "202506030000Z"
+            DESCRIPTION  "V4.04, Updated the hwEntityPortType, add vdsl(21)"
+
+            REVISION     "202505170000Z"
+            DESCRIPTION  "V4.03, add hwTemperatureInfoTable, hwTemperatureInfoEntry"
+
+            REVISION     "202505150000Z"
+            DESCRIPTION  "V4.02, Updated the hwEntityOpticalType, add sfpfhc(36) and osfp(37) to the list of hwEntityOpticalType values"
+
+            REVISION     "202502270000Z"
+            DESCRIPTION  "V4.01, Updated the hwEntityOpticalType, add qsfp112(35) to the list of hwEntityOpticalType values"
+
+            REVISION     "202411250000Z"
+            DESCRIPTION  "V3.96, Update hwEntityFanSpdAdjMode"
+
+            REVISION     "202410240000Z"
+            DESCRIPTION  "V3.95, add hwEntityOpticalIsSupportPRBS, hwEntityOpticalAppFirmwareVer"
+
+            REVISION     "202409260000Z" 
+            DESCRIPTION  "V3.94, modify hwEntityPortType"
+
+            REVISION     "202408210000Z" 
+            DESCRIPTION  "V3.93, modify hwDevicePowerInfoUsedPower"
+
+            REVISION     "202408210000Z" 
+            DESCRIPTION  "V3.92, modify hwDevicePowerInfoTotalPower"
+
+            REVISION     "202408140000Z" 
+            DESCRIPTION  "V3.90, modify hwEntityTempStatus"
+
+            REVISION     "202406130000Z" 
+            DESCRIPTION  "V3.90, modify hwEntityPortType"
+
+            REVISION     "202405280000Z" 
+            DESCRIPTION  "V3.89, modify hwEntityOpticalType"
+
+            REVISION     "202405110000Z" 
+            DESCRIPTION  "V3.88, modify hwEntityOpticalType"
+ 
+            REVISION     "202402190000Z" 
+            DESCRIPTION  "V3.87, modify hwEntityOpticalType"
+
+            REVISION     "202309070000Z"                                                                                   
+            DESCRIPTION  "V3.86, modify DESCRIPTION of hwEntityOpticalTunableModuleChannel."
+
+            REVISION     "202302140000Z"                                                                                   
+            DESCRIPTION  "V3.85, add hwEntityPortType enum value."
+
+            REVISION     "202211240000Z"                                                                                   
+            DESCRIPTION  "V3.84 modify hwEntityOpticalType."
+
+            REVISION     "202211180000Z"                                                                                   
+            DESCRIPTION  "V3.83 add hwEntityExtHardDiskOnlineFail and  hwEntityExtHardDiskOfflineFail."
             
             REVISION     "202209130000Z"                                                                                   
             DESCRIPTION  "V3.82 modify the description of hwEntityOpticalVoltage, hwEntityOpticalRxPower, hwEntityOpticalTxPower, hwEntityOpticalTemperature."
@@ -845,7 +905,9 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
                 hwCpuUsageCurrentUsage
                     Integer32,
                 hwCpuUsageThreashold
-                    Integer32
+                    Integer32,
+                hwEntityPanelSerialNum
+                    OCTET STRING
              }
 
         -- 1.3.6.1.4.1.2011.5.25.31.1.1.1.1.1
@@ -1059,7 +1121,14 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
                 fiber200000(11),
                 fiber400000(12),
                 fiber40000(13),
-                cellular(14)
+                cellular(14),
+                e1(15),
+                serial(16),
+                pos(18),
+                openge(19),
+                vge(20),
+                vdsl(21),
+                fiber2500(22)
                 }
             MAX-ACCESS read-only
             STATUS current
@@ -1624,7 +1693,16 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
             STATUS current
             DESCRIPTION
                 " This object indicates the cpu usage threshold of an entity."
-            ::= { hwEntityStateEntry 74}	
+            ::= { hwEntityStateEntry 74}
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.1.1.75
+        hwEntityPanelSerialNum OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the SN on the device panel."
+            ::= { hwEntityStateEntry 75}	
 
         -- 1.3.6.1.4.1.2011.5.25.31.1.1.2
         hwRUModuleInfoTable OBJECT-TYPE
@@ -1916,39 +1994,39 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
                    INTEGER,
                 hwEntityOpticalWaveLengthDecimal
                    Integer32,
-               hwEntityOpticalTunableModuleChannel
+                hwEntityOpticalTunableModuleChannel
                    Integer32,
-               hwEntityOpticalWaveBand
+                hwEntityOpticalWaveBand
                    INTEGER,
-               hwEntityOpticalLaneBiasCurrent
+                hwEntityOpticalLaneBiasCurrent
                    SnmpAdminString,
-               hwEntityOpticalLaneRxPower
+                hwEntityOpticalLaneRxPower
                    SnmpAdminString,
-               hwEntityOpticalLaneTxPower
+                hwEntityOpticalLaneTxPower
                    SnmpAdminString,
-               hwEntityOpticalVendorOUI
+                hwEntityOpticalVendorOUI
                     DisplayString,
-               hwEntityOpticalVendorRev                    
+                hwEntityOpticalVendorRev                    
                     DisplayString,    
-               hwEntityOpticalGponSN
+                hwEntityOpticalGponSN
                     DisplayString,
-              hwEntityTransceiverType
+                hwEntityTransceiverType
                     DisplayString,
-               hwEntityOpticalMaxRxPower
+                hwEntityOpticalMaxRxPower
                     Integer32,
-               hwEntityOpticalMinRxPower
+                hwEntityOpticalMinRxPower
                     Integer32,
-               hwEntityOpticalMaxTxPower
+                hwEntityOpticalMaxTxPower
                     Integer32,
-               hwEntityOpticalMinTxPower
+                hwEntityOpticalMinTxPower
                     Integer32,
-	           hwEntityOpticalTransType
+	            hwEntityOpticalTransType
                     SnmpAdminString,
-               hwEntityOpticalConnectType
+                hwEntityOpticalConnectType
                     SnmpAdminString,
-               hwEntityOpticalOrderingName
+                hwEntityOpticalOrderingName
                     SnmpAdminString,
-               hwEntityOpticalTransferDistance
+                hwEntityOpticalTransferDistance
                     SnmpAdminString,
                 hwEntityOpticalBandWidth
                     Integer32,
@@ -1956,7 +2034,7 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
                     DisplayString,
                 hwEntityOpticalModel
                     SnmpAdminString,
-		       hwEntityOpticalManufacturedDate 
+		        hwEntityOpticalManufacturedDate 
                     DateAndTime,
                 hwEntityOpticalTempLowThreshold 
                     Integer32,
@@ -1971,15 +2049,19 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
                 hwEntityOpticalBiasHighThreshold 
                     Integer32,
                 hwEntityOpticalHuaweiCertified
-	Integer32,
+	                Integer32,
                 hwEntityOpticalSupportDDM
-	INTEGER,
+	                INTEGER,
                 hwEntityOpticalPortName
                     DisplayString,
-	         hwEntityOpticalDifferentialGroupDelay
+	            hwEntityOpticalDifferentialGroupDelay
                     Unsigned32,
                 hwEntityOpticalChromaticDispersion
-                    Integer32
+                    Integer32,
+                hwEntityOpticalIsSupportPRBS
+                    INTEGER,
+                hwEntityOpticalAppFirmwareVer
+                    SnmpAdminString
      }
 
         -- 1.3.6.1.4.1.2011.5.25.31.1.1.3.1.1
@@ -2117,7 +2199,14 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
                 cfp2dco(27),
                 sfp56(28),
                 qsfp56(29),
-                oa(30)
+                oa(30),
+                micro(31),
+                qsfpdd800(32),
+                xgsponsfp(33),
+                dualOa(34),
+                qsfp112(35),
+                sfpfhc(36),
+                osfp(37)
                 }
             MAX-ACCESS read-only
             STATUS current
@@ -2355,7 +2444,7 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
             MAX-ACCESS read-only
             STATUS current
             DESCRIPTION
-                "The current channel of tunable optical module."
+                "The current configuration of tunable optical module channel."
             ::= { hwOpticalModuleInfoEntry 29 }
             
         -- 1.3.6.1.4.1.2011.5.25.31.1.1.3.1.30
@@ -2521,7 +2610,7 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
 			
         -- 1.3.6.1.4.1.2011.5.25.31.1.1.3.1.46
         hwEntityOpticalBandWidth OBJECT-TYPE
-            SYNTAX Integer32 (0..400000)
+            SYNTAX Integer32 (0..800000)
             MAX-ACCESS read-only
             STATUS current
             DESCRIPTION
@@ -2658,6 +2747,28 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
             DESCRIPTION
                 "Indicates the optical module chromatic dispersion. Unit: ps/nm."
             ::= { hwOpticalModuleInfoEntry 60 }
+        
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.3.1.61
+        hwEntityOpticalIsSupportPRBS OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                    support(1),
+                    notSupport(0)
+                }
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "Judge optical support PRBS or not."
+            ::= { hwOpticalModuleInfoEntry 61 }
+        
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.3.1.62
+        hwEntityOpticalAppFirmwareVer OBJECT-TYPE
+            SYNTAX SnmpAdminString (SIZE (0..50))
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The firmware version of the optical module."
+            ::= { hwOpticalModuleInfoEntry 62 }
 			
         -- 1.3.6.1.4.1.2011.5.25.31.1.1.4
         hwMonitorInputTable OBJECT-TYPE
@@ -3215,7 +3326,11 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
                 hwEntityTempMajorAlmThreshold
                     Integer32,
                 hwEntityTempFatalAlmThreshold
-                    Integer32
+                    Integer32,
+                hwEntityTempSensorID
+                    Integer32,
+                hwEntityTempSensorName
+                    DisplayString
              }
 
         -- 1.3.6.1.4.1.2011.5.25.31.1.1.8.1.1
@@ -3265,7 +3380,8 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
                 normal(1),
                 minor(2),
                 major(3),
-                fatal(4)
+                fatal(4),
+                abnormal(5)
                 }
             MAX-ACCESS read-only
             STATUS current
@@ -3312,6 +3428,26 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
             DESCRIPTION
                 "This object indicates the fatal alarm threshold of the entity temperature."
             ::= { hwTemperatureThresholdEntry 9 }
+
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.8.1.10
+        hwEntityTempSensorID OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the sensor id of a entity temperature sensor."
+            ::= { hwTemperatureThresholdEntry 10 }
+
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.8.1.11
+        hwEntityTempSensorName OBJECT-TYPE
+            SYNTAX DisplayString
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the sensor name of a entity temperature sensor."
+            ::= { hwTemperatureThresholdEntry 11 }
 
 
         -- 1.3.6.1.4.1.2011.5.25.31.1.1.9
@@ -3574,7 +3710,8 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
                 manual(2),
                 unknown(3),
                 silent(4),
-                denoise(11)
+                denoise(11),
+                highPerformance(12)
                 }
             MAX-ACCESS read-only
             STATUS current
@@ -5186,6 +5323,24 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
             DESCRIPTION 
                 " The hwEntityExtCpuUsageNotficationClear indicates the entity CPU usage fell below the threshold. "
             ::= { hwEntityExtTrapsPrefix 49 }
+
+		-- 1.3.6.1.4.1.2011.5.25.31.2.0.50
+		hwEntityExtHardDiskOnlineFail NOTIFICATION-TYPE
+		OBJECTS { hwDiskType, hwDiskSN, hwDiskSlot }
+	    STATUS current
+	    DESCRIPTION 
+	        " The object indicates
+			that the hard disk went online fail."
+	    ::= { hwEntityExtTrapsPrefix 50 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.31.2.0.51
+		hwEntityExtHardDiskOfflineFail NOTIFICATION-TYPE
+		OBJECTS { hwDiskType, hwDiskSN, hwDiskSlot }
+	    STATUS current
+	    DESCRIPTION 
+	        " The object indicates
+			that the hard disk went offline fail. "
+	    ::= { hwEntityExtTrapsPrefix 51 }
 		
 		-- 1.3.6.1.4.1.2011.5.25.31.2.1
         hwEntityExtTrapObject OBJECT IDENTIFIER ::= { hwEntityExtTraps 1 }
@@ -5518,7 +5673,7 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
             MAX-ACCESS read-only
             STATUS current
             DESCRIPTION
-                "This object indicates the total power of the device."
+                "This object indicates the total power of the device(mW)."
             ::= { hwDevicePowerInfoObjects 1 }
 
 
@@ -5528,7 +5683,7 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
             MAX-ACCESS read-only
             STATUS current
             DESCRIPTION
-                "This object indicates the current power of the device."
+                "This object indicates the current power of the device(mW)."
             ::= { hwDevicePowerInfoObjects 2 }
 
 
@@ -5706,7 +5861,8 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
         -- 1.3.6.1.4.1.2011.5.25.31.4.2.11
         hwTemperatureThresholdGroup OBJECT-GROUP
             OBJECTS { hwEntityTempSlotId, hwEntityTempI2CId, hwEntityTempAddr, hwEntityTempChannel, hwEntityTempStatus, 
-                hwEntityTempValue, hwEntityTempMinorAlmThreshold, hwEntityTempMajorAlmThreshold, hwEntityTempFatalAlmThreshold }
+                hwEntityTempValue, hwEntityTempMinorAlmThreshold, hwEntityTempMajorAlmThreshold, hwEntityTempFatalAlmThreshold,
+                hwEntityTempSensorID, hwEntityTempSensorName }
             STATUS current
             DESCRIPTION 
                 "Temperature threshold group."
@@ -7768,7 +7924,132 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
 			DESCRIPTION
 				"This object indicates the battery chip temperature, in degC."
 			::= { hwBatteryChipEntry 2 }
-	
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.44
+        hwTemperatureInfoTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwTemperatureInfoEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "This table describes temperature information on a device."
+            ::= { hwEntityState 44 }
+
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.44.1
+        hwTemperatureInfoEntry OBJECT-TYPE
+            SYNTAX HwTemperatureInfoEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "Defines an entry in the hwTemperatureInfoTable."
+            INDEX { hwTemperBoardIndex, hwTemperSensorID }
+            ::= { hwTemperatureInfoTable 1 }
+
+
+        HwTemperatureInfoEntry ::=
+            SEQUENCE {
+                hwTemperBoardIndex
+                    Integer32,
+                hwTemperSensorID
+                    Integer32,
+                hwTemperSensorName
+                    OCTET STRING,
+                hwTemperStatus
+                    INTEGER,
+                hwTemperValue
+                    Integer32,
+                hwTemperMinorAlmThreshold
+                    Integer32,
+                hwTemperMajorAlmThreshold
+                    Integer32,
+                hwTemperFatalAlmThreshold
+                    Integer32
+             }
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.44.1.1
+        hwTemperBoardIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the physicalIndex of a board."
+            ::= { hwTemperatureInfoEntry 1 }
+
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.44.1.2
+        hwTemperSensorID OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the index of a temperature sensor."
+            ::= { hwTemperatureInfoEntry 2 }
+
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.44.1.3
+        hwTemperSensorName OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the name of a temperature sensor."
+            ::= { hwTemperatureInfoEntry 3 }
+
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.44.1.4
+        hwTemperStatus OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                normal(1),
+                minor(2),
+                major(3),
+                fatal(4),
+                abnormal(5),
+                unknown(6)
+                }
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the status of a temperature sensor."
+            ::= { hwTemperatureInfoEntry 4 }
+
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.44.1.5
+        hwTemperValue OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the value of a temperature sensor."
+            ::= { hwTemperatureInfoEntry 5 }
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.44.1.6
+        hwTemperMinorAlmThreshold OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the minor alarm threshold of a temperature sensor."
+            ::= { hwTemperatureInfoEntry 6 }
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.44.1.7
+        hwTemperMajorAlmThreshold OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the major alarm threshold of a temperature sensor."
+            ::= { hwTemperatureInfoEntry 7 }
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.44.1.8
+        hwTemperFatalAlmThreshold OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the fatal alarm threshold of a temperature sensor."
+            ::= { hwTemperatureInfoEntry 8 }
+
         -- 1.3.6.1.4.1.2011.5.25.31.8
 
         hwPreDisposeObjects OBJECT IDENTIFIER ::= { hwEntityExtentMIB 8 }
@@ -8022,6 +8303,51 @@ hwEntityOpticalWaveLength, hwEntityOpticalBiasCurrent, hwEntityOpticalRxLowThres
             	DESCRIPTION
                 "Board resume from unconnected"
             ::= { hwEntityExtOSPTrapsPrefix 2 }
+
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.43     
+        hwEntityFwdCpuUsageTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwEntityFwdCpuUsageEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "This table lists the FWD CPU usage."
+            ::= { hwEntityState 43 }            
+            
+         -- 1.3.6.1.4.1.2011.5.25.31.1.1.43.1     
+           hwEntityFwdCpuUsageEntry OBJECT-TYPE
+            SYNTAX HwEntityFwdCpuUsageEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "Defines an entry in the HwEntityFwdCpuUsageEntry."
+            INDEX { hwFwdCpuIndex }
+            ::= { hwEntityFwdCpuUsageTable 1 }
+         
+          HwEntityFwdCpuUsageEntry ::=
+            SEQUENCE { 
+                hwFwdCpuIndex
+                    Integer32,
+                hwFwdCpuUsageRate
+                    Integer32
+             }                             
+             
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.43.1.1                     
+        hwFwdCpuIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the index of the FWD CPU."
+            ::= { hwEntityFwdCpuUsageEntry 1 }    
+            
+        -- 1.3.6.1.4.1.2011.5.25.31.1.1.43.1.2
+        hwFwdCpuUsageRate OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the the FWD CPU usage"
+            ::= { hwEntityFwdCpuUsageEntry 2 }
 
      END
 

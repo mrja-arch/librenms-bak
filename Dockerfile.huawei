@@ -1,0 +1,14 @@
+FROM librenms/librenms:latest
+
+USER root
+
+RUN mkdir -p /opt/librenms/mib-archives /opt/librenms/mib-reports /opt/librenms/docker/snmptrapd
+
+COPY mibs /opt/librenms/mibs
+COPY mib-archives /opt/librenms/mib-archives
+COPY mib-reports /opt/librenms/mib-reports
+COPY scripts/huawei-mib-workflow.php /opt/librenms/scripts/huawei-mib-workflow.php
+
+RUN chmod +x /opt/librenms/scripts/huawei-mib-workflow.php
+
+USER librenms

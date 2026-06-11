@@ -1,9 +1,9 @@
 --=================================================================
--- Copyright (C) 2022 by HUAWEI TECHNOLOGIES. All rights reserved
+-- Copyright (C) 2025 by HUAWEI TECHNOLOGIES. All rights reserved
 -- 
 -- Description:HUAWEI MACSEC MIB
 -- Reference:
--- Version: V1.06
+-- Version: V4.01
 -- History:
 -- =================================================================
 
@@ -15,11 +15,13 @@
 			OBJECT-GROUP, MODULE-COMPLIANCE, NOTIFICATION-GROUP			
 				FROM SNMPv2-CONF			
 			Unsigned32, OBJECT-TYPE, MODULE-IDENTITY, NOTIFICATION-TYPE			
-				FROM SNMPv2-SMI;
+				FROM SNMPv2-SMI
+			RowStatus
+        		FROM SNMPv2-TC;
 	
 	
 		hwMACsec MODULE-IDENTITY 
-			LAST-UPDATED "202207211521Z"		-- 07/21, 2022
+			LAST-UPDATED "202509090900Z"		-- 09/09, 2025
 			ORGANIZATION 
 				"Huawei Technologies Co.,Ltd."
 			CONTACT-INFO 
@@ -31,7 +33,25 @@
 				Email: support@huawei.com"
 			DESCRIPTION 
 				"This MIB describes objects used for MACsec."  
-                        REVISION  "202207211521Z"
+			REVISION  "202509090900Z"
+															   DESCRIPTION 
+				                                                                 "Add NOTIFICATION-TYPE of hwMacsecDynCakReAuthPacketLoss, hwMacsecDynCakReAuthPacketLossResume."
+			REVISION  "202507280900Z"
+															   DESCRIPTION 
+				                                                                 "Add mib table hwMACsecProfile and modify table of hwMACsecPortCfgTable."
+			REVISION  "202507101558Z"
+															   DESCRIPTION 
+				                                                                 "Add mib node hwMACsecPortRowStatus and modify name of hwMAcsecPortCryptographicAlgorithm to hwMACsecPortCryptographicAlgorithm."
+			REVISION  "202506120841Z"
+															   DESCRIPTION 
+				                                                                 "Add mib node hwMACsecCak, hwMACsecPortMode, hwMACsecPolicy, hwMACsecMKALife, hwMAcsecPortCryptographicAlgorithm and modify MAX-ACCESS of hwMACsecPortNewCKN"
+			REVISION  "202506041011Z"
+															   DESCRIPTION 
+				                                                                 "Remove hwMACsecSlotID from Entry."
+			REVISION  "202505141011Z"
+															   DESCRIPTION 
+				                                                                 "Add NOTIFICATION-TYPE of hwMacsecRebootRequired, hwMacsecRebootRequiredResume."
+			REVISION  "202207211521Z"
 															   DESCRIPTION 
 				                                                                 "Delete useless comments."
 			REVISION  "202202231521Z"
@@ -107,7 +127,13 @@
 				hwMACsecIfName
 					OCTET STRING,
 				hwMACsecFailReason
-					OCTET STRING
+					OCTET STRING,
+				hwMACsecCak
+					OCTET STRING,
+				hwMACsecPortProfileName
+					OCTET STRING,
+				hwMACsecPortRowStatus
+					RowStatus
 			 }
 
 		-- 1.3.6.1.4.1.2011.5.25.347.1.1.1.1
@@ -157,7 +183,7 @@
 		-- 1.3.6.1.4.1.2011.5.25.347.1.1.1.5
 		hwMACsecPortNewCKN OBJECT-TYPE
 			SYNTAX OCTET STRING
-			MAX-ACCESS accessible-for-notify 
+			MAX-ACCESS read-create 
 			STATUS current
 			DESCRIPTION
 				"The configed CKN of this port."
@@ -198,8 +224,35 @@
 			DESCRIPTION
 				"The reason that MACsec failed to run on an interface."
 			::= { hwMACsecPortCfgEntry 9 }
-		
-		--
+
+		-- 1.3.6.1.4.1.2011.5.25.347.1.1.1.10
+		hwMACsecCak OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (32..188))
+			MAX-ACCESS read-create
+			STATUS current
+			DESCRIPTION
+				"The value of CAK."
+			::= { hwMACsecPortCfgEntry 10 }
+
+		-- 1.3.6.1.4.1.2011.5.25.347.1.1.1.11
+		hwMACsecPortProfileName OBJECT-TYPE
+			SYNTAX OCTET STRING
+			MAX-ACCESS read-create
+			STATUS current
+			DESCRIPTION
+				"The port profile name."
+			::= { hwMACsecPortCfgEntry 11 }
+
+		-- 1.3.6.1.4.1.2011.5.25.347.1.1.1.12
+		hwMACsecPortRowStatus OBJECT-TYPE
+			SYNTAX RowStatus
+			MAX-ACCESS read-create
+			STATUS current
+			DESCRIPTION
+				"The value of this object identifies the row status."
+			::= { hwMACsecPortCfgEntry 12 }
+
+
 		-- 1.3.6.1.4.1.2011.5.25.347.1.2
 		hwMacsecRcvRspTimeoutTable OBJECT-TYPE
 			SYNTAX SEQUENCE OF HwMacsecRcvRspTimeoutEntry
@@ -255,7 +308,124 @@
 			DESCRIPTION
 				"Local port."
 			::= { hwMacsecRcvRspTimeoutEntry 3 }
-			
+
+		-- 1.3.6.1.4.1.2011.5.25.347.1.3
+		hwMACsecProfileTable OBJECT-TYPE
+			SYNTAX SEQUENCE OF HwMACsecProfileEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"MACsec profile table."
+			::= { hwMACsecMibObjects 3 }
+
+		-- 1.3.6.1.4.1.2011.5.25.347.1.3.1
+		hwMACsecProfileEntry OBJECT-TYPE
+			SYNTAX HwMACsecProfileEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"An entry in the MACsec profile table."
+			INDEX { hwMACsecProfileId }
+			::= { hwMACsecProfileTable 1 }
+		
+		HwMACsecProfileEntry ::=
+			SEQUENCE { 
+				hwMACsecProfileId
+					Unsigned32,
+				hwMACsecProfileName
+					OCTET STRING,
+				hwMACsecMode
+					INTEGER,
+				hwMACsecPolicy
+					INTEGER,
+				hwMACsecMKALife
+					Unsigned32,
+				hwMACsecCryptographicAlgorithm
+					INTEGER,
+				hwMACsecProfileRowStatus
+					RowStatus
+			 }
+
+		-- 1.3.6.1.4.1.2011.5.25.347.1.3.1.1
+		hwMACsecProfileId OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS  not-accessible
+			STATUS current
+			DESCRIPTION
+				"The index of MACsec profile."
+			::= { hwMACsecProfileEntry 1 }
+
+		-- 1.3.6.1.4.1.2011.5.25.347.1.3.1.2
+		hwMACsecProfileName OBJECT-TYPE
+			SYNTAX OCTET STRING
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"The profile name."
+			::= { hwMACsecProfileEntry 2 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.347.1.3.1.3
+		hwMACsecMode OBJECT-TYPE
+			SYNTAX INTEGER
+			{
+				none(0),
+				normal(1),
+				integrityOnly(2)
+			}
+			MAX-ACCESS read-create
+			STATUS current
+			DESCRIPTION
+				"The MACsec mode."
+			DEFVAL { normal }
+			::= { hwMACsecProfileEntry 3 }
+
+		-- 1.3.6.1.4.1.2011.5.25.347.1.3.1.4
+		hwMACsecPolicy OBJECT-TYPE
+			SYNTAX INTEGER
+			{
+				mustSecure(0),
+				shouldSecure(1)
+			}
+			MAX-ACCESS read-create
+			STATUS current
+			DESCRIPTION
+				"The MACsec policy."
+			DEFVAL { mustSecure }
+			::= { hwMACsecProfileEntry 4 }
+
+		-- 1.3.6.1.4.1.2011.5.25.347.1.3.1.5
+		hwMACsecMKALife OBJECT-TYPE
+			SYNTAX Unsigned32 (6..60)
+			MAX-ACCESS read-create
+			STATUS current
+			DESCRIPTION
+				"The MKA session timeout interval."
+			DEFVAL { 6 }
+			::= { hwMACsecProfileEntry 5 }
+
+		-- 1.3.6.1.4.1.2011.5.25.347.1.3.1.6
+		hwMACsecCryptographicAlgorithm OBJECT-TYPE
+			SYNTAX INTEGER
+			{
+				aesCmac128(0),
+				aesCmac256(1)
+			}
+			MAX-ACCESS read-create
+			STATUS current
+			DESCRIPTION
+				"The MKA key generation algorithm."
+			DEFVAL { aesCmac128 }
+			::= { hwMACsecProfileEntry 6 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.347.1.3.1.7
+		hwMACsecProfileRowStatus OBJECT-TYPE
+			SYNTAX RowStatus
+			MAX-ACCESS read-create
+			STATUS current
+			DESCRIPTION
+				"The value of this object identifies the row status."
+			::= { hwMACsecProfileEntry 7 }
+		
 
 		-- 1.3.6.1.4.1.2011.5.25.347.2
 		hwMACsecTraps OBJECT IDENTIFIER ::= { hwMACsec 2 }
@@ -298,7 +468,16 @@
 			DESCRIPTION
 				"The reason of Cipher Suite switching failed."
 			::= { hwMACsecTrapOID 4 }
-		
+
+		-- 1.3.6.1.4.1.2011.5.25.347.2.1.5
+		hwMACsecSlotID OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"Slot ID of the device."
+			::= { hwMACsecTrapOID 5 }
+
 		-- 1.3.6.1.4.1.2011.5.25.347.2.2
 		hwCKNSwitchFailAlarm NOTIFICATION-TYPE
 			OBJECTS { hwMACsecPortRole, hwMACsecPortName, hwMACsecPortOldCKN, hwMACsecPortNewCKN, hwMACsecCKNSwitchReason, hwMACsecCKNSwitchFailReason }
@@ -340,6 +519,38 @@
 				"Failed to run on an interface."
 			::= { hwMACsecTraps 6 }
 
+		-- 1.3.6.1.4.1.2011.5.25.347.2.7
+		hwMacsecRebootRequired NOTIFICATION-TYPE
+			OBJECTS { hwMACsecSlotID }
+			STATUS current
+			DESCRIPTION 
+				"MACsec requires to reboot alarm."
+			::= { hwMACsecTraps 7 }
+
+		-- 1.3.6.1.4.1.2011.5.25.347.2.8
+		hwMacsecRebootRequiredResume NOTIFICATION-TYPE
+			OBJECTS { hwMACsecSlotID }
+			STATUS current
+			DESCRIPTION 
+				"MACsec requires to reboot alarm resume."
+			::= { hwMACsecTraps 8 }
+
+		-- 1.3.6.1.4.1.2011.5.25.347.2.9
+		hwMacsecDynCakReAuthPacketLoss NOTIFICATION-TYPE
+			OBJECTS { hwMACsecPortRole, hwMACsecPortName}
+			STATUS current
+			DESCRIPTION 
+				"Packet loss alarm occurred due to dot1x reauthentication if the dynamic CAK mode is configured for MACsec."
+			::= { hwMACsecTraps 9 }
+
+		-- 1.3.6.1.4.1.2011.5.25.347.2.10
+		hwMacsecDynCakReAuthPacketLossResume NOTIFICATION-TYPE
+			OBJECTS { hwMACsecPortRole, hwMACsecPortName }
+			STATUS current
+			DESCRIPTION 
+				"Cleared the packet loss alarm occurred due to dot1x reauthentication if the dynamic CAK mode is configured for MACsec."
+			::= { hwMACsecTraps 10 }
+
 		-- 1.3.6.1.4.1.2011.5.25.347.3
 		hwMACsecConformance OBJECT IDENTIFIER ::= { hwMACsec 3 }
 		
@@ -354,8 +565,10 @@
 		
 		-- 1.3.6.1.4.1.2011.5.25.347.3.1.1
 		hwMACsecBindGroup OBJECT-GROUP
-			OBJECTS { hwMACsecPortRole, hwMACsecCKNSwitchReason, hwMACsecPortName, hwMACsecPortNewCKN, hwMACsecPortOldCKN, 
-				hwMACsecCKNSwitchFailReason , hwMACsecPortCipherPeer, hwMACsecPortCipher, hwMACsecCipherSwitchReason, hwMACsecCipherSwitchFailReason}
+			OBJECTS { hwMACsecPortRole, hwMACsecCKNSwitchReason, hwMACsecPortName, hwMACsecPortNewCKN, hwMACsecPortOldCKN, hwMACsecPortRowStatus, hwMACsecPortProfileName,
+				hwMACsecCKNSwitchFailReason, hwMACsecPortCipherPeer, hwMACsecPortCipher, hwMACsecCipherSwitchReason, hwMACsecCipherSwitchFailReason, hwMACsecSlotID,
+				hwMACsecCak, hwMACsecCryptographicAlgorithm, hwMACsecFailReason, hwMACsecIfName, hwMACsecMKALife, hwMACsecPolicy, hwMACsecMode, hwMACsecProfileName, 
+				hwMACsecProfileRowStatus, hwMacsecRcvRspTimeoutIfIndex, hwMacsecRcvRspTimeoutLocalPort, hwMacsecRcvRspTimeoutRole}
 			STATUS current
 			DESCRIPTION 
 				"The MACsec module's Bind group."
@@ -363,7 +576,7 @@
 		
 		-- 1.3.6.1.4.1.2011.5.25.347.3.1.2
 		hwMACsecTrapGroup NOTIFICATION-GROUP
-			NOTIFICATIONS { hwCKNSwitchFailAlarm,hwMacsecRcvRspTimeout,hwMacsecRcvRspTimeoutResume,hwCipherSwitchFailAlarm,hwMACsecFailNotify }
+			NOTIFICATIONS { hwCKNSwitchFailAlarm,hwMacsecRcvRspTimeout,hwMacsecRcvRspTimeoutResume,hwCipherSwitchFailAlarm,hwMACsecFailNotify,hwMacsecRebootRequired,hwMacsecRebootRequiredResume,hwMacsecDynCakReAuthPacketLoss,hwMacsecDynCakReAuthPacketLossResume }
 			STATUS current
 			DESCRIPTION 
 				"The MACsec module's Notification group."

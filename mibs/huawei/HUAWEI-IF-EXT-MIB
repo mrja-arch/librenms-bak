@@ -1,9 +1,9 @@
 -- ==================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2024 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI Private Extended Interface MIB
 -- Reference:
--- Version: V3.30
+-- Version: V3.44
 -- History:
 --      V1.0 
 -- ==================================================================
@@ -42,7 +42,7 @@
     
     
         hwIFExtMib MODULE-IDENTITY 
-            LAST-UPDATED "202206180000Z"
+            LAST-UPDATED "202409210000Z"
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -53,7 +53,46 @@
                    Website: http://www.huawei.com
                    Email: support@huawei.com
                  "
+	            DESCRIPTION
+                "V3.44 add lacpMasterBackup to hwTrunkIfWorkingMode" 
+                 REVISION     "202409210000Z"
+	            DESCRIPTION
+                "V3.43 delete hwIfMonitorCrcErrorRepeat from hwIfMonitorCrcErrorRising and hwIfMonitorCrcErrorResume" 
+                 REVISION     "202406270000Z"
+	            DESCRIPTION
+                "V3.42 add from hwIfEtherStatRxPkts64Octets to hwIfEtherStatTx1519toMaxGoodOctets" 
+                 REVISION     "202406250000Z"
+	            DESCRIPTION
+                "V3.41 modify the description of hwIFExtFlowStatInterval" 
+                 REVISION     "202406210000Z"
+	            DESCRIPTION
+                "V3.40 update the hwIfMonitorCrcErrorRepeat type" 
+                 REVISION     "202406050000Z"
+                DESCRIPTION
+                "V3.39 add hwSliceIfBwNotEnough and hwSliceIfBwNotEnoughResume" 
+                 REVISION     "202406040000Z"
+		DESCRIPTION
+                "V3.38 add the hwIfMonitorCrcErrorRepeat" 
+                 REVISION     "202405070000Z"
+                DESCRIPTION
+                "V3.37 Update the hwLinkDownReason, add from subifLinkDownDisable to y1731Up." 
+                 REVISION     "202404240000Z"
+                DESCRIPTION
+                "V3.36 add  hwTrunkETrunkId,hwLacpLPartnerSystemID ,hwLacpPPartnerSystemID" 
+                 REVISION     "202403140000Z"
                 DESCRIPTION 
+                "V3.35 modify description of hwTrunkPortWeight" 
+                 REVISION     "202402290000Z"
+                DESCRIPTION 
+                "V3.34 add  hwIfUBStat,hwIfUBStatTable,HwIfUBStatEntry,hwIfUBStatIfIndex,hwIfUBInFlits,hwIfUBOutFlits,hwIfUBCRCPkts,hwIfEtherStatInPfcPkts,hwIfEtherStatOutPfcPkts" 
+                 REVISION     "202402210000Z"
+                DESCRIPTION
+                "V3.30 Add  hwIfEtherFecCorrectedErrors and hwIfEtherFecUncorrectedErrors." 
+                 REVISION     "202310240000Z"
+                DESCRIPTION 
+                "V3.31 add  hwIFExtInDiscardOctets,hwIFExtInDiscardOctetRate,hwIFExtInDiscardPktRate,hwIFExtOutDiscardOctets,hwIFExtOutDiscardOctetRate,hwIFExtOutDiscardPktRate" 
+                 REVISION     "202309090000Z"
+                DESCRIPTION
                 "V3.30 Add  hwIPv4StateChangeReason." 
                  REVISION     "202206180000Z"
                 DESCRIPTION
@@ -562,7 +601,19 @@
                 hwIFExtDampStatus
                     INTEGER,
                 hwIFExtPhyStatusUpTime
-                    Unsigned32
+                    Unsigned32,
+                hwIFExtInDiscardOctets
+                    Counter64,
+                hwIFExtInDiscardOctetRate
+                    CounterBasedGauge64,
+                hwIFExtInDiscardPktRate
+                    CounterBasedGauge64,
+                hwIFExtOutDiscardOctets
+                    Counter64,
+                hwIFExtOutDiscardOctetRate
+                    CounterBasedGauge64,
+                hwIFExtOutDiscardPktRate
+                    CounterBasedGauge64
              }
 
         hwIFExtIndex OBJECT-TYPE
@@ -613,7 +664,7 @@
             MAX-ACCESS read-write
             STATUS current
             DESCRIPTION
-                "This object indicates the interval for collecting traffic statistics for an interface. The value ranges from 0 to 600, in seconds. The default value is 300."
+                "This object indicates the interval for collecting traffic statistics for an interface. The value ranges from 0 to 600, in seconds. The value must be a multiple of 10, and the minimum value is 10. The interval is 0 only when the interface does not support statistics collection. The default value is 300."
             DEFVAL { 300 }
             ::= { hwIFExtEntry 4 }
 
@@ -995,6 +1046,55 @@
             DESCRIPTION 
                "This object indicates the accumulated time in seconds during which the physical status of the interface remains up after its creation."
             ::= { hwIFExtEntry 42 }
+
+        hwIFExtInDiscardOctets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+            "Number of incoming bytes discarded on an interface."
+            ::= {hwIFExtEntry 43 }
+
+        hwIFExtInDiscardOctetRate OBJECT-TYPE
+            SYNTAX CounterBasedGauge64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+            "Rate at which incoming packets are discarded on an interface. The rate value is 64 bits."
+            ::= {hwIFExtEntry 44 }
+
+        hwIFExtInDiscardPktRate OBJECT-TYPE
+            SYNTAX CounterBasedGauge64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+            "Rate at which incoming bytes are discarded on an interface.The rate value is 64 bits."
+            ::= {hwIFExtEntry 45 }
+
+        hwIFExtOutDiscardOctets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+            "Number of outgoing bytes discarded on an interface."
+            ::= {hwIFExtEntry 46 }
+
+        hwIFExtOutDiscardOctetRate OBJECT-TYPE
+            SYNTAX CounterBasedGauge64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+            "Rate at which outgoing packets are discarded on an interface. The rate value is 64 bits."
+            ::= {hwIFExtEntry 47 }
+
+        hwIFExtOutDiscardPktRate OBJECT-TYPE
+            SYNTAX CounterBasedGauge64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+            "Rate at which outgoing bytes are discarded on an interface. The rate value is 64 bits.
+        "::= {hwIFExtEntry 48 }
+        
 
         hwIFExtPhyStatus OBJECT-TYPE
             SYNTAX INTEGER { up(1), down(2) }
@@ -2098,6 +2198,7 @@ The currently supported value ranges from 1 to 32. By default, the minimum numbe
                 lacpMode(3),
                 lacpCompatibleMode(4),
                 portStandbyMode(5),
+                lacpMasterBackup(6),
                 invalid(-1)
                 }
             MAX-ACCESS read-create
@@ -2108,7 +2209,8 @@ The currently supported value ranges from 1 to 32. By default, the minimum numbe
                   2: normal mode 
                   3: static LACP mode   
                   4: compatible LACP mode  
-                  5: backup interface mode"
+                  5: backup interface mode
+                  6: lacp master/backup access mode"
             ::= { hwTrunkIfEntry 9 }
 
         
@@ -2699,7 +2801,7 @@ The currently supported value ranges from 1 to 32. By default, the minimum numbe
             MAX-ACCESS read-create
             STATUS current
             DESCRIPTION
-                "The value of this object identifies the weight of a trunk member interface. The default weight of a Trunk member interface is 1. The sum weight of all member interfaces of a trunk cannot exceed the maximum number of member interfaces that a trunk supports."
+                "The value of this object identifies the weight of a trunk member interface. The default weight of a Trunk member interface is 1. "
             DEFVAL { 1 }
             ::= { hwTrunkMemEntry 8 }
 
@@ -2886,6 +2988,70 @@ The currently supported value ranges from 1 to 32. By default, the minimum numbe
                 hwIfEtherStatOutExcessiveCollisionPkts
                     Counter64,
                 hwIfEtherStatOutBufferPurgationPkts
+                    Counter64,
+                hwIfEtherFecCorrectedErrors
+                    Counter64,
+                hwIfEtherFecUncorrectedErrors
+                    Counter64,
+                hwIfEtherStatInPfcPkts
+                    Counter64,
+                hwIfEtherStatOutPfcPkts
+                    Counter64,
+                hwIfEtherStatRxPkts64Octets
+                    Counter64,
+                hwIfEtherStatRx65to127Octets
+                    Counter64,
+                hwIfEtherStatRx128to255Octets
+                    Counter64,
+                hwIfEtherStatRx256to511Octets
+                    Counter64,
+                hwIfEtherStatRx512to1023Octets
+                    Counter64,
+                hwIfEtherStatRx1024to1518Octets
+                    Counter64,
+                hwIfEtherStatRx1519to2047Octets
+                    Counter64,
+                hwIfEtherStatRx2048to4095Octets
+                    Counter64,
+                hwIfEtherStatRx4096to8191Octets
+                    Counter64,
+                hwIfEtherStatRx8192to9216Octets
+                    Counter64,
+                hwIfEtherStatRx9217to12287Octets
+                    Counter64,
+                hwIfEtherStatRx12288to16383Octets
+                    Counter64,
+                hwIfEtherStatRx1519toMaxBadOctets
+                    Counter64,
+                hwIfEtherStatRx1519toMaxGoodOctets
+                    Counter64,
+                hwIfEtherStatTxPkts64Octets
+                    Counter64,
+                hwIfEtherStatTx65to127Octets
+                    Counter64,
+                hwIfEtherStatTx128to255Octets
+                    Counter64,
+                hwIfEtherStatTx256to511Octets
+                    Counter64,
+                hwIfEtherStatTx512to1023Octets
+                    Counter64,
+                hwIfEtherStatTx1024to1518Octets
+                    Counter64,
+                hwIfEtherStatTx1519to2047Octets
+                    Counter64,
+                hwIfEtherStatTx2048to4095Octets
+                    Counter64,
+                hwIfEtherStaTx4096to8191Octets
+                    Counter64,
+                hwIfEtherStatTx8192to9216Octets
+                    Counter64,
+                hwIfEtherStatTx9217to12287Octets
+                    Counter64,
+                hwIfEtherStatTx12288to16383Octets
+                    Counter64,
+                hwIfEtherStatTx1519toMaxBadOctets
+                    Counter64,
+                hwIfEtherStatTx1519toMaxGoodOctets
                     Counter64
              }
 
@@ -3166,8 +3332,267 @@ The currently supported value ranges from 1 to 32. By default, the minimum numbe
             STATUS current
             DESCRIPTION
                 " The number of sent Frames which is purged from the buffer because of long time "
-            ::= { hwIfEtherStatEntry 33 }       
-      
+            ::= { hwIfEtherStatEntry 33 }
+
+
+         hwIfEtherFecCorrectedErrors OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                " Fec corrected error statistics value "
+            ::= { hwIfEtherStatEntry 34 }
+ 
+
+        hwIfEtherFecUncorrectedErrors OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                " Fec uncorrected error statistics value "
+            ::= { hwIfEtherStatEntry 35 }
+
+
+        hwIfEtherStatInPfcPkts OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received priority-based control frames."
+            ::= { hwIfEtherStatEntry 36 }
+
+
+         hwIfEtherStatOutPfcPkts OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent priority-based control frames."
+            ::= { hwIfEtherStatEntry 37 }
+
+        hwIfEtherStatRxPkts64Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received data packets each with a length ranging from 0 bytes to 64 bytes"
+            ::= { hwIfEtherStatEntry 38 }
+
+        hwIfEtherStatRx65to127Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received data packets each with a length ranging from 65 bytes to 127 bytes"
+            ::= { hwIfEtherStatEntry 39 }
+
+        hwIfEtherStatRx128to255Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received data packets each with a length ranging from 128 bytes to 255 bytes"
+            ::= { hwIfEtherStatEntry 40 }
+
+        hwIfEtherStatRx256to511Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received data packets each with a length ranging from 256 bytes to 511 bytes"
+            ::= { hwIfEtherStatEntry 41 }
+
+        hwIfEtherStatRx512to1023Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received data packets each with a length ranging from 512 bytes to 1023 bytes"
+            ::= { hwIfEtherStatEntry 42 }
+
+        hwIfEtherStatRx1024to1518Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received data packets each with a length ranging from 1024 bytes to 1518 bytes"
+            ::= { hwIfEtherStatEntry 43 }
+
+        hwIfEtherStatRx1519to2047Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received data packets each with a length ranging from 1519 bytes to 2047 bytes"
+            ::= { hwIfEtherStatEntry 44 }
+
+        hwIfEtherStatRx2048to4095Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received data packets each with a length ranging from 2048 bytes to 4095 bytes"
+            ::= { hwIfEtherStatEntry 45 }
+
+        hwIfEtherStatRx4096to8191Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received data packets each with a length ranging from 4096 bytes to 8191 bytes"
+            ::= { hwIfEtherStatEntry 46 }
+
+        hwIfEtherStatRx8192to9216Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received data packets each with a length ranging from 8192 bytes to 9216 bytes"
+            ::= { hwIfEtherStatEntry 47 }
+
+        hwIfEtherStatRx9217to12287Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received data packets each with a length ranging from 9217 bytes to 12287 bytes"
+            ::= { hwIfEtherStatEntry 48 }
+
+        hwIfEtherStatRx12288to16383Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received data packets each with a length ranging from 12288 bytes to 16383 bytes"
+            ::= { hwIfEtherStatEntry 49 }
+
+        hwIfEtherStatRx1519toMaxBadOctets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received bad data packets each with a length ranging from 1519 bytes to max bytes"
+            ::= { hwIfEtherStatEntry 50 }
+
+        hwIfEtherStatRx1519toMaxGoodOctets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of received good data packets each with a length ranging from 512 bytes to 1023 bytes"
+            ::= { hwIfEtherStatEntry 51 }
+
+        hwIfEtherStatTxPkts64Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent data packets each with a length ranging from 0 bytes to 64 bytes"
+            ::= { hwIfEtherStatEntry 52 }
+
+        hwIfEtherStatTx65to127Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent data packets each with a length ranging from 65 bytes to 127 bytes"
+            ::= { hwIfEtherStatEntry 53 }
+
+        hwIfEtherStatTx128to255Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent data packets each with a length ranging from 128 bytes to 255 bytes"
+            ::= { hwIfEtherStatEntry 54 }
+
+        hwIfEtherStatTx256to511Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent data packets each with a length ranging from 256 bytes to 511 bytes"
+            ::= { hwIfEtherStatEntry 55 }
+
+        hwIfEtherStatTx512to1023Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent data packets each with a length ranging from 512 bytes to 1023 bytes"
+            ::= { hwIfEtherStatEntry 56 }
+
+        hwIfEtherStatTx1024to1518Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent data packets each with a length ranging from 1024 bytes to 1518 bytes"
+            ::= { hwIfEtherStatEntry 57 }
+
+        hwIfEtherStatTx1519to2047Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent data packets each with a length ranging from 1519 bytes to 2047 bytes"
+            ::= { hwIfEtherStatEntry 58 }
+
+        hwIfEtherStatTx2048to4095Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent data packets each with a length ranging from 2048 bytes to 4095 bytes"
+            ::= { hwIfEtherStatEntry 59 }
+
+        hwIfEtherStaTx4096to8191Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent data packets each with a length ranging from 4096 bytes to 8191 bytes"
+            ::= { hwIfEtherStatEntry 60 }
+
+        hwIfEtherStatTx8192to9216Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent data packets each with a length ranging from 8192 bytes to 9216 bytes"
+            ::= { hwIfEtherStatEntry 61 }
+
+        hwIfEtherStatTx9217to12287Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent data packets each with a length ranging from 9217 bytes to 12287 bytes"
+            ::= { hwIfEtherStatEntry 62 }
+
+        hwIfEtherStatTx12288to16383Octets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent data packets each with a length ranging from 12288 bytes to 16383 bytes"
+            ::= { hwIfEtherStatEntry 63 }
+
+        hwIfEtherStatTx1519toMaxBadOctets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent bad data packets each with a length ranging from 1519 bytes to max bytes"
+            ::= { hwIfEtherStatEntry 64 }
+
+        hwIfEtherStatTx1519toMaxGoodOctets OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of sent good data packets each with a length ranging from 512 bytes to 1023 bytes"
+            ::= { hwIfEtherStatEntry 65 }
 
 hwIfSdhStatTable OBJECT-TYPE
             SYNTAX SEQUENCE OF HwIfSdhStatEntry
@@ -3778,6 +4203,8 @@ hwIfSdhStatTable OBJECT-TYPE
                         hwIfMonitorPostFECErrorStatistics
                                  Counter64,
                         hwIfMonitorAllStatistics
+                                Unsigned32,
+                        hwIfMonitorCrcErrorRepeat
                                 Unsigned32
                 }
 
@@ -4010,6 +4437,14 @@ hwIfMonitorJitterThreshold OBJECT-TYPE
         DESCRIPTION
             " All statistics value "
         ::= { hwIfMonitorThresholdEntry 29 }
+
+    hwIfMonitorCrcErrorRepeat OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS read-write
+        STATUS current
+        DESCRIPTION
+            " Crc error alarm filter times,default value is 1 and 0 is an invalid value "
+        ::= { hwIfMonitorThresholdEntry 30 }
               
 -- 1.3.6.1.4.1.2011.5.25.41.1.7.1.1.40
 hwIfMonitorBadBytesErrorStatistics OBJECT-TYPE
@@ -5593,7 +6028,11 @@ hwAdminVrrpMemberIf OBJECT IDENTIFIER ::= { hwIFExtObjects 9 }
                         linkHeartBeatDown(42) ,        -- link heart beat down
                         triggerDown(43),           -- The interface is trigger down
                         cfmSessionDown(48),       -- cfm session is down
-                        cfmSessionUp(49)          -- cfm session is up
+                        cfmSessionUp(49),         -- cfm session is up
+                        subifLinkDownDisable(51), -- The sub-interface linkDown alarm is disabled
+                        standbyDown(52),          -- The interface is standby down
+                        y1731Down(53),            -- Y.1731 trigger down
+                        y1731Up(54)               -- Y.1731 trigger down resume
                 }
         MAX-ACCESS  accessible-for-notify
         STATUS      current
@@ -5780,7 +6219,30 @@ hwAdminVrrpMemberIf OBJECT IDENTIFIER ::= { hwIFExtObjects 9 }
 	         DESCRIPTION
 	               "The reason code of IPv4 state changes."
 	         ::= { hwIFExtTrapObjects 21 }  
-          			
+
+        hwTrunkETrunkId OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "E-Trunk ID."
+            ::= { hwIFExtTrapObjects 22 }
+
+       hwLacpLPartnerSystemID  OBJECT-TYPE
+            SYNTAX PhysAddress
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+               " The local partner system ID."
+            ::= { hwIFExtTrapObjects 23 } 
+
+       hwLacpPPartnerSystemID  OBJECT-TYPE
+            SYNTAX PhysAddress
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+               " The remote partner system ID."
+            ::= { hwIFExtTrapObjects 24 }
 --  ===========================================================================
 -- Trunk map table
 -- ===========================================================================
@@ -5977,7 +6439,8 @@ OBJECTS{
         hwIfMonitorTxPauseFrameInterval,
         hwIfMonitorPostFECErrorStatistics,
         hwIfMonitorName,
-	hwIfMonitorAllStatistics
+	hwIfMonitorAllStatistics,
+        hwIfMonitorCrcErrorRepeat
     }
     STATUS current
     DESCRIPTION
@@ -6771,6 +7234,35 @@ This object can be bound to two variables:
             DESCRIPTION 
                 "The interface IPv4 status changes."
             ::= { hwIFExtTraps 63 }
+
+
+	hwLacpMlagPartnerMisconnect NOTIFICATION-TYPE
+            OBJECTS { ifName, hwTrunkETrunkId , hwLacpLPartnerSystemID , hwLacpPPartnerSystemID  }
+            STATUS current
+            DESCRIPTION 
+                "The local device in the M-LAG connected to an incorrect partner device."
+            ::= { hwIFExtTraps 64 }
+
+	hwLacpMlagPartnerMisconnectResume NOTIFICATION-TYPE
+            OBJECTS { ifName, hwTrunkETrunkId }
+            STATUS current
+            DESCRIPTION 
+                "The local device in the M-LAG connected to an correct partner device."
+            ::= { hwIFExtTraps 65 }
+
+         hwSliceIfBwNotEnough NOTIFICATION-TYPE
+                OBJECTS { ifIndex, ifName, hwIfBandWidth, hwIfBandWidth}
+                STATUS current
+                DESCRIPTION 
+                    "The slice interface bandwidth is less than the outer interface bandwidth."
+                ::= { hwIFExtTraps 66 }
+
+         hwSliceIfBwNotEnoughResume NOTIFICATION-TYPE
+                OBJECTS { ifIndex, ifName, hwIfBandWidth, hwIfBandWidth}
+                STATUS current
+                DESCRIPTION 
+                    "The slice interface bandwidth is not less than the outer interface bandwidth."
+                ::= { hwIFExtTraps 67 }
 
     hwMonitorNotifications OBJECT IDENTIFIER ::= { hwIFExtMib 4 }        
 
@@ -7898,6 +8390,79 @@ This object can be bound to two variables:
             DESCRIPTION
                 "Interface name of the interface."
             ::= { hwModeFlexeNotSupportEntry 1 }
+
+-- ===========================================================================
+--  UB Interface packet statistics
+-- ===========================================================================   
+        -- hwIfUBStat  1.3.6.1.4.1.2011.5.25.41.1.30
+        hwIfUBStat OBJECT IDENTIFIER ::= { hwIFExtObjects 30 }
+        
+        -- hwIfUBStatTable  1.3.6.1.4.1.2011.5.25.41.1.30.1
+        hwIfUBStatTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwIfUBStatEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+	    DESCRIPTION
+                " UB Interface packet statistics."
+            ::= { hwIfUBStat 1 }
+
+        -- hwIfUBStatEntry   1.3.6.1.4.1.2011.5.25.41.1.30.1.1
+        hwIfUBStatEntry OBJECT-TYPE
+            SYNTAX HwIfUBStatEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+			DESCRIPTION
+                " Entry of the UB Interface packet statistics."
+            INDEX { hwIfUBStatIfIndex}
+            ::= { hwIfUBStatTable 1 }
+     
+        HwIfUBStatEntry ::=
+            SEQUENCE {
+                hwIfUBStatIfIndex
+                Integer32 ,
+                hwIfUBInFlits
+                Counter64,
+                hwIfUBOutFlits
+                Counter64,
+                hwIfUBCRCPkts
+                Counter64
+             }
+
+        -- hwIfUBStatIfIndex   1.3.6.1.4.1.2011.5.25.41.1.30.1.1.1
+        hwIfUBStatIfIndex OBJECT-TYPE
+            SYNTAX   Integer32 
+            MAX-ACCESS not-accessible
+            STATUS current
+	   DESCRIPTION
+                "Interface index."
+            ::= { hwIfUBStatEntry 1 }
+
+	-- hwIfUBInFlits  1.3.6.1.4.1.2011.5.25.41.1.30.1.1.2
+        hwIfUBInFlits OBJECT-TYPE
+            SYNTAX     Counter64
+            MAX-ACCESS read-only
+            STATUS current
+	    DESCRIPTION
+                "Indicates the number of inbound Flit on the UB interface."
+            ::= { hwIfUBStatEntry 2 }
+
+	-- hwIfUBOutFlits  1.3.6.1.4.1.2011.5.25.41.1.30.1.1.3
+        hwIfUBOutFlits OBJECT-TYPE
+            SYNTAX     Counter64
+            MAX-ACCESS read-only
+            STATUS current
+	    DESCRIPTION
+                "Indicates the number of outbound Flit on the UB interface."
+            ::= { hwIfUBStatEntry 3 }
+
+	-- hwIfUBCRCPkts  1.3.6.1.4.1.2011.5.25.41.1.30.1.1.4
+        hwIfUBCRCPkts OBJECT-TYPE
+            SYNTAX     Counter64
+            MAX-ACCESS read-only
+            STATUS current
+	    DESCRIPTION
+                "Number of CRC packets received over the UB interface."
+            ::= { hwIfUBStatEntry 4 }
 	
     END
 

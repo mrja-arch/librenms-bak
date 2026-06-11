@@ -1,9 +1,9 @@
 -- =================================================================
--- Copyright (C) 2021 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2021-2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 --
 -- Description: Huawei Ethernet ARP MIB
 -- Reference: HUAWEI Enterprise MIB
--- Version: V3.25
+-- Version: V4.00
 -- History:
 -- History:
 --              chenzhiwei, 2009-08-07, add nodes for arp anti-attack.
@@ -33,7 +33,7 @@
                 FROM P-BRIDGE-MIB;
             
         hwEthernetARPMIB MODULE-IDENTITY 
-            LAST-UPDATED "202110221800Z"  
+            LAST-UPDATED "202507261800Z"  
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -48,6 +48,12 @@
             DESCRIPTION 
                 "This MIB describes objects used for managing Ethernet ARP,
                  including  ARP Speed-limit,ARP Limit etc. "
+       REVISION "202507261800Z"
+            DESCRIPTION
+              "Add  hwEthernetARPMacAdd hwEthernetARPVlanId hwEthernetARPCeVlanId"
+       REVISION "202501131800Z"
+            DESCRIPTION
+              "Add  hwEthernetARPDetectAbnormalAlarm hwEthernetARPDetectResumeAlarm"
 
        REVISION "202110221800Z"
             DESCRIPTION
@@ -2162,6 +2168,27 @@ hwEthernetARPObjects OBJECT IDENTIFIER ::= { hwEthernetARPMIB 1 }
             DESCRIPTION
                 "This object indicates the number of broadcast-suppress ARP entries."
             ::= { hwEthernetARPTrapObjects 22 }
+        hwEthernetARPMacAdd  OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the MAC of detect abnormal ARP entries."
+            ::= { hwEthernetARPTrapObjects 23 }
+        hwEthernetARPVlanId  OBJECT-TYPE
+            SYNTAX  Integer32(1..4094)
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the VLAN of detect abnormal ARP entries."
+            ::= { hwEthernetARPTrapObjects 24 }
+        hwEthernetARPCeVlanId  OBJECT-TYPE
+            SYNTAX  Integer32(1..4094)
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the CE VLAN of detect abnormal ARP entries."
+            ::= { hwEthernetARPTrapObjects 25 }
 
 --  Notifications(trap) Definitions
 --       
@@ -2436,6 +2463,18 @@ hwEthernetARPObjects OBJECT IDENTIFIER ::= { hwEthernetARPMIB 1 }
         DESCRIPTION
             "Trap information about ARP broadcast-suppress entries resume spec: slot, spec, number of broadcast-suppress ARP."
         ::= { hwEthernetARPNotifications 41 }
+   hwEthernetARPDetectAbnormalAlarm NOTIFICATION-TYPE
+        OBJECTS { hwEthernetARPInterfaceName,hwEthernetARPIPAddress,hwEthernetARPMacAdd,hwEthernetARPVlanId,hwEthernetARPCeVlanId,hwEthernetARPReceiveInterfaceName }
+        STATUS current
+        DESCRIPTION
+            "Trap information about the alarm of the abnormal ARP detection."
+        ::= { hwEthernetARPNotifications 42 }
+   hwEthernetARPDetectResumeAlarm NOTIFICATION-TYPE
+        OBJECTS { hwEthernetARPInterfaceName,hwEthernetARPIPAddress,hwEthernetARPMacAdd,hwEthernetARPVlanId,hwEthernetARPCeVlanId,hwEthernetARPReceiveInterfaceName }
+        STATUS current
+        DESCRIPTION
+            "Trap information about the resolved alarm of the abnormal ARP detection."
+        ::= { hwEthernetARPNotifications 43 }
 	
 --
 -- Conformance information
@@ -2578,7 +2617,10 @@ hwEthernetARPObjects OBJECT IDENTIFIER ::= { hwEthernetARPMIB 1 }
           hwEthernetARPMACMismatch,
           hwEthernetARPMACMismatchClear,
           hwEthernetARPBdSuppressEntryExceedAlarm,
-          hwEthernetARPBdSuppressEntryResumeAlarm}
+          hwEthernetARPBdSuppressEntryResumeAlarm,
+          hwEthernetARPDetectAbnormalAlarm,
+          hwEthernetARPDetectResumeAlarm
+          }
         STATUS current
         DESCRIPTION
                  "notification Group."   

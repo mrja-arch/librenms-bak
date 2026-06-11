@@ -4,7 +4,7 @@
 -- 
 -- Description: HUAWEI L2VPN Management MIB
 -- Reference:
--- Version:     V2.05
+-- Version:     V2.04
 -- History:
 --              V1.0 WangSongTao, 2009-02-26, publish 
 -- ==================================================================
@@ -40,9 +40,6 @@
                 DESCRIPTION
                      "The HUAWEI-L2VPN-MIB contains objects to
                       manage global Attributes of L2VPN."
-                REVISION "201803191700Z"                    -- Mar 19, 2018 at 17:00 GMT
-                DESCRIPTION
-                     "Add null string in the end."
                 REVISION "201803191700Z"                    -- Mar 19, 2018 at 17:00 GMT
                 DESCRIPTION
                      "Add null string in the end."
@@ -414,4 +411,3 @@
 --
 -- HUAWEI-L2VPN-MIB.mib
 --
-

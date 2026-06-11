@@ -1,0 +1,1439 @@
+-- =================================================================
+-- Copyright (C) 2025 by HUAWEI TECHNOLOGIES. All rights reserved.
+-- Description: Remote unit management.
+-- Reference:
+-- Version: V4.01
+--
+-- =================================================================
+
+    HUAWEI-RUMNG-MIB DEFINITIONS ::= BEGIN
+        IMPORTS
+            hwDatacomm
+                FROM HUAWEI-MIB
+            RowStatus, MacAddress
+                FROM SNMPv2-TC
+            IpAddress, Integer32, Unsigned32, Counter32, Counter64, OBJECT-TYPE, MODULE-IDENTITY, NOTIFICATION-TYPE
+                FROM SNMPv2-SMI
+            OBJECT-GROUP, MODULE-COMPLIANCE, NOTIFICATION-GROUP
+                FROM SNMPv2-CONF
+            LldpChassisIdSubtype, LldpChassisId, LldpPortIdSubtype, LldpPortId
+                FROM LLDP-MIB
+            SnmpAdminString
+                FROM SNMP-FRAMEWORK-MIB;
+
+        hwRuMngMIB MODULE-IDENTITY
+            LAST-UPDATED "202506060000Z"
+            ORGANIZATION "Huawei Technologies Co.,Ltd."
+            CONTACT-INFO
+                "Huawei Industrial Base
+                  Bantian, Longgang
+                   Shenzhen 518129
+                   People's Republic of China
+                   Website: http://www.huawei.com
+                   Email: support@huawei.com
+                "
+            DESCRIPTION
+                "Remote unit management.
+                "
+            -- Revision history
+            REVISION    "202506060000Z"
+            DESCRIPTION  "V4.01 add alarm clear about opticalLife warning"
+
+            -- Revision history
+            REVISION    "202505270000Z"
+            DESCRIPTION  "V4.00 modify the key of HwlldpRemEntry"
+
+            -- Revision history
+            REVISION    "202502130000Z"
+            DESCRIPTION  "V3.00 add mac address"
+
+            -- Revision history
+            REVISION    "202501130000Z"
+            DESCRIPTION  "V2.02 modify lldp neighbor change notification"
+
+            REVISION    "202501030000Z"
+            DESCRIPTION  "V2.01 add lldp neighbor"
+
+            REVISION    "202412160000Z"
+            DESCRIPTION  "V2.00 modify alarm about backup port misconfigured"
+
+            REVISION    "202412100000Z"
+            DESCRIPTION  "V1.13 add alarm about backup master port misconfigured"
+
+            REVISION    "202411210000Z"
+            DESCRIPTION  "V1.12 add alarm about backup master port unavailable"
+
+            REVISION    "202312220000Z"
+            DESCRIPTION  "V1.11 modify the description of the hwRuCertMisMatch, hwRuCertMatch, hwRuMngDevConnectInterface, hwRuMngPortConnectInterface"
+
+            REVISION    "202308230000Z"
+            DESCRIPTION  "V1.10 modify the description of the hwRuMngDevMemoryUsage"
+
+            REVISION    "202304070000Z"
+            DESCRIPTION  "V1.09 add change hwRuMngPortMode type"
+
+            REVISION    "202212270000Z"
+            DESCRIPTION  "V1.08 add device information, port information and optical module information"
+
+            REVISION    "202212150000Z"
+            DESCRIPTION  "V1.07 add alarm about hwRuCertMisMatch"
+
+            REVISION    "202209290000Z"
+            DESCRIPTION  "V1.06 add alarm about UART"
+
+            REVISION    "202207220000Z"
+            DESCRIPTION  "V1.05 add alarm about mac usage"
+
+            REVISION    "202203070000Z"
+            DESCRIPTION  "V1.04 add alarm about authentication"
+
+            REVISION    "202202190000Z"
+            DESCRIPTION  "V1.03 add alarm about authentication"
+
+            REVISION    "202201290000Z"
+            DESCRIPTION  "V1.02 change hwRuMngRu  to hwRuMngRuEsn  "
+
+            REVISION    "202107160000Z"
+            DESCRIPTION  "V1.0 Initial version"
+            ::= { hwDatacomm 667 }
+--
+-- Textual conventions
+--
+--
+-- Node definitions
+--
+       hwRuMngTrapsVbOids OBJECT IDENTIFIER ::= { hwRuMngMIB 1 }
+        hwRuMngRuEsn  OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The ESN of remote unit."
+            ::= { hwRuMngTrapsVbOids 1 }  
+
+        hwRuMngRuPortName OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The portid of remote unit."
+            ::= { hwRuMngTrapsVbOids 2 }
+
+        hwRuMngRuLinkExceptionReason OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The reason of remote unit exception."
+            ::= { hwRuMngTrapsVbOids 3 }
+        hwRuMngPortName OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Port name of the central device."
+            ::= { hwRuMngTrapsVbOids 4 }
+        hwRuMngRuPortAdminStatus OBJECT-TYPE
+            SYNTAX INTEGER {
+                up(1),       -- ready to pass packets
+                down(2)
+            }
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Indicates the administrative status of the remote unit port."
+            ::= { hwRuMngTrapsVbOids 5 }
+        hwRuMngRuPortOperStatus OBJECT-TYPE
+            SYNTAX INTEGER {
+                up(1),       -- ready to pass packets
+                down(2)
+            }
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Operational status of the remote unit port."
+            ::= { hwRuMngTrapsVbOids 6 }
+        hwRuMngRuPortDiscardPkts OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The number of packets discarded on the remote unit port."
+            ::= { hwRuMngTrapsVbOids 7 }
+        hwRuMngRuPortDiscardPktThreshold OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Packet discard threshold during the configured interval.unit(packet)."
+            ::= { hwRuMngTrapsVbOids 8 }	
+        hwRuMngRuPortDiscardPktInterval OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The detection interval of the discard packet."
+            ::= { hwRuMngTrapsVbOids 9 }	
+        hwRuMngRuPortCrcErrorPkts OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The number of crc packets on the remote unit port."
+            ::= { hwRuMngTrapsVbOids 10 }
+        hwRuMngRuPortCrcErrorPktThreshold OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Crc Packet threshold during the configured interval.unit(packet)."
+            ::= { hwRuMngTrapsVbOids 11 }	
+        hwRuMngRuPortCrcErrorPktInterval OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The detection interval of the crc packet."
+            ::= { hwRuMngTrapsVbOids 12 }	
+        hwRuMngRuPortBandWidthUsage OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The bandwidth usage on the remote unit port."
+            ::= { hwRuMngTrapsVbOids 13 }
+        hwRuMngRuPortBandWidthUsageThreshold OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The bandwidth usage threshold during the configured interval.unit(packet)."
+            ::= { hwRuMngTrapsVbOids 14 }		
+        hwRuMngRuPortOpticalAbnormalReason OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The reason of remote unit port optical module exception."
+            ::= { hwRuMngTrapsVbOids 15 }
+        hwRuMngRuSpec OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The max number of the remote unit."
+            ::= { hwRuMngTrapsVbOids 16 }
+            
+        hwRuMngFirmware OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The firmware type of remote-unit."
+            ::= { hwRuMngTrapsVbOids 17 }
+            
+        hwRuMngFailReason OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The Reason for the remote unit upgrade failure."
+            ::= { hwRuMngTrapsVbOids 18 } 
+            
+        hwRuMngPortRuSpec OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The maximum number of remote units supported on a port."
+            ::= { hwRuMngTrapsVbOids 19 }            
+
+        hwRuMngOfflineReason OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The Reason for the remote offline."
+            ::= { hwRuMngTrapsVbOids 20 }
+
+        hwRuMngPseV33AbnReason OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The Reason for the remote unit PSE V33 abnormal."
+            ::= { hwRuMngTrapsVbOids 21 }
+        
+        hwRuMngTempValue OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The temperature of the remote unit."
+            ::= { hwRuMngTrapsVbOids 22 }
+
+        hwRuMngIICId OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The fault IIC id of the remote unit."
+            ::= { hwRuMngTrapsVbOids 23 } 
+
+        hwRuMngIICName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The fault IIC name of the remote unit."
+            ::= { hwRuMngTrapsVbOids 24 }
+
+        hwRuMngMacUsage OBJECT-TYPE
+        SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "MAC address usage."
+            ::= { hwRuMngTrapsVbOids 25 }
+
+        hwRuMngMacThreshold OBJECT-TYPE
+        SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "MAC address usage alarm threshold."
+            ::= { hwRuMngTrapsVbOids 26 }
+
+        hwRuMngMasterPortName OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The master port name of remote unit."
+            ::= { hwRuMngTrapsVbOids 27 }
+        
+        hwRuMngBackupPortName OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The backup port name of remote unit."
+            ::= { hwRuMngTrapsVbOids 28 }
+        hwRuMngLldpInterfaceNeiIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                  "Indexes of LLDP neighbors."
+            ::= { hwRuMngTrapsVbOids 29 }
+
+        hwRuMngLldpInterfaceNeiChangeType OBJECT-TYPE
+            SYNTAX INTEGER {
+                added(1),
+                deleted(2),
+                updated(3)
+            }    
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                  "Change types of LLDP neighbors."
+            ::= { hwRuMngTrapsVbOids 30 }
+
+       hwRuMngTraps OBJECT IDENTIFIER ::= { hwRuMngMIB 2 }
+        hwRuMngRuLinkAbnormal NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngPortName, hwRuMngRuLinkExceptionReason }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when remote unit connection is abnormal."
+            ::= { hwRuMngTraps 1 }
+
+        hwRuMngRuLinkNormal NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngPortName, hwRuMngRuLinkExceptionReason }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when remote unit connection is normal."
+            ::= { hwRuMngTraps 2 }
+
+        hwRuMngRuPortLinkDown NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuPortAdminStatus, hwRuMngRuPortOperStatus }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the port status of the remote unit changes to down."
+            ::= { hwRuMngTraps 3 }
+
+         hwRuMngRuPortLinkUp NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuPortAdminStatus, hwRuMngRuPortOperStatus }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the port status of the remote unit changes to up."
+            ::= { hwRuMngTraps 4 }
+
+         hwRuPortInputDiscardNotice NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuPortDiscardPkts, hwRuMngRuPortDiscardPktThreshold, hwRuMngRuPortDiscardPktInterval }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit interface input discard exceed the trap threshold."
+            ::= { hwRuMngTraps 5 }
+
+         hwRuPortOutputDiscardNotice NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuPortDiscardPkts, hwRuMngRuPortDiscardPktThreshold, hwRuMngRuPortDiscardPktInterval }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit interface output discard exceed the trap threshold."
+            ::= { hwRuMngTraps 7 }
+
+         hwRuPortCrcErrorRising NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuPortCrcErrorPkts, hwRuMngRuPortCrcErrorPktThreshold, hwRuMngRuPortCrcErrorPktInterval }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit port CRC error is rising."
+            ::= { hwRuMngTraps 9 }
+
+         hwRuPortCrcErrorResume NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuPortCrcErrorPkts, hwRuMngRuPortCrcErrorPktThreshold, hwRuMngRuPortCrcErrorPktInterval }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit port CRC error resume."
+            ::= { hwRuMngTraps 10 }	
+
+         hwRuPortInputRateRising NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuPortBandWidthUsage, hwRuMngRuPortBandWidthUsageThreshold }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit interface input flow bandwidth usage exceeded the trap threshod."
+            ::= { hwRuMngTraps 11 }
+
+         hwRuPortInputRateResume NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuPortBandWidthUsage, hwRuMngRuPortBandWidthUsageThreshold }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit interface input flow bandwidth usage was restored to the trap threshold."
+            ::= { hwRuMngTraps 12 }
+
+         hwRuPortOutputRateRising NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuPortBandWidthUsage, hwRuMngRuPortBandWidthUsageThreshold }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit interface output flow bandwidth usage exceeded the trap threshod."
+            ::= { hwRuMngTraps 13 }
+
+         hwRuPortOutputRateResume NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuPortBandWidthUsage, hwRuMngRuPortBandWidthUsageThreshold }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit interface output flow bandwidth usage was restored to the trap threshold."
+            ::= { hwRuMngTraps 14 }
+
+         hwRuPortOpticalPowerAbnormal NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuPortOpticalAbnormalReason }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit interface optical module power is abnormal."
+            ::= { hwRuMngTraps 15 }
+
+         hwRuPortOpticalPowerResume NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuPortOpticalAbnormalReason }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit interface recovered from power abnormal."
+            ::= { hwRuMngTraps 16 }
+
+         hwRuMngDevFull NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuSpec }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the number of remote unit is overspec."
+            ::= { hwRuMngTraps 17 }
+            
+         hwRuMngFirmwareUpdateFail NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngPortName, hwRuMngFirmware, hwRuMngFailReason }
+            STATUS current
+            DESCRIPTION
+                "The notification is generated when the remote unit firmware upgrade failed."
+            ::= { hwRuMngTraps 19 }
+
+         hwRuMngPortRuFull NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngPortName, hwRuMngRuEsn, hwRuMngPortRuSpec}
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the number of remote units connected to ETH-Trunk exceeds the upper limit."
+            ::= { hwRuMngTraps 21 }
+
+         hwRuMngOnline NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn, hwRuMngPortName}
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit goes online."
+            ::= { hwRuMngTraps 23 }
+
+        hwRuMngOffline NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn, hwRuMngPortName, hwRuMngOfflineReason}
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit goes offline."
+            ::= { hwRuMngTraps 25 }
+
+        hwRuPseV33Abnormal NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn, hwRuMngPseV33AbnReason}
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit pse v33 is abnormal."
+            ::= { hwRuMngTraps 27 }
+
+        hwRuPseV33Resume NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit pse v33 goes normal."
+            ::= { hwRuMngTraps 28 }
+
+        hwRuPsePowerStatAbnormal NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn}
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit pse power supply is abnormal."
+            ::= { hwRuMngTraps 29 }
+
+        hwRuPsePowerStatResume NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit pse power supply goes normal."
+            ::= { hwRuMngTraps 30 }
+
+        hwRuTemperatureAbnormal NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn, hwRuMngTempValue }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit temperature is abnormal."
+            ::= { hwRuMngTraps 31 }
+
+        hwRuTemperatureResume NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn, hwRuMngTempValue }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit temperature goes normal."
+            ::= { hwRuMngTraps 32 }
+
+        hwRuPhyStatAbnormal NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit phy status is abnormal."
+            ::= { hwRuMngTraps 33 }
+
+        hwRuPhyStatResume NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit phy status goes normal."
+            ::= { hwRuMngTraps 34 }
+
+        hwRuIICFault NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn, hwRuMngIICId, hwRuMngIICName}
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit IIC fault."
+            ::= { hwRuMngTraps 35 }
+
+        hwRuAuthFail NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated the authentication to the remote unit failed."
+            ::= { hwRuMngTraps 37 }
+
+        hwRuAuthSuccess NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated the authentication to the remote unit succeeded."
+            ::= { hwRuMngTraps 38 }
+
+        hwRuPortCongestAlarm NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit interface is congested."
+            ::= { hwRuMngTraps 39 }
+
+        hwRuPortCongestResume NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the congestion on the remote unit interface is cleared."
+            ::= { hwRuMngTraps 40 }
+
+        hwRuMacUsageRaising NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngMacUsage, hwRuMngMacThreshold }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when MAC address usage exceeds the threshold alarm."
+            ::= { hwRuMngTraps 41 }
+
+        hwRuMacUsageFalling NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngMacUsage, hwRuMngMacThreshold }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when The MAC address usage rate is lower than the recovery alarm threshold."
+            ::= { hwRuMngTraps 42 }
+
+        hwRuUartStatAbnormal NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn}
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit UART communication is abnormal."
+            ::= { hwRuMngTraps 43 }
+
+        hwRuUartStatResume NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the remote unit UART communication goes normal."
+            ::= { hwRuMngTraps 44 }
+
+        hwRuCertMisMatch NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated the remote unit certificate version does not match the central device."
+            ::= { hwRuMngTraps 45}
+
+        hwRuCertMatch NOTIFICATION-TYPE   
+            OBJECTS { hwRuMngRuEsn }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated the RU certificate version match the central device."
+            ::= { hwRuMngTraps 46}
+        
+        hwRuMngBackupMasterPortUnavailable NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngMasterPortName, hwRuMngBackupPortName }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the RU's master port is unavailable and backup port is in forwarding state."
+            ::= { hwRuMngTraps 47}
+ 
+        hwRuMngBackupMasterPortAvailable NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngMasterPortName, hwRuMngBackupPortName }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the RU's master port is available and backup port is in blocking state."
+            ::= { hwRuMngTraps 48}
+        
+        hwRuMngBackupPortMisconfigured NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngPortName, hwRuMngRuPortName }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the RU's port directly connected to the central device is misconfigured as a backup port."
+            ::= { hwRuMngTraps 49}
+        
+        hwRuMngBackupPortMisconfiguredResume NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngPortName, hwRuMngRuPortName }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when the RU's port directly connected to the central device is deconfigured as a backup port."
+            ::= { hwRuMngTraps 50}
+        
+        hwRuMngLldpInterfaceNeighborChange  NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngPortName, hwRuMngRuPortName, hwRuMngLldpInterfaceNeiIndex, hwRuMngLldpInterfaceNeiChangeType, hwRuMngLldpNbrChassisType, hwRuMngLldpNbrChassisId,
+                hwRuMngLldpNbrPortIdType, hwRuMngLldpNbrPortId, hwRuMngLldpNbrSysName, hwRuMngLldpNbrSysDescript}
+            STATUS current
+            DESCRIPTION
+                  "Notify the NMS that the LLDP neighbor information of the interface was changed."
+            ::= { hwRuMngTraps 51}
+
+        hwRuMngOpticalLifeWarning NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngPortName, hwRuMngRuPortName }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when pre-warning for the optical module life of the remote unit."
+            ::= { hwRuMngTraps 52 }
+
+        hwRuMngOpticalLifeWarningResume NOTIFICATION-TYPE
+            OBJECTS { hwRuMngRuEsn, hwRuMngPortName, hwRuMngRuPortName }
+            STATUS current
+            DESCRIPTION
+                "This notification is generated when clear-warning for the optical module life of the remote unit."
+            ::= { hwRuMngTraps 53 }
+
+          hwRuMngConformance OBJECT IDENTIFIER ::= { hwRuMngMIB 3 }
+            hwRuMngCompliances OBJECT IDENTIFIER ::= { hwRuMngConformance 1 }
+            hwRuMngFullCompliance MODULE-COMPLIANCE
+                STATUS current
+                DESCRIPTION
+                    "hwRuMngFullCompliance"
+                MODULE 
+                    MANDATORY-GROUPS { hwRuMngVbGrops, hwRuMngTrapGroup }
+                ::= { hwRuMngCompliances 1 }
+
+            hwRuMngGroups OBJECT IDENTIFIER ::= { hwRuMngConformance 2 }
+              hwRuMngVbGrops OBJECT-GROUP
+                  OBJECTS { hwRuMngRuEsn, hwRuMngRuPortName, hwRuMngRuLinkExceptionReason, hwRuMngPortName, hwRuMngRuPortAdminStatus, hwRuMngRuPortOperStatus,
+                            hwRuMngRuPortDiscardPkts, hwRuMngRuPortDiscardPktThreshold, hwRuMngRuPortDiscardPktInterval, hwRuMngRuPortCrcErrorPkts, hwRuMngRuPortCrcErrorPktThreshold,
+                            hwRuMngRuPortCrcErrorPktInterval, hwRuMngRuPortBandWidthUsage, hwRuMngRuPortBandWidthUsageThreshold, hwRuMngRuPortOpticalAbnormalReason, hwRuMngRuSpec, 
+                            hwRuMngFirmware, hwRuMngFailReason, hwRuMngPortRuSpec, hwRuMngOfflineReason, hwRuMngPseV33AbnReason,  hwRuMngTempValue,
+                            hwRuMngIICId, hwRuMngIICName, hwRuMngMacUsage, hwRuMngMacThreshold, hwRuMngMasterPortName, hwRuMngBackupPortName, hwRuMngLldpInterfaceNeiIndex, hwRuMngLldpInterfaceNeiChangeType,
+                            hwRuMngLldpNbrChassisId, hwRuMngLldpNbrChassisType, hwRuMngLldpNbrPortDescript, hwRuMngLldpNbrPortId, hwRuMngLldpNbrPortIdType, hwRuMngLldpNbrSysDescript, hwRuMngLldpNbrSysName}
+                STATUS current
+                DESCRIPTION
+                    "A collection of objects providing information about  remote unit."
+                ::= {  hwRuMngGroups 1 }
+
+              hwRuMngTrapGroup NOTIFICATION-GROUP
+                  NOTIFICATIONS { hwRuMngRuLinkAbnormal, hwRuMngRuLinkNormal, hwRuMngRuPortLinkDown, hwRuMngRuPortLinkUp, hwRuPortInputDiscardNotice, hwRuPortOutputDiscardNotice, hwRuPortCrcErrorRising,
+                                  hwRuPortCrcErrorResume, hwRuPortInputRateRising, hwRuPortInputRateResume, hwRuPortOutputRateRising, hwRuPortOutputRateResume,
+                                  hwRuPortOpticalPowerAbnormal, hwRuPortOpticalPowerResume, hwRuMngDevFull, hwRuMngFirmwareUpdateFail, hwRuMngPortRuFull, hwRuMngOnline, hwRuMngOffline,
+                                  hwRuPseV33Abnormal, hwRuPseV33Resume, hwRuPsePowerStatAbnormal, hwRuPsePowerStatResume, hwRuTemperatureAbnormal, hwRuTemperatureResume, hwRuPhyStatAbnormal,
+                                  hwRuPhyStatResume, hwRuIICFault, hwRuAuthFail, hwRuAuthSuccess, hwRuPortCongestAlarm, hwRuPortCongestResume, hwRuMacUsageRaising, hwRuMacUsageFalling, hwRuUartStatAbnormal,
+                                  hwRuUartStatResume, hwRuCertMisMatch, hwRuCertMatch, hwRuMngBackupMasterPortUnavailable, hwRuMngBackupMasterPortAvailable, hwRuMngBackupPortMisconfigured, hwRuMngBackupPortMisconfiguredResume,
+                                  hwRuMngLldpInterfaceNeighborChange, hwRuMngOpticalLifeWarning, hwRuMngOpticalLifeWarningResume }
+                STATUS current
+                DESCRIPTION
+                    "The trap enable group."
+                ::= {  hwRuMngGroups 2 }
+
+        hwRuMngDevTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwRuMngDevEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The basic device information about remote unit."
+            ::= { hwRuMngMIB 4 }
+
+        hwRuMngDevEntry OBJECT-TYPE
+            SYNTAX HwRuMngDevEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The basic device information about remote unit."
+            INDEX { hwRuMngDevEsn }
+            ::= { hwRuMngDevTable 1 }
+
+        HwRuMngDevEntry ::=
+            SEQUENCE { 
+                    hwRuMngDevEsn
+                        OCTET STRING,
+                    hwRuMngDevStatus
+                        INTEGER,
+                    hwRuMngDevMemoryUsage
+                        Integer32,
+                    hwRuMngDevName
+                        OCTET STRING,
+                    hwRuMngDevType
+                        OCTET STRING,
+                    hwRuMngDevOnlineTime
+                        Integer32,
+                    hwRuMngDevConnectInterface
+                        OCTET STRING,
+                    hwRuMngDevAbnormalReason
+                        OCTET STRING,
+                    hwRuMngDevSlotIndex
+                        Integer32,
+                    hwRuMngDevAppVersion
+                        OCTET STRING
+                }
+
+            hwRuMngDevEsn OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The ESN of an RU. It uniquely identifies an RU."
+                ::= { hwRuMngDevEntry 1 }
+
+            hwRuMngDevStatus OBJECT-TYPE
+                SYNTAX INTEGER
+                    {
+                    normal(0),
+                    upgrading(1),
+                    idle(2),
+                    abnormal(3),
+                    configuring(4)
+                    }
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The device status."
+                ::= { hwRuMngDevEntry 2 }
+
+            hwRuMngDevMemoryUsage OBJECT-TYPE
+                SYNTAX Integer32 (0..100)
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The memory usage of an RU."
+                ::= { hwRuMngDevEntry 3 }
+
+            hwRuMngDevName OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The alias of an RU."
+                ::= { hwRuMngDevEntry 4 }
+
+            hwRuMngDevType OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The model of an RU."
+                ::= { hwRuMngDevEntry 5 }
+
+            hwRuMngDevOnlineTime OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The time when an RU goes online."
+                ::= { hwRuMngDevEntry 6 }
+
+            hwRuMngDevConnectInterface OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The interface connecting the RU to the central device."
+                ::= { hwRuMngDevEntry 7 }
+
+            hwRuMngDevAbnormalReason OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The cause of an RU exception."
+                ::= { hwRuMngDevEntry 8 }
+
+            hwRuMngDevSlotIndex OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The virtual slot number of an RU."
+                ::= { hwRuMngDevEntry 9 }
+
+            hwRuMngDevAppVersion OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The version number of an RU."
+                ::= { hwRuMngDevEntry 10 }
+
+        hwRuMngPortTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwRuMngPortEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The basic port information about remote unit."
+            ::= { hwRuMngMIB 5 }
+
+        hwRuMngPortEntry OBJECT-TYPE
+            SYNTAX HwRuMngPortEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The basic port information about remote unit."
+            INDEX { hwRuMngPortEsn, hwRuMngPortIndex }
+            ::= { hwRuMngPortTable 1 }
+
+        HwRuMngPortEntry ::=
+            SEQUENCE { 
+                    hwRuMngPortEsn
+                        OCTET STRING,
+                    hwRuMngPortIndex
+                        Integer32,
+                    hwRuMngPortStatus
+                        INTEGER,
+                    hwRuMngPortInputRate
+                        Counter64,
+                    hwRuMngPortOutputRate
+                        Counter64,
+                    hwRuMngPortInputPeakRate
+                        Counter64,
+                    hwRuMngPortOutputPeakRate
+                        Counter64,
+                    hwRuMngPortInputTraffic
+                        Counter64,
+                    hwRuMngPortOutputTraffic
+                        Counter64,
+                    hwRuMngPortRuName
+                        OCTET STRING,
+                    hwRuMngPortMode
+                        Integer32,
+                    hwRuMngPortPhyStatus
+                        Integer32,
+                    hwRuMngPortAdminStatus
+                        Integer32,
+                    hwRuMngPortAutoNegotiation
+                        Integer32,
+                    hwRuMngPortDuplex
+                        Integer32,
+                    hwRuMngPortSpeed
+                        Integer32,
+                    hwRuMngPortTrunkName
+                        OCTET STRING,
+                    hwRuMngPortConnectInterface
+                        OCTET STRING
+                }
+
+            hwRuMngPortEsn OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The ESN of an RU. It uniquely identifies an RU."
+                ::= { hwRuMngPortEntry 1 }
+
+            hwRuMngPortIndex OBJECT-TYPE
+                SYNTAX Integer32 (0..100)
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The port index."
+                ::= { hwRuMngPortEntry 2 }
+
+            hwRuMngPortStatus OBJECT-TYPE
+                SYNTAX INTEGER
+                    {
+                    down(1),
+                    up(2)
+                    }
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The current running status of a port."
+                ::= { hwRuMngPortEntry 3 }
+
+            hwRuMngPortInputRate OBJECT-TYPE
+                SYNTAX Counter64
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The inbound rate of a port, in bit/s. The value is the average value in the latest statistical period."
+                ::= { hwRuMngPortEntry 4 }
+
+            hwRuMngPortOutputRate OBJECT-TYPE
+                SYNTAX Counter64
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The outbound rate of a port, in bit/s. The value is the average value in the latest statistical period."
+                ::= { hwRuMngPortEntry 5 }
+
+            hwRuMngPortInputPeakRate OBJECT-TYPE
+                SYNTAX Counter64
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The peak rate of incoming traffic on a port, in bit/s. The value is the peak rate in the latest statistical period."
+                ::= { hwRuMngPortEntry 6 }
+
+            hwRuMngPortOutputPeakRate OBJECT-TYPE
+                SYNTAX Counter64
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The peak rate of outgoing traffic on a port, in bit/s. The value is the peak rate in the latest statistical period."
+                ::= { hwRuMngPortEntry 7 }
+
+            hwRuMngPortInputTraffic OBJECT-TYPE
+                SYNTAX Counter64
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The incoming traffic statistics on a port, which is the incremental value within a collection period, in bytes."
+                ::= { hwRuMngPortEntry 8 }
+
+            hwRuMngPortOutputTraffic OBJECT-TYPE
+                SYNTAX Counter64
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The outgoing traffic statistics on a port, which is the incremental value within a collection period, in bytes."
+                ::= { hwRuMngPortEntry 9 }
+
+            hwRuMngPortRuName OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The port name."
+                ::= { hwRuMngPortEntry 10 }
+
+            hwRuMngPortMode OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The port mode."
+                ::= { hwRuMngPortEntry 11 }
+ 
+            hwRuMngPortPhyStatus OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The PHY status of an RU port."
+                ::= { hwRuMngPortEntry 12 }
+ 
+            hwRuMngPortAdminStatus OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The administrative status of an RU port."
+                ::= { hwRuMngPortEntry 13 }
+            hwRuMngPortAutoNegotiation OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The auto-negotiation status of an RU port."
+                ::= { hwRuMngPortEntry 14 }
+            hwRuMngPortDuplex OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The duplex status of an RU port."
+                ::= { hwRuMngPortEntry 15 }
+            hwRuMngPortSpeed OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The rate at which an RU port works."
+                ::= { hwRuMngPortEntry 16 }
+            hwRuMngPortTrunkName OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The name of the Eth-Trunk port to which an RU interface is added."
+                ::= { hwRuMngPortEntry 17 }
+            hwRuMngPortConnectInterface OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The physical interface connecting the RU to the central device."
+                ::= { hwRuMngPortEntry 18 }
+
+        hwRuMngSfpTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwRuMngSfpEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "Basic information about the optical module."
+            ::= { hwRuMngMIB 6 }
+ 
+        hwRuMngSfpEntry OBJECT-TYPE
+            SYNTAX HwRuMngSfpEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "Basic information about the optical module."
+            INDEX { hwRuMngSfpEsn, hwRuMngSfpIndex }
+            ::= { hwRuMngSfpTable 1 }
+
+        HwRuMngSfpEntry ::=
+            SEQUENCE { 
+                    hwRuMngSfpEsn
+                        OCTET STRING,
+                    hwRuMngSfpIndex
+                        Integer32,
+                    hwRuMngSfpName
+                        OCTET STRING,
+                    hwRuMngSfpCertified
+                        Integer32,
+                    hwRuMngSfpManuDate
+                        OCTET STRING,
+                    hwRuMngSfpBandwidth
+                        Integer32,
+                    hwRuMngSfpSerialNumber
+                        OCTET STRING,
+                    hwRuMngSfpTransferDistance
+                        OCTET STRING,
+                    hwRuMngSfpSupportDdm
+                        Integer32,
+                    hwRuMngSfpTemperature
+                        OCTET STRING,
+                    hwRuMngSfpTempHighThreshold
+                        OCTET STRING,
+                    hwRuMngSfpTempLowThreshold
+                        OCTET STRING,
+                    hwRuMngSfpVoltage
+                        OCTET STRING,
+                    hwRuMngSfpTransceiverType
+                        OCTET STRING,
+                    hwRuMngSfpVendorName
+                        OCTET STRING,
+                    hwRuMngSfpTransferMode
+                        Integer32
+                }
+
+            hwRuMngSfpEsn OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The ESN of an RU. It uniquely identifies an RU."
+                ::= { hwRuMngSfpEntry 1 }
+
+            hwRuMngSfpIndex OBJECT-TYPE
+                SYNTAX Integer32 (0..100)
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The port index."
+                ::= { hwRuMngSfpEntry 2 }
+
+            hwRuMngSfpName OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The port name."
+                ::= { hwRuMngSfpEntry 3 }
+
+            hwRuMngSfpCertified OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "Whether an optical module is non-certified."
+                ::= { hwRuMngSfpEntry 4 }
+ 
+            hwRuMngSfpManuDate OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The manufacturing date of an optical module."
+                ::= { hwRuMngSfpEntry 5 }
+ 
+            hwRuMngSfpBandwidth OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The bandwidth of an optical module, in Mbits/s."
+                ::= { hwRuMngSfpEntry 6 }
+ 
+            hwRuMngSfpSerialNumber OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The SN of an optical module."
+                ::= { hwRuMngSfpEntry 7 }
+ 
+            hwRuMngSfpTransferDistance OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The transmission distance description."
+                ::= { hwRuMngSfpEntry 8 }
+ 
+            hwRuMngSfpSupportDdm OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "whether DDM module diagnosis is supported."
+                ::= { hwRuMngSfpEntry 9 }
+ 
+            hwRuMngSfpTemperature OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The temperature of an optical module."
+                ::= { hwRuMngSfpEntry 10 }
+ 
+            hwRuMngSfpTempHighThreshold OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The upper temperature threshold of an optical module."
+                ::= { hwRuMngSfpEntry 11 }
+ 
+            hwRuMngSfpTempLowThreshold OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The lower temperature threshold of an optical module."
+                ::= { hwRuMngSfpEntry 12 }
+ 
+            hwRuMngSfpVoltage OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The voltage of an optical module, in V."
+                ::= { hwRuMngSfpEntry 13 }
+ 
+            hwRuMngSfpTransceiverType OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The type of an optical module."
+                ::= { hwRuMngSfpEntry 14 }
+ 
+            hwRuMngSfpVendorName OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..128))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The manufacturer of an optical module."
+                ::= { hwRuMngSfpEntry 15 }
+ 
+            hwRuMngSfpTransferMode OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The transmission mode of an optical module:"
+                ::= { hwRuMngSfpEntry 16 }
+                
+        hwlldpRemTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwlldpRemEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "This table contains one or more rows per physical network
+                connection known to this agent."
+            ::= { hwRuMngMIB 7 }  
+            
+            hwlldpRemEntry OBJECT-TYPE
+              SYNTAX HwlldpRemEntry
+              MAX-ACCESS not-accessible
+              STATUS current
+              DESCRIPTION
+                  "Information about a particular physical network connection.
+                  Entries may be created and deleted in this table by the agent,
+                  if a physical topology discovery process is active."
+              INDEX {
+                  hwRuMngLldpNbrEsn,
+                  hwRuMngLldpNbrPortIndex,
+                  hwRuMngLldpNbrIndex
+              }
+              ::= { hwlldpRemTable 1 }
+              
+              HwlldpRemEntry ::= 
+                  SEQUENCE {
+                  hwRuMngLldpNbrEsn OCTET STRING,
+                  hwRuMngLldpNbrPortIndex Integer32,
+                  hwRuMngLldpNbrIndex Integer32,
+                  hwRuMngLldpNbrPortName OCTET STRING,
+                  hwRuMngLldpNbrChassisType LldpChassisIdSubtype,
+                  hwRuMngLldpNbrChassisId LldpChassisId,
+                  hwRuMngLldpNbrPortIdType LldpPortIdSubtype,
+                  hwRuMngLldpNbrPortId LldpPortId,
+                  hwRuMngLldpNbrPortDescript SnmpAdminString,
+                  hwRuMngLldpNbrSysName SnmpAdminString,
+                  hwRuMngLldpNbrSysDescript SnmpAdminString
+              }  
+              
+              hwRuMngLldpNbrEsn OBJECT-TYPE
+              SYNTAX OCTET STRING (SIZE(1..128))
+              MAX-ACCESS read-only
+              STATUS current
+              DESCRIPTION
+                  "A TimeFilter for this entry. See the TimeFilter textual
+                  convention in IETF RFC 2021 and
+                  http://www.ietf.org/IESG/Implementations/RFC2021-Implementation.txt
+                  to see how TimeFilter works."
+              REFERENCE
+                  "IETF RFC 2021 section 6"
+              ::= { hwlldpRemEntry 1 }             
+              
+              hwRuMngLldpNbrPortIndex OBJECT-TYPE
+              SYNTAX Integer32 (0..100)
+              MAX-ACCESS read-only
+              STATUS current
+              DESCRIPTION
+                  "The port index."
+              ::= { hwlldpRemEntry 2}   
+            
+            hwRuMngLldpNbrIndex OBJECT-TYPE
+              SYNTAX Integer32
+              MAX-ACCESS read-only
+              STATUS current
+              DESCRIPTION
+                  "A TimeFilter for this entry. See the TimeFilter textual
+                  convention in IETF RFC 2021 and
+                  http://www.ietf.org/IESG/Implementations/RFC2021-Implementation.txt
+                  to see how TimeFilter works."
+              REFERENCE
+                  "IETF RFC 2021 section 6"
+              ::= { hwlldpRemEntry 3 } 
+
+              hwRuMngLldpNbrPortName OBJECT-TYPE
+              SYNTAX OCTET STRING (SIZE(1..128))
+              MAX-ACCESS read-only
+              STATUS current
+              DESCRIPTION
+                  "This object represents an arbitrary local integer value used
+                  by this agent to identify a particular connection instance,
+                  unique only for the indicated remote system.
+                  An agent is encouraged to assign monotonically increasing
+                  index values to new entries, starting with one, after each
+                  reboot. It is considered unlikely that the lldpRemIndex
+                  will wrap between reboots."
+              ::= { hwlldpRemEntry 4 }      
+              
+              hwRuMngLldpNbrChassisType OBJECT-TYPE
+              SYNTAX LldpChassisIdSubtype
+              MAX-ACCESS read-only
+              STATUS current
+              DESCRIPTION
+                  "The type of encoding used to identify the chassis associated
+                  with the remote system."
+              REFERENCE
+                  "IEEE Std 802.1AB-2005 9.5.2.2"
+              ::= { hwlldpRemEntry 5 }   
+              
+              hwRuMngLldpNbrChassisId OBJECT-TYPE
+              SYNTAX LldpChassisId
+              MAX-ACCESS read-only
+              STATUS current
+              DESCRIPTION
+                  "The string value used to identify the chassis component
+                  associated with the remote system."
+              REFERENCE
+                  "IEEE Std 802.1AB-2005 9.5.2.3"
+              ::= { hwlldpRemEntry 6 }    
+              
+              hwRuMngLldpNbrPortIdType OBJECT-TYPE
+              SYNTAX LldpPortIdSubtype
+              MAX-ACCESS read-only
+              STATUS current
+              DESCRIPTION
+                  "The type of port identifier encoding used in the associated
+                  'lldpRemPortId' object."
+              REFERENCE
+                  "IEEE Std 802.1AB-2005 9.5.3.2"
+              ::= { hwlldpRemEntry 7 }      
+              
+              hwRuMngLldpNbrPortId OBJECT-TYPE
+              SYNTAX LldpPortId
+              MAX-ACCESS read-only
+              STATUS current
+              DESCRIPTION
+                  "The string value used to identify the port component
+                  associated with the remote system."
+              REFERENCE
+                  "IEEE Std 802.1AB-2005 9.5.3.3"
+              ::= { hwlldpRemEntry 8}   
+              
+              hwRuMngLldpNbrPortDescript OBJECT-TYPE
+              SYNTAX SnmpAdminString  
+              MAX-ACCESS read-only
+              STATUS current
+              DESCRIPTION
+                  "The string value used to identify the description of
+                  the given port associated with the remote system."
+              REFERENCE
+                  "IEEE Std 802.1AB-2005 9.5.5.2"
+              ::= { hwlldpRemEntry 9 }   
+              
+              hwRuMngLldpNbrSysName OBJECT-TYPE
+              SYNTAX SnmpAdminString 
+              MAX-ACCESS read-only
+              STATUS current
+              DESCRIPTION
+                  "The string value used to identify the system name of the
+                  remote system."
+              REFERENCE
+                  "IEEE Std 802.1AB-2005 9.5.6.2"
+              ::= { hwlldpRemEntry 10 }    
+              
+              hwRuMngLldpNbrSysDescript OBJECT-TYPE
+              SYNTAX SnmpAdminString 
+              MAX-ACCESS read-only
+              STATUS current
+              DESCRIPTION
+                  "The string value used to identify the system description
+                  of the remote system."
+              REFERENCE
+                  "IEEE Std 802.1AB-2005 9.5.7.2"
+              ::= { hwlldpRemEntry 11 }   
+        hwRuMngMacTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwRuMngMacEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "Basic information about MAC address."
+            ::= { hwRuMngMIB 8 }
+ 
+        hwRuMngMacEntry OBJECT-TYPE
+            SYNTAX HwRuMngMacEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "Basic information about MAC address."
+            INDEX { hwRuMngMacConnectInterface, hwRuMngMacMacAddress }
+            ::= { hwRuMngMacTable 1 }
+
+        HwRuMngMacEntry ::=
+            SEQUENCE { 
+                    hwRuMngMacConnectInterface
+                        OCTET STRING,
+                    hwRuMngMacMacAddress
+                        MacAddress,
+                    hwRuMngMacPortName
+                        OCTET STRING,
+                    hwRuMngMacMacType 
+                        INTEGER
+                }
+
+            hwRuMngMacConnectInterface OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..64))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The interface connecting the RU to the central device."
+                ::= { hwRuMngMacEntry 1 }
+
+            hwRuMngMacMacAddress OBJECT-TYPE
+                SYNTAX MacAddress
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The mac address."
+                ::= { hwRuMngMacEntry 2 }
+
+            hwRuMngMacPortName OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE(1..64))
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The port name."
+                ::= { hwRuMngMacEntry 3 }
+
+            hwRuMngMacMacType OBJECT-TYPE
+                SYNTAX INTEGER
+                    {
+                    dynamic(0),
+                    static(1)
+                    }
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                    "The mac address type.
+                    Options:
+                    dynamic(0)              - Dynamic type.
+                    static(1)               - Static type.
+                    "
+                ::= { hwRuMngMacEntry 4 }   
+    END
+--
+-- HUAWEI-RUMNG-MIB.mib
+--
+

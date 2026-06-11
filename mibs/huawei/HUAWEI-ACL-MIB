@@ -1,9 +1,9 @@
 -- ====================================================================
--- Copyright (C) 2021 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2023 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: Huawei Acl MIB Definition
 -- Reference:   Huawei Enterprise MIB
--- Version:     V2.31
+-- Version:     V2.32
 -- History:
 --         Version:     V2.0
 --             Wang Ning,2002-11-29,Reunification version based on the Fix-Net MIBs 
@@ -105,6 +105,9 @@
 --         Version:     V2.30
 --             hanyaohui, 2021-03-01.
 --             1, Modified the description of hwAclResourceInfoTrap, based on V2.29
+--         Version:     V2.32
+--             chenyang, 2023-03-20.
+--             1, Add hwAclUrlTrapsTable, based on V2.31
 -- ========================================================================
 
 HUAWEI-ACL-MIB DEFINITIONS ::= BEGIN
@@ -122,7 +125,7 @@ HUAWEI-ACL-MIB DEFINITIONS ::= BEGIN
         Ipv6Address                        FROM IPV6-TC;
 
     hwAcl MODULE-IDENTITY 
-        LAST-UPDATED "202110262112Z"        -- Oct 01, 2021 at 21:12 GMT
+        LAST-UPDATED "202303201200Z"        -- Mar 20, 2023 at 12:00 GMT
         ORGANIZATION "Huawei Technologies Co.,Ltd."
         CONTACT-INFO                           
            "Huawei Industrial Base            
@@ -149,6 +152,9 @@ HUAWEI-ACL-MIB DEFINITIONS ::= BEGIN
             ACL classifies data packets through these device interface applied
             rules, by which the device decides which packets can be received 
             and which should be rejected."
+        REVISION "202303201200Z"
+        DESCRIPTION
+            "Add table of hwAclUrlTrapsTable"
         REVISION "202110262112Z"
         DESCRIPTION
             "Add table of hwAclIPPoolHostNameTable"
@@ -5433,7 +5439,62 @@ HUAWEI-ACL-MIB DEFINITIONS ::= BEGIN
         "Group for all acl meter resource traps."
         ::= { hwMeterResourceTrapsGroups 1 }
 
-    -- 1.3.6.1.4.1.2011.5.1.2.3
+     -- 1.3.6.1.4.1.2011.5.1.2.2.1.4
+    hwAclUrlTrapsTable OBJECT IDENTIFIER ::= { hwAclTraps 4 }
+
+    -- 1.3.6.1.4.1.2011.5.1.2.2.1.4.1
+    hwAclUrlNetType OBJECT-TYPE
+        SYNTAX INTEGER
+            {
+            ipv4(0),
+            ipv6(1)
+            }
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+        "The infomation of nettype."
+        ::= { hwAclUrlTrapsTable 1 }
+
+    -- 1.3.6.1.4.1.2011.5.1.2.2.1.4.2
+    hwAclUrlIpSpec OBJECT-TYPE
+        SYNTAX Counter32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+        "This object indicates the spec of the alarm generated."
+        ::= { hwAclUrlTrapsTable 2 }
+
+    -- 1.3.6.1.4.1.2011.5.1.2.2.1.4.3
+    hwAclUrlTrapsEntry OBJECT IDENTIFIER ::= { hwAclUrlTrapsTable 3 }
+
+    -- 1.3.6.1.4.1.2011.5.1.2.2.1.4.3.1
+    hwAclUrlIPExceedClear NOTIFICATION-TYPE
+        OBJECTS { hwAclUrlNetType, hwAclUrlIpSpec }
+        STATUS current
+        DESCRIPTION
+        "Acl url exceed clear trap"
+        ::= { hwAclUrlTrapsEntry 1 }
+
+    -- 1.3.6.1.4.1.2011.5.1.2.2.1.4.3.2
+    hwAclUrlIPExceed NOTIFICATION-TYPE
+        OBJECTS { hwAclUrlNetType, hwAclUrlIpSpec }
+        STATUS current
+        DESCRIPTION
+        "Acl url exceed trap"
+        ::= { hwAclUrlTrapsEntry 2 }
+
+    -- 1.3.6.1.4.1.2011.5.1.2.2.1.4.4
+    hwAclUrlTrapsGroups OBJECT IDENTIFIER ::= { hwAclUrlTrapsTable 4 }
+
+    -- 1.3.6.1.4.1.2011.5.1.2.2.1.4.4.1
+    hwAclUrlTrapsGroup NOTIFICATION-GROUP
+        NOTIFICATIONS { hwAclUrlIPExceedClear, hwAclUrlIPExceed }
+        STATUS current
+        DESCRIPTION
+        "Group for all acl url traps."
+        ::= { hwAclUrlTrapsGroups 1 }
+
+   -- 1.3.6.1.4.1.2011.5.1.2.3
     hwAclResourceInfoTrap OBJECT IDENTIFIER ::= { hwAclMibTrap 3 }
 
     -- 1.3.6.1.4.1.2011.5.1.2.3.1

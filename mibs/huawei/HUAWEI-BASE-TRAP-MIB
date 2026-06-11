@@ -4,7 +4,7 @@
 -- Description: The HUAWEI-DC-BASE-MIB provides information about DataComm TRAPS
 -- 
 -- Reference:
--- Version:     V2.17
+-- Version:     V2.15
 -- History:
 -- 
 -- =================================================================
@@ -41,7 +41,7 @@
 
     
         hwBaseTrapMIB MODULE-IDENTITY 
-            LAST-UPDATED "202208042000Z"        -- July 12, 2022 at 21:11 GMT
+            LAST-UPDATED "202201122000Z"        -- Jan 12, 2022 at 14:11 GMT
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -55,12 +55,6 @@
             DESCRIPTION 
                 "This is the base trap definition for DataCom."
             -- Revision history
-        REVISION     "202208042000Z"
-	    DESCRIPTION  "V2.17, add hwBaseCommonTrap"
-
-	    REVISION     "202207122000Z"
-	    DESCRIPTION  "V2.16, add hwProcessPid and hwProcessExitTrap"
-
 	    REVISION     "202201122000Z"
 	    DESCRIPTION  "V2.15, modify hwSystemMemoryOverload and hwSystemMemoryOverloadResume"
 
@@ -870,134 +864,6 @@
                 "The IP address."
             ::= { hwBaseTrapObject 57 }
 
-    hwTrapSlotID OBJECT-TYPE
-            SYNTAX Integer32
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The slot ID."
-            ::= { hwBaseTrapObject 58 }
-
-    hwTrapUnit OBJECT-TYPE
-            SYNTAX DisplayString
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The unit name."
-            ::= { hwBaseTrapObject 59 }
-
-    hwTrapEntry OBJECT-TYPE
-            SYNTAX DisplayString
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The entry name."
-            ::= { hwBaseTrapObject 60 }
-
-    hwTrapField OBJECT-TYPE
-            SYNTAX DisplayString
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The field."
-            ::= { hwBaseTrapObject 61 }
-
-    hwTrapErrorBit OBJECT-TYPE
-            SYNTAX DisplayString
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The error bit."
-            ::= { hwBaseTrapObject 62 }
-
-    hwTrapPort OBJECT-TYPE
-            SYNTAX DisplayString
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The port name."
-            ::= { hwBaseTrapObject 63 }
-
-    hwTrapFailedReason OBJECT-TYPE
-            SYNTAX DisplayString
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "Cause of the failure."
-            ::= { hwBaseTrapObject 64 }
-
-    hwTrapTotalNumber OBJECT-TYPE
-            SYNTAX Integer32
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The total number."
-            ::= { hwBaseTrapObject 65 }
-
-    hwTrapUsedNumber OBJECT-TYPE
-            SYNTAX Integer32
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The used number."
-            ::= { hwBaseTrapObject 66 }
-
-    hwTrapPacketDroppedService OBJECT-TYPE
-            SYNTAX DisplayString
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The service which dropped packets."
-            ::= { hwBaseTrapObject 67 }
-
-    hwTrapPacketDroppedNumber OBJECT-TYPE
-            SYNTAX Integer32
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The number of packet dropped."
-            ::= { hwBaseTrapObject 68 }
-
-    hwTrapPacketDroppedReason OBJECT-TYPE
-            SYNTAX DisplayString
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The reason of packet dropped."
-            ::= { hwBaseTrapObject 69 }
-
-    hwTrapAbnormalProtocol OBJECT-TYPE
-            SYNTAX DisplayString
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The protocol which is abnormal."
-            ::= { hwBaseTrapObject 70 }
-
-    hwTrapProtocolAbnormalReason OBJECT-TYPE
-            SYNTAX DisplayString
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The cause of the anomaly."
-            ::= { hwBaseTrapObject 71 }
-
-    hwTrapProtocolAbnormalPeerInfo OBJECT-TYPE
-            SYNTAX DisplayString
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "The peer info of the anomaly protocol."
-            ::= { hwBaseTrapObject 72 }
-
-    hwProcessPid OBJECT-TYPE
-            SYNTAX INTEGER { processid(1) }
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "The Process ID."
-            ::= { hwBaseTrapObject 73 } 
-
       hwBaseMemThresTable OBJECT-TYPE
             SYNTAX SEQUENCE OF HwBaseMemThresEntry
             MAX-ACCESS not-accessible
@@ -1265,12 +1131,6 @@
                 "The entity resumed from the minor fault."
             ::= { hwEntityTrap 24 }
 
-        hwProcessExitTrap NOTIFICATION-TYPE
-            OBJECTS { hwProcessPid }
-            STATUS current
-            DESCRIPTION 
-                "Indicates that the process exits."
-            ::= { hwEntityTrap 26 }
 
         hwEnvironmentTrap OBJECT IDENTIFIER ::= { hwBaseTraps 2 }
 
@@ -2208,39 +2068,6 @@ hwPortPhysicalAutoNegotiateResume NOTIFICATION-TYPE
                 "Setting Security Group Rules Resume."
             ::= { hwBaseNpsTrap 43 }
 
-        hwBaseCommonTrap OBJECT IDENTIFIER ::= { hwBaseTraps 19 }
-
-        hwParityAbnormal NOTIFICATION-TYPE
-            OBJECTS { hwTrapSlotID, hwTrapUnit, hwTrapEntry, hwTrapField, hwTrapErrorBit}
-            STATUS current
-            DESCRIPTION 
-                "The trap for parity check abnormal."
-            ::= { hwBaseCommonTrap 1 }
-
-        hwDownloadEntryFailed NOTIFICATION-TYPE
-            OBJECTS { hwTrapSlotID, hwTrapUnit, hwTrapPort, hwTrapEntry, hwTrapFailedReason, hwTrapTotalNumber,
-                hwTrapUsedNumber }
-            STATUS current
-            DESCRIPTION 
-                "The trap for downloading entry failed."
-            ::= { hwBaseCommonTrap 2 }
-
-        hwPacketDropped NOTIFICATION-TYPE
-            OBJECTS { hwTrapSlotID, hwTrapUnit, hwTrapPort, hwTrapPacketDroppedService, hwTrapPacketDroppedNumber,
-                hwTrapPacketDroppedReason }
-            STATUS current
-            DESCRIPTION 
-                "The trap for packet dropped."
-            ::= { hwBaseCommonTrap 3 }
-
-        hwProtocolAbnormal NOTIFICATION-TYPE
-            OBJECTS { hwTrapSlotID, hwTrapPort, hwTrapAbnormalProtocol, hwTrapProtocolAbnormalPeerInfo,
-                hwTrapProtocolAbnormalReason}
-            STATUS current
-            DESCRIPTION 
-                "The trap for protocol abnormal."
-            ::= { hwBaseCommonTrap 4 }
-
         hwBaseTrapConformance OBJECT IDENTIFIER ::= { hwBaseTrapMIB 3 }
 
         
@@ -2271,9 +2098,7 @@ hwPortPhysicalAutoNegotiateResume NOTIFICATION-TYPE
                 hwNpsOverloadThreshold,hwNpsAvailableSpace,hwNpsCapThreshold,hwNpsvnfcType,hwNpsAppType,hwNpsVersionType,hwNpsVersionId,
                 hwNpsVMId,hwNpsCertFile,hwNpsVaildBeginTime,hwNpsVaildEndTime,hwNpsPhysicalVMID,hwNpsVnfmIp,
                 hwNpsVnfmPort,hwNpsLocalVM,hwNpsRemoteVM,hwNpsPlane,hwNpsThreshold,hwNpsVendorID,hwNpsDeviceID,hwNpsCurrentDriverType,
-                hwNpsVNFCName,hwNpsRUName,hwNpsPortName,hwNpsIpAdress,hwTrapSlotID,hwTrapUnit,hwTrapEntry,hwTrapField,hwTrapErrorBit,
-                hwTrapPort,hwTrapFailedReason,hwTrapTotalNumber,hwTrapUsedNumber,hwTrapPacketDroppedService,hwTrapPacketDroppedNumber,
-                hwTrapPacketDroppedReason,hwTrapAbnormalProtocol,hwTrapProtocolAbnormalReason,hwTrapProtocolAbnormalPeerInfo,hwProcessPid}
+                hwNpsVNFCName,hwNpsRUName,hwNpsPortName,hwNpsIpAdress}
             STATUS current
             DESCRIPTION 
                 "Group for base trap objects."
@@ -2308,7 +2133,7 @@ hwPortPhysicalAutoNegotiateResume NOTIFICATION-TYPE
                 hwNpsVMResInconsistAlarm,hwNpsVMResInconsistResume,hwNpsVmFauldAlarm,hwNpsVmFauldResume,hwNpsVNFMConnectFault,hwNpsVNFMConnectResume,
                 hwNpsFabricOamPlaneDown,hwNpsFabricOamPlaneDownResume,hwNpsFabricLinkSubhealthy,hwNpsFabricLinkSubhealthyResume,
                 hwNpsDriverTypeMismatch,hwNpsDriverTypeMismatchResume,hwNpsRuCreateFail,hwNpsRuCreateResume,hwNpsIpSecRuleFail,hwNpsIpSecRuleResume,
-                hwEntityWarning,hwEntityWarningResume,hwProcessExitTrap,hwParityAbnormal,hwDownloadEntryFailed,hwPacketDropped,hwProtocolAbnormal}
+                hwEntityWarning,hwEntityWarningResume}
             STATUS current
             DESCRIPTION 
                 "Group for all base traps."

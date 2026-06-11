@@ -1,9 +1,9 @@
 -- ==================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI GTL MIB
 -- Reference:
--- Version: V2.37
+-- Version: V3.00
 -- History:
 -- <author>,  <date>,  <contents>
 -- WangHaiwei   2007-1-16
@@ -27,7 +27,7 @@
                 FROM SNMPv2-SMI;
 
         hwGtl MODULE-IDENTITY 
-            LAST-UPDATED "202209291731Z"        -- Sep 29, 2022 at 17:31 GMT
+            LAST-UPDATED "202505271731Z"        -- May 27, 2025 at 17:31 GMT
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -41,6 +41,9 @@
             DESCRIPTION 
                 "The private mib file includes the general extent 
                 information of the device.hwDatacomm(25).htGtl(142)"
+
+            REVISION     "202505271731Z"
+            DESCRIPTION  "V3.00, Add the hwGtlResourceOverused, hwGtlResourceOverusedResume"
 
             REVISION     "202209291731Z"
             DESCRIPTION  "V2.37, Add the hwGtlFeatureDefaultValue, hwGtlFeatureDefaultValueCleared"
@@ -532,11 +535,11 @@
             ::= { hwGtlMibObjects 18 }
 
         hwGtlRemainingDays OBJECT-TYPE
-            SYNTAX     Unsigned32 (1..60)
+            SYNTAX     Unsigned32
             MAX-ACCESS accessible-for-notify
             STATUS     current
             DESCRIPTION
-                "Remaining days of device offline locking."
+                "Remaining days."
             ::= { hwGtlMibObjects 19 }
 
         hwGtlPosition OBJECT-TYPE
@@ -546,6 +549,14 @@
             DESCRIPTION
                 "Description of the alarm location."
             ::= { hwGtlMibObjects 20 }
+
+        hwGtlRunningDays OBJECT-TYPE
+            SYNTAX     Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS     current
+            DESCRIPTION
+                "Running days."
+            ::= { hwGtlMibObjects 21 }
 
         hwGtlNotifications OBJECT IDENTIFIER ::= { hwGtl 2 }
 
@@ -957,6 +968,18 @@
                 "Notification represents the feature uses the default value is cleared."
             ::= { hwGtlNotifications 59 }
 
+        hwGtlResourceOverused NOTIFICATION-TYPE
+            OBJECTS { hwGtlRunningDays, hwGtlRemainingDays }
+            STATUS current
+            DESCRIPTION
+                "The license resources on the device have been overused."
+            ::= { hwGtlNotifications 60}
+        hwGtlResourceOverusedResume NOTIFICATION-TYPE
+            STATUS current
+            DESCRIPTION
+                "The license resource overuse alarm has been cleared."
+            ::= { hwGtlNotifications 61}
+
 --    Conformance information            
         hwGtlConformance OBJECT IDENTIFIER ::= { hwGtl 3 }
 
@@ -975,14 +998,14 @@
 
         hwGtlObjectGroup OBJECT-GROUP
             OBJECTS { hwGtlDefaultValueReason, hwGtlResourceItem, hwGtlFeatureName, hwGtlRemainTime, hwGtlVerifyCode, 
-                      hwGtlActive, hwGtlShowActLCSName, hwGtlItemName, hwGtlItemControlValue, hwGtlItemUsedValue, hwGtlItemDescription, hwGtlItemState, hwGtlItemExpireDay, hwGtlItemTrialRemainTime, hwGtlItemTrialResRemainTime, hwGtlChassisID, hwGtlBoardID, hwGtlAbnormalReason, hwGtlStackItemName, hwGtlStackItemControlValue, hwGtlStackItemUsedValue, hwGtlStackItemDescription, hwGtlStackItemState, hwGtlStackItemExpireDay, hwGtlLicensePreviousState, hwGtlLicenseState, hwGtlSnsEndDate, hwGtlLicenseRevokeTicket, hwGtlMachineESN, hwGtlNextStartup, hwGtlRemainingDays, hwGtlPosition}
+                      hwGtlActive, hwGtlShowActLCSName, hwGtlItemName, hwGtlItemControlValue, hwGtlItemUsedValue, hwGtlItemDescription, hwGtlItemState, hwGtlItemExpireDay, hwGtlItemTrialRemainTime, hwGtlItemTrialResRemainTime, hwGtlChassisID, hwGtlBoardID, hwGtlAbnormalReason, hwGtlStackItemName, hwGtlStackItemControlValue, hwGtlStackItemUsedValue, hwGtlStackItemDescription, hwGtlStackItemState, hwGtlStackItemExpireDay, hwGtlLicensePreviousState, hwGtlLicenseState, hwGtlSnsEndDate, hwGtlLicenseRevokeTicket, hwGtlMachineESN, hwGtlNextStartup, hwGtlRemainingDays, hwGtlPosition, hwGtlRunningDays}
             STATUS current
             DESCRIPTION 
                 "The GTL attribute group."
             ::= { hwGtlGroups 1 }
 
         hwGtlNotificationGroup NOTIFICATION-GROUP
-            NOTIFICATIONS { hwGtlDefaultValue, hwGtlResourceUsedUp, hwGtlNearDeadline, hwGtlLicenseVerifyFailed, hwGtlExpired, hwGtlItemMismatch, hwGtlDefaultValueCleared, hwGtlNearDeadlineCleared, hwGtlItemMismatchCleared, hwGtlResourceUsedUpCleared, hwGtlLicenseNotCommeral, hwGtlEmergencyStart, hwGtlEmergencyStop, hwGtlTrialFeatureEnable, hwGtlTrialFeatureDisable, hwGtlTrialFeatureNearDeadline, hwGtlTrialFeatureNearDeadlineCleared, hwGtlResourceOverload, hwGtlResourceOverloadCleared, hwGtlEsnMismatch, hwGtlEsnMismatchCleared, hwGtlItemInactive, hwGtlItemInactiveCleared, hwGtlInitial, hwGtlInitialCleared, hwGtlFunctionInactive, hwGtlFunctionInactiveCleared, hwGtlResourceLack, hwGtlResourceLackCleared, hwGtlAbnormal, hwGtlAbnormalCleared,  hwGtlTrialResFeatureEnable, hwGtlTrialResFeatureDisable, hwGtlFeatureFunInactive, hwGtlFeatureFunInactiveCleared, hwGtlLicenseStateChange,hwGtlSnsNearExpire,hwGtlSnsNearExpireCleared,hwGtlSnsExpire,hwGtlSnsExpireCleared,hwGtlItemNearExpire,hwGtlItemNearExpireResume,hwGtlItemExpire,hwGtlItemExpireResume, hwGtlCloudNearDeadline, hwGtlCloudNearDeadlineCleared, hwGtlMachineESNChanged, hwGtlCloudServerOffline, hwGtlCloudServerOfflineCleared, hwGtlCloudServerOfflineLocked, hwGtlCloudServerOfflineLockedCleared, hwGtlDataDamaged, hwGtlDataDamagedResume, hwGtlFeatureDefaultValue, hwGtlFeatureDefaultValueCleared }
+            NOTIFICATIONS { hwGtlDefaultValue, hwGtlResourceUsedUp, hwGtlNearDeadline, hwGtlLicenseVerifyFailed, hwGtlExpired, hwGtlItemMismatch, hwGtlDefaultValueCleared, hwGtlNearDeadlineCleared, hwGtlItemMismatchCleared, hwGtlResourceUsedUpCleared, hwGtlLicenseNotCommeral, hwGtlEmergencyStart, hwGtlEmergencyStop, hwGtlTrialFeatureEnable, hwGtlTrialFeatureDisable, hwGtlTrialFeatureNearDeadline, hwGtlTrialFeatureNearDeadlineCleared, hwGtlResourceOverload, hwGtlResourceOverloadCleared, hwGtlEsnMismatch, hwGtlEsnMismatchCleared, hwGtlItemInactive, hwGtlItemInactiveCleared, hwGtlInitial, hwGtlInitialCleared, hwGtlFunctionInactive, hwGtlFunctionInactiveCleared, hwGtlResourceLack, hwGtlResourceLackCleared, hwGtlAbnormal, hwGtlAbnormalCleared,  hwGtlTrialResFeatureEnable, hwGtlTrialResFeatureDisable, hwGtlFeatureFunInactive, hwGtlFeatureFunInactiveCleared, hwGtlLicenseStateChange,hwGtlSnsNearExpire,hwGtlSnsNearExpireCleared,hwGtlSnsExpire,hwGtlSnsExpireCleared,hwGtlItemNearExpire,hwGtlItemNearExpireResume,hwGtlItemExpire,hwGtlItemExpireResume, hwGtlCloudNearDeadline, hwGtlCloudNearDeadlineCleared, hwGtlMachineESNChanged, hwGtlCloudServerOffline, hwGtlCloudServerOfflineCleared, hwGtlCloudServerOfflineLocked, hwGtlCloudServerOfflineLockedCleared, hwGtlDataDamaged, hwGtlDataDamagedResume, hwGtlFeatureDefaultValue, hwGtlFeatureDefaultValueCleared, hwGtlResourceOverused, hwGtlResourceOverusedResume, hwGtlTrialFeatureExpire, hwGtlTrialFeatureExpireCleared, hwGtlTrialFeatureNearExpire, hwGtlTrialFeatureNearExpireCleared }
             STATUS current
             DESCRIPTION 
                 "The notification group."

@@ -1,9 +1,9 @@
 -- ============================================================================
--- Copyright (C) 2021 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description:  
 -- Reference:  
--- Version: V2.14
+-- Version: V3.00
 -- History:
 -- ============================================================================
          
@@ -55,7 +55,7 @@ VlanIdOrAnyOrNone ::= TEXTUAL-CONVENTION
     SYNTAX       Integer32 (0 | 1..4094 | 4095)
     
 hwL2MultiCastMIB MODULE-IDENTITY 
-    LAST-UPDATED "202104250000Z"
+    LAST-UPDATED "202505210000Z"
     ORGANIZATION "Huawei Technologies Co.,Ltd."
     CONTACT-INFO 
              "Huawei Industrial Base
@@ -76,7 +76,41 @@ hwL2MultiCastMIB MODULE-IDENTITY
          IGMP Snooping listens to the IGMP messages exchanged between 
          the hosts and router, then provides selective transmission of 
          multicast traffic based on multicast mac destination address
-         or multicast group address."   
+         or multicast group address."
+
+    REVISION "202505210000Z"-- 21 May 2025
+    DESCRIPTION
+        "1: Modify hwL2mcSpmsiReachLimitResume."
+    
+    REVISION "202504110000Z"-- 11 Apr 2025
+    DESCRIPTION
+        "1: Add hwL2mcSpmsiReachLimit.
+                 2.Add hwL2mcSpmsiReachLimitResume."
+
+    REVISION "202407020000Z"-- 02 July 2024
+    DESCRIPTION
+        "1: Add hwL2mcGlobalEntryReachLimit.
+                 2.Add hwL2mcGlobalEntryReachLimitResume."
+
+    REVISION "202404250000Z"-- 25 Apr 2024
+    DESCRIPTION
+        "1: Add hwL2mcBoardGMPEntryLimit.
+                 2.Add hwL2mcBoardGMPEntryLimitClear."
+ 
+    REVISION "202402220000Z"-- 22 Feb 2024
+    DESCRIPTION
+        "1: Add the allinst(4) limit type under hwL2mcNotificationsExceedType.
+                 2.Modify the description of hwL2mcGlobalEntryThresholdExceed.
+                 3.Modify the description of hwL2mcGlobalEntryThresholdResume."
+
+    REVISION "202309050000Z"-- 05 Sep 2023
+    DESCRIPTION 
+        "1: Add hwL2mcVlanEntryReachLimit.
+                 2.Add hwL2mcVlanEntryResume.
+                 3.Add hwL2mcInterfaceEntryReachLimit.
+                 4.Add hwL2mcInterfaceEntryResume.
+                 5.Add hwL2mcInterfaceVlanEntryReachLimit.
+                 6.hwL2mcInterfaceVlanEntryResume."
 
     REVISION "202104250000Z"-- 25 Apr 2021
     DESCRIPTION 
@@ -5528,7 +5562,8 @@ hwL2mcNotificationsExceedType  OBJECT-TYPE
     SYNTAX     INTEGER {
                          bd(1),
                          vlan(2),
-                         vsi(3)
+                         vsi(3),
+                         allinst(4)
     }
     MAX-ACCESS accessible-for-notify
     STATUS     current
@@ -5536,8 +5571,32 @@ hwL2mcNotificationsExceedType  OBJECT-TYPE
              "The limit type:
              1:BD bridge domain;
              2:VLAN Virtual Local Area Network;
-             3:VSI Virtual Switch Instance"
+             3:VSI Virtual Switch Instance;
+             4:ALLINST All Instance"
     ::= { hwL2mcGeneralNotificationsObject 19 }
+
+hwL2mcNotificationsBdId  OBJECT-TYPE
+    SYNTAX     Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS     current
+    DESCRIPTION
+             "The id of notification bd."
+    ::= { hwL2mcGeneralNotificationsObject 20 }
+ 
+hwL2mcNotificationsPolicyName  OBJECT-TYPE
+    SYNTAX     DisplayString (SIZE(0..64))
+    MAX-ACCESS accessible-for-notify
+    STATUS     current
+    DESCRIPTION
+             "The name of notification policy."
+    ::= { hwL2mcGeneralNotificationsObject 21 }
+hwL2mcNotificationsLimit OBJECT-TYPE
+	SYNTAX Unsigned32 (1..4294967295)
+	MAX-ACCESS accessible-for-notify
+	STATUS current
+	DESCRIPTION
+                 "Limit value."
+	::= { hwL2mcGeneralNotificationsObject 22 }
 --
 --  The l2 multicast Notifications.
 --
@@ -5616,7 +5675,7 @@ hwL2mcGlobalEntryThresholdExceed NOTIFICATION-TYPE
             }
     STATUS      current
     DESCRIPTION
-            "A hwL2mcGlobalEntryThresholdExceed notification signifies that the number of global multicast groups reached the upper limit threshold."
+            "An hwL2mcGlobalEntryThresholdExceed notification indicates that the number of multicast groups in a certain instance or all instances reaches the upper threshold."
       ::= { hwL2mcGeneralNotifications 5 }
 
 hwL2mcGlobalEntryThresholdResume NOTIFICATION-TYPE
@@ -5629,7 +5688,7 @@ hwL2mcGlobalEntryThresholdResume NOTIFICATION-TYPE
             }
     STATUS      current
     DESCRIPTION
-            "A hwL2mcGlobalEntryThresholdResume notification signifies that the number of global multicast groups fell below the lower limit threshold."
+            "An hwL2mcGlobalEntryThresholdResume notification indicates that the number of multicast groups in a certain instance or all instances groups fell below the lower limit threshold."
       ::= { hwL2mcGeneralNotifications 6 }
 
 hwL2mcUserPerEntryThresholdExceed NOTIFICATION-TYPE
@@ -5689,6 +5748,144 @@ hwL2mcUserPerEntryExceed NOTIFICATION-TYPE
 		This notification should be generated when the number of multicast users in one group has exceeded the limit."
 	::= { hwL2mcGeneralNotifications 10 }        
 
+hwL2mcVlanEntryReachLimit NOTIFICATION-TYPE
+    OBJECTS { hwL2mcNotificationsAddressType,
+              hwL2mcNotificationsPortVlanIndex,
+              hwL2mcNotificationsExceedCurrent,
+              hwL2mcNotificationsExceedLimit
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwL2mcVlanEntryReachLimit notification signifies that the number of multicast groups on one VLAN exceeded the upper limit."
+      ::= { hwL2mcGeneralNotifications 11 }
+
+hwL2mcVlanEntryResume NOTIFICATION-TYPE
+    OBJECTS { hwL2mcNotificationsAddressType,
+              hwL2mcNotificationsPortVlanIndex,
+              hwL2mcNotificationsExceedCurrent,
+              hwL2mcNotificationsExceedLimit,
+              hwL2mcNotificationReason
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwL2mcVlanEntryResume notification signifies that the number of multicast groups on one VLAN fell below the upper limit."
+      ::= { hwL2mcGeneralNotifications 12 }
+
+hwL2mcInterfaceEntryReachLimit NOTIFICATION-TYPE
+    OBJECTS { hwL2mcNotificationsAddressType,
+              hwL2mcNotificationsPortIfIndex,
+              hwL2mcNotificationsPortIfName,
+              hwL2mcNotificationsExceedCurrent,
+              hwL2mcNotificationsExceedLimit
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwL2mcInterfaceEntryReachLimit notification signifies that the number of multicast groups on one interface exceeded the upper limit."
+      ::= { hwL2mcGeneralNotifications 13 }
+
+hwL2mcInterfaceEntryResume NOTIFICATION-TYPE
+    OBJECTS { hwL2mcNotificationsAddressType,
+              hwL2mcNotificationsPortIfIndex,
+              hwL2mcNotificationsPortIfName,
+              hwL2mcNotificationsExceedCurrent,
+              hwL2mcNotificationsExceedLimit,
+              hwL2mcNotificationReason
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwL2mcInterfaceEntryResume notification signifies that the number of multicast groups on one interface fell below the upper limit."
+      ::= { hwL2mcGeneralNotifications 14 }
+
+hwL2mcInterfaceVlanEntryReachLimit NOTIFICATION-TYPE
+    OBJECTS { hwL2mcNotificationsAddressType,
+              hwL2mcNotificationsPortIfIndex,
+              hwL2mcNotificationsPortIfName,
+              hwL2mcNotificationsPortVlanIndex,
+              hwL2mcNotificationsExceedCurrent,
+              hwL2mcNotificationsExceedLimit
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwL2mcInterfaceVlanEntryReachLimit notification signifies that the number of multicast groups in a vlan on one interface exceeded the upper limit."
+      ::= { hwL2mcGeneralNotifications 15 }
+
+hwL2mcInterfaceVlanEntryResume NOTIFICATION-TYPE
+    OBJECTS { hwL2mcNotificationsAddressType,
+              hwL2mcNotificationsPortIfIndex,
+              hwL2mcNotificationsPortIfName,
+              hwL2mcNotificationsPortVlanIndex,
+              hwL2mcNotificationsExceedCurrent,
+              hwL2mcNotificationsExceedLimit,
+              hwL2mcNotificationReason
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwL2mcInterfaceVlanEntryResume notification signifies that the number of multicast groups in a vlan on one interface fell below the upper limit."
+      ::= { hwL2mcGeneralNotifications 16 }
+
+hwL2mcBoardGMPEntryLimit NOTIFICATION-TYPE
+    OBJECTS { hwL2mcNotificationsAddressType,
+              hwL2mcNotificationsSlot,
+              hwL2mcNotificationsExceedLimit
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwL2mcBoardGMPEntryLimit notification signifies that the number of Layer 2 multicast entries on the board reached the upper limit."
+      ::= { hwL2mcGeneralNotifications 17 }
+
+hwL2mcBoardGMPEntryLimitClear NOTIFICATION-TYPE
+    OBJECTS { hwL2mcNotificationsAddressType,
+              hwL2mcNotificationsSlot,
+              hwL2mcNotificationsExceedLimit
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwL2mcBoardGMPEntryLimitClear notification signifies that the number of Layer 2 multicast entries on the board fell below the upper limit."
+      ::= { hwL2mcGeneralNotifications 18 }
+
+hwL2mcGlobalEntryReachLimit NOTIFICATION-TYPE
+    OBJECTS { hwL2mcNotificationsAddressType,
+              hwL2mcNotificationsExceedCurrent,
+              hwL2mcNotificationsExceedLimit
+            }
+    STATUS      current
+    DESCRIPTION
+            "An hwL2mcGlobalEntryThresholdExceed notification indicates that the number of multicast groups in a certain instance or all instances reaches the upper limit."
+      ::= { hwL2mcGeneralNotifications 19 }
+
+hwL2mcGlobalEntryReachLimitResume NOTIFICATION-TYPE
+    OBJECTS { hwL2mcNotificationsAddressType,
+              hwL2mcNotificationsExceedCurrent,
+              hwL2mcNotificationsExceedLimit,
+              hwL2mcNotificationReason
+            }
+    STATUS      current
+    DESCRIPTION
+            "An hwL2mcGlobalEntryThresholdExceed notification indicates that the number of multicast groups in a certain instance or all instances fell below the upper limit."
+      ::= { hwL2mcGeneralNotifications 20 }
+
+hwL2mcSpmsiReachLimit NOTIFICATION-TYPE
+    OBJECTS { hwL2mcNotificationsAddressType,
+              hwL2mcNotificationsBdId,
+              hwL2mcNotificationsPolicyName,
+              hwL2mcNotificationsLimit
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwL2mcSpmsiReachLimit indicates that number of Layer 2 multicast entries matching a single SPMSI policy reaches the SPMSI limit."
+      ::= { hwL2mcGeneralNotifications 21 }
+ 
+hwL2mcSpmsiReachLimitResume NOTIFICATION-TYPE
+    OBJECTS { hwL2mcNotificationsAddressType,
+              hwL2mcNotificationsBdId,
+              hwL2mcNotificationsPolicyName,
+              hwL2mcNotificationsLimit,
+              hwL2mcNotificationReason
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwL2mcSpmsiReachLimitResume indicates that the number of Layer 2 multicast entries matching a single SPMSI policy fell below the upper limit"
+      ::= { hwL2mcGeneralNotifications 22 }
 --
 -- Conformance Information
 --
@@ -6069,7 +6266,10 @@ hwL2mcGeneralNotificationObjectGroup OBJECT-GROUP
                  hwL2mcNotificationsSlot,
                  hwL2mcNotificationsExceedCurrent,
                  hwL2mcNotificationsExceedThreshold,
-		 hwL2mcNotificationReason
+		 hwL2mcNotificationReason,
+                hwL2mcNotificationsBdId,
+                hwL2mcNotificationsPolicyName,
+                hwL2mcNotificationsLimit
                }
         STATUS current                            
         DESCRIPTION                               
@@ -6087,7 +6287,19 @@ hwL2mcGeneralNotificationGroup NOTIFICATION-GROUP
                     hwL2mcUserPerEntryThresholdExceed,
                     hwL2mcUserPerEntryThresholdResume,
 		    hwL2mcGlobalEntryExceed,
-		    hwL2mcUserPerEntryExceed
+		    hwL2mcUserPerEntryExceed,
+                    hwL2mcVlanEntryReachLimit,
+                    hwL2mcVlanEntryResume,
+                    hwL2mcInterfaceEntryReachLimit,
+                    hwL2mcInterfaceEntryResume,
+                    hwL2mcInterfaceVlanEntryReachLimit,
+                    hwL2mcInterfaceVlanEntryResume,
+                    hwL2mcBoardGMPEntryLimit,
+                    hwL2mcBoardGMPEntryLimitClear,
+                    hwL2mcGlobalEntryReachLimit,
+                    hwL2mcGlobalEntryReachLimitResume,
+                    hwL2mcSpmsiReachLimit,
+                    hwL2mcSpmsiReachLimitResume
                   }
         STATUS current                            
         DESCRIPTION                               

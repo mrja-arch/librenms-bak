@@ -1,9 +1,9 @@
 --==================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2024 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI Layer Two VLAN MIB
 -- Reference:
--- Version: V2.15
+-- Version: V2.16
 -- History:
 -- ==================================================================
 -- ==================================================================
@@ -42,7 +42,7 @@ IMPORTS
     hwL2Mgmt OBJECT IDENTIFIER ::= { hwDatacomm 42 }
     
     hwL2Vlan MODULE-IDENTITY
-            LAST-UPDATED "202207270000Z"                
+            LAST-UPDATED "202406030000Z"                
     ORGANIZATION 
             "Huawei Technologies Co.,Ltd."
     CONTACT-INFO 
@@ -55,6 +55,10 @@ IMPORTS
              "
     DESCRIPTION
             "Modify the hwL2VlanVoiceVlanEnabledVlanId."
+  REVISION
+            "202406030000Z" 
+   DESCRIPTION
+            "Add traps hwVcmpServerMacConflictResume and hwVcmpRevisionConflictResume." 
   REVISION
             "202207270000Z" 
    DESCRIPTION
@@ -4630,7 +4634,20 @@ hwL2VlanStatistics     OBJECT IDENTIFIER ::= { hwL2VlanMngObjects 3 }
             STATUS current
             DESCRIPTION 
                "The number of VLAN mapping or VLAN stacking configurations fell below the chip specification."
-            ::= { hwL2VlanTraps 9 }			
+            ::= { hwL2VlanTraps 9 }
+    hwVcmpServerMacConflictResume NOTIFICATION-TYPE
+            OBJECTS { hwVcmpDeviceMac}
+            STATUS current
+            DESCRIPTION 
+               "The VCMP role of the device is changed to a non-server."
+            ::= { hwL2VlanTraps 10 }
+
+    hwVcmpRevisionConflictResume NOTIFICATION-TYPE
+            OBJECTS { hwVcmpDeviceMac}
+            STATUS current
+            DESCRIPTION 
+               "The VCMP role of the device is changed to a non-server or the device received a VCMP packet with a correct revision number."
+            ::= { hwL2VlanTraps 11 }
 			
      hwL2VlanTrapObjects OBJECT IDENTIFIER ::= { hwL2VlanMngObjects 5 }
      hwVcmpDeviceMac OBJECT-TYPE
@@ -5332,7 +5349,9 @@ hwL2vlanQinQInterfaceGroup OBJECT-GROUP
                         hwVlantransCountExceedThreshold,
                         hwVlantransCountExceedThresholdResume,
                         hwVlantransExceedChipSpec,
-                        hwVlantransExceedChipSpecResume
+                        hwVlantransExceedChipSpecResume,
+                        hwVcmpServerMacConflictResume,
+                        hwVcmpRevisionConflictResume
                     }
             STATUS current
             DESCRIPTION 

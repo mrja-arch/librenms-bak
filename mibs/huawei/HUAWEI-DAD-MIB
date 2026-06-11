@@ -1,13 +1,13 @@
---  =================================================================
--- Copyright (C) 2016 by  HUAWEI TECHNOLOGIES. All rights reserved
--- 
+-- =================================================================
+-- Copyright (C) 2016-2022 by HUAWEI TECHNOLOGIES. All rights reserved
+--
 -- Description: HUAWEI DAD MIB, this mib will maintain information of DAD 
---              protocol for datacomm product.  
+--              protocol for datacomm product. 
 -- Reference:
--- Version:     V1.02
+-- Version:     V1.03
 -- History:
---  
---  V1.00 2011-09-14 initial version
+-- Author,2022-12-05,modifying file header
+-- Author,2011-09-14,initial version
 -- =================================================================
 
 HUAWEI-DAD-MIB DEFINITIONS ::= BEGIN
@@ -32,7 +32,7 @@ HUAWEI-DAD-MIB DEFINITIONS ::= BEGIN
         FROM P-BRIDGE-MIB;
  
     hwDadMIB MODULE-IDENTITY
-        LAST-UPDATED "201607111230Z"     
+        LAST-UPDATED "202212051004Z"     
         ORGANIZATION 
 			"Huawei Technologies Co.,Ltd."
         CONTACT-INFO 
@@ -46,6 +46,9 @@ HUAWEI-DAD-MIB DEFINITIONS ::= BEGIN
         DESCRIPTION
             "This MIB contains private managed object definitions for dual-active
             detection."
+        REVISION "202212051004Z"   
+        DESCRIPTION "Updated to modifying file header for DAD" 
+
         REVISION "201607111230Z"   
         DESCRIPTION "Updated to include support for DAD" 
 

@@ -1,0 +1,127 @@
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: librenms-huawei-mariadb
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --innodb-file-per-table=1
+      - --lower-case-table-names=0
+    environment:
+      TZ: ${TZ:-Asia/Shanghai}
+      MYSQL_DATABASE: ${DB_DATABASE:-librenms}
+      MYSQL_USER: ${DB_USERNAME:-librenms}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-librenms}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-change-me}
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD --silent"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: librenms-huawei-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  librenms:
+    build:
+      context: .
+      dockerfile: Dockerfile.huawei
+    image: librenms-huawei:local
+    container_name: librenms-huawei
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "${WEB_PORT:-8000}:8000"
+    environment:
+      TZ: ${TZ:-Asia/Shanghai}
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-librenms}
+      DB_USERNAME: ${DB_USERNAME:-librenms}
+      DB_PASSWORD: ${DB_PASSWORD:-librenms}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      APP_URL: ${APP_URL:-http://localhost:8000}
+      BASE_URL: ${APP_URL:-http://localhost:8000}
+      DISPATCHER_NODE_ID: ${DISPATCHER_NODE_ID:-huawei-node-1}
+    volumes:
+      - ./:/opt/librenms
+      - librenms-logs:/opt/librenms/logs
+      - librenms-rrd:/opt/librenms/rrd
+    restart: unless-stopped
+
+  dispatcher:
+    image: librenms-huawei:local
+    container_name: librenms-huawei-dispatcher
+    depends_on:
+      librenms:
+        condition: service_started
+    command: ["python3", "/opt/librenms/librenms-service.py", "-d"]
+    environment:
+      TZ: ${TZ:-Asia/Shanghai}
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-librenms}
+      DB_USERNAME: ${DB_USERNAME:-librenms}
+      DB_PASSWORD: ${DB_PASSWORD:-librenms}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DISPATCHER_NODE_ID: ${DISPATCHER_NODE_ID:-huawei-node-1}
+    volumes:
+      - ./:/opt/librenms
+      - librenms-logs:/opt/librenms/logs
+      - librenms-rrd:/opt/librenms/rrd
+    restart: unless-stopped
+
+  snmptrapd:
+    image: debian:bookworm-slim
+    container_name: librenms-huawei-snmptrapd
+    depends_on:
+      librenms:
+        condition: service_started
+    ports:
+      - "${SNMPTRAP_PORT:-162}:162/udp"
+    environment:
+      TZ: ${TZ:-Asia/Shanghai}
+      SNMP_TRAP_COMMUNITY: ${SNMP_TRAP_COMMUNITY:-public}
+      HUAWEI_TRAP_MODULES: ${HUAWEI_TRAP_MODULES:-HUAWEI-BASE-TRAP-MIB:HUAWEI-ENTITY-TRAP-MIB:HUAWEI-FWD-RES-TRAP-MIB:HUAWEI-LDT-MIB:HUAWEI-NTP-TRAP-MIB:HUAWEI-SNMP-NOTIFICATION-MIB}
+    volumes:
+      - ./:/opt/librenms
+      - snmptrap-logs:/var/log/snmptrap
+    command:
+      - /bin/sh
+      - -lc
+      - |
+        apt-get update
+        DEBIAN_FRONTEND=noninteractive apt-get install -y snmptrapd snmp
+        cat >/etc/snmp/snmptrapd.conf <<EOF
+        disableAuthorization yes
+        authCommunity log,execute,net $${SNMP_TRAP_COMMUNITY}
+        traphandle default /opt/librenms/snmptrap.php
+        EOF
+        mkdir -p /var/log/snmptrap
+        exec /usr/sbin/snmptrapd -f -Lo -n -M /opt/librenms/mibs:/opt/librenms/mibs/huawei -m $${HUAWEI_TRAP_MODULES} -tLf /var/log/snmptrap/traps.log udp:162
+    restart: unless-stopped
+
+volumes:
+  mariadb-data:
+  redis-data:
+  librenms-logs:
+  librenms-rrd:
+  snmptrap-logs:

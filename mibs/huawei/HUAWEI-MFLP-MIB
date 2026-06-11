@@ -1,9 +1,9 @@
 -- ==================================================================
--- Copyright (C) 2019 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2024 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description:  HUAWEI mac flapping management MIB
 -- Reference:
--- Version: V2.23
+-- Version: V2.27
 -- History:
 -- ==================================================================
 
@@ -32,7 +32,7 @@ IMPORTS
         FROM SNMPv2-SMI;                         
         
     hwMFlpMIB MODULE-IDENTITY 
-            LAST-UPDATED "201907120000Z"
+            LAST-UPDATED "202406050000Z"
             ORGANIZATION
                   "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -43,7 +43,15 @@ IMPORTS
                      Website: http://www.huawei.com
                      Email: support@huawei.com
                    "
-			DESCRIPTION   "Modify disable to disabled"
+            DESCRIPTION "Modify notification: hwMflpVsiLoopAlarm hwMflpVsiLoopAlarmResume."
+            REVISION     "202406050000Z"
+            DESCRIPTION "Modify Objects: hwMflpBdAcSubVidBlock hwMflpBdAcSubVidResume hwMflpBdSubVidAlarmOnly."
+            REVISION     "202405200000Z"
+            DESCRIPTION "Add Objects: hwMflpBdAcSubVidBlock hwMflpBdAcSubVidResume hwMflpBdSubVidAlarmOnly."
+            REVISION     "202405160000Z"
+	    DESCRIPTION   "Modify disable to disabled"
+            REVISION     "202310200000Z"
+            DESCRIPTION "Add Objects: hwMflpBdEvplBlock hwMflpBdEvplResume."
             REVISION     "201907120000Z"
             DESCRIPTION   "Modify hwMflpBdLinkBlocked hwMflpBdLinkResumed"
             REVISION     "201806290000Z"
@@ -500,6 +508,8 @@ IMPORTS
                         hwMflpBdCfgIpAddr
                                 IpAddress,
                         hwMflpBdCfgPwId
+                                Unsigned32,
+                        hwMflpBdCfgEvplId
                                 Unsigned32				                          
                  }				
 				
@@ -585,6 +595,13 @@ IMPORTS
                         "The PW ID, only used for trap."
                     ::= { hwMflpBdCfgEntry 10 }    
 
+        hwMflpBdCfgEvplId OBJECT-TYPE
+                    SYNTAX Unsigned32
+                    MAX-ACCESS accessible-for-notify
+                    STATUS current
+                    DESCRIPTION
+                        "The EVPL ID, only used for trap."
+                    ::= { hwMflpBdCfgEntry 11 }
         hwMacHopTrafficSuppressCfgTable OBJECT-TYPE
                 SYNTAX SEQUENCE OF HwMacHopTrafficSuppressCfgEntry
                 MAX-ACCESS not-accessible
@@ -948,6 +965,55 @@ hwMacHopTrafficSuppressVsiToken NOTIFICATION-TYPE
             DESCRIPTION 
                 "Traffic-suppress became ineffective."
             ::= { hwMflpMIBTraps 33 }
+
+hwMflpBdEvplBlock NOTIFICATION-TYPE
+            OBJECTS { hwMflpBdIndex, hwMflpBdCfgEvplId, hwMflpBdCfgBlockTime, hwMflpBdCfgAlarmReason, hwMflpBdDetectMAC }
+            STATUS current
+            DESCRIPTION 
+                "This notification indicates the evpl blocked."
+            ::= { hwMflpMIBTraps 34}  
+
+hwMflpBdEvplResume NOTIFICATION-TYPE
+            OBJECTS { hwMflpBdIndex, hwMflpBdCfgEvplId, hwMflpBdCfgBlockTime, hwMflpBdCfgAlarmReason }
+            STATUS current
+            DESCRIPTION 
+                "This notification indicates the evpl resumed."
+                ::= { hwMflpMIBTraps 35 }    
+ 
+ hwMflpBdAcSubVidBlock NOTIFICATION-TYPE
+            OBJECTS { hwMflpBdIndex, hwMflpBdCfgAcName, hwMflpBdCfgBlockTime, hwMflpBdCfgAlarmReason, hwMflpBdDetectMAC }
+            STATUS current
+            DESCRIPTION 
+                "This notification indicates some of the VIDs of sub-interfaces in BD blocked."
+            ::= { hwMflpMIBTraps 36 }
+
+hwMflpBdAcSubVidResume NOTIFICATION-TYPE
+            OBJECTS { hwMflpBdIndex, hwMflpBdCfgAcName, hwMflpBdCfgBlockTime, hwMflpBdCfgAlarmReason }
+            STATUS current
+            DESCRIPTION 
+                "This notification indicates some of the VIDs of sub-interfaces in BD resumed."
+            ::= { hwMflpMIBTraps 37 }
+
+hwMflpBdSubVidAlarmOnly NOTIFICATION-TYPE
+            OBJECTS { hwMflpBdIndex, hwMflpBdCfgAcName, hwMflpBdCfgAcNameEx1, hwMflpBdCfgAcNameEx2, hwMflpBdCfgAlarmReason, hwMflpBdDetectMAC}
+            STATUS current
+            DESCRIPTION 
+                "This notification indicates alarm only when the number of loops exceeds the upper limit with loop existed on some VIDs of sub-interfaces in BD."
+            ::= { hwMflpMIBTraps 38 }
+			
+hwMflpVsiLoopAlarm NOTIFICATION-TYPE
+            OBJECTS { hwMflpVsiName, hwMflpIfName, hwMflpIfName, hwMflpIfName, hwMflpAlarmReason}
+            STATUS current
+            DESCRIPTION 
+                "This notification indicates alarm only when loop existed in bd."
+            ::= { hwMflpMIBTraps 39 } 
+
+hwMflpVsiLoopAlarmResume NOTIFICATION-TYPE
+            OBJECTS { hwMflpVsiName, hwMflpIfName, hwMflpIfName, hwMflpIfName, hwMflpAlarmReason}
+            STATUS current
+            DESCRIPTION 
+                "This notification indicates alarm only when loop existed in bd."
+            ::= { hwMflpMIBTraps 40 }			
 			
 -- IEEE 802.1Q MIB - Conformance Information
 
@@ -1054,7 +1120,11 @@ hwMflpTrapGroup NOTIFICATION-GROUP
        hwMacHopTrafficSuppressVsiVlan,
         hwMacHopTrafficUnsuppressVsiVlan,
         hwMacHopTrafficSuppressVsiToken,
-        hwMacHopTrafficUnsuppressVsiToken
+        hwMacHopTrafficUnsuppressVsiToken,
+        hwMflpBdEvplBlock,
+        hwMflpBdEvplResume,
+        hwMflpVsiLoopAlarm,
+        hwMflpVsiLoopAlarmResume
         }
         STATUS current
         DESCRIPTION 
@@ -1072,8 +1142,8 @@ hwMflpBdCfgGroup OBJECT-GROUP
     		hwMflpBdCfgVsiName,
     		hwMflpBdCfgIpAddr,
     		hwMflpBdCfgPwId,		
-    		hwMflpVsiCfgPwId
-
+    		hwMflpVsiCfgPwId,
+            hwMflpBdCfgEvplId
     }
     STATUS      current
     DESCRIPTION

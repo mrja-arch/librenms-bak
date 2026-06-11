@@ -1,8 +1,8 @@
 -- ===================================================================
--- Copyright (C) 2022 by HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by HUAWEI TECHNOLOGIES. All rights reserved.
 -- Description:
 -- Reference:
--- Version: V3.32
+-- Version: V4.09
 -- ===================================================================
 HUAWEI-PORT-MIB DEFINITIONS ::= BEGIN
     IMPORTS
@@ -28,7 +28,7 @@ HUAWEI-PORT-MIB DEFINITIONS ::= BEGIN
             FROM HUAWEI-GTL-MIB;
 
     hwPortMIB MODULE-IDENTITY
-        LAST-UPDATED "202211020000Z"
+        LAST-UPDATED "202507311135Z"
         ORGANIZATION "Huawei Technologies Co.,Ltd."
         CONTACT-INFO
             "Huawei Industrial Base
@@ -40,6 +40,131 @@ HUAWEI-PORT-MIB DEFINITIONS ::= BEGIN
         DESCRIPTION 
             "The private mib file includes the general extent
             information of the device.hwDatacomm(157).hwPortMIB"
+-- Add revision info here!
+  REVISION "202507311135Z"
+  DESCRIPTION
+        "Add speed800000(19)."
+        
+-- Add revision info here!
+  REVISION "202506121135Z"
+  DESCRIPTION
+        "Add hwPortModeInconsistent, hwPortModeInconsistentResume."
+
+-- Add revision info here!
+  REVISION "202505231000Z"
+  DESCRIPTION
+        "Add hwWdmPortMapTable, hwWdmPortMapEntry, hwPortMapName, hwWdmPortName, hwWdmPortPosition and hwWdmPortGroupId."
+
+-- Add revision info here!
+  REVISION "202505211000Z"
+  DESCRIPTION
+        "Add hwOpticalParameterOutOfThreshold and hwOpticalParameterOutOfThresholdResume."
+
+-- Add revision info here!
+  REVISION "202504291000Z"
+  DESCRIPTION
+        "Add hwPortTxTrafficConvergenceAlarm, hwPortTxTrafficConvergenceAlarmResume, hwPortRxTrafficConvergenceAlarm, hwPortRxTrafficConvergenceAlarmResume."
+
+-- Add revision info here!
+  REVISION "202502181000Z"
+  DESCRIPTION
+        "Add hwOpticalFake and hwOpticalFakeResume."
+-- Add revision info here!
+  REVISION "202411121000Z"
+  DESCRIPTION
+        "Add hwCasAbnormal and hwCasAbnormalResume."
+
+-- Add revision info here!
+  REVISION "202411120000Z"
+  DESCRIPTION
+        "Add hwCesDcrUnlock hwCesDcrUnlockResume."
+
+-- Add revision info here!
+  REVISION "202409180000Z"
+  DESCRIPTION
+        "Modify hwPortBandwidth."
+
+-- Add revision info here!
+  REVISION "202408010000Z"
+  DESCRIPTION
+        "Add hwPortBandwidthLimited,hwPortBandwidthLimitedResume,hwPortBandwidth."
+
+-- Add revision info here!
+  REVISION "202407290000Z"
+  DESCRIPTION
+        "Add hwPortRxPowerViolateThreshold."
+
+-- Add revision info here!
+  REVISION "202407260000Z"
+  DESCRIPTION
+        "Add hwLicenseSpeedCfg"
+
+-- Add revision info here!
+  REVISION "202406200000Z"
+  DESCRIPTION
+        "Add hwL2VeOverLimitNotification,hwL2VeCurNum,hwL2VeMaxNum"
+
+-- Add revision info here!
+  REVISION "202406030000Z"
+  DESCRIPTION
+        "Add hwTrunkAssignNotRebootDeviceAlarm"
+
+-- Add revision info here!
+  REVISION "202405310000Z"
+        DESCRIPTION
+        "Modify hwEthernetSpeedSet"
+
+-- Add revision info here!
+  REVISION "202401120000Z"
+        DESCRIPTION
+        "Add hwPortDownHoldTimeFlapping and hwPortDownHoldTimeFlappingResume"
+
+-- Add revision info here!
+  REVISION "202312060000Z"
+        DESCRIPTION
+        "Add hwPhysicalPortInFrameAndSlot"
+
+-- Add revision info here!
+REVISION "202310070000Z"
+    DESCRIPTION
+    "Add hwPortGroupOpticalCfgInconsistent and hwPortGroupOpticalCfgInconsistentResume"
+
+-- Add revision info here!
+  REVISION "202308160000Z"
+        DESCRIPTION
+        "Add hwRTUCtrlPortSpecStatistics, hwRTUCtrlPortSpecTable, hwRTUCtrlPortSpecEntry,
+         hwRTUCtrlPortSpecIndex, hwRTUCtrlPortSpecSpeed, hwRTUCtrlPortTotal, hwRTUCtrlPortMaxAvailableNum.
+         Add hwPhysicalPortPacketLoss and hwPhysicalPortPacketLossResume to hwPortNotificationsGroup."
+
+-- Add revision info here!
+  REVISION "202308050000Z"
+        DESCRIPTION
+        "Modify hwPortGroupOpticalCfgInconsistent and hwPortGroupOpticalCfgInconsistentResume"
+
+-- Add revision info here!
+  REVISION "202308020000Z"
+        DESCRIPTION
+        "Modify hwPortGroupOpticalCfgInconsistent and hwPortGroupOpticalCfgInconsistentResume"
+
+-- Add revision info here!
+  REVISION "202307270000Z"
+        DESCRIPTION
+        "Add hwPortGroupOpticalCfgInconsistent and hwPortGroupOpticalCfgInconsistentResume"
+
+-- Add revision info here!
+  REVISION "202304240000Z"
+        DESCRIPTION
+        "Add hwPhysicalPortPacketLoss and hwPhysicalPortPacketLossResume"
+
+-- Add revision info here!
+  REVISION "202303070000Z"
+        DESCRIPTION
+        "Correct the spelling of words."
+
+-- Add revision info here!
+  REVISION "202211080000Z"
+        DESCRIPTION
+        "Add hwEthernetSpeedSet enum speed12500(17)."
 
 -- Add revision info here!
    REVISION "202211020000Z"
@@ -759,7 +884,7 @@ HUAWEI-PORT-MIB DEFINITIONS ::= BEGIN
 
 
     hwEthernetSpeedSet OBJECT-TYPE
-        SYNTAX INTEGER {other(1),speed10(2),speed100(3),speed1000(4),speed10000(5),speed40000(6),speed20000(7),speed2500(8),speed5000(9),speed100000(10),speed12000(11),speed48000(12),speed25000(13),speed50000(14),speed200000(15),speed400000(16)}
+        SYNTAX INTEGER {other(1),speed10(2),speed100(3),speed1000(4),speed10000(5),speed40000(6),speed20000(7),speed2500(8),speed5000(9),speed100000(10),speed12000(11),speed48000(12),speed25000(13),speed50000(14),speed200000(15),speed400000(16),speed12500(17),speedmode2500(18),speed800000(19)}
         MAX-ACCESS read-write
         STATUS current
         DESCRIPTION
@@ -1803,7 +1928,7 @@ HUAWEI-PORT-MIB DEFINITIONS ::= BEGIN
         STATUS current
         DESCRIPTION
             "Indicates the timeslot0 to be bound or a single channel.
-                The ture value indicates it will be create TDM channel."
+                The true value indicates it will be create TDM channel."
         ::= { hwDs0ChannelBundleEntry 14 }
 
 
@@ -2433,6 +2558,22 @@ HUAWEI-PORT-MIB DEFINITIONS ::= BEGIN
         INDEX { hwPhysicalPortIfIndex }
         ::= { hwPhysicalPortTable 1 }
 
+    hwWdmPortMapTable OBJECT-TYPE
+        SYNTAX  SEQUENCE OF HwWdmPortMapEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "This table describes the access methods for attributes of WDM physical interfaces."
+        ::= { hwPhysicalPort 10 }
+ 
+    hwWdmPortMapEntry OBJECT-TYPE
+        SYNTAX HwWdmPortMapEntry 
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "Indicates the attribute of the WDM physical interfaces."
+        INDEX { hwPhysicalPortIfIndex }
+        ::= { hwWdmPortMapTable 1 }
 
     HwPhysicalPortEntry ::= SEQUENCE {
         hwPhysicalPortIfIndex 
@@ -2534,9 +2675,87 @@ HUAWEI-PORT-MIB DEFINITIONS ::= BEGIN
         hwBandwidthLast
             Counter64,
         hwBandwidthCurrent
-            Counter64
+            Counter64,
+        hwPhysicalTrapFaultID
+            Unsigned32,
+        hwPhysicalReasonDescription
+            OCTET STRING,
+        hwPhysicalPortInFrameAndSlot
+	        OCTET STRING,
+        hwPortDownHoldTimeFlappingInterval
+            Integer32,
+        hwPortDownHoldTimeFlappingAlarmThreshold
+            Integer32,
+        hwPortDownHoldTimeFlappingResumeThreshold
+            Integer32,
+        hwPortDownHoldTimeFlappingCurrentCnt
+            Integer32,
+        hwAllLaneMinRxPower
+            OCTET STRING,
+        hwAllLaneMaxRxPower
+            OCTET STRING,
+        hwNormalMinRxPower
+            OCTET STRING,
+        hwNormalMaxRxPower
+            OCTET STRING,
+        hwPortBandwidth
+            OCTET STRING,
+        hwOpticalParameterType
+            OCTET STRING,
+        hwOpticalLaneID
+            Integer32,
+        hwOpticalParaCurValue
+            OCTET STRING,
+        hwOpticalParaLowThreshold
+            OCTET STRING,
+        hwOpticalParaHighThreshold
+            OCTET STRING,
+        hwOpticalParameterUint
+            OCTET STRING
         }
 
+    HwWdmPortMapEntry ::= SEQUENCE {
+        hwPortMapName 
+            OCTET STRING,
+        hwWdmPortName 
+            OCTET STRING,
+        hwWdmPortPosition 
+            OCTET STRING,
+        hwWdmPortGroupId 
+            Unsigned32
+        }
+ 
+    hwPortMapName OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the port name."
+        ::= { hwWdmPortMapEntry 1 }
+ 
+    hwWdmPortName OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the corresponding WDM port name for the port."
+        ::= { hwWdmPortMapEntry 2 }
+        
+    hwWdmPortPosition OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the corresponding WDM port position for the port."
+        ::= { hwWdmPortMapEntry 3 }
+ 
+    hwWdmPortGroupId OBJECT-TYPE
+        SYNTAX Unsigned32 (0..255)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the corresponding WDM port groupId for the port."
+        ::= { hwWdmPortMapEntry 4 }
 
     hwPhysicalPortIfIndex OBJECT-TYPE
         SYNTAX InterfaceIndex 
@@ -2989,6 +3208,168 @@ HUAWEI-PORT-MIB DEFINITIONS ::= BEGIN
         DESCRIPTION
             "Indicates the physical port current bandwidth."
         ::= { hwPhysicalPortEntry 50 }
+        
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.51
+    hwPhysicalTrapFaultID  OBJECT-TYPE
+        SYNTAX Unsigned32 (0..4294967295)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the fault ID."
+        ::= { hwPhysicalPortEntry 51 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.52
+    hwPhysicalReasonDescription   OBJECT-TYPE
+        SYNTAX OCTET STRING 
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the description of alarm reason."
+        ::= { hwPhysicalPortEntry 52 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.53
+    hwPhysicalPortInFrameAndSlot   OBJECT-TYPE
+        SYNTAX OCTET STRING 
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the Frame and SlotID."
+        ::= { hwPhysicalPortEntry 53 }
+    
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.54
+    hwPortDownHoldTimeFlappingInterval   OBJECT-TYPE
+        SYNTAX Integer32 (1..24)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Interval for detecting intermittent disconnection alarms on a port."
+        ::= { hwPhysicalPortEntry 54 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.55
+    hwPortDownHoldTimeFlappingAlarmThreshold   OBJECT-TYPE
+        SYNTAX Integer32 (1..100) 
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the Port Transient Alarm Upper Threshold."
+        ::= { hwPhysicalPortEntry 55 }
+    
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.56
+    hwPortDownHoldTimeFlappingResumeThreshold   OBJECT-TYPE
+        SYNTAX Integer32 (0..50) 
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the Lower Threshold for Port Transient Alarms."
+        ::= { hwPhysicalPortEntry 56 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.57
+    hwPortDownHoldTimeFlappingCurrentCnt   OBJECT-TYPE
+        SYNTAX Integer32 (0..86400)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the number of intermittent disconnections on the current port."
+        ::= { hwPhysicalPortEntry 57 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.58
+    hwAllLaneMinRxPower   OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the minimum receive optical power of all channels."
+        ::= { hwPhysicalPortEntry 58 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.59
+    hwAllLaneMaxRxPower   OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the maximum receive optical power of all channels."
+        ::= { hwPhysicalPortEntry 59 }
+ 
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.60
+    hwNormalMinRxPower   OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the minimum receive optical power within the normal range."
+        ::= { hwPhysicalPortEntry 60 }
+ 
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.61
+    hwNormalMaxRxPower   OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the maximum receive optical power within the normal range."
+        ::= { hwPhysicalPortEntry 61 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.62
+    hwPortBandwidth   OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicateds the limited port bandwidth."
+        ::= { hwPhysicalPortEntry 62 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.63
+    hwOpticalParameterType   OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the type of the optical module parameter."
+        ::= { hwPhysicalPortEntry 63 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.64
+    hwOpticalLaneID   OBJECT-TYPE
+        SYNTAX Integer32 (1..50)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the laneID of the optical module."
+        ::= { hwPhysicalPortEntry 64 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.65
+    hwOpticalParaCurValue   OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the current value of the optical module parameter."
+        ::= { hwPhysicalPortEntry 65 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.66
+    hwOpticalParaLowThreshold   OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the low threshold of the optical module parameter."
+        ::= { hwPhysicalPortEntry 66 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.67
+    hwOpticalParaHighThreshold   OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the high threshold of the optical module parameter."
+        ::= { hwPhysicalPortEntry 67 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.8.1.1.68
+    hwOpticalParameterUint   OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the unit of the optical module parameter."
+        ::= { hwPhysicalPortEntry 68 }
 
 		-- 1.3.6.1.4.1.2011.5.25.157.1.8.2
     hwSDHRsMsPerfCurrentTable OBJECT-TYPE
@@ -11974,7 +12355,7 @@ hwPhysicalPortPreFecPowerStatistics OBJECT-TYPE
 
     -- 1.3.6.1.4.1.2011.5.25.157.2.242
     hwPortGroupTransModeDiff NOTIFICATION-TYPE
-        OBJECTS { hwPhysicalPortInSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID, hwPortTransModeReasonDescr }
+        OBJECTS { hwPhysicalPortInFrameAndSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID, hwPortTransModeReasonDescr }
 	STATUS current
 	DESCRIPTION 
 	        "This group of interfaces do not work in the same transmission mode."
@@ -11982,7 +12363,7 @@ hwPhysicalPortPreFecPowerStatistics OBJECT-TYPE
 			
      -- 1.3.6.1.4.1.2011.5.25.157.2.243	
     hwPortGroupTransModeDiffResume NOTIFICATION-TYPE
-        OBJECTS { hwPhysicalPortInSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID, hwPortTransModeReasonDescr }
+        OBJECTS { hwPhysicalPortInFrameAndSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID, hwPortTransModeReasonDescr }
 	STATUS current
 	DESCRIPTION 
 	         "This group of interfaces work in the same transmission mode now."
@@ -12760,7 +13141,7 @@ hwPhysicalPortPreFecPowerStatistics OBJECT-TYPE
 
     -- 1.3.6.1.4.1.2011.5.25.157.2.329
     	hwPortGroupModeInvalid NOTIFICATION-TYPE
-        OBJECTS { hwPhysicalPortInSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID, hwPortTransModeReasonDescr }
+        OBJECTS { hwPhysicalPortInFrameAndSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID, hwPortTransModeReasonDescr }
 	STATUS current
 	DESCRIPTION 
 	        "The rate and PLL of the ports in the group do not match."
@@ -12768,7 +13149,7 @@ hwPhysicalPortPreFecPowerStatistics OBJECT-TYPE
 			
      -- 1.3.6.1.4.1.2011.5.25.157.2.330	
     	hwPortGroupModeInvalidResume NOTIFICATION-TYPE
-        OBJECTS { hwPhysicalPortInSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID, hwPortTransModeReasonDescr }
+        OBJECTS { hwPhysicalPortInFrameAndSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID, hwPortTransModeReasonDescr }
 	STATUS current
 	DESCRIPTION 
 	         "The rate and PLL of the ports in the group match now."
@@ -12787,6 +13168,227 @@ hwPhysicalPortPreFecPowerStatistics OBJECT-TYPE
         DESCRIPTION
             "The number of error packets is lower than the threshold and the interface rate is automatically recovered."
         ::= { hwPortNotifications 332 }
+        
+    	-- 1.3.6.1.4.1.2011.5.25.157.2.333
+     hwPhysicalPortPacketLoss NOTIFICATION-TYPE
+           OBJECTS { 
+             hwPhysicalPortIfIndex, 
+             hwPhysicalPortName,
+             hwPhysicalTrapFaultID,
+             hwPhysicalReasonDescription  }
+           STATUS current
+           DESCRIPTION 
+           "The packet loss alarm on the physical port is generated.."
+           ::= { hwPortNotifications 333 } 
+
+       	-- 1.3.6.1.4.1.2011.5.25.157.2.334
+      hwPhysicalPortPacketLossResume NOTIFICATION-TYPE
+           OBJECTS { 
+             hwPhysicalPortIfIndex, 
+             hwPhysicalPortName,
+             hwPhysicalTrapFaultID,
+             hwPhysicalReasonDescription  }
+           STATUS current
+           DESCRIPTION 
+           "The packet loss alarm on the physical port is cleared."
+           ::= { hwPortNotifications 334 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.335
+        hwPortGroupOpticalCfgInconsistent NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortGroupID, hwPhysicalPortName, hwPhysicalReasonDescription }
+        STATUS current
+        DESCRIPTION 
+                "The optical module configurations of this group of ports are inconsistent. Currently, port 0 takes effect."
+        ::= { hwPortNotifications 335 }
+        
+        -- 1.3.6.1.4.1.2011.5.25.157.2.336
+        hwPortGroupOpticalCfgInconsistentResume NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortGroupID, hwPhysicalPortName, hwPhysicalReasonDescription }
+        STATUS current
+        DESCRIPTION 
+                "The optical modules of this group of ports have the same configuration."
+        ::= { hwPortNotifications 336 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.337
+        hwPortGroupSplitTypeDiff NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortInChassis, hwPhysicalPortInSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID }
+        STATUS current
+        DESCRIPTION 
+                "The interfaces in this group worked in different split types."
+        ::= { hwPortNotifications 337 }
+        
+        -- 1.3.6.1.4.1.2011.5.25.157.2.338
+        hwPortGroupSplitTypeDiffResume NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortInChassis, hwPhysicalPortInSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID }
+        STATUS current
+        DESCRIPTION 
+                "The interfaces in this group worked in the same split types now."
+        ::= { hwPortNotifications 338 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.339
+        hwPortDownHoldTimeFlapping NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortName, hwPortDownHoldTimeFlappingInterval, hwPortDownHoldTimeFlappingAlarmThreshold, hwPortDownHoldTimeFlappingResumeThreshold, hwPortDownHoldTimeFlappingCurrentCnt }
+        STATUS current
+        DESCRIPTION 
+                "The number of transient interruptions on a port within a specified period exceeds the configured threshold."
+        ::= { hwPortNotifications 339 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.340
+        hwPortDownHoldTimeFlappingResume NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortName, hwPortDownHoldTimeFlappingInterval, hwPortDownHoldTimeFlappingAlarmThreshold, hwPortDownHoldTimeFlappingResumeThreshold, hwPortDownHoldTimeFlappingCurrentCnt }
+        STATUS current
+        DESCRIPTION 
+                "The number of transient interruptions on the port within the specified period does not exceed the configured threshold.."
+        ::= { hwPortNotifications 340 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.341
+        hwTrunkAssignNotRebootDeviceAlarm NOTIFICATION-TYPE
+        STATUS current
+        DESCRIPTION 
+               "The maximum number of LAGs or the maximum number of member interfaces in an LAG is changed but the configuration is not saved and the device is not restarted."
+        ::= { hwPortNotifications 341 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.342
+        hwL2VeOverLimitNotification NOTIFICATION-TYPE
+           OBJECTS { hwL2VeCurNum, hwL2VeMaxNum }
+        STATUS current
+        DESCRIPTION 
+               "The number of L2 Virtual-Ethernet interface has exceeded the upper limit."
+        ::= { hwPortNotifications 342 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.343
+        hwPortRxPowerViolateThreshold NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortName, hwAllLaneMinRxPower, hwAllLaneMaxRxPower, hwNormalMinRxPower, hwNormalMaxRxPower }
+        STATUS current
+        DESCRIPTION 
+                "The receive optical power of the optical module violates the threshold."
+        ::= { hwPortNotifications 343 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.344
+        hwPortBandwidthLimited NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortName, hwPortBandwidth, hwPhysicalReasonDescription }
+        STATUS current
+        DESCRIPTION 
+                "The current bandwidth of the physical port is limited."
+        ::= { hwPortNotifications 344 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.345
+        hwPortBandwidthLimitedResume NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortName, hwPortBandwidth, hwPhysicalReasonDescription }
+        STATUS current
+        DESCRIPTION 
+                "The current bandwidth of the physical port is unlimited."
+        ::= { hwPortNotifications 345 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.346
+        hwCesDcrUnlock NOTIFICATION-TYPE
+            OBJECTS { hwPWCesVcID, hwPWCesVcType, hwPeerIpAddr, hwPWPortName }
+        STATUS current
+        DESCRIPTION
+                "The DCR recovery clock is unlocked."
+        ::= { hwPortNotifications 346 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.347
+        hwCesDcrUnlockResume NOTIFICATION-TYPE
+            OBJECTS { hwPWCesVcID, hwPWCesVcType, hwPeerIpAddr, hwPWPortName }
+        STATUS current
+        DESCRIPTION
+                "The DCR recovery clock is locked."
+        ::= { hwPortNotifications 347 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.348
+        hwCasAbnormal NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortName }
+        STATUS current
+        DESCRIPTION 
+                "This object indicates that the number of errored seconds exceeds a specified threshold."
+        ::= { hwPortNotifications 348 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.349
+        hwCasAbnormalResume NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortName }
+        STATUS current
+        DESCRIPTION 
+                "This object indicates that the number of errored seconds falls below a specified threshold."
+        ::= { hwPortNotifications 349 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.350
+        hwOpticalFake NOTIFICATION-TYPE
+        STATUS current
+        DESCRIPTION 
+                "This object indicates that the device has faked optical modules."
+        ::= { hwPortNotifications 350 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.351
+        hwOpticalFakeResume NOTIFICATION-TYPE
+        STATUS current
+        DESCRIPTION 
+                "This object indicates that all faked optical modules of the device have been pulled out."
+        ::= { hwPortNotifications 351 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.352
+        hwPortTxTrafficConvergenceAlarm NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortInFrameAndSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID, hwPortTransModeReasonDescr }
+	    STATUS current
+	    DESCRIPTION 
+	        "The downstream traffic of the group of interfaces exceeds the configured bandwidth threshold."
+	    ::= { hwPortNotifications 352 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.353
+        hwPortTxTrafficConvergenceAlarmResume NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortInFrameAndSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID, hwPortTransModeReasonDescr }
+	    STATUS current
+	    DESCRIPTION 
+	        "The downstream traffic of the group of interfaces falls below the configured bandwidth threshold."
+	    ::= { hwPortNotifications 353 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.354
+        hwPortRxTrafficConvergenceAlarm NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortInFrameAndSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID, hwPortTransModeReasonDescr }
+	    STATUS current
+	    DESCRIPTION 
+	        "The upstream traffic of the group of interfaces exceeds the configured bandwidth threshold."
+	    ::= { hwPortNotifications 354 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.355
+        hwPortRxTrafficConvergenceAlarmResume NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortInFrameAndSlot, hwPhysicalPortInCard, hwPhysicalPortGroupID, hwPortTransModeReasonDescr }
+	    STATUS current
+	    DESCRIPTION 
+	        "The upstream traffic of the group of interfaces falls below the configured bandwidth threshold."
+	    ::= { hwPortNotifications 355 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.356
+        hwOpticalParameterOutOfThreshold NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortName, hwOpticalParameterType, hwOpticalLaneID, hwOpticalParaCurValue, hwOpticalParaLowThreshold, hwOpticalParaHighThreshold, hwOpticalParameterUint }
+	    STATUS current
+	    DESCRIPTION 
+	        "The upstream traffic of the group of interfaces falls below the configured bandwidth threshold."
+	    ::= { hwPortNotifications 356 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.357
+        hwOpticalParameterOutOfThresholdResume NOTIFICATION-TYPE
+            OBJECTS { hwPhysicalPortIfIndex, hwPhysicalPortName, hwOpticalParameterType, hwOpticalLaneID, hwOpticalParaCurValue, hwOpticalParaLowThreshold, hwOpticalParaHighThreshold, hwOpticalParameterUint }
+	    STATUS current
+	    DESCRIPTION 
+	        "The upstream traffic of the group of interfaces falls below the configured bandwidth threshold."
+	    ::= { hwPortNotifications 357 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.358
+        hwPortModeInconsistent NOTIFICATION-TYPE
+            OBJECTS {hwPhysicalPortIfIndex, hwPhysicalPortName }
+            STATUS current
+            DESCRIPTION
+                "The rate mode configuration of the interface is inconsistent with that of other interfaces."
+            ::= { hwPortNotifications 358 }
+
+        -- 1.3.6.1.4.1.2011.5.25.157.2.359
+        hwPortModeInconsistentResume NOTIFICATION-TYPE
+            OBJECTS {hwPhysicalPortIfIndex, hwPhysicalPortName }
+            STATUS current
+            DESCRIPTION
+                "The rate mode configuration of the interface becomes consistent with that of other interfaces."
+            ::= { hwPortNotifications 359 } 
 
     hwPortTotalStatistics OBJECT IDENTIFIER ::= { hwPortMIBObjects 25 }
     
@@ -13141,6 +13743,167 @@ hwPhysicalPortPreFecPowerStatistics OBJECT-TYPE
 				"Ths object indecates the burst event time."
 			::= { hwIFMPortBurstEntry 17 }
 
+    -- 1.3.6.1.4.1.2011.5.25.157.1.32
+    hwRTUCtrlPortSpecStatistics OBJECT IDENTIFIER ::= { hwPortMIBObjects 32 } 
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.32.1
+    hwRTUCtrlPortSpecTable OBJECT-TYPE
+        SYNTAX  SEQUENCE OF HwRTUCtrlPortSpecEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "This table describes the specifications of ports controlled by the RTU."
+        ::= { hwRTUCtrlPortSpecStatistics 1 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.32.1.1
+    hwRTUCtrlPortSpecEntry OBJECT-TYPE
+        SYNTAX HwRTUCtrlPortSpecEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "This table describes the specifications of ports controlled by the RTU."
+        INDEX { hwRTUCtrlPortSpecIndex }
+        ::= { hwRTUCtrlPortSpecTable 1 }
+
+    HwRTUCtrlPortSpecEntry ::= SEQUENCE {
+        hwRTUCtrlPortSpecIndex
+            Unsigned32,
+        hwRTUCtrlPortSpecSpeed
+            Unsigned32,
+        hwRTUCtrlPortTotal
+            Unsigned32,
+        hwRTUCtrlPortMaxAvailableNum
+            Unsigned32
+    }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.32.1.1.1
+    hwRTUCtrlPortSpecIndex OBJECT-TYPE
+        SYNTAX Unsigned32 (1..4294967295)
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "This object indicates the table index."
+        ::= { hwRTUCtrlPortSpecEntry 1 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.32.1.1.2
+    hwRTUCtrlPortSpecSpeed OBJECT-TYPE
+        SYNTAX Unsigned32 (0..4294967295)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "This object indicates the maximum bandwidth of the port, in Mbit/s."
+        ::= { hwRTUCtrlPortSpecEntry 2 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.32.1.1.3
+    hwRTUCtrlPortTotal OBJECT-TYPE
+        SYNTAX Unsigned32 (0..4294967295)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "This object indicates the total number of controlled ports with the maximum bandwidth."
+        DEFVAL { 0 }
+        ::= { hwRTUCtrlPortSpecEntry 3 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.32.1.1.4
+    hwRTUCtrlPortMaxAvailableNum OBJECT-TYPE
+        SYNTAX Unsigned32 (0..4294967295)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "This object indicates the number of controlled ports with the maximum bandwidth that can be activated using the RTU."
+        DEFVAL { 0 }
+        ::= { hwRTUCtrlPortSpecEntry 4 }
+
+    hwL2VeOverlimitObjects OBJECT IDENTIFIER ::= { hwPortMIBObjects 33 }
+
+	hwL2VeCurNum OBJECT-TYPE
+		SYNTAX Integer32
+		MAX-ACCESS accessible-for-notify
+		STATUS current
+		DESCRIPTION
+			"The current number of l2 virtual-ethernet interface."
+		::= { hwL2VeOverlimitObjects 1 }
+	
+
+	hwL2VeMaxNum  OBJECT-TYPE
+		SYNTAX Integer32
+		MAX-ACCESS accessible-for-notify
+		STATUS current
+		DESCRIPTION
+			"The max number of l2 virtual-ethernet interface."
+		::= { hwL2VeOverlimitObjects 2 }
+
+     -- 1.3.6.1.4.1.2011.5.25.157.1.34
+    hwLicenseSpeedCfg OBJECT IDENTIFIER ::= { hwPortMIBObjects 34 } 
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.34.1
+    hwLicenseSpeedTable OBJECT-TYPE
+        SYNTAX  SEQUENCE OF HwLicenseSpeedEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "This table describes the license speed cfg."
+        ::= { hwLicenseSpeedCfg 1 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.34.1.1
+    hwLicenseSpeedEntry OBJECT-TYPE
+        SYNTAX HwLicenseSpeedEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "This table describes the license speed cfg."
+        INDEX { hwLicensePortIfIndex }
+        ::= { hwLicenseSpeedTable 1 }
+
+    HwLicenseSpeedEntry ::= SEQUENCE {
+        hwLicensePortIfIndex
+            Unsigned32,
+        hwLicensePortName
+            OCTET STRING,
+        hwLicenseBaseSpeed
+            Unsigned32,
+        hwLicenseMaxSpeed
+            Unsigned32
+    }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.34.1.1.1
+    hwLicensePortIfIndex OBJECT-TYPE
+        SYNTAX Unsigned32 (1..4294967295)
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "This object indicates the table index."
+        ::= { hwLicenseSpeedEntry 1 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.34.1.1.2
+    hwLicensePortName OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "This object indicates the name of the port."
+        ::= { hwLicenseSpeedEntry 2 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.34.1.1.3
+    hwLicenseBaseSpeed OBJECT-TYPE
+        SYNTAX Unsigned32 (0..4294967295)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "This object indicates the base bandwidth of the port, in Mbit/s."
+        DEFVAL { 0 }
+        ::= { hwLicenseSpeedEntry 3 }
+
+    -- 1.3.6.1.4.1.2011.5.25.157.1.34.1.1.4
+    hwLicenseMaxSpeed OBJECT-TYPE
+        SYNTAX Unsigned32 (0..4294967295)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "This object indicates the maximum bandwidth of the port, in Mbit/s."
+        DEFVAL { 0 }
+        ::= { hwLicenseSpeedEntry 4 }     
+
 
     hwPortConformance OBJECT IDENTIFIER ::= { hwPortMIB 11 }
 
@@ -13152,7 +13915,7 @@ hwPhysicalPortPreFecPowerStatistics OBJECT-TYPE
             "The compliance statement for systems supporting
                 the HUAWEI-PORT-MIB."
         MODULE 
-            MANDATORY-GROUPS {hwEthernetObjectGroup,hwPosObjectGroup,hwCposObjectGroup,hwBundleSerialObjectGroup,hwDs0ChannelBundleObjectGroup,hwDs1ObjectGroup,hwDs3ObjectGroup,hwPortNotificationsGroup,hwPortAlarmThresholdObjectGroup,hwPortAlarmDownEnableObjectGroup,hwLogicalPortObjectGroup,hwPortSpeedTrapObjectsGroup,hwIFMPortBurstObjectGroup}
+            MANDATORY-GROUPS {hwEthernetObjectGroup,hwPosObjectGroup,hwCposObjectGroup,hwBundleSerialObjectGroup,hwDs0ChannelBundleObjectGroup,hwDs1ObjectGroup,hwDs3ObjectGroup,hwPortNotificationsGroup,hwPortAlarmThresholdObjectGroup,hwPortAlarmDownEnableObjectGroup,hwLogicalPortObjectGroup,hwPortSpeedTrapObjectsGroup,hwIFMPortBurstObjectGroup,hwL2VeOverLimitObjectGroup}
 
         ::= { hwPortCompliances 1 }
 
@@ -13590,7 +14353,32 @@ hwPhysicalPortPreFecPowerStatistics OBJECT-TYPE
 	    hwPortGroupModeInvalid,
 	    hwPortGroupModeInvalidResume,
             hwPortErrPktSpeedDownGrade,
-            hwPortErrPktSpeedDownGradeResume 
+            hwPortErrPktSpeedDownGradeResume,
+            hwPhysicalPortPacketLoss,
+            hwPhysicalPortPacketLossResume,
+            hwPortGroupOpticalCfgInconsistent,
+            hwPortGroupOpticalCfgInconsistentResume,
+            hwPortGroupSplitTypeDiff,
+            hwPortGroupSplitTypeDiffResume,
+            hwPortDownHoldTimeFlapping,
+            hwPortDownHoldTimeFlappingResume,
+            hwTrunkAssignNotRebootDeviceAlarm,
+            hwL2VeOverLimitNotification,
+            hwPortRxPowerViolateThreshold,
+            hwPortBandwidthLimited,
+            hwPortBandwidthLimitedResume,
+            hwCesDcrUnlock,
+            hwCesDcrUnlockResume,
+            hwCasAbnormal,
+            hwCasAbnormalResume,
+            hwOpticalFake,
+            hwOpticalFakeResume,
+            hwPortTxTrafficConvergenceAlarm,
+            hwPortTxTrafficConvergenceAlarmResume,
+            hwPortRxTrafficConvergenceAlarm,
+            hwPortRxTrafficConvergenceAlarmResume,
+            hwPortModeInconsistent,
+            hwPortModeInconsistentResume
          }
         STATUS current
         DESCRIPTION
@@ -13889,6 +14677,17 @@ hwPhysicalPortPreFecPowerStatistics OBJECT-TYPE
 			DESCRIPTION
 				"The Port attribute group."
 			::= { hwPortGroups 33}
+
+     hwL2VeOverLimitObjectGroup OBJECT-GROUP
+
+        OBJECTS {
+            hwL2VeCurNum,
+            hwL2VeMaxNum
+        }
+        STATUS current
+        DESCRIPTION
+            "The l2 ve over limit object group"
+        ::= { hwPortGroups 34 }
 
 END
 --

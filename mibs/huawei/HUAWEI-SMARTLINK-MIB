@@ -1,9 +1,9 @@
 -- ==================================================================
--- Copyright (C) 2019 by HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2007 by HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI SMARTLINK MIB
 -- Reference:
--- Version: V3.06
+-- Version: V2.00
 -- History:
 -- ==================================================================
 
@@ -29,7 +29,7 @@
                         
         hwSmartLinkMib MODULE-IDENTITY 
 
-			      LAST-UPDATED "201903142040Z"		-- Mar 14, 2019 at 20:40 GMT
+			      LAST-UPDATED "201303181420Z"		-- Mar 18, 2013 at 14:20 GMT
 			      ORGANIZATION 
 				        "Huawei Technologies Co.,Ltd."
 			      CONTACT-INFO 
@@ -42,29 +42,8 @@
                 "
             DESCRIPTION 
                 "This module includes the information about smart link.
-                The information can be read and some of them can be set."  
+                The information can be read and some of them can be set."
 
-            REVISION  "201903142040Z"
-            DESCRIPTION  "Update the max index of hwMonitorLinkDlArrayIndex from 48 to 512."     
-
-            REVISION  "201707141055Z"
-            DESCRIPTION  "Update index of hwMonitorLinkDlArrayIndex."                
-
-            REVISION  "201607091717Z"
-            DESCRIPTION  "Update to increase  hwSmartLinkPcIfName."
-
-            REVISION  "201507271717Z"
-            DESCRIPTION  "Update to increase  hwSmartLinkRpcRevAuthMode and hwSmartLinkMulRpcRevAuthMode ENUM elemt as null(0)."
-
-            REVISION  "201504301443Z"
-            DESCRIPTION  "Update DESCRIPTION of hwMonitorLinkDlArrayIndex."
-
-            REVISION  "201308291443Z"
-            DESCRIPTION  "Update DESCRIPTION of hwSmartLinkRevLastFlushTime and hwSmartLinkPcSendFlushTime."
-          
-            REVISION  "201305031155Z"
-            DESCRIPTION  "Update to increase  hwSmartLinkMulRevPortCfgTable table."
-            
             REVISION  "201303181420Z"
             DESCRIPTION  "Update to increase  hwSmartLinkGcGroupStatus ENUM elemt as idle(4), init(5)."
             
@@ -101,7 +80,7 @@
             DESCRIPTION
                 "The time when received flush packet lastly.
                 field  octets  contents                range
-                 - - -  - - - -  - - - -                 - - -
+                 -----  ------  --------                -----
                    1      1-2       year                   0..65536
                    2       3        month                  1..12
                    3       4        day                    1..31
@@ -181,14 +160,14 @@
             DESCRIPTION
                 "The index of port from which received flush packets."
             ::= { hwSmartLinkRevPortCfgEntry 1 }
-                         
+        
         hwSmartLinkRpcRevVlan OBJECT-TYPE
             SYNTAX VlanIdOrNone
             MAX-ACCESS read-write
             STATUS current
             DESCRIPTION
                 "Set the VLAN ID to verify the validity of flush packets received.
-                Ranging from 0 to 4095."
+                Ranging from 1 to 4094."
             ::= { hwSmartLinkRevPortCfgEntry 2 }
         
         hwSmartLinkRpcRevPassword OBJECT-TYPE
@@ -201,8 +180,7 @@
         
         hwSmartLinkRpcRevAuthMode OBJECT-TYPE
             SYNTAX INTEGER
-            {   
-            null(0),
+            {
             simple(1),
             sha(2)
             }
@@ -390,7 +368,6 @@
         hwSmartLinkGcAuthMode OBJECT-TYPE
             SYNTAX INTEGER
             {
-            null(0),
             simple(1),                  
             sha(2)
             }
@@ -496,7 +473,7 @@
             DESCRIPTION
                 "The time when send flush packet lastly.
                 field  octets  contents                range
-                 - - -  - - -   - - - - -               - - -
+                 -----  ------  --------                -----
                    1      1-2       year                   0..65536
                    2       3        month                  1..12
                    3       4        day                    1..31
@@ -724,7 +701,7 @@
             ::= { hwMonitorLinkDownLinkPortEntry 1 }
         
         hwMonitorLinkDlArrayIndex OBJECT-TYPE
-            SYNTAX Integer32 (1..512)
+            SYNTAX Integer32 (1..16)
             MAX-ACCESS not-accessible
             STATUS current
             DESCRIPTION
@@ -774,98 +751,7 @@
             DESCRIPTION
                 "Status of monitor link group row."
             ::= { hwMonitorLinkDownLinkPortEntry 7 }
-           
---hwSmartLinkMulRevPortCfgTable
         
-        hwSmartLinkMulRevPortCfgTable OBJECT-TYPE
-            SYNTAX SEQUENCE OF HwSmartLinkMulRevPortCfgEntry
-            MAX-ACCESS not-accessible
-            STATUS current
-            DESCRIPTION
-                "This is port configuration table which received flush packet, 
-                and configuration relation of port received flush packet was described.
-                The index of table is hwSmartLinkMulRpcIfIndex and hwSmartLinkMulRpcVlan."
-            ::= { hwSmartLinkMibObjects 13 }
-        
-        hwSmartLinkMulRevPortCfgEntry OBJECT-TYPE
-            SYNTAX HwSmartLinkMulRevPortCfgEntry
-            MAX-ACCESS not-accessible
-            STATUS current
-            DESCRIPTION
-                "The table includes the information of the received flush packet port configuration information.
-                The index of the table is hwSmartLinkMulRpcIfIndex and hwSmartLinkMulRpcVlan."
-            INDEX { hwSmartLinkMulRpcIfIndex, hwSmartLinkMulRpcVlan }
-            ::= { hwSmartLinkMulRevPortCfgTable 1 }
-        
-        HwSmartLinkMulRevPortCfgEntry ::=
-            SEQUENCE { 
-                hwSmartLinkMulRpcIfIndex
-                    InterfaceIndex,  
-                hwSmartLinkMulRpcVlan  
-                	Integer32,
-                hwSmartLinkMulRpcRevPassword
-                    OCTET STRING,
-                hwSmartLinkMulRpcRevAuthMode
-                    INTEGER, 
-                hwSmartLinkMulRpcRevRowStatus
-                    RowStatus    
-             }
-
-        hwSmartLinkMulRpcIfIndex OBJECT-TYPE
-            SYNTAX InterfaceIndex
-            MAX-ACCESS not-accessible
-            STATUS current
-            DESCRIPTION
-                "The index of port from which received flush packets."
-            ::= { hwSmartLinkMulRevPortCfgEntry 1 }  
-            
-        hwSmartLinkMulRpcVlan OBJECT-TYPE
-            SYNTAX Integer32 (0..4095)
-            MAX-ACCESS not-accessible
-            STATUS current
-            DESCRIPTION
-                "The control-vlan of port from which received flush packets"
-            ::= { hwSmartLinkMulRevPortCfgEntry 2 }
-                              
-        hwSmartLinkMulRpcRevPassword OBJECT-TYPE
-            SYNTAX OCTET STRING (SIZE (0..16))
-            MAX-ACCESS read-write
-            STATUS current
-            DESCRIPTION
-                "Set the password to verify the validity of flush packets received."
-            ::= { hwSmartLinkMulRevPortCfgEntry 3 }
-        
-        hwSmartLinkMulRpcRevAuthMode OBJECT-TYPE
-            SYNTAX INTEGER
-            {         
-            null(0),
-            simple(1),
-            sha(2)
-            }
-            MAX-ACCESS read-create
-            STATUS current
-            DESCRIPTION
-                "Set the password mode to verify the validity of flush packets received."
-            ::= { hwSmartLinkMulRevPortCfgEntry 4 }  
-            
-        hwSmartLinkMulRpcRevRowStatus OBJECT-TYPE
-            SYNTAX RowStatus
-            MAX-ACCESS read-create
-            STATUS current
-            DESCRIPTION
-                " Operation of CreateAndGo can be
-	             used to create a new instance, and operation of Destroy be 
-	             used to destroy an existent index."
-            ::= { hwSmartLinkMulRevPortCfgEntry 50 }
-
-	hwSmartLinkPcIfName OBJECT-TYPE
-            SYNTAX OCTET STRING (SIZE (0..80))
-            MAX-ACCESS accessible-for-notify
-            STATUS current
-            DESCRIPTION
-                "Indicates the interface name."
-            ::= { hwSmartLinkMibObjects 14 } 
-	                      
         hwSmartLinkMibTraps OBJECT-IDENTITY
             STATUS current
             DESCRIPTION 
@@ -880,14 +766,14 @@
             ::= { hwSmartLinkMibTraps 1 }
         
         hwSmartLinkInactiveLinkFail NOTIFICATION-TYPE
-            OBJECTS { hwSmartLinkPcIfIndex, hwSmartLinkPcIfName }
+            OBJECTS { hwSmartLinkPcIfIndex }
             STATUS current
             DESCRIPTION 
                 "The SNMP trap that is generated when detect the link change to abnormal status."
             ::= { hwSmartLinkMibTraps 2 }
         
         hwSmartLinkInactiveLinkResume NOTIFICATION-TYPE
-            OBJECTS { hwSmartLinkPcIfIndex, hwSmartLinkPcIfName }
+            OBJECTS { hwSmartLinkPcIfIndex }
             STATUS current
             DESCRIPTION 
                 "The SNMP trap that is generated when detect the link change to normal status from abnormal status."
@@ -996,8 +882,7 @@
                       hwSmartLinkPcPortStatus,
                       hwSmartLinkPcSendFlushNum,
                       hwSmartLinkPcSendFlushTime, 
-                      hwSmartLinkPcRowStatus,
-                      hwSmartLinkPcIfName }
+                      hwSmartLinkPcRowStatus }
             STATUS current
             DESCRIPTION 
                 "A collection of objects providing smart link port configuration."

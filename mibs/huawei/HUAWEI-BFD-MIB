@@ -1,5 +1,5 @@
 -- =================================================================
--- Copyright (C) 2022 by HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by HUAWEI TECHNOLOGIES. All rights reserved.
 -- Description: MIB interface of BFD protocol configuration.
 --              The Bidirectional Forwarding Detection (BFD) protocol
 --              is standardized by the IETF. BFD detects the
@@ -7,7 +7,7 @@
 --              quickly sending BFD control packets (the UDP packets in
 --              a specified format) at intervals between two nodes.
 -- Reference:
--- Version:     V1.74
+-- Version: V1.79
 --
 -- =================================================================
 
@@ -32,7 +32,7 @@
 
 
         hwBFDMIB MODULE-IDENTITY
-            LAST-UPDATED "202207210000Z"
+            LAST-UPDATED "202504010000Z"
             ORGANIZATION "Huawei Technologies Co.,Ltd."
             CONTACT-INFO
                 "Huawei Industrial Base
@@ -52,6 +52,21 @@
                 "
 
             -- Revision history
+            REVISION    "202504010000Z"
+            DESCRIPTION "V1.79, add hwBfdSelectBoardAlarmSlotId, hwBfdSelectBoardWarn and hwBfdSelectBoardWarnResume."
+
+            REVISION    "202405100000Z"
+            DESCRIPTION "V1.78, modified the name of hwBfdSlicedAlarm and hwBfdSlicedAlarmResume."
+
+            REVISION    "202404080000Z"
+            DESCRIPTION "V1.77, add hwBfdSlicedAlarm and hwBfdSlicedAlarmResume."
+
+            REVISION    "202311020000Z"
+            DESCRIPTION "V1.76, modified the max-access of hwBfdServiceName."
+
+            REVISION    "202309010000Z"
+            DESCRIPTION "V1.75, add hwBfdSessCreateFail and hwBfdSessCreateFailResume."
+            
             REVISION    "202207210000Z"
             DESCRIPTION "V1.74, modified the range of hwBfdSessConfName."
 
@@ -491,6 +506,30 @@
                 Default: 0
                 "
             ::= { hwBfdScalarsObjects 21 }
+
+        hwBfdServiceName OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "Name of the service for which the BFD session fails to be created."
+            ::= { hwBfdScalarsObjects 22 }
+
+        hwBfdAlarmSlotId OBJECT-TYPE
+            SYNTAX DisplayString (SIZE (1..32))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Interface board ID."
+            ::= { hwBfdScalarsObjects 23 }
+
+        hwBfdSelectBoardAlarmSlotId OBJECT-TYPE
+            SYNTAX DisplayString (SIZE (1..32))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Selected board ID."
+            ::= { hwBfdScalarsObjects 24 }
 
         hwBfdObjects OBJECT IDENTIFIER ::= { hwBFDMIB 2 }
 
@@ -3459,6 +3498,47 @@
                 "The number of BFD sessions is restored within the specified range, the new session can be created. "
             ::= { hwBfdNotifications 17 }
 
+        hwBfdSessCreateFail NOTIFICATION-TYPE
+            OBJECTS { hwBfdServiceName }
+            STATUS current
+            DESCRIPTION
+                "The BFD session fails to be created for the service."
+            ::= { hwBfdNotifications 18 }
+
+        hwBfdSessCreateFailResume NOTIFICATION-TYPE
+            OBJECTS { hwBfdServiceName }
+            STATUS current
+            DESCRIPTION
+                "The alarm indicating that the BFD session fails to be created is cleared."
+            ::= { hwBfdNotifications 19 }
+
+        hwBfdSliceAlarm NOTIFICATION-TYPE
+            OBJECTS { hwBfdAlarmSlotId }
+            STATUS current
+            DESCRIPTION
+                "In HBH network slicing scenarios, the BFD for SRv6 TE Policy session does not support the loose mode on the board."
+            ::= { hwBfdNotifications 20 }
+
+        hwBfdSliceAlarmResume NOTIFICATION-TYPE
+            OBJECTS { hwBfdAlarmSlotId }
+            STATUS current
+            DESCRIPTION
+                "The alarm indicating that the BFD for SRv6 TE Policy session does not support the loose mode on the board in HBH network slicing scenarios is cleared."
+            ::= { hwBfdNotifications 21 }
+
+        hwBfdSelectBoardWarn NOTIFICATION-TYPE
+            OBJECTS { hwBfdSelectBoardAlarmSlotId }
+            STATUS current
+            DESCRIPTION
+                "When the board selection result of a board selection session is the board but the board is not a member board of the session, an alarm about the board is reported."
+            ::= { hwBfdNotifications 22 }
+
+        hwBfdSelectBoardWarnResume NOTIFICATION-TYPE
+            OBJECTS { hwBfdSelectBoardAlarmSlotId }
+            STATUS current
+            DESCRIPTION
+                "This alarm is cleared when the board is a member board of all member interfaces on the board."
+            ::= { hwBfdNotifications 23 }
 
         hwBfdConformance OBJECT IDENTIFIER ::= { hwBFDMIB 4 }
 
@@ -3531,7 +3611,8 @@
 
         hwBfdNotificationGroup NOTIFICATION-GROUP
             NOTIFICATIONS { hwBfdSessDown, hwBfdSessUp, hwBfdSessReachLimit, hwBfdSessReachLimitResume, hwBfdSessReachLimitBindIf, hwBfdSessReachLimitBindIfResume, hwBfdSessCfgRemoteFail, hwBfdBitErrorDetectSessReachLimit,
-                                           hwBfdSessReachTotalLimit, hwBfdSessReachTotalLimitResume}
+                                           hwBfdSessReachTotalLimit, hwBfdSessReachTotalLimitResume, hwBfdSessCreateFail, hwBfdSessCreateFailResume, hwBfdSliceAlarm, hwBfdSliceAlarmResume,
+                                           hwBfdSelectBoardWarn, hwBfdSelectBoardWarnResume }
             STATUS current
             DESCRIPTION
                 "A collection of traps."

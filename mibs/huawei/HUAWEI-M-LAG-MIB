@@ -1,55 +1,136 @@
 -- =================================================================
--- Copyright (C) 2016 by HUAWEI TECHNOLOGIES. All rights reserved
+-- Copyright (C) 2025 by HUAWEI TECHNOLOGIES. All rights reserved
 -- 
 -- Description: M-LAG huawei mib define
 -- Reference: M-LAG 
--- Version: V2.00
+-- Version: V3.00
 -- History:
---    <liuquan 00231012>,<2016.11.22>,<create>
+--    <liuquan>,<2016.11.22>,<create>
 -- =================================================================
          
 HUAWEI-M-LAG-MIB DEFINITIONS ::= BEGIN
 
     IMPORTS
-        hwDatacomm            
+        hwDatacomm
             FROM HUAWEI-MIB
-        hwETrunkMIB            
+        hwETrunkMIB
             FROM HUAWEI-E-TRUNK-MIB
-		MacAddress
-			FROM SNMPv2-TC
+        MacAddress
+            FROM SNMPv2-TC
+        Ipv6Address
+            FROM IPV6-TC
         OBJECT-GROUP, NOTIFICATION-GROUP, MODULE-COMPLIANCE
-            FROM SNMPv2-CONF            
-        OBJECT-TYPE, MODULE-IDENTITY, OBJECT-IDENTITY, NOTIFICATION-TYPE, Integer32, Unsigned32
-            FROM SNMPv2-SMI                
+            FROM SNMPv2-CONF
+        OBJECT-TYPE, MODULE-IDENTITY, OBJECT-IDENTITY, NOTIFICATION-TYPE, Integer32, Unsigned32, IpAddress
+            FROM SNMPv2-SMI
         entPhysicalName
-      	    FROM ENTITY-MIB;
+            FROM ENTITY-MIB;
  
     hwMLagMIB MODULE-IDENTITY 
-            LAST-UPDATED "201611221109Z"        
+            LAST-UPDATED "202505221500Z"
             ORGANIZATION 
                   "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
                   "Huawei Industrial Base
-				   Bantian, Longgang
-				   Shenzhen 518129
-				   People's Republic of China
-				   Website: http://www.huawei.com
-				   Email: support@huawei.com
-				  "
+                   Bantian, Longgang
+                   Shenzhen 518129
+                   People's Republic of China
+                   Website: http://www.huawei.com
+                   Email: support@huawei.com
+                  "
+
             DESCRIPTION 
-                "Please provide the descritpion."
-		    REVISION    "201611221109Z"   
+                "This MIB contains private managed object and notification trap definitions for M-LAG."
+            REVISION  "202505221500Z"
+            DESCRIPTION "V3.00, Modify hwMLagConsistencyFailed for M-LAG."
+
+            REVISION  "202403051500Z"
+            DESCRIPTION "V2.25, Modify hwMlagDualhomedChange for M-LAG ."
+
+            REVISION  "202401051500Z"
+            DESCRIPTION "V2.24, Add hwMlagDiffVersionOrBoardType for M-LAG ."
+
+            REVISION  "202307221500Z"
+            DESCRIPTION "V2.23, Add hwMlagPeerlinkInfoTable,hwMlagDualhomedChange,hwDfsPairSuceessDfs and hwDfsPairSuceessPeerlink for M-LAG ."
+
+            REVISION  "202307131500Z"
+            DESCRIPTION "V2.22, Add hwMLagPeerlinkSingleCard for M-LAG ."
+
+            REVISION  "202209051500Z"
+            DESCRIPTION "V2.21, Add hwMLagPeerlinkSingleLpu for M-LAG ."
+
+            REVISION  "202207121500Z"
+            DESCRIPTION "V2.20, Add hwMlagActiveStandbyStateNotElected and hwMlagActiveStandbyStateElected."
+
+            REVISION  "202207111629Z"
+            DESCRIPTION "V2.19, Add hwPeerlinkBlock for M-LAG"
+
+            REVISION  "202111121500Z"
+            DESCRIPTION "V2.18, Delete employee IDs and add causation."
+
+            REVISION  "202109141500Z"
+            DESCRIPTION "V2.17, Modify ACCESS of hwMlagLinkLocalVpnName and hwMlagLinkLocalAddress."
+
+            REVISION  "202104221500Z"
+            DESCRIPTION "V2.16, Modify description."
+
+            REVISION  "202104191500Z"
+            DESCRIPTION "V2.15, Change hwmlagConnectivityChkTable."
+
+            REVISION  "202103101500Z"
+            DESCRIPTION "V2.14, Change Connetivity to Connectivity."
+
+            REVISION  "202102101500Z"
+            DESCRIPTION "V2.13, Updated to include hwMlagReasonDescription for  hwMLagSynConnectivityCheckFailed for M-LAG"
+
+            REVISION  "202102081500Z"
+            DESCRIPTION "V2.12, Add hwMLagSynConnectivityCheckFailed for M-LAG"
+
+            REVISION  "202007221500Z"
+            DESCRIPTION "V2.11, Add hwMLagConsistencyCheckFailed which include hwMLagConsistencyCheckType1 and hwMLagConsistencyCheckType2 for M-LAG"
+
+            REVISION  "202007151200Z"
+            DESCRIPTION "V2.10, Updated MAX-ACCESS of hwMlagInfId, hwMlagInfName, hwLocalSysID and hwRemoteSysID for M-LAG" 
+
+            REVISION  "202006221630Z"
+            DESCRIPTION "V2.09, Updated to include noauthentication causation for M-LAG" 
+
+            REVISION  "202005301515Z"
+            DESCRIPTION "V2.08, Updated to include versionmismatch causation for M-LAG" 
+
+            REVISION  "202005251425Z"
+            DESCRIPTION "V2.06, Add hwMLagVxlanByPassTunnelTraffic for M-LAG"
+
+            REVISION  "202005140900Z"
+            DESCRIPTION "V2.06, Add hwMlagLinkLocalConflictDetect for M-LAG"
+
+            REVISION  "202004280900Z"
+            DESCRIPTION "V2.04, Add hwMlagLinkLocalVpnName for M-LAG"
+
+            REVISION  "202001200900Z"
+            DESCRIPTION "V2.04, Updated to include m-lag link-local address conflict alarm for M-LAG"
+
+            REVISION    "201811071109Z"
+            DESCRIPTION "V2.03, Updated to include mlag interface down for M-LAG."
+
+            REVISION    "201804021109Z"
+            DESCRIPTION "V2.02, Updated to include dfs info and mlag info query."
+
+            REVISION    "201803151109Z"
+            DESCRIPTION "V2.01, Updated to include dfs info and mlag info query."
+
+            REVISION    "201611221109Z"
             DESCRIPTION "V2.00, Updated to include dfs peer down alarm for M-LAG."
-			
-            REVISION    "201611221109Z"   
+
+            REVISION    "201611221109Z"
             DESCRIPTION "V1.02, Updated to include heart lost alarm for M-LAG."
-			
-            REVISION    "201611221109Z"   
+
+            REVISION    "201611221109Z"
             DESCRIPTION "V1.01, Updated to include support for M-LAG."
 
-            REVISION    "201611221109Z"   
+            REVISION    "201611221109Z"
             DESCRIPTION "V1.00, initial version."
-    
+
             ::= { hwETrunkMIB 8 }
 
     
@@ -76,82 +157,997 @@ hwMLagConformance    OBJECT IDENTIFIER ::= { hwMLagMIB 3 }
        DESCRIPTION
            "The type of M-LAG consistency check."
        ::= { hwMLagObjects 2 }
+
+    hwMLagConsistencyFailed OBJECT-TYPE
+       SYNTAX Unsigned32
+       MAX-ACCESS  accessible-for-notify
+       STATUS      current
+       DESCRIPTION
+           "The type of M-LAG consistency check."
+       ::= { hwMLagObjects 8 }
        
     hwmlagDfsPeerDownTable OBJECT-TYPE
-		SYNTAX SEQUENCE OF HwmlagDfsPeerDownEntry
-		MAX-ACCESS  not-accessible
+        SYNTAX SEQUENCE OF HwmlagDfsPeerDownEntry
+        MAX-ACCESS  not-accessible
         STATUS current
         DESCRIPTION 
             "The type of DFS peer status goes down."
         ::= { hwMLagObjects 3 }
 
-	
-	hwmlagDfsPeerDownEntry OBJECT-TYPE
-		SYNTAX HwmlagDfsPeerDownEntry
-		MAX-ACCESS not-accessible
-		STATUS current
-		DESCRIPTION
-				"Entries of Dfs peer status goes down table."
-		INDEX { hwdfsGroupId, hwsysMac, hwdfsType, hwdfsPeerAddress }
-                ::= { hwmlagDfsPeerDownTable 1 }
-				
-	HwmlagDfsPeerDownEntry ::=
-		SEQUENCE {
-					hwdfsGroupId
-						Unsigned32,
-					hwsysMac
-						MacAddress,
-					hwdfsType
-						OCTET STRING,
-					hwdfsPeerAddress
-						OCTET STRING
-                 }
-				 
-    hwdfsGroupId OBJECT-TYPE
-		SYNTAX Unsigned32
-		MAX-ACCESS accessible-for-notify
-		STATUS current
-		DESCRIPTION
-				"Dfs Group id."
-                ::= { hwmlagDfsPeerDownEntry 1 }
-				 
-	hwsysMac OBJECT-TYPE
-		SYNTAX MacAddress
-		MAX-ACCESS accessible-for-notify
-		STATUS current
-		DESCRIPTION
-				"MAC of system from dfs peer."
-                ::= { hwmlagDfsPeerDownEntry 2 }
-				
-	hwdfsType OBJECT-TYPE
-		SYNTAX OCTET STRING
-		MAX-ACCESS accessible-for-notify
-		STATUS current
-		DESCRIPTION
-				"The type of dfs-group which contains M-LAG or Active-Active Gateway."
-                ::= { hwmlagDfsPeerDownEntry 3 }
-				
-	hwdfsPeerAddress OBJECT-TYPE
-		SYNTAX OCTET STRING
-		MAX-ACCESS accessible-for-notify
-		STATUS current
-		DESCRIPTION
-				"Peer address from dfs peer."
-                ::= { hwmlagDfsPeerDownEntry 4 }
     
-	   
+    hwmlagDfsPeerDownEntry OBJECT-TYPE
+        SYNTAX HwmlagDfsPeerDownEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+                "Entries of Dfs peer status goes down table."
+        INDEX { hwdfsGroupId, hwsysMac, hwdfsType, hwdfsPeerAddress }
+                ::= { hwmlagDfsPeerDownTable 1 }
+                
+    HwmlagDfsPeerDownEntry ::=
+        SEQUENCE {
+                    hwdfsGroupId
+                        Unsigned32,
+                    hwsysMac
+                        MacAddress,
+                    hwdfsType
+                        OCTET STRING,
+                    hwdfsPeerAddress
+                        OCTET STRING
+                 }
+                 
+    hwdfsGroupId OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+                "Dfs Group id."
+                ::= { hwmlagDfsPeerDownEntry 1 }
+                 
+    hwsysMac OBJECT-TYPE
+        SYNTAX MacAddress
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+                "MAC of system from dfs peer."
+                ::= { hwmlagDfsPeerDownEntry 2 }
+                
+    hwdfsType OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+                "The type of DFS group which contains M-LAG or Active-Active Gateway."
+                ::= { hwmlagDfsPeerDownEntry 3 }
+                
+    hwdfsPeerAddress OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+                "Peer address from dfs peer."
+                ::= { hwmlagDfsPeerDownEntry 4 }
+
+    hwmlagDfsInfoTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF HwmlagDfsInfoEntry
+        MAX-ACCESS  not-accessible
+        STATUS current
+        DESCRIPTION 
+            "The information of DFS."
+        ::= { hwMLagObjects 4 }
+
+    hwmlagDfsInfoEntry OBJECT-TYPE
+        SYNTAX HwmlagDfsInfoEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "The DFS information entry."
+        INDEX { hwLocalGroupId }
+        ::= { hwmlagDfsInfoTable 1 }
+
+    HwmlagDfsInfoEntry ::=
+        SEQUENCE { 
+            hwLocalHeartBeatState
+                INTEGER,
+            hwLocalNodeId
+                Integer32,
+            hwLocalGroupId
+                Integer32,
+            hwLocalPriority
+                Integer32,
+            hwLocalAddressType
+                INTEGER,
+            hwLocalIpAddress
+                IpAddress,
+            hwLocalIpv4VpnName
+                OCTET STRING,
+            hwLocalIpv6Address
+                Ipv6Address,
+            hwLocalIpv6VpnName
+                OCTET STRING,
+            hwLocalNickname
+                Integer32,
+            hwLocalState
+                INTEGER,
+            hwLocalCausation
+                INTEGER,
+            hwLocalSystemID
+                MacAddress,
+            hwLocalSystemName
+                OCTET STRING,
+            hwLocalSystemVersion
+                OCTET STRING,
+            hwLocalDeviceType
+                OCTET STRING,
+            hwRemoteDfsStatus
+                INTEGER,
+            hwRemoteVersionMatch
+                INTEGER,
+            hwRemoteNodeId
+                Integer32,
+            hwRemoteGroupId
+                Integer32,
+            hwRemotePriority
+                Integer32,
+            hwRemoteAddrType
+                INTEGER,
+            hwRemoteIpv4Address
+                IpAddress,
+            hwRemoteIpv4VpnName
+                OCTET STRING,
+            hwRemoteIpv6Address
+                Ipv6Address,
+            hwRemoteIpv6VpnName
+                OCTET STRING,
+            hwRemoteNickname
+                Integer32,
+            hwRemoteState
+                INTEGER,
+            hwRemoteCausation
+                INTEGER,
+            hwRemoteSystemID
+                MacAddress,
+            hwRemoteSystemName
+                OCTET STRING,
+            hwRemoteSystemVersion
+                OCTET STRING,
+            hwRemoteDeviceType
+                OCTET STRING
+         }
+
+    hwLocalHeartBeatState OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            ok(1),
+            lost(2)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local heart beat state."
+        DEFVAL { lost }
+        ::= { hwmlagDfsInfoEntry 1 }
+
+    hwLocalNodeId OBJECT-TYPE
+        SYNTAX Integer32
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local node ID."
+        ::= { hwmlagDfsInfoEntry 2 }
+
+    hwLocalGroupId OBJECT-TYPE
+        SYNTAX Integer32 (1)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local DFS group ID."
+        ::= { hwmlagDfsInfoEntry 3 }
+
+    hwLocalPriority OBJECT-TYPE
+        SYNTAX Integer32 (0..254)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local DFS group priority."
+        ::= { hwmlagDfsInfoEntry 4 }
+
+    hwLocalAddressType OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            invalid(0),
+            ipv4(1),
+            ipv6(2),
+            nickname(3),
+            ipv4vpn(4),
+            ipv6vpn(5)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local DFS group address type."
+        DEFVAL { invalid }
+        ::= { hwmlagDfsInfoEntry 5 }
+
+    hwLocalIpAddress OBJECT-TYPE
+        SYNTAX IpAddress
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local DFS group ipv4 address."
+        ::= { hwmlagDfsInfoEntry 6 }
+
+    hwLocalIpv4VpnName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..31))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local DFS group ipv4 VPN name."
+        ::= { hwmlagDfsInfoEntry 7 }
+
+    hwLocalIpv6Address OBJECT-TYPE
+        SYNTAX Ipv6Address
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local DFS group ipv6 address."
+        ::= { hwmlagDfsInfoEntry 8 }
+
+    hwLocalIpv6VpnName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..31))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local DFS group ipv6 VPN name."
+        ::= { hwmlagDfsInfoEntry 9 }
+
+    hwLocalNickname OBJECT-TYPE
+        SYNTAX Integer32(0..65471)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local DFS group nickname."
+        ::= { hwmlagDfsInfoEntry 10 }
+
+    hwLocalState OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            invalid(0),
+            master(1),
+            backup(2)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local DFS group state."
+        DEFVAL { invalid }
+        ::= { hwmlagDfsInfoEntry 11 }
+
+    hwLocalCausation OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            invalid(0),
+            success(1),
+            nopeerlink(2),
+            noaddress(3),
+            samemac(4),
+            typemismatch(5),
+            timeout(6),
+            peerlinkdown(7),
+            detect(8),
+            cmtdown(9),
+            authenfailed(10),
+            versionmismatch(11),
+            noauthentication(12),
+            devicetypemismatch(13),
+            peerlinktypemismatch(14)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Negotiation failed reason."
+        ::= { hwmlagDfsInfoEntry 12 }
+
+    hwLocalSystemID OBJECT-TYPE
+        SYNTAX MacAddress
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "System MAC address."
+        ::= { hwmlagDfsInfoEntry 13 }
+
+    hwLocalSystemName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..255))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local device name."
+        ::= { hwmlagDfsInfoEntry 14 }
+
+    hwLocalSystemVersion OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..31))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local device version."
+        ::= { hwmlagDfsInfoEntry 15 }
+
+    hwLocalDeviceType OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..20))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local device series."
+        ::= { hwmlagDfsInfoEntry 16 }
+
+    hwRemoteDfsStatus OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            available(1),
+            unavailable(2)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote status."
+        DEFVAL { unavailable }
+        ::= { hwmlagDfsInfoEntry 17 }
+
+    hwRemoteVersionMatch OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            invalid(0),
+            match(1),
+            mismatch(2)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Version match status."
+        ::= { hwmlagDfsInfoEntry 18 }
+
+    hwRemoteNodeId OBJECT-TYPE
+        SYNTAX Integer32
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote node ID."
+        ::= { hwmlagDfsInfoEntry 19 }
+
+    hwRemoteGroupId OBJECT-TYPE
+        SYNTAX Integer32
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote DFS group ID."
+        ::= { hwmlagDfsInfoEntry 20 }
+
+    hwRemotePriority OBJECT-TYPE
+        SYNTAX Integer32 (0..254)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote DFS group priority."
+        ::= { hwmlagDfsInfoEntry 21 }
+
+    hwRemoteAddrType OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            invalid(0),
+            ipv4(1),
+            ipv6(2),
+            nickname(3),
+            ipv4vpn(4),
+            ipv6vpn(5)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote DFS group address type."
+        DEFVAL { invalid }
+        ::= { hwmlagDfsInfoEntry 22 }
+
+    hwRemoteIpv4Address OBJECT-TYPE
+        SYNTAX IpAddress
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote DFS group ipv4 address."
+        ::= { hwmlagDfsInfoEntry 23 }
+
+    hwRemoteIpv4VpnName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..31))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote DFS group ipv4 VPN name."
+        ::= { hwmlagDfsInfoEntry 24 }
+
+    hwRemoteIpv6Address OBJECT-TYPE
+        SYNTAX Ipv6Address
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote DFS group ipv6 address."
+        ::= { hwmlagDfsInfoEntry 25 }
+
+    hwRemoteIpv6VpnName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..31))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote DFS group ipv6 VPN name."
+        ::= { hwmlagDfsInfoEntry 26 }
+
+    hwRemoteNickname OBJECT-TYPE
+        SYNTAX Integer32(0..65471)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote DFS group nickname."
+        ::= { hwmlagDfsInfoEntry 27 }
+
+    hwRemoteState OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            invalid(0),
+            master(1),
+            backup(2)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote DFS group state."
+        DEFVAL { invalid }
+        ::= { hwmlagDfsInfoEntry 28 }
+
+    hwRemoteCausation OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            invalid(0),
+            success(1),
+            nopeerlink(2),
+            noaddress(3),
+            samemac(4),
+            typemismatch(5),
+            timeout(6),
+            peerlinkdown(7),
+            detect(8),
+            cmtdown(9),
+            authenfailed(10),
+            versionmismatch(11),
+            noauthentication(12),
+            devicetypemismatch(13),
+            peerlinktypemismatch(14)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Negotiation failed reason."
+        ::= { hwmlagDfsInfoEntry 29 }
+
+    hwRemoteSystemID OBJECT-TYPE
+        SYNTAX MacAddress
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote system MAC address."
+        ::= { hwmlagDfsInfoEntry 30 }
+
+    hwRemoteSystemName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..255))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote device name."
+        ::= { hwmlagDfsInfoEntry 31 }
+
+    hwRemoteSystemVersion OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..31))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote device version."
+        ::= { hwmlagDfsInfoEntry 32 }
+
+    hwRemoteDeviceType OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..20))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote device series."
+        ::= { hwmlagDfsInfoEntry 33 }
+
+    hwmlagInfoTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF HwmlagInfoEntry
+        MAX-ACCESS  not-accessible
+        STATUS current
+        DESCRIPTION 
+            "The information of M-Lag port status."
+        ::= { hwMLagObjects 5 }
+
+    hwmlagInfoEntry OBJECT-TYPE
+        SYNTAX HwmlagInfoEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "Policy applied on interface Configuration Information Entry."
+        INDEX { hwGroupId, hwNodeId, hwMlagId }
+        ::= { hwmlagInfoTable 1 }
+
+    HwmlagInfoEntry ::=
+        SEQUENCE { 
+            hwGroupId
+                Integer32,
+            hwNodeId
+                Integer32,
+            hwMlagId
+                Integer32,
+            hwMlagPortName
+                OCTET STRING,
+            hwPortState
+                INTEGER,
+            hwLocalStatus
+                INTEGER,
+            hwRemoteStatus
+                INTEGER,
+            hwLocalMemberPortRole
+                INTEGER,
+            hwRemoteMemberPortRole
+                INTEGER
+         }
+
+    hwGroupId OBJECT-TYPE
+        SYNTAX Integer32 (1)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "DFS group ID."
+        ::= { hwmlagInfoEntry 1 }
+    hwNodeId OBJECT-TYPE
+        SYNTAX Integer32 (1..2)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Node ID."
+        ::= { hwmlagInfoEntry 2 }
+
+    hwMlagId OBJECT-TYPE
+        SYNTAX Integer32 (1..2048)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "M-LAG ID."
+        ::= { hwmlagInfoEntry 3 }
+
+    hwMlagPortName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..64))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "M-LAG port name."
+        ::= { hwmlagInfoEntry 4 }
+
+    hwPortState OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            down(0),
+            up(1)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "M-LAG port state."
+        ::= { hwmlagInfoEntry 5 }
+
+    hwLocalStatus OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            active(1),
+            inactive(2)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local M-LAG status."
+        DEFVAL { inactive }
+        ::= { hwmlagInfoEntry 6 }
+
+    hwRemoteStatus OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            active(1),
+            inactive(2)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote M-Lag status."
+        DEFVAL { inactive }
+        ::= { hwmlagInfoEntry 7 }
+
+    hwLocalMemberPortRole OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            master(0),
+            backup(1),
+            invalid(2)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "The status of local M-LAG member interface."
+        ::= { hwmlagInfoEntry 8 }
+
+    hwRemoteMemberPortRole OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            master(0),
+            backup(1),
+            invalid(2)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local DFS group priority."
+        ::= { hwmlagInfoEntry 9 }
+
+    hwmlagPortDownTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF HwmlagPortDownEntry
+        MAX-ACCESS  not-accessible
+        STATUS current
+        DESCRIPTION 
+            "The type of local and remote m-lag interfaces are all down."
+        ::= { hwMLagObjects 6 }
+
+    
+    hwmlagPortDownEntry OBJECT-TYPE
+        SYNTAX HwmlagPortDownEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+                "Entries of local and remote m-lag interfaces are all down."
+        INDEX { hwMlagInfId, hwMlagInfName, hwLocalSysID, hwRemoteSysID }
+                ::= { hwmlagPortDownTable 1 }
+                
+    HwmlagPortDownEntry ::=
+        SEQUENCE {
+                    hwMlagInfId
+                        Integer32,
+                    hwMlagInfName
+                        OCTET STRING,
+                    hwLocalSysID
+                        MacAddress,
+                    hwRemoteSysID
+                        MacAddress
+                 }
+                 
+    hwMlagInfId OBJECT-TYPE
+        SYNTAX Integer32 (1..2048)
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "M-LAG ID."
+        ::= { hwmlagPortDownEntry 1 }
+                         
+    hwMlagInfName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..64))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "M-LAG port name."
+        ::= { hwmlagPortDownEntry 2 }
+                
+    hwLocalSysID OBJECT-TYPE
+        SYNTAX MacAddress
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "System MAC address."
+        ::= { hwmlagPortDownEntry 3 }
+                
+    hwRemoteSysID OBJECT-TYPE
+        SYNTAX MacAddress
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Remote system MAC address."
+        ::= { hwmlagPortDownEntry 4 }
+
+   hwmlagLinkLocalConflictTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF HwmlagLinkLocalConflictEntry
+        MAX-ACCESS  not-accessible
+        STATUS current
+        DESCRIPTION 
+            "The link-local address in local layer-3 interface is conflict with the m-lag ipv6 address configured in peer device."
+        ::= { hwMLagObjects 7 }
+    
+    hwmlagLinkLocalConflictEntry OBJECT-TYPE
+        SYNTAX HwmlagLinkLocalConflictEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+                "The link-local address in local layer-3 interface is conflict with the m-lag ipv6 address configured in peer device."
+        INDEX { hwMlagLinkLocalVpnName, hwMlagLinkLocalAddress}
+                ::= { hwmlagLinkLocalConflictTable 1 }
+                
+    HwmlagLinkLocalConflictEntry ::=
+    SEQUENCE {
+        hwMlagLinkLocalVpnName
+            OCTET STRING,
+        hwMlagLinkLocalAddress
+            Ipv6Address
+                 }
+
+    hwMlagLinkLocalVpnName OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "link-local vpn name."
+        ::= { hwmlagLinkLocalConflictEntry 1 }
+                 
+    hwMlagLinkLocalAddress OBJECT-TYPE
+        SYNTAX Ipv6Address
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "link-local address."
+        ::= { hwmlagLinkLocalConflictEntry 2 }
+
+    hwmlagConnectivityChkTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF HwmlagConnectivityChkEntry
+        MAX-ACCESS  not-accessible
+        STATUS current
+        DESCRIPTION 
+            "The type of connectivity check failed."
+        ::= { hwMLagObjects 9 }
+
+    
+    hwmlagConnectivityChkEntry OBJECT-TYPE
+        SYNTAX HwmlagConnectivityChkEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+                "Entries of connectivity check failed table."
+        INDEX { hwMlagSlotStr, hwMlagReasonDescription}
+                ::= { hwmlagConnectivityChkTable 1 }
+                
+    HwmlagConnectivityChkEntry ::=
+        SEQUENCE {
+                    hwMlagSlotStr
+                        OCTET STRING,
+                    hwMlagReasonDescription
+                        OCTET STRING
+                 }
+
+    hwPeerlinkBlockStpInstanceId OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION 
+            "STP instance ID."
+        ::= { hwMLagObjects 10 }
+
+    hwPeerlinkBlockModId OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION 
+            "ID of the service module whose STP instance state is discarding."
+        ::= { hwMLagObjects 11 }
+
+    hwPeerlinkBlockMemberIf OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION 
+            "Peer-link member interface whose STP instance state is discarding."
+        ::= { hwMLagObjects 12 }
+                 
+    hwMlagSlotStr OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The information for the slot."
+                ::= { hwmlagConnectivityChkEntry 1 }
+                 
+    hwMlagReasonDescription OBJECT-TYPE
+        SYNTAX OCTET STRING(SIZE(0..256))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The specific description for failed reason."
+                ::= { hwmlagConnectivityChkEntry 2 }
+
+    hwMlagPeerlinkInfoTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF HwMlagPeerlinkInfoEntry
+        MAX-ACCESS  not-accessible
+        STATUS current
+        DESCRIPTION 
+            "The information of M-Lag peer-link port."
+        ::= { hwMLagObjects 14 }
+
+    hwLocalVersion OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION 
+            "Local device version."
+        ::= { hwMLagObjects 15 }
+
+    hwLocalBoardType OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION 
+            "Local board type."
+        ::= { hwMLagObjects 16 }
+
+    hwRemoteVersion OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION 
+            "Remote device version."
+        ::= { hwMLagObjects 17 }
+
+    hwRemoteBoardType OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION 
+            "Remote board type."
+        ::= { hwMLagObjects 18 }
+
+    
+    hwMlagLocalStatus OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            active(1),
+            inactive(2)
+        }
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION 
+            "Local M-LAG status."
+        ::= { hwMLagObjects 19 }
+
+    hwMlagRemoteStatus OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            active(1),
+            inactive(2)
+        }
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION 
+            "Remote M-LAG status."
+        ::= { hwMLagObjects 20 }
+
+    hwMlagPeerlinkInfoEntry OBJECT-TYPE
+        SYNTAX HwMlagPeerlinkInfoEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "M-lag peer-link port information entry."
+        INDEX { hwLocalPeerlinkId }
+        ::= { hwMlagPeerlinkInfoTable 1 }
+
+    HwMlagPeerlinkInfoEntry ::=
+        SEQUENCE { 
+            hwLocalPeerlinkId
+                Integer32,
+            hwLocalPeerlinkInfName
+                OCTET STRING,
+            hwLocalPeerlinkStatus
+                INTEGER,
+            hwLocalPeerlinkType
+                INTEGER,
+            hwRemotePeerlinkId
+                Integer32,
+            hwRemotePeerlinkInfName
+                OCTET STRING,
+            hwRemotePeerlinkStatus
+                INTEGER,
+            hwRemotePeerlinkType
+                INTEGER
+         }
+
+    hwLocalPeerlinkId OBJECT-TYPE
+        SYNTAX Integer32 (1)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local Peer-link ID."
+        ::= { hwMlagPeerlinkInfoEntry 1 }
+
+    hwLocalPeerlinkInfName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..64))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local Peer-link port name."
+        ::= { hwMlagPeerlinkInfoEntry 2 }
+
+    hwLocalPeerlinkStatus OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            down(0),
+            up(1)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local Peer-link port state."
+        ::= { hwMlagPeerlinkInfoEntry 3 }
+
+    hwLocalPeerlinkType OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            physical(0),
+            virtual(1)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Local Peer-link link type."
+        DEFVAL { physical }
+        ::= { hwMlagPeerlinkInfoEntry 4 }
+
+    hwRemotePeerlinkId OBJECT-TYPE
+        SYNTAX Integer32 (1)
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote Peer-link ID."
+        ::= { hwMlagPeerlinkInfoEntry 5 }
+
+    hwRemotePeerlinkInfName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (0..64))
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote Peer-link port name."
+        ::= { hwMlagPeerlinkInfoEntry 6 }
+
+    hwRemotePeerlinkStatus OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            down(0),
+            up(1)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote Peer-link port state."
+        ::= { hwMlagPeerlinkInfoEntry 7 }
+
+    hwRemotePeerlinkType OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+            physical(0),
+            virtual(1)
+        }
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Remote Peer-link link type."
+        DEFVAL { physical }
+        ::= { hwMlagPeerlinkInfoEntry 8 }
+
 -- Notifications
 
     hwMLagConsistencyCheckType1 NOTIFICATION-TYPE
-    	OBJECTS { hwMLagConsistencyType1 }
+        OBJECTS { hwMLagConsistencyType1 }
         STATUS current
         DESCRIPTION 
-            "Trap message is generated when
-			there is type1 inconsistency configuration between the two devices of M-LAG."
+            "Trap message is generated when there is type1 inconsistency configuration between the two devices of M-LAG."
         ::= { hwMLagNotifications 1 }
     
      hwMLagConsistencyCheckType1Resume NOTIFICATION-TYPE
-    	OBJECTS { hwMLagConsistencyType1 }
+        OBJECTS { hwMLagConsistencyType1 }
         STATUS current
         DESCRIPTION 
             "The expected state trap of M-LAG resumed."
@@ -161,8 +1157,7 @@ hwMLagConformance    OBJECT IDENTIFIER ::= { hwMLagMIB 3 }
         OBJECTS {hwMLagConsistencyType2 }
         STATUS current
         DESCRIPTION 
-            "Trap message is generated when 
-			there is type1 inconsistency configuration between the two devices of M-LAG."
+            "Trap message is generated when there is type1 inconsistency configuration between the two devices of M-LAG."
         ::= { hwMLagNotifications 3 }        
 
     hwMLagConsistencyCheckType2Resume NOTIFICATION-TYPE
@@ -175,8 +1170,7 @@ hwMLagConformance    OBJECT IDENTIFIER ::= { hwMLagMIB 3 }
     hwMLagHeartLost NOTIFICATION-TYPE
         STATUS current
         DESCRIPTION 
-            "Trap message is generated when
-			heart beat state is lost."
+            "Trap message is generated when heart beat state is lost."
         ::= { hwMLagNotifications 5 }
     
      hwMLagHeartLostResume NOTIFICATION-TYPE
@@ -186,48 +1180,207 @@ hwMLagConformance    OBJECT IDENTIFIER ::= { hwMLagMIB 3 }
         ::= { hwMLagNotifications 6 }
 
      hwMlagDfsPeerDown NOTIFICATION-TYPE
-		OBJECTS {hwdfsGroupId, hwsysMac, hwdfsType, hwdfsPeerAddress}
+        OBJECTS {hwdfsGroupId, hwsysMac, hwdfsType, hwdfsPeerAddress}
         STATUS current
         DESCRIPTION 
-            "Trap message is generated when
-			dfs peer status goes down."
+            "Trap message is generated when dfs peer status goes down."
         ::= { hwMLagNotifications 7 }
     
     hwMlagDfsPeerDownResume NOTIFICATION-TYPE
-		OBJECTS {hwdfsGroupId, hwsysMac, hwdfsType, hwdfsPeerAddress}
+        OBJECTS {hwdfsGroupId, hwsysMac, hwdfsType, hwdfsPeerAddress}
         STATUS current
         DESCRIPTION 
             "The expected state of dfs peer status goes down resumed."
         ::= { hwMLagNotifications 8 }
-	
+
+     hwMlagPortDown NOTIFICATION-TYPE
+        OBJECTS {hwMlagInfId, hwMlagInfName, hwLocalSysID, hwRemoteSysID}
+        STATUS current
+        DESCRIPTION 
+            "Trap message is generated when local and remote m-lag interfaces are all down."
+        ::= { hwMLagNotifications 9 }
+    
+    hwMlagPortDownResume NOTIFICATION-TYPE
+        OBJECTS {hwMlagInfId, hwMlagInfName, hwLocalSysID, hwRemoteSysID}
+        STATUS current
+        DESCRIPTION 
+            "The expected state of local and remote m-lag interfaces are all down resumed."
+        ::= { hwMLagNotifications 10 }
+
+    hwMlagLinkLocalConflictDetect NOTIFICATION-TYPE
+        OBJECTS {hwMlagLinkLocalVpnName, hwMlagLinkLocalAddress}
+        STATUS current
+        DESCRIPTION 
+            "The link-local address in local layer-3 interface is conflict with the m-lag ipv6 address configured in peer device."
+        ::= { hwMLagNotifications 11 }
+    
+    hwMlagLinkLocalConflictResume NOTIFICATION-TYPE
+        OBJECTS {hwMlagLinkLocalVpnName, hwMlagLinkLocalAddress}
+        STATUS current
+        DESCRIPTION 
+            "The link-local address in local layer-3 interface is conflict with the m-lag ipv6 address configured in peer device resume."
+        ::= { hwMLagNotifications 12 }    
+
+    hwMLagVxlanByPassTunnelTraffic NOTIFICATION-TYPE
+        STATUS current
+        DESCRIPTION 
+            "Trap message is generated when the outbound interface is not a peer-link interface."
+        ::= { hwMLagNotifications 13 }
+    
+     hwMLagVxlanByPassTunnelTrafficResume NOTIFICATION-TYPE
+        STATUS current
+        DESCRIPTION 
+            "The expected state of the outbound interface is not a peer-link interface resumed."
+        ::= { hwMLagNotifications 14 }
+        
+    hwMLagConsistencyCheckFailed NOTIFICATION-TYPE
+        OBJECTS { hwMLagConsistencyFailed }
+        STATUS current
+        DESCRIPTION 
+            "Trap message is generated when there is configuration consistency check failed between the two devices of M-LAG."
+        ::= { hwMLagNotifications 15 }
+    
+    hwMLagConsistencyCheckFailedResume NOTIFICATION-TYPE
+        OBJECTS { hwMLagConsistencyFailed }
+        STATUS current
+        DESCRIPTION 
+            "M-LAG configurations configuration consistency check succeeded."
+        ::= { hwMLagNotifications 16 }
+
+    hwMLagSynConnectivityCheckFailed NOTIFICATION-TYPE
+        OBJECTS { hwMlagSlotStr, hwMlagReasonDescription }
+        STATUS current
+        DESCRIPTION 
+            "The connectivity check of the M-LAG synchronization channel fails."
+        ::= { hwMLagNotifications 17 }
+    
+    hwMLagSynConnectivityCheckFailedResume NOTIFICATION-TYPE
+        OBJECTS { hwMlagSlotStr, hwMlagReasonDescription }
+        STATUS current
+        DESCRIPTION 
+            "The connectivity check of the M-LAG synchronization channel succeeds or the connectivity check condition is not met ."
+        ::= { hwMLagNotifications 18 }
+    
+   hwMlagPortActiveStandbyNotElected NOTIFICATION-TYPE
+        STATUS current
+        DESCRIPTION 
+            "The M-LAG member interfaces are not elected when the M-LAG works in active/standby mode."
+        ::= { hwMLagNotifications 19 }
+
+    hwMlagPortActiveStandbyNotElectedResume NOTIFICATION-TYPE
+        STATUS current
+        DESCRIPTION 
+            "The M-LAG member interfaces are elected when the M-LAG works in active/standby mode."
+        ::= { hwMLagNotifications 20 }
+
+    hwPeerlinkBlock NOTIFICATION-TYPE
+        OBJECTS { hwPeerlinkBlockStpInstanceId, hwPeerlinkBlockModId, hwPeerlinkBlockMemberIf }
+        STATUS current
+        DESCRIPTION 
+            "The STP state of the Peer-link interface is discarding."
+        ::= { hwMLagNotifications 21 }
+    
+     hwPeerlinkBlockResume NOTIFICATION-TYPE
+        OBJECTS { hwPeerlinkBlockStpInstanceId, hwPeerlinkBlockModId, hwPeerlinkBlockMemberIf }
+        STATUS current
+        DESCRIPTION 
+            "The STP state of the Peer-link interface is forwarding."
+        ::= { hwMLagNotifications 22 }
+
+    hwMLagPeerlinkSingleLpu NOTIFICATION-TYPE
+        STATUS current
+        DESCRIPTION 
+            "All peer-link member interfaces in the Up state reside on the same LPU."
+        ::= { hwMLagNotifications 23 }
+    
+    hwMLagPeerlinkSingleLpuResume NOTIFICATION-TYPE
+        STATUS current
+        DESCRIPTION 
+            "Peer-link member interfaces in the Up state reside on different LPUs."
+        ::= { hwMLagNotifications 24 }
+
+    hwMLagPeerlinkSingleCard NOTIFICATION-TYPE
+        STATUS current
+        DESCRIPTION 
+            "All peer-link member interfaces in the Up state reside on the same card."
+        ::= { hwMLagNotifications 25 }
+    
+    hwMLagPeerlinkSingleCardResume NOTIFICATION-TYPE
+        STATUS current
+        DESCRIPTION 
+            "Peer-link member interfaces in the Up state reside on different cards."
+        ::= { hwMLagNotifications 26 }
+
+     hwMlagDualhomedChange NOTIFICATION-TYPE
+        OBJECTS {hwMlagInfId, hwMlagInfName, hwLocalSysID, hwRemoteSysID, hwMlagLocalStatus, hwMlagRemoteStatus}
+        STATUS current
+        DESCRIPTION 
+            "Trap message is generated when M-LAG interfaces are changed from dual-homed to single-homed."
+        ::= { hwMLagNotifications 27 }
+    
+    hwMlagDualhomedChangeResume NOTIFICATION-TYPE
+        OBJECTS {hwMlagInfId, hwMlagInfName, hwLocalSysID, hwRemoteSysID, hwMlagLocalStatus, hwMlagRemoteStatus}
+        STATUS current
+        DESCRIPTION 
+            "The expected state of M-LAG interfaces are changed from single-homing to non single-homing."
+        ::= { hwMLagNotifications 28 }
+
+    hwDfsPairSuceessDfs NOTIFICATION-TYPE
+        OBJECTS {hwLocalGroupId, hwLocalSystemID, hwRemoteGroupId, hwRemoteSystemID}
+        STATUS current
+        DESCRIPTION 
+            "The dfs-group infomation changed when DFS pair success."
+        ::= { hwMLagNotifications 29 }
+
+    hwDfsPairSuceessPeerlink NOTIFICATION-TYPE
+        OBJECTS {hwLocalPeerlinkId, hwLocalPeerlinkInfName, hwLocalPeerlinkStatus, hwRemotePeerlinkId, hwRemotePeerlinkInfName, hwRemotePeerlinkStatus}
+        STATUS current
+        DESCRIPTION 
+            "The peer-link infomation changed when DFS pair success."
+        ::= { hwMLagNotifications 30 }
+
+    hwMlagDiffVersionOrBoardType NOTIFICATION-TYPE
+        OBJECTS { hwLocalVersion, hwLocalBoardType, hwRemoteVersion, hwRemoteBoardType}
+        STATUS current
+        DESCRIPTION 
+            "The versions or models of the devices on both ends of the M-LAG system are inconsistent."
+        ::= { hwMLagNotifications 31 }
+
+    hwMlagDiffVersionOrBoardTypeResume NOTIFICATION-TYPE
+        OBJECTS { hwLocalVersion, hwLocalBoardType, hwRemoteVersion, hwRemoteBoardType}
+        STATUS current
+        DESCRIPTION 
+            "The versions or models of the devices on both ends of the M-LAG system are inconsistent."
+        ::= { hwMLagNotifications 32 }
+
 -- Conformance
 
     hwMlagGroups OBJECT IDENTIFIER ::= { hwMLagConformance 1 }
     
     hwMLagObjectGroup OBJECT-GROUP
-        OBJECTS { hwMLagConsistencyType1, hwMLagConsistencyType2 }
+        OBJECTS { hwMLagConsistencyType1, hwMLagConsistencyType2, hwMLagConsistencyFailed, hwPeerlinkBlockStpInstanceId, hwPeerlinkBlockModId, hwPeerlinkBlockMemberIf, hwLocalVersion, hwLocalBoardType, hwRemoteVersion, hwRemoteBoardType, hwMlagLocalStatus, hwMlagRemoteStatus}
         STATUS current
         DESCRIPTION 
             "The object group."
         ::= { hwMlagGroups 1 }
         
     hwMLagNotificationGroup NOTIFICATION-GROUP
-        NOTIFICATIONS { hwMLagConsistencyCheckType1, hwMLagConsistencyCheckType1Resume, hwMLagConsistencyCheckType2, hwMLagConsistencyCheckType2Resume , hwMLagHeartLost, hwMLagHeartLostResume, hwMlagDfsPeerDown, hwMlagDfsPeerDownResume}
+        NOTIFICATIONS { hwMLagConsistencyCheckType1, hwMLagConsistencyCheckType1Resume, hwMLagConsistencyCheckType2, hwMLagConsistencyCheckType2Resume , hwMLagHeartLost, hwMLagHeartLostResume, hwMlagDfsPeerDown, hwMlagDfsPeerDownResume, hwMlagPortDown, hwMlagPortDownResume, hwMlagLinkLocalConflictDetect, hwMlagLinkLocalConflictResume, hwMLagVxlanByPassTunnelTraffic, hwMLagVxlanByPassTunnelTrafficResume , hwMLagConsistencyCheckFailed, hwMLagConsistencyCheckFailedResume, hwMLagSynConnectivityCheckFailed, hwMLagSynConnectivityCheckFailedResume, hwMlagPortActiveStandbyNotElected, hwMlagPortActiveStandbyNotElectedResume, hwPeerlinkBlock, hwPeerlinkBlockResume, hwMLagPeerlinkSingleLpu, hwMLagPeerlinkSingleLpuResume, hwMLagPeerlinkSingleCard, hwMLagPeerlinkSingleCardResume, hwMlagDualhomedChange, hwMlagDualhomedChangeResume, hwDfsPairSuceessDfs, hwDfsPairSuceessPeerlink, hwMlagDiffVersionOrBoardType, hwMlagDiffVersionOrBoardTypeResume }
         STATUS current
         DESCRIPTION 
             "The notification group."
-        ::= { hwMlagGroups 2 }        
+        ::= { hwMlagGroups 2 }
         
     hwMLagCompliances OBJECT IDENTIFIER ::= { hwMLagConformance 2 }
                     
     hwMLagCompliance MODULE-COMPLIANCE
-	STATUS current
-	DESCRIPTION
+    STATUS current
+    DESCRIPTION
             "The core compliance statement for all implementations."
-	MODULE -- this module
-	MANDATORY-GROUPS  {
-		hwMLagObjectGroup, hwMLagNotificationGroup  		            		            		            
-	    }
-	    ::= { hwMLagCompliances 1 }
+    MODULE -- this module
+    MANDATORY-GROUPS  {
+        hwMLagObjectGroup, hwMLagNotificationGroup
+        }
+        ::= { hwMLagCompliances 1 }
 
 END

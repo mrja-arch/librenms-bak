@@ -1,7 +1,7 @@
--- Copyright (C) 2021 by HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by HUAWEI TECHNOLOGIES. All rights reserved.
 -- Description: HUAWEI Private Extended Interface MIB
 -- Reference:
--- Version: V2.26
+-- Version: V3.00
 -- History:
 -- Version: V2.0
 -- History:
@@ -43,7 +43,7 @@ HUAWEI-LLDP-MIB DEFINITIONS ::= BEGIN
         FROM IPV6-TC;
  
     hwLldpMIB MODULE-IDENTITY
-        LAST-UPDATED "202110280001Z"
+        LAST-UPDATED "202508290001Z"
 
         ORGANIZATION 
             "Huawei Technologies Co.,Ltd."
@@ -60,6 +60,14 @@ HUAWEI-LLDP-MIB DEFINITIONS ::= BEGIN
            globally enabling or disabling the LLDP protocol, enabling the global
            alarm, clearing statistics on ports and configuring network management 
            IP addresses and some alarms."
+        REVISION "202508290001Z"
+        DESCRIPTION "add trap hwlldpNeighborUnexpectedAlarm element hwLldpInterfaceLocalInterface"
+
+        REVISION "202406120001Z"
+        DESCRIPTION "add trap hwlldpNeighborUnexpectedAlarm"       
+ 
+        REVISION "202404080001Z"
+        DESCRIPTION "modify trap hwLldpInterfaceNeighborChange"
 
         REVISION "202110280001Z"
         DESCRIPTION "add trap hwLldpInterfaceNeighborChange"
@@ -699,7 +707,11 @@ HUAWEI-LLDP-MIB DEFINITIONS ::= BEGIN
                hwLldpInterfaceNeiSysCapSup OCTET STRING,
                hwLldpInterfaceNeiSysCapEnabled OCTET STRING,
                hwLldpInterfaceNeiMgtAddrType OCTET STRING,
-               hwLldpInterfaceNeiMgtAddr OCTET STRING
+               hwLldpInterfaceNeiMgtAddr OCTET STRING,
+               hwLldpInterfaceNeiManufacturerName OCTET STRING,
+               hwLldpInterfaceNeiModelName OCTET STRING,
+               hwLldpInterfaceNeiReason OCTET STRING,
+               hwLldpInterfaceLocalInterface OCTET STRING
                }
 
    hwLldpInterfaceNeiIndex OBJECT-TYPE
@@ -713,7 +725,8 @@ HUAWEI-LLDP-MIB DEFINITIONS ::= BEGIN
    hwLldpInterfaceNeiChangeType OBJECT-TYPE
       SYNTAX INTEGER {
           added(1),
-          deleted(2)
+          deleted(2),
+          updated(3)
           }    
         MAX-ACCESS accessible-for-notify
         STATUS current
@@ -808,6 +821,38 @@ HUAWEI-LLDP-MIB DEFINITIONS ::= BEGIN
         DESCRIPTION
               "Management IP addresses of LLDP neighbors."
         ::= { hwLldpInterfaceNeighborChangeEntry 13 }
+
+   hwLldpInterfaceNeiManufacturerName OBJECT-TYPE
+      SYNTAX OCTET STRING (SIZE (1..33))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+              "Manufacturer name of LLDP neighbors."
+        ::= { hwLldpInterfaceNeighborChangeEntry 14 }
+
+   hwLldpInterfaceNeiModelName OBJECT-TYPE
+      SYNTAX OCTET STRING (SIZE (1..33))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+              "Model name of LLDP neighbors."
+        ::= { hwLldpInterfaceNeighborChangeEntry 15 }
+
+    hwLldpInterfaceNeiReason OBJECT-TYPE
+      SYNTAX OCTET STRING (SIZE (1..256))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+              "reason of unexpected LLDP neighbors."
+        ::= { hwLldpInterfaceNeighborChangeEntry 16 }
+
+    hwLldpInterfaceLocalInterface OBJECT-TYPE
+      SYNTAX OCTET STRING (SIZE (1..256))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+              "Local Interface names."
+        ::= { hwLldpInterfaceNeighborChangeEntry 17 }
 
   hwLldpDdpTrapObjects OBJECT IDENTIFIER ::= { hwLldpObjects 52 }	 
   hwLldpDdpTrapLocalSN OBJECT-TYPE
@@ -1055,11 +1100,31 @@ hwLldpDdpTrapNbrIfindex OBJECT-TYPE
     OBJECTS {
     hwLldpInterfaceNeiIndex, hwLldpInterfaceNeiChangeType, hwLldpInterfaceNeiChassisType, hwLldpInterfaceNeiChassisId,
     hwLldpInterfaceNeiPortIdType, hwLldpInterfaceNeiPortId, hwLldpInterfaceNeiSysName, hwLldpInterfaceNeiSysDescription,
-    hwLldpInterfaceNeiSysCapSup, hwLldpInterfaceNeiSysCapEnabled, hwLldpInterfaceNeiMgtAddrType, hwLldpInterfaceNeiMgtAddr}
+    hwLldpInterfaceNeiSysCapSup, hwLldpInterfaceNeiSysCapEnabled, hwLldpInterfaceNeiMgtAddrType, hwLldpInterfaceNeiMgtAddr,
+    hwLldpInterfaceNeiManufacturerName, hwLldpInterfaceNeiModelName}
     STATUS current
     DESCRIPTION
           "Notify the NMS that the LLDP neighbor information of the interface was changed."
     ::= { hwLldpTraps 12}
+
+  hwlldpNeighborUnexpectedAlarm NOTIFICATION-TYPE
+    OBJECTS {
+    hwLldpInterfaceLocalInterface, hwLldpInterfaceNeiChassisType, hwLldpInterfaceNeiChassisId,
+    hwLldpInterfaceNeiPortIdType, hwLldpInterfaceNeiPortId, hwLldpInterfaceNeiReason}
+    STATUS current
+    DESCRIPTION
+          "Notify the NMS that the LLDP neighbor information of the interface was unexpected."
+    ::= { hwLldpTraps 13}
+
+  hwlldpNeighborUnexpectedResume NOTIFICATION-TYPE
+    OBJECTS {
+    hwLldpInterfaceLocalInterface, hwLldpInterfaceNeiChassisType, hwLldpInterfaceNeiChassisId,
+    hwLldpInterfaceNeiPortIdType, hwLldpInterfaceNeiPortId, hwLldpInterfaceNeiReason}
+    STATUS current
+    DESCRIPTION
+          "Notify the NMS that the unexpected LLDP neighbor information of the interface was resume."
+    ::= { hwLldpTraps 14}
+
   --
 	-- ***********************************************************
 	--
@@ -1136,7 +1201,9 @@ hwLldpDdpTrapNbrIfindex OBJECT-TYPE
 	hwLldpInterfaceRemTablesChange,
     hwLldpInterfaceParaChange,
     hwLldpMdnInterfaceRemTablesChange,
-    hwLldpInterfaceNeighborChange
+    hwLldpInterfaceNeighborChange,
+    hwlldpNeighborUnexpectedAlarm,
+    hwlldpNeighborUnexpectedResume
 	}
 	STATUS current
 	DESCRIPTION

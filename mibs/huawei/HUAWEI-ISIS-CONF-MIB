@@ -1,9 +1,9 @@
 -- ==================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI-ISIS-CONF-MIB provides information about ISIS
 -- Reference:
--- Version: V2.40
+-- Version: V2.59
 -- History:
 -- <author>,   <date>,  <contents>
 --  HUAWEI   2009-08-03  ISIS private MIB
@@ -33,7 +33,7 @@
     
         -- 1.3.6.1.4.1.2011.5.25.24
         hwISIS MODULE-IDENTITY 
-            LAST-UPDATED "202210291540Z"
+            LAST-UPDATED "202503111145Z"
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -49,6 +49,63 @@
                 The HUAWEI PRIVATE MIB contains objects belonging to processes of the IS-IS protocol existing on the system. 
                 It defines the model used to represent data that exists elsewhere in the system and on peripheral devices. 
                 There are no constraints on this MIB."
+
+            REVISION "202503111145Z"
+            DESCRIPTION "revision 2.5.9 Add hwIsisAdaptiveCongestState, hwIsisAdaptiveCongestStateClear, hwIsisEnterAdaptiveCongestState, hwIsisExitAdaptiveCongestState."
+
+            REVISION "202501152020Z"
+            DESCRIPTION "revision 2.5.8 Modify hwisisLocatorPrefixConflict, hwisisLocatorPrefixConflictClear, hwisisNetSliceSrcPrefixConflict, hwisisNetSliceSrcPrefixConflictClear."
+
+            REVISION "202412041154Z"
+            DESCRIPTION "revision 2.5.7 Add hwIsisSrMplsPortLcsInactive, hwIsisSrMplsPortLcsInactiveClear."
+
+            REVISION "202411131643Z"
+            DESCRIPTION "revision 2.5.6 Modify hwIsisInstanceIdMismatchClear."
+
+            REVISION "202411091102Z"
+            DESCRIPTION "revision 2.5.5 Modify hwIsisIfCount."
+
+            REVISION "202411042057Z"
+            DESCRIPTION "revision 2.5.4 Add hwIsisSrv6PortLcsInactive, hwIsisSrv6PortLcsInactiveClear, hwIsisIfCount."
+
+            REVISION "202411041500Z"
+            DESCRIPTION "revision 2.5.3 Add hwIsisInstanceIdMismatch, hwIsisInstanceIdMismatchClear, hwIsisAdjSysInstance."
+
+            REVISION "202404171900Z"
+            DESCRIPTION "revision 2.5.2 Add hwIsisConflictSystemID2, hwIsisConflictType, hwIsisConflictIpAddr, hwIsisIPConflict, hwIsisIPConflictClear."
+
+            REVISION "202404091530Z"
+            DESCRIPTION "revision 2.5.1 Modify hwIsisSystemIdCfgConflict, hwIsisSystemIdCfgConflictClear."
+
+            REVISION "202404071533Z"
+            DESCRIPTION "revision 2.5.0 Modify hwIsisSystemIdCfgConflict, hwIsisSystemIdCfgConflictClear."
+
+            REVISION "202403221600Z"
+            DESCRIPTION "revision 2.4.9 Modify hwIsisSystemIdCfgConflict, hwIsisSystemIdCfgConflictClear."
+
+            REVISION "202403051540Z"
+            DESCRIPTION "revision 2.4.8 added hwIsisSystemIdCfgConflict, hwIsisSystemIdCfgConflictClear, hwisisDatabaseOverload, hwisisDatabaseOverloadClear."
+
+            REVISION "202403021208Z"
+            DESCRIPTION "revision 2.4.7 Modify the type of the address-family in notification of the adj-af-down and adj-af-down-clear."
+
+            REVISION "202402280910Z"
+            DESCRIPTION "revision 2.4.6 Modify hwIsisAddressFamily, hwIsisAdjAfDownReason, hwIsisAdjAfDown, hwIsisAdjAfDownClear."
+
+            REVISION "202402211717Z"
+            DESCRIPTION "revision 2.4.5 added hwIsisAddressFamily, hwIsisAdjAfDownReason, hwIsisAdjAfDown, hwIsisAdjAfDownClear."
+
+            REVISION "202309271111Z"
+            DESCRIPTION "revision 2.4.4 added hwisisNetSliceSrcPrefixConflict, hwisisNetSliceSrcPrefixConflictClear."
+
+            REVISION "202304242121Z"
+            DESCRIPTION "revision 2.4.2 added object hwIsisIfName."
+
+            REVISION "202304041617Z"
+            DESCRIPTION "revision 2.4.2 added hwIsisLspRetranExceedLimit, hwIsisLspRetranExceedLimitClear."
+
+            REVISION "202302111722Z"
+            DESCRIPTION "revision 2.4.0 Modify hwisisLocatorPrefixConflict, hwisisLocatorPrefixConflictClear."
 
             REVISION "202210291540Z"
             DESCRIPTION "revision 2.3.8 Modify the type of hwisisIpv6PrefixAddressMask."
@@ -141,7 +198,7 @@
 --
 -- Textual conventions
 --
-    
+
         InetAddress ::= TEXTUAL-CONVENTION
             STATUS current
             DESCRIPTION 
@@ -3794,6 +3851,87 @@ holdmaxcost(3): IS-IS neighbor relationship flapping suppression works in Hold-m
                 "Remote Flexible Algorithm."
             ::= { hwIsisTrapsObjects 45 }
 
+        -- 1.3.6.1.4.1.2011.5.25.24.2.2.46
+        hwIsisIfName  OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (1..64))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The interface name."
+            ::= { hwIsisTrapsObjects 46 }
+
+       -- 1.3.6.1.4.1.2011.5.25.24.2.2.47
+        hwIsisAddressFamily OBJECT-TYPE
+            SYNTAX InetAddressType
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The address family of the IS-IS adjacency."
+            ::= { hwIsisTrapsObjects 47 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.2.48
+        hwIsisAdjAfDownReason OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..256))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Reason why an address family of an IS-IS dual-stack neighbor goes down."
+            ::= { hwIsisTrapsObjects 48 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.2.49
+        hwIsisConflictSystemID2 OBJECT-TYPE
+            SYNTAX SystemID
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The conflicting IS-IS system ID."
+            ::= { hwIsisTrapsObjects 49 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.2.50
+        hwIsisConflictType  OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (1..255))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Type of conflict."
+            ::= { hwIsisTrapsObjects 50 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.2.51
+        hwIsisConflictIpAddr OBJECT-TYPE
+            SYNTAX InetAddress
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The conflicting IP address."
+            ::= { hwIsisTrapsObjects 51 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.2.52   
+            hwIsisAdjSysInstance OBJECT-TYPE
+            SYNTAX Unsigned32 (1..4294967295)
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the IS-IS process."
+            ::= { hwIsisTrapsObjects 52 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.2.53
+        hwIsisIfCount OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Interface count."
+            ::= { hwIsisTrapsObjects 53 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.2.54
+        hwIsisArState OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..64))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The adaptive routing state."
+            ::= { hwIsisTrapsObjects 54 }
+
         -- 1.3.6.1.4.1.2011.5.25.24.2.3
         hwIsisConfConformance OBJECT IDENTIFIER ::= { hwIsisConf 3 }
         
@@ -3947,7 +4085,8 @@ hwIsisProcL2LowerRedistThreshold, hwIsisProcL1TotalRedist, hwIsisProcL2TotalRedi
         -- 1.3.6.1.4.1.2011.5.25.24.2.3.2.24
         hwIsisTrapsObjectsGroup OBJECT-GROUP
             OBJECTS { hwIsisAdjChangeReason, hwisisSysInstance, hwisisSysLevelIndex, hwIsisOwnSysID, hwIsisAdjSysID, hwIsisAdjSysName, 
-                                hwIsisConflictSystemID, hwIsisAutoSysId, hwIsisLocalIP, hwIsisAdjIP, hwIsisRemoteIP , hwIsisPeerFlappingSuppressStatus }
+                                hwIsisConflictSystemID, hwIsisAutoSysId, hwIsisLocalIP, hwIsisAdjIP, hwIsisRemoteIP , hwIsisPeerFlappingSuppressStatus,
+                                hwIsisIfCount, hwIsisArState }
             STATUS current
             DESCRIPTION 
                 "The group of adj change reason."
@@ -3995,8 +4134,23 @@ hwIsisProcL2LowerRedistThreshold, hwIsisProcL1TotalRedist, hwIsisProcL2TotalRedi
 		 hwIsisLinkCostAdjustment,
 		 hwIsisLinkCostAdjustmentClear,
 		 hwisisLocatorPrefixConflict,
-		 hwisisLocatorPrefixConflictClear
-				 
+		 hwisisLocatorPrefixConflictClear,
+		 hwIsisLspRetranExceedLimit,
+		 hwIsisLspRetranExceedLimitClear,
+		 hwisisNetSliceSrcPrefixConflict,
+		 hwisisNetSliceSrcPrefixConflictClear,
+         hwIsisAdjAfDown,
+         hwIsisAdjAfDownClear,
+         hwIsisInstanceIdMismatch,
+         hwIsisInstanceIdMismatchClear,
+         hwIsisSrv6PortLcsInactive,
+         hwIsisSrv6PortLcsInactiveClear,
+         hwIsisSrMplsPortLcsInactive,
+         hwIsisSrMplsPortLcsInactiveClear,
+         hwIsisAdaptiveCongestState,
+         hwIsisAdaptiveCongestStateClear,
+         hwIsisEnterAdaptiveCongestState,
+         hwIsisExitAdaptiveCongestState
             }
         STATUS current
         DESCRIPTION
@@ -4381,19 +4535,197 @@ hwIsisProcL2LowerRedistThreshold, hwIsisProcL1TotalRedist, hwIsisProcL2TotalRedi
 
 		-- 1.3.6.1.4.1.2011.5.25.24.2.4.41
 		hwisisLocatorPrefixConflict NOTIFICATION-TYPE
-			OBJECTS { hwisisSysInstance, hwisisMtId, hwisisSysLevelIndex, hwisisIpv6PrefixAddress, hwisisIpv6PrefixAddressMask, hwIsisConflictSystemID, hwisisLocalFlexAlgorithm, hwisisRemoteFlexAlgorithm }
+			OBJECTS { hwisisSysInstance, hwisisMtId, hwisisSysLevelIndex, hwisisIpv6PrefixAddress, hwisisIpv6PrefixAddressMask, hwIsisConflictSystemID, hwisisLocalFlexAlgorithm, hwisisRemoteFlexAlgorithm, hwIsisHostName }
 			STATUS current
 			DESCRIPTION 
-				"Locator or interface IPv6 prefix conflict with locator prefix between local and another device is detected."
+				"Locator  prefix conflict with locator prefix between local and another device is detected."
 			::= { hwIsisTraps 41 }
 
 		-- 1.3.6.1.4.1.2011.5.25.24.2.4.42
 		hwisisLocatorPrefixConflictClear NOTIFICATION-TYPE
-			OBJECTS { hwisisSysInstance, hwisisMtId, hwisisSysLevelIndex, hwisisIpv6PrefixAddress, hwisisIpv6PrefixAddressMask, hwIsisConflictSystemID, hwisisLocalFlexAlgorithm, hwisisRemoteFlexAlgorithm }
+			OBJECTS { hwisisSysInstance, hwisisMtId, hwisisSysLevelIndex, hwisisIpv6PrefixAddress, hwisisIpv6PrefixAddressMask, hwIsisConflictSystemID, hwisisLocalFlexAlgorithm, hwisisRemoteFlexAlgorithm, hwIsisHostName }
 			STATUS current
 			DESCRIPTION 
-				"Locator or interface IPv6 prefix conflict with locator prefix between local and another device is cleared."
+				"Locator prefix conflict with locator prefix between local and another device is cleared."
 			::= { hwIsisTraps 42 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.43
+		hwIsisLspRetranExceedLimit NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance, hwIsisIfName }
+			STATUS current
+			DESCRIPTION 
+				"The number of IS-IS LSP retransmissions on an interface exceeds the limit."
+			::= { hwIsisTraps 43 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.44
+		hwIsisLspRetranExceedLimitClear NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance, hwIsisIfName }
+			STATUS current
+			DESCRIPTION 
+				"The number of IS-IS LSP retransmissions on an interface is lower than the limit."
+			::= { hwIsisTraps 44 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.45
+		hwisisNetSliceSrcPrefixConflict NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance, hwisisMtId, hwisisSysLevelIndex, hwisisIpv6PrefixAddress, hwisisIpv6PrefixAddressMask, hwIsisConflictSystemID, hwIsisHostName }
+			STATUS current
+			DESCRIPTION 
+				"A conflict between the network slice source prefix of the local device and the IPv6 prefix of another device is detected."
+			::= { hwIsisTraps 45 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.46
+		hwisisNetSliceSrcPrefixConflictClear NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance, hwisisMtId, hwisisSysLevelIndex, hwisisIpv6PrefixAddress, hwisisIpv6PrefixAddressMask, hwIsisConflictSystemID, hwIsisHostName }
+			STATUS current
+			DESCRIPTION 
+				"The conflict between the network slice source prefix and the IPv6 prefix is cleared."
+			::= { hwIsisTraps 46 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.47
+		hwIsisAdjAfDown NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance, hwisisSysLevelIndex, ifIndex, ifName, hwIsisAdjSysID, hwIsisAddressFamily, hwIsisAdjAfDownReason }
+			STATUS current
+			DESCRIPTION 
+				"Only one address family of the IS-IS dual-stack neighbor is up."
+			::= { hwIsisTraps 47 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.48
+		hwIsisAdjAfDownClear NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance, hwisisSysLevelIndex, ifIndex, ifName, hwIsisAdjSysID, hwIsisAddressFamily, hwIsisAdjAfDownReason }
+			STATUS current
+			DESCRIPTION 
+				"Both IS-IS dual-stack neighbor address families are up or down."
+			::= { hwIsisTraps 48 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.49
+		hwIsisSystemIdCfgConflict NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance, hwisisSysLevelIndex, hwIsisConflictSystemID, hwIsisHostName, hwIsisAdjSysName }
+			STATUS current
+			DESCRIPTION 
+				"System ID conflict. The system ID may have been automatically recovered, but the conflicting configuration still exists. "
+			::= { hwIsisTraps 49 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.50
+		hwIsisSystemIdCfgConflictClear NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance, hwisisSysLevelIndex, hwIsisConflictSystemID, hwIsisHostName, hwIsisAdjSysName }
+			STATUS current
+			DESCRIPTION 
+				"The system ID conflict has been cleared."
+			::= { hwIsisTraps 50 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.51
+		hwisisDatabaseOverload NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance }
+			STATUS current
+			DESCRIPTION 
+				"IS-IS LSP at this node is overloaded start."
+			::= { hwIsisTraps 51 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.52
+		hwisisDatabaseOverloadClear NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance }
+			STATUS current
+			DESCRIPTION 
+				"IS-IS LSP at this node is overloaded end."
+			::= { hwIsisTraps 52 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.53
+		hwIsisIPConflict NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance, hwisisSysLevelIndex, hwIsisConflictType, hwIsisConflictIpAddr, hwIsisConflictSystemID, hwIsisConflictSystemID2 }
+			STATUS current
+			DESCRIPTION 
+				"The IS-IS IP address conflict between the local device and another device is detected."
+			::= { hwIsisTraps 53 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.54
+		hwIsisIPConflictClear NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance, hwisisSysLevelIndex, hwIsisConflictType, hwIsisConflictIpAddr, hwIsisConflictSystemID, hwIsisConflictSystemID2 }
+			STATUS current
+			DESCRIPTION 
+				"The IS-IS IP address conflict between the local device and another device is cleared."
+			::= { hwIsisTraps 54 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.55
+		hwIsisInstanceIdMismatch NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance, ifIndex, ifName, hwIsisAdjSysID, hwIsisAdjSysInstance }
+			STATUS current
+			DESCRIPTION 
+				"The local device detected that the instance ID was mismatched with that of a neighboring device."
+			::= { hwIsisTraps 55 }
+
+		-- 1.3.6.1.4.1.2011.5.25.24.2.4.56
+		hwIsisInstanceIdMismatchClear NOTIFICATION-TYPE
+			OBJECTS { hwisisSysInstance, ifIndex, ifName, hwIsisAdjSysID, hwIsisAdjSysInstance }
+			STATUS current
+			DESCRIPTION 
+				"The instance ID mismatch with its neighboring device has been cleared."
+			::= { hwIsisTraps 56 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.4.57
+        hwIsisSrv6PortLcsInactive NOTIFICATION-TYPE
+            OBJECTS { hwisisSysInstance, hwIsisIfName, hwIsisIfCount }
+            STATUS current
+            DESCRIPTION 
+                "No SRv6 license authorization was available."
+            ::= { hwIsisTraps 57 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.4.58
+        hwIsisSrv6PortLcsInactiveClear NOTIFICATION-TYPE
+            OBJECTS { hwisisSysInstance, hwIsisIfName, hwIsisIfCount }
+            STATUS current
+            DESCRIPTION 
+                "The alarm indicating that no SRv6 license authorization was available was cleared."
+            ::= { hwIsisTraps 58 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.4.59
+        hwIsisSrMplsPortLcsInactive NOTIFICATION-TYPE
+            OBJECTS { hwisisSysInstance, hwIsisIfName, hwIsisIfCount }
+            STATUS current
+            DESCRIPTION 
+                "No SR-MPLS license authorization was available."
+            ::= { hwIsisTraps 59 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.4.60
+        hwIsisSrMplsPortLcsInactiveClear NOTIFICATION-TYPE
+            OBJECTS { hwisisSysInstance, hwIsisIfName, hwIsisIfCount }
+            STATUS current
+            DESCRIPTION 
+                "The alarm indicating that no SR-MPLS license authorization was available was cleared."
+            ::= { hwIsisTraps 60 }
+
+        -- mib alarm node for ar
+        -- 1.3.6.1.4.1.2011.5.25.24.2.4.61
+        hwIsisAdaptiveCongestState NOTIFICATION-TYPE
+            OBJECTS { hwisisSysInstance, hwIsisAdjSysID, hwIsisHostName }
+            STATUS current
+            DESCRIPTION 
+                "The IS-IS link to the neighbor is congested. As a result, some routes may enter the adaptive state."
+            ::= { hwIsisTraps 61 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.4.62
+        hwIsisAdaptiveCongestStateClear NOTIFICATION-TYPE
+            OBJECTS { hwisisSysInstance, hwIsisAdjSysID, hwIsisHostName }
+            STATUS current
+            DESCRIPTION 
+                "The adaptive status of the IS-IS link is cleared."
+            ::= { hwIsisTraps 62 }
+
+        -- mib trap node for ar
+        -- 1.3.6.1.4.1.2011.5.25.24.2.4.63
+        hwIsisEnterAdaptiveCongestState NOTIFICATION-TYPE
+            OBJECTS { hwisisSysInstance, hwIsisAdjSysID, hwIsisHostName, hwIsisArState }
+            STATUS current
+            DESCRIPTION 
+                "The IS-IS link to the neighbor is congested. As a result, some routes may enter the adaptive state."
+            ::= { hwIsisTraps 63 }
+
+        -- 1.3.6.1.4.1.2011.5.25.24.2.4.64
+        hwIsisExitAdaptiveCongestState NOTIFICATION-TYPE
+            OBJECTS { hwisisSysInstance, hwIsisAdjSysID, hwIsisHostName }
+            STATUS current
+            DESCRIPTION 
+                "The adaptive status of the IS-IS link is cleared"
+            ::= { hwIsisTraps 64 }
     END
 --   
 

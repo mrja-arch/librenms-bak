@@ -1,10 +1,10 @@
 -- =================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved
+-- Copyright (C) 2024 by  HUAWEI TECHNOLOGIES. All rights reserved
 -- 
 -- Description: This mib file is used for management of huawei Class Based
 --              QoS information.
 -- Reference:
--- Version:     V2.54
+-- Version: V3.00
 -- History:
 --              V1.0 tianli,2004.4.10,publish
 --              V1.1 lizhiyong, 2004-9-14
@@ -95,6 +95,32 @@
 --                  modified by gaolikun 2022-01-29
 --              v2.54
 --                  modified by zhaohaoran 2022-07-21
+--              v2.55
+--                  modified by zhaohaoran 2022-12-13
+--              v2.56
+--                  modified by hupeng 2022-12-21
+--              v2.58
+--                  modified by hupeng 2023-03-16
+--              v2.59
+--                  modified by hupeng 2023-03-23
+--              v2.60
+--                  modified by hupeng 2023-03-30
+--              v2.61
+--                  modified by hupeng 2023-04-01     
+--              v2.62
+--                  modified by leihaoran 2023-04-11
+--              v2.63
+--                  modified by xiaozhihui 2023-05-17 
+--              v2.64
+--                  modified by xiaozhihui 2023-05-18
+--              v2.65
+--                  modified by xiaozhihui 2023-05-31
+--              v2.66
+--                  modified by mengxiangyu 2023-07-29
+--              v2.68
+--                  modified by dulongkun 2024-08-05
+--              v3.00
+--                  modified by wuhejia 2024-12-20
 -- ==========================================================================
 
     HUAWEI-CBQOS-MIB DEFINITIONS ::= BEGIN
@@ -117,7 +143,7 @@
     
     
         hwCBQoSMIB MODULE-IDENTITY 
-            LAST-UPDATED "202207211521Z"
+            LAST-UPDATED "202412201705Z"
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -133,7 +159,66 @@
                 Manage configuration and Monitor running state
                 for Class Based QoS feature.                    
         
-        "
+        " 
+              REVISION "202412201705Z"
+               DESCRIPTION
+                  "MOD hwCBQosMirrorResourceAlarmEntry"
+
+              REVISION "202408051730Z"
+               DESCRIPTION
+                  "MOD hwCBQoSMatchRuleCfgInfoTable"
+
+              REVISION "202403091522Z"
+               DESCRIPTION
+                  "ADD hwCBQoSSacFlowTblResourceExceedAlarm hwCBQoSSacFlowTblResourceExceedAlarmResume hwCBQoSSacFlowTblResourceFullAlarm hwCBQoSSacFlowTblResourceFullAlarmResume"
+
+              REVISION "202307291602Z"
+               DESCRIPTION
+                  "MOD hwCBQoSCarGreenRemarkValue hwCBQoSCarYellowRemarkValue hwCBQoSCarRedRemarkValue"
+              REVISION "202305311728Z"
+               DESCRIPTION
+                  "MOD hwCBQoSSaTfcRedrctStartAlarm"
+
+              REVISION "202305181606Z"
+               DESCRIPTION
+                  "MOD hwCBQoSSaTfcRedrctStartAlarm hwCBQoSSaTfcRedrctStopAlarm"
+
+              REVISION "202305171018Z"
+               DESCRIPTION
+                  "ADD hwCBQoSSaTfcRedrctStartAlarm hwCBQoSSaTfcRedrctStopAlarm"
+
+              REVISION "202304111235Z"
+               DESCRIPTION
+                  "ADD hwCBQoSSaFlowTableExceedAlarm hwCBQoSSaFlowTableExceedClearAlarm"
+
+              REVISION "202304011719Z"
+               DESCRIPTION
+                  "MOD hwCBQosMirrorFeatureVersionNotMatchAlarmResume"
+
+              REVISION "202303301005Z"
+               DESCRIPTION
+                  "MOD hwCBQosMirrorFeatureVersionNotMatchAlarm"
+
+               REVISION "202303231018Z"
+               DESCRIPTION
+                  "MOD hwCBQosMirrorArpResourceExceedAlarm"
+
+               REVISION "202303161647Z"
+               DESCRIPTION
+                  "MOD hwCBQosMirrorErspanVersionNotMatchAlarm"
+
+               REVISION "202212211647Z"
+               DESCRIPTION
+                  "MOD hwCBQosMirrResourceAlarm"
+
+              REVISION "202212211647Z"
+               DESCRIPTION
+                  "ADD hwCBQosMirrResourceAlarm hwCBQosMirrResourceAlarmResume"
+
+              REVISION "202212132201Z"
+               DESCRIPTION
+                  "Delete useless comments"
+				  
               REVISION "202207211521Z"
                DESCRIPTION
                   "Delete useless comments"
@@ -307,6 +392,7 @@
             REVISION "201306041600Z"
                DESCRIPTION
                   "MOD hwCBQoSPolicyClassifierIndex NODE"
+
      
                                         	
     	  
@@ -369,7 +455,9 @@
                 transit-tagged-vxlan(40),
                 transit-untagged-vxlan(41),
                 vxlan-qos-local-id(42),
-                ipv6-vxlan-qos-local-id(43)
+                ipv6-vxlan-qos-local-id(43),
+                ipv6-src-dst-qos-local-id(44),
+                ipv6-qos-local-id(45)
                 }
 
 -- CarAction
@@ -876,9 +964,11 @@ The value of this object can be match(1) or match-not(2)."
                 tagged-vxlan(38),
                 untagged-vxlan(39),
                 transit-tagged-vxlan(40),
-                transit-untagged-vxlan(41)
-                vxlan-qos-local-id(42)
-                ipv6-vxlan-qos-local-id(43)
+                transit-untagged-vxlan(41),
+                vxlan-qos-local-id(42),
+                ipv6-vxlan-qos-local-id(43),
+                ipv6-src-dst-qos-local-id(44),
+                ipv6-qos-local-id(45)
                 This object has no default value.
                 "
             ::= { hwCBQoSMatchRuleCfgInfoEntry 3 }
@@ -1236,8 +1326,11 @@ The index used when the user creates a traffic behavior must be the same as the 
             STATUS current
             DESCRIPTION
                 "This object indicates the re-marked internal priority of packets when the CIR is not reached. The value ranges from 0 to 83.
+                For remarking DSCP, the range is 0~63;
                 When service-class is specified for CAR,the high bit represents service-class,the range is 1~8 (1:be 2:af1 3:af2 4:af3 5:af4 6:ef 7:cs6 8:cs7), 
-                the low bit represents color,the range is 1~3 (1:green 2:yellow 3:red)."
+                the low bit represents color,the range is 1~3 (1:green 2:yellow 3:red).
+                -1 is returned only when action being pass,discard of software QoS.
+                -1 cannot be set."
             ::= { hwCBQoSCarCfgInfoEntry 7 }
 
         
@@ -1258,8 +1351,11 @@ The index used when the user creates a traffic behavior must be the same as the 
             STATUS current
             DESCRIPTION
                 "This object indicates the re-marked internal priority of packets when the CIR is exceeded but the PIR is not exceeded. The value ranges from 0 to 83.
+                For remarking DSCP, the range is 0~63;
                 When service-class is specified for CAR,the high bit represents service-class,the range is 1~8 (1:be 2:af1 3:af2 4:af3 5:af4 6:ef 7:cs6 8:cs7), 
-                the low bit represents color,the range is 1~3 (1:green 2:yellow 3:red)."
+                the low bit represents color,the range is 1~3 (1:green 2:yellow 3:red).
+                -1 is returned only when action being pass,discard of software QoS.
+                -1 cannot be set."
             ::= { hwCBQoSCarCfgInfoEntry 9 }
 
         
@@ -1279,13 +1375,11 @@ The index used when the user creates a traffic behavior must be the same as the 
             MAX-ACCESS read-create
             STATUS current
             DESCRIPTION
-                "The value is to remark When red action is remarking.
-                For remarking DSCP, the range is 0~83; 
-                the high bit represents service-class,the range is 1~8 (1:be 2:af1 3:af2 4:af3 5:af4 6:ef 7:cs6 8:cs7)
+                "This object indicates the re-marked internal priority of packets when the CIR is exceeded but the PIR is not exceeded. The value ranges from 0 to 83.
+                For remarking DSCP, the range is 0~63; 
+                When service-class is specified for CAR, the high bit represents service-class,the range is 1~8 (1:be 2:af1 3:af2 4:af3 5:af4 6:ef 7:cs6 8:cs7)
                 the low bit represents color,the range is 1~3 (1:green 2:yellow 3:red)
-                For remarking IP Precedence and MPLS EXP, the range is 0~7;
-                Only software QoS support this node.
-                -1 is returned only when getting value from hardware QoS or when action being pass,discard of software QoS.
+                -1 is returned only when action being pass,discard of software QoS.
                 -1 cannot be set."
             ::= { hwCBQoSCarCfgInfoEntry 11 }
 
@@ -3463,6 +3557,171 @@ This object has no default value.
                 "
             ::= { hwCBQoSSuppressionCfgInfoEntry 8 }
 
+        hwCBQosMirrorResourceAlarmTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwCBQosMirrorResourceAlarmEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "A table of mirr full alarm information."
+            ::= { hwCBQoSBehaviorObjects 33 }
+
+        
+        hwCBQosMirrorResourceAlarmEntry OBJECT-TYPE
+            SYNTAX HwCBQosMirrorResourceAlarmEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "mirr full alarm Information Entry."
+            INDEX { hwCBQoSMirrorSlotId }
+            ::= { hwCBQosMirrorResourceAlarmTable 1 }
+
+        
+        HwCBQosMirrorResourceAlarmEntry ::=
+            SEQUENCE {         
+                 hwCBQoSMirrorSlotId
+                    OCTET STRING,
+                 hwCBQoSMirrorServiceType
+                    OCTET STRING, 
+                 hwCBQoSMirrorDirection
+                    OCTET STRING
+                     }
+
+        hwCBQoSMirrorSlotId OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The information of the chassis."
+            ::= { hwCBQosMirrorResourceAlarmEntry 1 }
+            
+        hwCBQoSMirrorServiceType OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Service Type."
+            ::= { hwCBQosMirrorResourceAlarmEntry 2 }
+
+        hwCBQoSMirrorDirection OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "inbound or outbound."
+            ::= { hwCBQosMirrorResourceAlarmEntry 3 }
+
+        hwCBQoSSacFlowTblResourceExceedAlarmTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwCBQoSSacFlowTblResourceExceedAlarmEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "A table of SA flow table usage exceed threshold alarm information."
+            ::= { hwCBQoSBehaviorObjects 34 }
+
+        hwCBQoSSacFlowTblResourceExceedAlarmEntry OBJECT-TYPE
+            SYNTAX HwCBQoSSacFlowTblResourceExceedAlarmEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "SA flow table usage exceed threshold alarm Information Entry."
+            INDEX { hwCBQoSSacFlowTblResSlotId, hwCBQoSSacFlowTblResThreshold, hwCBQoSSacFlowTblResUsed, hwCBQoSSacFlowTblResTotal }
+            ::= { hwCBQoSSacFlowTblResourceExceedAlarmTable 1 }
+
+        HwCBQoSSacFlowTblResourceExceedAlarmEntry ::=
+            SEQUENCE {
+                 hwCBQoSSacFlowTblResSlotId
+                    OCTET STRING,
+                 hwCBQoSSacFlowTblResThreshold
+                    Unsigned32,
+                 hwCBQoSSacFlowTblResUsed
+                    Unsigned32,
+                 hwCBQoSSacFlowTblResTotal
+                    Unsigned32
+            }
+
+        hwCBQoSSacFlowTblResSlotId OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The information of the chassis."
+            ::= { hwCBQoSSacFlowTblResourceExceedAlarmEntry 1 }
+
+        hwCBQoSSacFlowTblResThreshold OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Alarm threshold of SA flow table usage."
+            ::= { hwCBQoSSacFlowTblResourceExceedAlarmEntry 2 }
+
+        hwCBQoSSacFlowTblResUsed OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Used SA flow table number."
+            ::= { hwCBQoSSacFlowTblResourceExceedAlarmEntry 3 }
+
+        hwCBQoSSacFlowTblResTotal OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "total SA flow table number."
+            ::= { hwCBQoSSacFlowTblResourceExceedAlarmEntry 4 }
+
+        hwCBQoSSacFlowTblResourceFullAlarmTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwCBQoSSacFlowTblResourceFullAlarmEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "A table of SA flow table usage exceed threshold alarm information."
+            ::= { hwCBQoSBehaviorObjects 35 }
+
+        hwCBQoSSacFlowTblResourceFullAlarmEntry OBJECT-TYPE
+            SYNTAX HwCBQoSSacFlowTblResourceFullAlarmEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "SA flow table usage exceed threshold alarm Information Entry."
+            INDEX { hwCBQoSSacFlowTblResFullSlotId, hwCBQoSSacFlowTblResFullUsed, hwCBQoSSacFlowTblResFullTotal }
+            ::= { hwCBQoSSacFlowTblResourceFullAlarmTable 1 }
+
+        HwCBQoSSacFlowTblResourceFullAlarmEntry ::=
+            SEQUENCE {
+                 hwCBQoSSacFlowTblResFullSlotId
+                    OCTET STRING,
+                 hwCBQoSSacFlowTblResFullUsed
+                    Unsigned32,
+                 hwCBQoSSacFlowTblResFullTotal
+                    Unsigned32
+            }
+
+        hwCBQoSSacFlowTblResFullSlotId OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The information of the chassis."
+            ::= { hwCBQoSSacFlowTblResourceFullAlarmEntry 1 }
+
+        hwCBQoSSacFlowTblResFullUsed OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Used SA flow table number."
+            ::= { hwCBQoSSacFlowTblResourceFullAlarmEntry 2 }
+
+        hwCBQoSSacFlowTblResFullTotal OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "total SA flow table number."
+            ::= { hwCBQoSSacFlowTblResourceFullAlarmEntry 3 }
+
 -- hwCBQoSPolicyObjects
         hwCBQoSPolicyObjects OBJECT IDENTIFIER ::= { hwCBQoSObjects 3 }
 
@@ -4629,7 +4888,7 @@ This object has no default value.
                                 "RowStatus. Three actions are used: active, createAndGo, destroy."
                         ::= { hwCBQoSVlanApplyMultiPolicyEntry 5 }
 
-		--add by zhangyong 00291234
+		--add by zhangyong 
                 hwCBQoSGlobalAclNotSupportAlarmTable OBJECT-TYPE
                         SYNTAX SEQUENCE OF HwCBQoSGlobalAclNotSupportAlarmEntry
                         MAX-ACCESS not-accessible
@@ -4670,7 +4929,7 @@ This object has no default value.
                 DESCRIPTION
                 "hwCBQoSGlobalAclSlotID"
                  ::= { hwCBQoSGlobalAclNotSupportAlarmEntry 2 }     
-		--end by zhangyong 00291234
+		--end by zhangyong 
 
        hwCBQoSUpdateUserQueueResourceNotEnoughAlarmTable OBJECT-TYPE
                         SYNTAX SEQUENCE OF HwCBQoSUpdateUserQueueResourceNotEnoughAlarmEntry
@@ -13284,8 +13543,86 @@ This object has no default value.
                 "This value of qos classifier index."
             ::= { hwCBQoSClassifierIndexQueryEntry 3 }        
 
-                     
+
+
+-- hwCBQosSaObjects
+        hwCBQosSaObjects OBJECT IDENTIFIER ::= { hwCBQoSObjects 8 }
         
+    --  hwCBQoSSaFlowTableExceedAlarmTable
+        hwCBQoSSaFlowTableExceedAlarmTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwCBQoSSaFlowTableExceedAlarmEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "A table of SA flowTableExceedAlarm."
+            ::= { hwCBQosSaObjects 1 }
+
+        
+        hwCBQoSSaFlowTableExceedAlarmEntry OBJECT-TYPE
+            SYNTAX HwCBQoSSaFlowTableExceedAlarmEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "SA flowTableExceedAlarm Entry."
+            INDEX { hwCBQoSSaSlotId, hwCBQoSSaFlowTableSpec, hwCBQoSSaCurrentPercentage, hwCBQoSSaAlarmThreshold }
+            ::= { hwCBQoSSaFlowTableExceedAlarmTable 1 }
+
+        
+        HwCBQoSSaFlowTableExceedAlarmEntry ::=
+            SEQUENCE { 
+                hwCBQoSSaSlotId
+                    OCTET STRING,
+                hwCBQoSSaFlowTableSpec
+                    Unsigned32,
+                hwCBQoSSaCurrentPercentage
+                    Unsigned32,
+                hwCBQoSSaAlarmThreshold
+                    Unsigned32,
+                hwCBQoSSaStopCause
+                    OCTET STRING
+             }
+            
+        hwCBQoSSaSlotId OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The information of slotID."
+            ::= { hwCBQoSSaFlowTableExceedAlarmEntry 1 }
+        
+        hwCBQoSSaFlowTableSpec OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The spec number of SA flow table."
+            ::= { hwCBQoSSaFlowTableExceedAlarmEntry 2 }    
+            
+        hwCBQoSSaCurrentPercentage OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Current percentage of SA flow table usage."
+            ::= { hwCBQoSSaFlowTableExceedAlarmEntry 3 }
+            
+        hwCBQoSSaAlarmThreshold OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Alarm threshold of SA flow table usage."
+            ::= { hwCBQoSSaFlowTableExceedAlarmEntry 4 }
+
+        hwCBQoSSaStopCause OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The cause for stopping traffic redirect."
+            ::= { hwCBQoSSaFlowTableExceedAlarmEntry 5 }
+
+
     hwCBQoSNotifications OBJECT IDENTIFIER ::= { hwCBQoSMIB 2 }   
          
         hwCBQoSGtsDiscardThresholdTrap NOTIFICATION-TYPE
@@ -13367,6 +13704,103 @@ This object has no default value.
                 "PBR invalid recover."
             ::= { hwCBQoSNotifications 9 }
 
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.11
+       hwCBQosMirrorResourceAlarm NOTIFICATION-TYPE
+            OBJECTS { hwCBQoSMirrorSlotId, hwCBQoSMirrorServiceType, hwCBQoSMirrorDirection }
+            STATUS current
+            DESCRIPTION 
+                "Mirroring resources are used up."
+            ::= { hwCBQoSNotifications 11 }
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.12
+       hwCBQosMirrorResourceAlarmResume NOTIFICATION-TYPE
+            OBJECTS { hwCBQoSMirrorSlotId, hwCBQoSMirrorServiceType, hwCBQoSMirrorDirection }
+            STATUS current
+            DESCRIPTION 
+                "MIRR resources are sufficient."
+            ::= { hwCBQoSNotifications 12 }
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.13
+       hwCBQosMirrorFeatureVersionNotMatchAlarm NOTIFICATION-TYPE
+            STATUS current
+            DESCRIPTION 
+                "The version of the mirror feature package does not match that of the system software package."
+            ::= { hwCBQoSNotifications 13 }
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.14
+       hwCBQosMirrorFeatureVersionNotMatchAlarmResume NOTIFICATION-TYPE
+            STATUS current
+            DESCRIPTION 
+                "The alarm indicating that the mirror feature package version does not match the basic package version is cleared."
+            ::= { hwCBQoSNotifications 14 }
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.15
+       hwCBQosMirrorArpResourceExceedAlarm NOTIFICATION-TYPE
+            OBJECTS { hwCBQoSMirrorSlotId}
+            STATUS current
+            DESCRIPTION 
+                "ARP link-layer encapsulation resources are insufficient, and ERSPAN fails to deliver ARP entries."
+            ::= { hwCBQoSNotifications 15 }
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.16
+       hwCBQosMirrorArpResourceExceedAlarmResume NOTIFICATION-TYPE
+            OBJECTS { hwCBQoSMirrorSlotId}
+            STATUS current
+            DESCRIPTION 
+                "ARP link-layer encapsulation resources become sufficient, and ERSPAN successfully delivers ARP entries."
+            ::= { hwCBQoSNotifications 16 }
+            
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.17
+       hwCBQosSaFlowTableExceedAlarm NOTIFICATION-TYPE
+            OBJECTS { hwCBQoSSaSlotId, hwCBQoSSaFlowTableSpec, hwCBQoSSaCurrentPercentage, hwCBQoSSaAlarmThreshold}
+            STATUS current
+            DESCRIPTION 
+                "The percentage of the number of flow tables used for service awareness exceeds the threshold."
+            ::= { hwCBQoSNotifications 17 }
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.18
+       hwCBQosSaFlowTableExceedClearAlarm NOTIFICATION-TYPE
+            OBJECTS { hwCBQoSSaSlotId, hwCBQoSSaFlowTableSpec, hwCBQoSSaCurrentPercentage, hwCBQoSSaAlarmThreshold}
+            STATUS current
+            DESCRIPTION 
+                "The percentage of the number of flow tables used for service awareness falls below the threshold."
+            ::= { hwCBQoSNotifications 18 }
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.19
+       hwCBQosSaTfcRedrctStartAlarm NOTIFICATION-TYPE
+            OBJECTS { hwCBQoSSaSlotId}
+            STATUS current
+            DESCRIPTION 
+                "Traffic starts to be redirected for service awareness."
+            ::= { hwCBQoSNotifications 19 }
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.20
+       hwCBQosSaTfcRedrctStopAlarm NOTIFICATION-TYPE
+            OBJECTS { hwCBQoSSaStopCause}
+            STATUS current
+            DESCRIPTION 
+                "Traffic stops to be redirected for service awareness."
+            ::= { hwCBQoSNotifications 20 }
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.21
+       hwCBQoSSacFlowTblResourceExceedAlarm NOTIFICATION-TYPE
+            OBJECTS { hwCBQoSSacFlowTblResSlotId, hwCBQoSSacFlowTblResThreshold, hwCBQoSSacFlowTblResUsed, hwCBQoSSacFlowTblResTotal}
+            STATUS current
+            DESCRIPTION 
+                "The number of SAC flow table resources reaches the alarm threshold."
+            ::= { hwCBQoSNotifications 21 }
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.22
+       hwCBQoSSacFlowTblResourceExceedAlarmResume NOTIFICATION-TYPE
+            OBJECTS { hwCBQoSSacFlowTblResSlotId, hwCBQoSSacFlowTblResThreshold, hwCBQoSSacFlowTblResUsed, hwCBQoSSacFlowTblResTotal}
+            STATUS current
+            DESCRIPTION 
+                "The number of SAC flow table resources become sufficient."
+            ::= { hwCBQoSNotifications 22 }
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.23
+       hwCBQoSSacFlowTblResourceFullAlarm NOTIFICATION-TYPE
+            OBJECTS { hwCBQoSSacFlowTblResFullSlotId, hwCBQoSSacFlowTblResFullUsed, hwCBQoSSacFlowTblResFullTotal}
+            STATUS current
+            DESCRIPTION 
+                "The number of SAC flow table resources reaches the alarm threshold."
+            ::= { hwCBQoSNotifications 23 }
+       -- 1.3.6.1.4.1.2011.5.25.32.1.2.24
+       hwCBQoSSacFlowTblResourceFullAlarmResume NOTIFICATION-TYPE
+            OBJECTS { hwCBQoSSacFlowTblResFullSlotId, hwCBQoSSacFlowTblResFullUsed, hwCBQoSSacFlowTblResFullTotal}
+            STATUS current
+            DESCRIPTION 
+                "The number of SAC flow table resources become sufficient."
+            ::= { hwCBQoSNotifications 24 }
 --  compliance statements
 -- this module
         hwCBQoSCompliance MODULE-COMPLIANCE
@@ -14018,7 +14452,7 @@ This object has no default value.
         DESCRIPTION 
             "This is a optional group of information."
         ::= { hwCBQoSGroups 64 }
-		--add by zhangyong 00291234
+		--add by zhangyong 
 		-- 1.3.6.1.4.1.2011.5.25.32.1.3.2.64	
 		hwCBQoSGlobalAclNotSupportAlarmGroup OBJECT-GROUP
 			OBJECTS { hwCBQoSGlobalAclDirection, hwCBQoSGlobalAclSlotID }

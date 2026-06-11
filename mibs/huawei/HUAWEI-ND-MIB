@@ -1,9 +1,9 @@
 -- =================================================================
--- Copyright (C) 2020 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2023 by  HUAWEI TECHNOLOGIES. All rights reserved.
 --
 -- Description: Huawei Ethernet ND MIB
 -- Reference: HUAWEI Enterprise MIB
--- Version: V1.16
+-- Version: V1.22
 -- History:
 -- gaoning , 2014-06-27, add nodes for ND.
 -- =================================================================
@@ -27,7 +27,7 @@
                 FROM ENTITY-MIB;        
             
         hwNDMIB MODULE-IDENTITY 
-            LAST-UPDATED "202011191449Z"         
+            LAST-UPDATED "202304192103Z"         
             ORGANIZATION 
                   "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -38,7 +38,36 @@
                    Website: http://www.huawei.com
                    Email: support@huawei.com
                   "
-            
+            DESCRIPTION 
+                "V1.22, Modify the key field of hwNDSlotMultiGroup at 2023-04-19."
+
+            REVISION    "202304192103Z"
+
+            DESCRIPTION 
+                "V1.21, Add hwSlotMultiNDThresholdExceedAlarm, hwSlotMultiNDThresholdResumeAlarm, hwMultiNDProxyDynThresholdExceedAlarm and hwMultiNDProxyDynThresholdResumeAlarm to hwNDIPv6ConflictEvent at 2023-04-19."
+
+            REVISION    "202304191510Z"
+
+            DESCRIPTION 
+                "V1.20, Modify hwNDIPConflictEvent to hwNDIPv6ConflictEvent at 2023-02-27."
+
+            REVISION    "202302271700Z"
+
+            DESCRIPTION 
+                "V1.19, Modify hwNDIPConflictIPAddress to hwNDIPConflictIPv6Address of hwNDIPConflictEvent at 2023-02-27."
+
+            REVISION    "202302271254Z"
+
+            DESCRIPTION 
+                "V1.18, Add  hwNDIPConflictEvent at 2023-02-24."
+
+            REVISION    "202302241454Z"
+
+            DESCRIPTION 
+                "V1.17, Add enum of  hwNDLimitSuppressType at 2023-02-17."
+
+            REVISION    "202302171432Z"
+
             DESCRIPTION 
                 "V1.16, Add enum of  hwNDLimitSuppressType at 2020-11-19."
 
@@ -759,7 +788,309 @@ hwNDRateLimitTable OBJECT-TYPE
 		"Current dynamic ND entries in slot."
 	::= { hwNDProxyObject 3 }
 	
+-- =================================================================
+-- 8th The Node of IPv6 Conflict
+-- =================================================================
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8
+        hwNDIPv6ConflictTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwNDIPv6ConflictEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The table contains ND IPv6 address conflict information."
+            ::= { hwNDObjects 8 }
+
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8.1
+        hwNDIPv6ConflictEntry OBJECT-TYPE
+            SYNTAX HwNDIPv6ConflictEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "Entries of ND IPv6 conflict table."
+            INDEX {hwNDIPv6ConflictIPv6Address}
+            ::= { hwNDIPv6ConflictTable 1 }
+
+        HwNDIPv6ConflictEntry ::=
+            SEQUENCE { 
+                hwNDIPv6ConflictIPv6Address
+                    Ipv6Address,
+                hwNDIPv6ConflictLocalMAC
+                    PhysAddress,                    
+                hwNDIPv6ConflictLocalInterfaceName
+                    OCTET STRING,
+                hwNDIPv6ConflictLocalWorkInterfaceName
+                    OCTET STRING,                    
+                hwNDIPv6ConflictLocalPEVLAN
+                    Unsigned32,
+                hwNDIPv6ConflictLocalCEVLAN
+                    Unsigned32,
+                hwNDIPv6ConflictReceiveMAC
+                    PhysAddress,                    
+                hwNDIPv6ConflictReceiveInterfaceName
+                    OCTET STRING,
+                hwNDIPv6ConflictReceiveWorkInterfaceName
+                    OCTET STRING,                    
+                hwNDIPv6ConflictReceivePEVLAN
+                    Unsigned32,
+                hwNDIPv6ConflictReceiveCEVLAN
+                    Unsigned32
+             }
+
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8.1.1
+        hwNDIPv6ConflictIPv6Address OBJECT-TYPE
+            SYNTAX Ipv6Address
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the conflict IPv6 address."
+            ::= { hwNDIPv6ConflictEntry 1 }
+
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8.1.2
+        hwNDIPv6ConflictLocalMAC OBJECT-TYPE
+            SYNTAX PhysAddress
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the MAC before conflict."
+            ::= { hwNDIPv6ConflictEntry 2 }
+
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8.1.3
+        hwNDIPv6ConflictLocalInterfaceName OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the interface before conflict."
+            ::= { hwNDIPv6ConflictEntry 3 }
+
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8.1.4
+        hwNDIPv6ConflictLocalWorkInterfaceName OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the work interface before conflict."
+            ::= { hwNDIPv6ConflictEntry 4 }
+
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8.1.5
+        hwNDIPv6ConflictLocalPEVLAN OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the outer VLAN before conflict."
+            ::= { hwNDIPv6ConflictEntry 5 }
+
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8.1.6
+        hwNDIPv6ConflictLocalCEVLAN OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the inner VLAN before conflict."
+            ::= { hwNDIPv6ConflictEntry 6 }
+
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8.1.7
+        hwNDIPv6ConflictReceiveMAC OBJECT-TYPE
+            SYNTAX PhysAddress
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the conflict MAC of the received packet."
+            ::= { hwNDIPv6ConflictEntry 7 }
+
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8.1.8
+        hwNDIPv6ConflictReceiveInterfaceName OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the conflict interface."
+            ::= { hwNDIPv6ConflictEntry 8 }
+
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8.1.9
+        hwNDIPv6ConflictReceiveWorkInterfaceName OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the conflict work interface."
+            ::= { hwNDIPv6ConflictEntry 9 }
+            
+        
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8.1.10
+        hwNDIPv6ConflictReceivePEVLAN OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the outer VLAN of the received packet."
+            ::= { hwNDIPv6ConflictEntry 10 }
+
+        -- 1.3.6.1.4.1.2011.5.25.332.1.8.1.11
+        hwNDIPv6ConflictReceiveCEVLAN OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the inner VLAN of the received packet."
+            ::= { hwNDIPv6ConflictEntry 11 }
+
+-- =================================================================
+-- 9th slot multi nd entries alarm
+-- =================================================================           
+hwNDStatisticsPerComponentTable OBJECT-TYPE
+	SYNTAX SEQUENCE OF HwNDStatisticsPerComponentEntry
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"This object indicates the threshold of the alarm generated in each ND component."
+	::= { hwNDObjects 9 }  
 	
+	hwNDStatisticsPerComponentEntry  OBJECT-TYPE
+	   SYNTAX HwNDStatisticsPerComponentEntry
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"This object indicates the threshold of the alarm generated in each ND component."
+	INDEX {hwNDCompPhysicalIndex, hwNDComponentPid}
+	::= { hwNDStatisticsPerComponentTable 1 }                                                
+									
+	HwNDStatisticsPerComponentEntry ::=
+	SEQUENCE {
+		hwNDCompPhysicalIndex  Unsigned32 ,
+        hwNDComponentPid  Unsigned32 ,
+		hwNDCompThresholdExceedValue   Unsigned32 ,
+		hwNDCompThresholdResumeValue   Unsigned32  ,
+		hwNDCompDynamicNumber   Unsigned32  ,
+		hwNDCompStaticNumber   Unsigned32 ,
+		hwNDCompTotalNumber    Unsigned32 ,
+		hwNDCompRemoteNumber   Unsigned32                    
+	}
+
+	hwNDCompPhysicalIndex  OBJECT-TYPE
+		SYNTAX Unsigned32(0..4294967294)
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+		"The slot of alarm generated."
+	::= { hwNDStatisticsPerComponentEntry 1 } 
+
+    hwNDComponentPid  OBJECT-TYPE
+		SYNTAX Unsigned32(0..4294967294)
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+		"The ND component identifier of alarm generated."
+	::= { hwNDStatisticsPerComponentEntry 2 } 
+   
+	hwNDCompThresholdExceedValue  OBJECT-TYPE
+	   SYNTAX Unsigned32(1..100)
+	   MAX-ACCESS read-only
+	   STATUS current
+	   DESCRIPTION
+		"This object indicates an ND entry alarm threshold in each ND component. An ND entry threshold-exceeding alarm is generated when the ratio of the number of ND entries in each ND component to the maximum number allowed is greater than or equal to the alarm threshold."
+	::= { hwNDStatisticsPerComponentEntry 3 }  
+	
+	hwNDCompThresholdResumeValue  OBJECT-TYPE
+	   SYNTAX Unsigned32(1..100)
+	   MAX-ACCESS read-only
+	   STATUS current
+	   DESCRIPTION
+		"This object indicates an ND entry clear alarm threshold in each ND component. An ND entry clear alarm is generated when the ratio of the number of ND entries in each ND component to the maximum number allowed is less than or equal to the clear alarm threshold."
+	::= { hwNDStatisticsPerComponentEntry 4 }  
+				
+	hwNDCompDynamicNumber  OBJECT-TYPE
+	   SYNTAX Unsigned32(0..4294967294)
+	   MAX-ACCESS read-only
+	   STATUS current
+	   DESCRIPTION
+		"Current dynamic ND entries in each ND component."
+	::= { hwNDStatisticsPerComponentEntry 5 }  
+				
+	hwNDCompStaticNumber  OBJECT-TYPE
+	   SYNTAX Unsigned32(0..4294967294)
+	   MAX-ACCESS read-only
+	   STATUS current
+	   DESCRIPTION
+		"Current static ND entries in each ND component."
+	::= { hwNDStatisticsPerComponentEntry 6 }  									
+				
+	hwNDCompTotalNumber  OBJECT-TYPE
+	   SYNTAX Unsigned32(0..4294967294)
+	   MAX-ACCESS read-only
+	   STATUS current
+	   DESCRIPTION
+		"Maximum ND entries number for each ND component."
+	::= { hwNDStatisticsPerComponentEntry 7 }  
+
+	hwNDCompRemoteNumber  OBJECT-TYPE
+	   SYNTAX Unsigned32(0..4294967294)
+	   MAX-ACCESS read-only
+	   STATUS current
+	   DESCRIPTION
+		"Current remote ND entries in each ND component."
+	::= { hwNDStatisticsPerComponentEntry 8 }  
+
+-- =================================================================
+-- 10th multi nd proxy entries alarm
+-- =================================================================           
+hwNDProxyStatisticsPerComponentTable OBJECT-TYPE
+	SYNTAX SEQUENCE OF HwNDProxyStatisticsPerComponentEntry
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"This object indicates the ND proxy threshold of the alarm generated in each ND component."
+	::= { hwNDObjects 10 }  
+	
+	hwNDProxyStatisticsPerComponentEntry  OBJECT-TYPE
+	   SYNTAX HwNDProxyStatisticsPerComponentEntry
+	MAX-ACCESS not-accessible
+	STATUS current
+	DESCRIPTION
+		"This object indicates the ND proxy threshold of the alarm generated in each ND component."
+	INDEX {hwNDProxyComponentPid}
+	::= { hwNDProxyStatisticsPerComponentTable 1 }                                                
+									
+	HwNDProxyStatisticsPerComponentEntry ::=
+	SEQUENCE {
+		hwNDProxyComponentPid  Unsigned32 ,
+        hwNDProxyCompThresholdExceedValue  Unsigned32 ,
+		hwNDProxyCompThresholdResumeValue   Unsigned32 ,
+		hwNDProxyCompDynamicNumber   Unsigned32             
+	}
+
+    hwNDProxyComponentPid  OBJECT-TYPE
+		SYNTAX Unsigned32(0..4294967294)
+		MAX-ACCESS read-only
+		STATUS current
+		DESCRIPTION
+		"The ND component identifier of alarm generated."
+	::= { hwNDProxyStatisticsPerComponentEntry 1 }
+   
+	hwNDProxyCompThresholdExceedValue  OBJECT-TYPE
+	   SYNTAX Unsigned32(1..100)
+	   MAX-ACCESS read-only
+	   STATUS current
+	   DESCRIPTION
+		"This object indicates an ND entry alarm threshold in each ND component. An ND entry threshold-exceeding alarm is generated when the ratio of the number of ND proxy entries in each ND component to the maximum number allowed is greater than or equal to the alarm threshold."
+	::= { hwNDProxyStatisticsPerComponentEntry 2 }  
+	
+	hwNDProxyCompThresholdResumeValue  OBJECT-TYPE
+	   SYNTAX Unsigned32(1..100)
+	   MAX-ACCESS read-only
+	   STATUS current
+	   DESCRIPTION
+		"This object indicates an ND entry clear alarm threshold in each ND component. An ND entry clear alarm is generated when the ratio of the number of ND proxy entries in each ND component to the maximum number allowed is less than or equal to the clear alarm threshold."
+	::= { hwNDProxyStatisticsPerComponentEntry 3 }  
+    
+	hwNDProxyCompDynamicNumber  OBJECT-TYPE
+	   SYNTAX Unsigned32(0..4294967294)
+	   MAX-ACCESS read-only
+	   STATUS current
+	   DESCRIPTION
+		"Current dynamic ND entries in each ND component."
+	::= { hwNDProxyStatisticsPerComponentEntry 4 }										
     
 --  Notifications(trap) Definitions
 
@@ -848,7 +1179,42 @@ hwNDRateLimitTable OBJECT-TYPE
             DESCRIPTION 
                 "This object indicates that a clear alarm is generated when the ratio of the number of proxy ND dynmic entries on a board to the maximum number of proxy ND entries supported on the board is less than or equal to the 70% threshold."
             ::= { hwNDNotifications 12 } 
- 
+
+   hwNDIPv6ConflictEvent NOTIFICATION-TYPE
+            OBJECTS { hwNDIPv6ConflictIPv6Address, hwNDIPv6ConflictLocalMAC, hwNDIPv6ConflictLocalInterfaceName, hwNDIPv6ConflictLocalWorkInterfaceName, hwNDIPv6ConflictLocalPEVLAN, hwNDIPv6ConflictLocalCEVLAN, hwNDIPv6ConflictReceiveMAC, hwNDIPv6ConflictReceiveInterfaceName, hwNDIPv6ConflictReceiveWorkInterfaceName, hwNDIPv6ConflictReceivePEVLAN, hwNDIPv6ConflictReceiveCEVLAN } 
+            STATUS current
+            DESCRIPTION
+                "Trap about ND IPv6 address conflict information."
+            ::= { hwNDNotifications 13 }
+
+    hwSlotMultiNDThresholdExceedAlarm NOTIFICATION-TYPE
+            OBJECTS { entPhysicalName, hwNDComponentPid, hwNDCompThresholdExceedValue, hwNDCompDynamicNumber,hwNDCompStaticNumber, hwNDCompRemoteNumber } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that an alarm is generated when the ratio of the number of ND entries in a ND component to the maximum number of ND entries supported in the ND component is greater than or equal to the 80% threshold."
+            ::= { hwNDNotifications 14 }    
+			
+    hwSlotMultiNDThresholdResumeAlarm NOTIFICATION-TYPE
+            OBJECTS { entPhysicalName, hwNDComponentPid, hwNDCompThresholdResumeValue, hwNDCompDynamicNumber, hwNDCompStaticNumber, hwNDCompRemoteNumber } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that a clear alarm is generated when the ratio of the number of ND entries in a ND component to the maximum number of ND entries supported in the ND component is less than or equal to the 70% threshold."
+            ::= { hwNDNotifications 15 }
+
+    hwMultiNDProxyDynThresholdExceedAlarm NOTIFICATION-TYPE
+            OBJECTS { hwNDProxyComponentPid, hwNDProxyCompThresholdExceedValue, hwNDProxyCompDynamicNumber } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that an alarm is generated when the ratio of the number of proxy ND dynamic entries in a ND component to the maximum number of proxy ND entries supported in the ND component is greater than or equal to the 80% threshold."
+            ::= { hwNDNotifications 16 }    
+
+    hwMultiNDProxyDynThresholdResumeAlarm NOTIFICATION-TYPE
+            OBJECTS { hwNDProxyComponentPid, hwNDProxyCompThresholdResumeValue, hwNDProxyCompDynamicNumber } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that a clear alarm is generated when the ratio of the number of proxy ND dynmic entries in a ND component to the maximum number of proxy ND entries supported in the ND component is less than or equal to the 70% threshold."
+            ::= { hwNDNotifications 17 }   
+
 -- Conformance information
 
   hwNDConformance OBJECT IDENTIFIER ::= { hwNDMIB 3 }
@@ -888,7 +1254,7 @@ hwNDRateLimitTable OBJECT-TYPE
     ::= { hwNDGroups  2 }	
     
      hwNDNotificationsGroup NOTIFICATION-GROUP   
-        NOTIFICATIONS{ hwSlotNDThresholdExceedAlarm, hwSlotNDThresholdResumeAlarm, hwInterfaceNDThresholdExceedAlarm, hwInterfaceNDThresholdResumeAlarm, hwNDHostIPConflict, hwNDHostIPConflictResume, hwNDDuplicateIPv6, hwNDDuplicateIPv6Resume, hwNDDADNotFinished, hwNDAntiAttackRateLimit, hwNDProxyDynThresholdExceedAlarm , hwNDProxyDynThresholdResumeAlarm}
+        NOTIFICATIONS{ hwSlotNDThresholdExceedAlarm, hwSlotNDThresholdResumeAlarm, hwInterfaceNDThresholdExceedAlarm, hwInterfaceNDThresholdResumeAlarm, hwNDHostIPConflict, hwNDHostIPConflictResume, hwNDDuplicateIPv6, hwNDDuplicateIPv6Resume, hwNDDADNotFinished, hwNDAntiAttackRateLimit, hwNDProxyDynThresholdExceedAlarm , hwNDProxyDynThresholdResumeAlarm, hwNDIPv6ConflictEvent, hwSlotMultiNDThresholdExceedAlarm, hwSlotMultiNDThresholdResumeAlarm, hwMultiNDProxyDynThresholdExceedAlarm, hwMultiNDProxyDynThresholdResumeAlarm}
         STATUS current
         DESCRIPTION
                  "notification Group."   
@@ -975,6 +1341,53 @@ hwNDRateLimitTable OBJECT-TYPE
         "A collection of objects for ND proxy threshold alarm in slot."
     ::= { hwNDGroups 8 }	
 
+    hwNDIPv6ConflictGroup OBJECT-GROUP
+    OBJECTS {
+        hwNDIPv6ConflictIPv6Address,
+        hwNDIPv6ConflictLocalMAC,
+        hwNDIPv6ConflictLocalInterfaceName,
+        hwNDIPv6ConflictLocalWorkInterfaceName,
+        hwNDIPv6ConflictLocalPEVLAN,
+        hwNDIPv6ConflictLocalCEVLAN,
+        hwNDIPv6ConflictReceiveMAC,
+        hwNDIPv6ConflictReceiveInterfaceName,
+        hwNDIPv6ConflictReceiveWorkInterfaceName,
+        hwNDIPv6ConflictReceivePEVLAN,
+        hwNDIPv6ConflictReceiveCEVLAN
+    }
+    STATUS      current
+    DESCRIPTION
+        "A collection of objects for ND conflict trap."
+    ::= {hwNDGroups  9}
+
+    hwNDSlotMultiGroup OBJECT-GROUP
+    OBJECTS {
+		hwNDCompPhysicalIndex,
+		hwNDComponentPid,
+		hwNDCompThresholdExceedValue,
+		hwNDCompThresholdResumeValue,
+		hwNDCompDynamicNumber,
+		hwNDCompStaticNumber,
+		hwNDCompTotalNumber,
+		hwNDCompRemoteNumber
+    }
+    STATUS      current
+    DESCRIPTION
+        "A collection of objects for each ND component threshold alarm in slot."
+    ::= { hwNDGroups 10 }
+
+	hwNDMultiProxyGroup OBJECT-GROUP
+    OBJECTS {
+        hwNDProxyComponentPid,
+		hwNDProxyCompThresholdExceedValue,
+		hwNDProxyCompThresholdResumeValue,
+		hwNDProxyCompDynamicNumber
+    }
+    STATUS      current
+    DESCRIPTION
+        "A collection of objects for each ND component proxy threshold alarm in slot."
+    ::= { hwNDGroups 11 }
+
 	hwNDCompliance MODULE-COMPLIANCE
     STATUS  current
     DESCRIPTION
@@ -983,7 +1396,9 @@ hwNDRateLimitTable OBJECT-TYPE
         MANDATORY-GROUPS {
             hwNDSlotGroup,
             hwNDIntfGroup,
-            hwNDProxyGroup
+            hwNDProxyGroup,
+            hwNDSlotMultiGroup,
+            hwNDMultiProxyGroup
         }  
       
    ::= { hwNDCompliances 1 }                                   

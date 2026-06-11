@@ -1,9 +1,9 @@
 -- =================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 --
 -- DESCRIPTION:  HUAWEI-AAA-MIB
 -- Reference:  
--- Version: V6.00
+-- Version: V6.19
 -- History:
 -- =================================================================
 
@@ -23,7 +23,7 @@
                 FROM IPV6-TC;
 
         hwAaa MODULE-IDENTITY 
-            LAST-UPDATED "202208291414Z"
+            LAST-UPDATED "202502211137Z"
             ORGANIZATION "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
                 "Huawei Industrial Base
@@ -32,7 +32,83 @@
                  People's Republic of China
                  Website: http://www.huawei.com
                  Email: support@huawei.com"
+
+            DESCRIPTION
+             "Add hwConfigDestSlot hwNacTemplate hwConfigInfo hwNacConfigAclFail"
+             REVISION    "202502211137Z"
+
+            DESCRIPTION
+             "Add hwECGWMHVniThresholdAlarm hwECGWMHVniThresholdResume"
+             REVISION    "202501131609Z"  
+
+            DESCRIPTION
+             "Add hwECGWGlobalFamilyThresholdAlarm hwECGWGlobalFamilyThresholdResume"
+             REVISION    "202411071507Z"  
+
+            DESCRIPTION
+             "Add hwBindAuthenProfileFail, hwAuthenProfileName"
+             REVISION    "202409122114Z"
+
+            DESCRIPTION
+             "Add hwUserTrafficUnidirectionalAlarm, hwUserTrafficUnidirectionalResume, hwCUUserTrafficUnidirectionalAlarm, hwCUUserTrafficUnidirectionalResume"
+             REVISION    "202408301934Z"
+
+             DESCRIPTION
+             "Add hwUserAbnormalOnlineFailureAlarm, hwUserAbnormalOnlineFailureAlarmResume"
+             REVISION    "202407131430Z"
+
+            DESCRIPTION
+             "Add hwLocalUserStatus, hwLocalUserLastLoginTime, hwLocalUserAdminLevel"
+             REVISION    "202404131430Z"
+
+             DESCRIPTION
+             "Add hwAAAUsedSubnetNumber, hwAAAUsedPrefixNumber"
+             REVISION    "202402191430Z"
+
+             DESCRIPTION
+             "Add hwAAAMaxSubnetNumber, hwAAAMaxPrefixNumber, hwAAASubnetNumberThreshold, hwAAAPrefixNumberThreshold, hwCUDomainIPv4DynamicSubnetNumberAlarm, hwCUDomainIPv4DynamicSubnetNumberAlarmResume, hwCUDomainIPv6DynamicPrefixNumberAlarm, hwCUDomainIPv6DynamicPrefixNumberAlarmResume"
+             REVISION    "202311151011Z"
+
+             DESCRIPTION
+             "Add hwFirstloginNeedAdminUserAlarm, hwFirstloginNeedAdminUserResume , hwNoAdminUserReason" 
+             REVISION    "202310241430Z"
+
+             DESCRIPTION
+             "Add hwBRASCUAccessUserEngineStatisticTable"
+             REVISION    "202310171631Z"
+
+              DESCRIPTION
+             "Add hwCuInstanceUserOnlineFailAlarm, hwCuInstanceUserOnlineFailResume"
+             REVISION    "202308141631Z"
+
+             DESCRIPTION
+             "Add hwWirelessUserNumExceedThresholdAlarm, hwWirelessUserNumExceedThresholdResume"
+             REVISION    "202307112022Z"
+
+             DESCRIPTION
+             "Modify hwAccessUCLGroup"
+             REVISION    "202305192022Z"
+
+             DESCRIPTION
+             "Add hwAAAInstanceName, hwCUInstanceUserMaxNum, hwCUInstanceUserMaxNumResume, hwCUInstanceAccessUserResourceOrCpuAlarm, hwCUInstanceAccessUserResourceOrCpuResume, hwCUInstanceChasisIPv6AddressThresholdAlarm, hwCUInstanceChasisIPv6AddressThresholdResume"
+             REVISION    "202303132022Z"
+
+             DESCRIPTION
+             "Add hwUmDatabaseFileChangedAlarm"
+             REVISION    "202212202022Z"
+              
+             DESCRIPTION
+             "Add hwDynmicUclGroupIpNum, hwDynmicUclGroupIpNumSpec, hwDynmicUclGroupIpNumThreshold, hwDynmicUclGroupIpNumAlarm, hwDynmicUclGroupIpNumResume."
+             REVISION    "202212131414Z"
+
+             DESCRIPTION
+             "Add hwAuthorDynAclRuleExceed, hwAuthorAclRuleExceed, hwUserAuthorMacAddress, hwUserAuthorAclType, hwUserAuthorAclRuleNum, hwUserAuthorAclId, hwMaxUserAuthorAclNum."
+             REVISION    "202211192012Z"
  
+             DESCRIPTION
+             "Add mib table hwAccessUserSummaryTable"
+             REVISION    "202211042012Z"
+
              DESCRIPTION
              "Add hwCUOnlineUserNumAlarm, hwCUOnlineUserNumResume."
              REVISION    "202208291414Z"
@@ -2937,7 +3013,13 @@
               hwLocalUserPasswordIsOrginal
                     INTEGER,
 		 hwhttpdirectory
-                    DisplayString  		
+                    DisplayString,
+              hwLocalUserLastLoginTime
+                    DisplayString,
+              hwLocalUserStatus
+                    DisplayString,
+              hwLocalUserAdminLevel
+                    DisplayString 		
 
              }
 
@@ -3109,7 +3191,31 @@
             STATUS current
             DESCRIPTION
                 "http directory"
-            ::= { hwLocalUserEntry 23 }   		 
+            ::= { hwLocalUserEntry 23 }   	
+
+        hwLocalUserLastLoginTime OBJECT-TYPE
+            SYNTAX DisplayString (SIZE (1..32))
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "Local user last login time."
+            ::= { hwLocalUserEntry 24 }
+
+        hwLocalUserStatus OBJECT-TYPE
+            SYNTAX DisplayString (SIZE (1..16))
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "Local user state."
+            ::= { hwLocalUserEntry 25 }
+
+        hwLocalUserAdminLevel OBJECT-TYPE
+            SYNTAX DisplayString (SIZE (1..16))
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "Local user admin level."
+            ::= { hwLocalUserEntry 26 }	 
                         
         hwLocalUserExtTable OBJECT-TYPE
             SYNTAX SEQUENCE OF HwLocalUserExtEntry
@@ -5156,7 +5262,7 @@
                  }
     
             hwAccessUCLGroup OBJECT-TYPE
-                SYNTAX Integer32 (0..1023|65535)
+                SYNTAX Integer32 (0..4094|65535)
                 MAX-ACCESS read-only
                 STATUS current
                 DESCRIPTION
@@ -6590,7 +6696,293 @@
             "The threshold of the number of users."
         ::= { hwAAATrapOid 98 }
 
+        -- 1.3.6.1.4.1.2011.5.2.2.1.99
+        hwUserAuthorAclRuleNum OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The number of user authorization acl rule."
+        ::= { hwAAATrapOid 99 }
+
+        -- 1.3.6.1.4.1.2011.5.2.2.1.100
+        hwUserAuthorAclId OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "User authorization acl id."
+        ::= { hwAAATrapOid 100 }
+
+        -- 1.3.6.1.4.1.2011.5.2.2.1.101
+        hwUserAuthorAclType OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "User authorization acl type."
+        ::= { hwAAATrapOid 101 }
+
+        -- 1.3.6.1.4.1.2011.5.2.2.1.102
+        hwUserAuthorMacAddress OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "User authorization mac address."
+        ::= { hwAAATrapOid 102 }
+
+        -- 1.3.6.1.4.1.2011.5.2.2.1.103
+        hwMaxUserAuthorAclNum OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Max number of user authorization acl rule."
+        ::= { hwAAATrapOid 103 }
+        
+        hwDynmicUclGroupIpNum OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The number of dynamic ucl group."
+        ::= { hwAAATrapOid 104 }
+
+        hwDynmicUclGroupIpNumSpec OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Max number of dynamic ucl group."
+        ::= { hwAAATrapOid 105 }
+
+        hwDynmicUclGroupIpNumThreshold OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The threshold value of dynamic ucl group."
+        ::= { hwAAATrapOid 106 }
+
+        -- 1.3.6.1.4.1.2011.5.2.2.1.107
+        hwAAAInstanceName OBJECT-TYPE
+        SYNTAX DisplayString (SIZE (1..15))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The name of UPMNG instance."
+        ::= { hwAAATrapOid 107 }
+
+        hwAAAMaxSubnetNumber OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The maximum number of subnets."
+        ::= { hwAAATrapOid 108 }
+
+        hwAAAMaxPrefixNumber OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The Maximum number of prefixes."
+        ::= { hwAAATrapOid 109 }
+
+        hwAAASubnetNumberThreshold OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The threshold of the number of subnets."
+        ::= { hwAAATrapOid 110 }
+
+        hwAAAPrefixNumberThreshold OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The threshold of the number of prefixes."
+        ::= { hwAAATrapOid 111 }
+
+        hwNoAdminUserReason OBJECT-TYPE
+        SYNTAX DisplayString
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The reason of the administrator account is missing."
+        ::= { hwAAATrapOid 112 }
+
+        hwAAAUsedSubnetNumber OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The used number of subnets."
+        ::= { hwAAATrapOid 113 }
+
+        hwAAAUsedPrefixNumber OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The used number of prefixes."
+        ::= { hwAAATrapOid 114 }
+
+        hwAAAOnlineFailCode OBJECT-TYPE
+        SYNTAX DisplayString (SIZE (1..8))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Cause code of a user online failure."
+        ::= { hwAAATrapOid 115 }
+
+        hwAAAOnlineFailReason OBJECT-TYPE
+        SYNTAX DisplayString (SIZE (1..256))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Cause of a user online failure."
+        ::= { hwAAATrapOid 116 }
+	
+        hwAAAOnlineFailNumber OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The number of users who fail to go online."
+        ::= { hwAAATrapOid 117 }
+
             hwAAATrapsDefine OBJECT IDENTIFIER ::= { hwAAAMibTrap 2 }
+
+        hwAAALoadBalanceInstance OBJECT-TYPE
+        SYNTAX Integer32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "This object indicates the ID of load balance instance."
+        ::= { hwAAATrapOid 118 }
+
+        hwUnidirectionalUserNumber OBJECT-TYPE
+        SYNTAX Integer32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The number of unidirectional users."
+        ::= { hwAAATrapOid 119 }
+
+        hwUnidirectionalUserThreshold OBJECT-TYPE
+        SYNTAX Integer32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The threshold of the number of unidirectional users."
+        ::= { hwAAATrapOid 120 }
+
+        hwAuthenProfileName OBJECT-TYPE
+            SYNTAX DisplayString (SIZE (1..32))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the authentication-profile name."
+            ::= { hwAAATrapOid 121 }
+
+        hwECGWFamilyNumber OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The number of ECGW family users."
+            ::= { hwAAATrapOid 122 }
+        
+        hwECGWFamilyMaxNumber OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The maximum number of ECGW family users."
+            ::= { hwAAATrapOid 123 }
+
+        hwECGWFamilyPercentageThreshold OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The percentage threshold of the number of ECGW family users."
+            ::= { hwAAATrapOid 124 }
+        
+        hwECGWMHMaxUserNumber OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The maximum number of mobile home users."
+            ::= { hwAAATrapOid 125 }
+
+        hwECGWMHCurrentUserNumber OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The current number of mobile home users."
+            ::= { hwAAATrapOid 126 }
+
+        hwECGWMHPercentageThreshold OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The mobile home percentage threshold."
+            ::= { hwAAATrapOid 127 }
+
+        hwECGWMHVasGroupId OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The mobile home vas group id."
+            ::= { hwAAATrapOid 128 }
+
+        hwECGWMHTotalVniNumber OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The total number of mobile home vni."
+            ::= { hwAAATrapOid 129 }
+
+        hwECGWMHUsedVniNumber OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The used number of mobile home vni."
+            ::= { hwAAATrapOid 130 }
+
+        hwConfigDestSlot OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the configure the slot number of the destination board."
+            ::= { hwAAATrapOid 131 }
+
+        hwNacTemplate OBJECT-TYPE
+            SYNTAX DisplayString (SIZE (1..64))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the name of a service template."
+            ::= { hwAAATrapOid 132 }
+
+          hwConfigInfo OBJECT-TYPE
+            SYNTAX DisplayString (SIZE (1..64))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "This object indicates the configure info."
+            ::= { hwAAATrapOid 133 }
 
         hwAAATraps OBJECT IDENTIFIER ::= { hwAAATrapsDefine 0 }
         hwUserIPAllocAlarm NOTIFICATION-TYPE
@@ -7763,6 +8155,324 @@ This object indicates the clear alarm when the number of users on the board fall
             "The number of users in a UPMNG instance fell below the alarm threshold."
         ::= { hwAAATraps 133}
 
+        hwAuthorDynAclRuleExceed NOTIFICATION-TYPE
+        OBJECTS { hwUserAuthorMacAddress, hwUserAuthorAclRuleNum, hwMaxUserAuthorAclNum}
+        STATUS current
+        DESCRIPTION
+            "The number of dynamic ACL rules authorized to NAC users exceeds the upper limit."
+        ::= { hwAAATraps 134}
+
+        hwAuthorAclRuleExceed NOTIFICATION-TYPE
+        OBJECTS { hwUserAuthorAclType, hwUserAuthorAclId, hwUserAuthorAclRuleNum, hwMaxUserAuthorAclNum}
+        STATUS current
+        DESCRIPTION
+            "The number of ACL rules authorized to NAC users exceeds the upper limit."
+        ::= { hwAAATraps 135}
+        
+        hwDynmicUclGroupIpNumAlarm NOTIFICATION-TYPE
+        OBJECTS { hwDynmicUclGroupIpNum, hwDynmicUclGroupIpNumSpec, hwDynmicUclGroupIpNumThreshold}
+        STATUS current
+        DESCRIPTION
+            "Enable the alarm when the quantity of dynamic ucl group exceed the trap threshold."
+        ::= { hwAAATraps 136}
+
+        hwDynmicUclGroupIpNumResume NOTIFICATION-TYPE
+        OBJECTS { hwDynmicUclGroupIpNum, hwDynmicUclGroupIpNumSpec, hwDynmicUclGroupIpNumThreshold}
+        STATUS current
+        DESCRIPTION
+            "Enable the alarm when the quantity of dynamic ucl group restore to the trap threshold."
+        ::= { hwAAATraps 137}
+
+        hwUmDatabaseFileChangedAlarm NOTIFICATION-TYPE
+        STATUS current
+        DESCRIPTION
+            "The user management database file is changed."
+        ::= { hwAAATraps 138}
+
+        hwCUInstanceUserMaxNum NOTIFICATION-TYPE
+            OBJECTS {hwMaxUserThresholdType,hwAAAInstanceName,hwUserSlotMaxNumThreshold}
+            STATUS current
+            DESCRIPTION
+                "
+                The number of users on the UPMNG instance reached the threshold.
+                 "
+            ::= { hwAAATraps 139}
+
+        hwCUInstanceUserMaxNumResume NOTIFICATION-TYPE
+         OBJECTS {hwMaxUserThresholdType,hwAAAInstanceName,hwUserSlotMaxNumThreshold}
+         STATUS current
+         DESCRIPTION
+             "
+             The number of users on the UPMNG instance fell below the threshold.
+             "
+          ::= { hwAAATraps 140}
+
+        hwCUInstanceAccessUserResourceOrCpuAlarm NOTIFICATION-TYPE
+        OBJECTS {hwAAAInstanceName,hwAAACpuUsage,hwAAAUserResourceUsage}
+        STATUS current
+        DESCRIPTION
+            "
+            This object indicates that an alarm is generated when the user resource or CPU usage on a board exceeds the alarm threshold. 
+            "
+        ::= { hwAAATraps 141}
+
+        hwCUInstanceAccessUserResourceOrCpuResume NOTIFICATION-TYPE
+        OBJECTS {hwAAAInstanceName,hwAAACpuUsage,hwAAAUserResourceUsage}
+        STATUS current
+        DESCRIPTION
+            "
+            This object indicates that a clear alarm is generated when the user resource or CPU usage on a board falls below the clear alarm threshold. 
+            "
+        ::= { hwAAATraps 142}
+
+         hwCUInstanceChasisIPv6AddressThresholdAlarm NOTIFICATION-TYPE
+         OBJECTS {hwAAAInstanceName,hwAAAChasisIPv6AddressThreshold }
+         STATUS current
+         DESCRIPTION
+             "
+            1 Notice/Trap name:  The number of IPv6 addresses reached the upper limit of the UPMNG instance.
+            2 Notice/Trap generation cause:  The number of IPv6 addresses reached the upper limit of the UPMNG instance.
+            3 Repair suggestions: NA.
+            "
+         ::= { hwAAATraps 143}
+
+         hwCUInstanceChasisIPv6AddressThresholdResume NOTIFICATION-TYPE
+         OBJECTS {hwAAAInstanceName,hwAAAChasisIPv6AddressThreshold }
+         STATUS current
+         DESCRIPTION
+             "
+            1 Notice/Trap name:  The number of IPv6 addresses fell below the lower limit of the UPMNG instance.
+            2 Notice/Trap generation cause:  The number of IPv6 addresses fell below the lower limit of the deUPMNG instancevice.
+            3 Repair suggestions: NA.
+            "
+         ::= { hwAAATraps 144}
+
+         hwWirelessUserNumExceedThresholdAlarm NOTIFICATION-TYPE
+            OBJECTS { hwNACMaxUserSlot, hwNACMaxUserNum, hwNACMaxPercentage }
+			STATUS current
+			DESCRIPTION 
+				"This object indicates that the wireless users exceeds the threshold."
+			::= { hwAAATraps 145 }
+
+        hwWirelessUserNumExceedThresholdResume NOTIFICATION-TYPE
+            OBJECTS { hwNACMaxUserSlot, hwNACMaxUserNum, hwNACMaxPercentage }
+			STATUS current
+			DESCRIPTION 
+				"This object indicates that the wireless users less than the resume threshold."
+			::= { hwAAATraps 146 }
+
+        hwCuInstanceUserOnlineFailAlarm NOTIFICATION-TYPE
+         OBJECTS { hwAAAInstanceName, hwOnlineFailNum, hwOnlineSuccessPercentage }
+         STATUS current
+         DESCRIPTION
+             "
+            1 Notice/Trap name:  The number of UPMNG instance online failures exceeds the threshold and the online success rate is lower than the threshold.
+            2 Notice/Trap generation cause:  The number of UPMNG instance online failures exceeds the threshold and the online success rate is lower than the threshold.
+            3 Repair suggestions: NA.
+            "
+         ::= { hwAAATraps 147}
+
+         hwCuInstanceUserOnlineFailResume NOTIFICATION-TYPE
+         OBJECTS { hwAAAInstanceName, hwOnlineFailNum, hwOnlineSuccessPercentage }
+         STATUS current
+         DESCRIPTION
+             "
+            1 Notice/Trap name:  The number of UPMNG instance online failures fell below the threshold and the online success rate fell above the threshold.
+            2 Notice/Trap generation cause:  The number of UPMNG instance online failures fell below the threshold and the online success rate fell above the threshold.
+            3 Repair suggestions: NA.
+            "
+         ::= { hwAAATraps 148}
+
+        hwCUDomainIPv4DynamicSubnetNumberAlarm NOTIFICATION-TYPE
+         OBJECTS { hwAAAInstanceName, hwDomainName, hwAAASubnetNumberThreshold, hwAAAMaxSubnetNumber, hwAAAUsedSubnetNumber }
+         STATUS current
+         DESCRIPTION
+             "
+            1 Notice/Trap name:  The number of subnets in the IPv4 dynamic address pool in the domain reached the threshold.
+            2 Notice/Trap generation cause:  The number of subnets in the IPv4 dynamic address pool in the domain reached the threshold.
+            3 Repair suggestions: NA.
+            "
+         ::= { hwAAATraps 149}
+
+         hwCUDomainIPv4DynamicSubnetNumberAlarmResume NOTIFICATION-TYPE
+         OBJECTS { hwAAAInstanceName, hwDomainName, hwAAASubnetNumberThreshold, hwAAAMaxSubnetNumber, hwAAAUsedSubnetNumber }
+         STATUS current
+         DESCRIPTION
+             "
+            1 Notice/Trap name:  The number of subnets in the IPv4 dynamic address pool in the domain fell below the threshold.
+            2 Notice/Trap generation cause:  The number of subnets in the IPv4 dynamic address pool in the domain fell below the threshold.
+            3 Repair suggestions: NA.
+            "
+         ::= { hwAAATraps 150}
+
+        hwCUDomainIPv6DynamicPrefixNumberAlarm NOTIFICATION-TYPE
+         OBJECTS { hwAAAInstanceName, hwDomainName, hwAAAPrefixNumberThreshold, hwAAAMaxPrefixNumber, hwAAAUsedPrefixNumber }
+         STATUS current
+         DESCRIPTION
+             "
+            1 Notice/Trap name:  The number of prefixes in the IPv6 dynamic address pool in the domain reached the threshold. 
+            2 Notice/Trap generation cause:  The number of prefixes in the IPv6 dynamic address pool in the domain reached the threshold. 
+            3 Repair suggestions: NA.
+            "
+         ::= { hwAAATraps 151}
+
+         hwCUDomainIPv6DynamicPrefixNumberAlarmResume NOTIFICATION-TYPE
+         OBJECTS { hwAAAInstanceName, hwDomainName, hwAAAPrefixNumberThreshold, hwAAAMaxPrefixNumber, hwAAAUsedPrefixNumber }
+         STATUS current
+         DESCRIPTION
+             "
+            1 Notice/Trap name:  The number of prefixes in the IPv6 dynamic address pool in the domain fell below the threshold.
+            2 Notice/Trap generation cause:  The number of prefixes in the IPv6 dynamic address pool in the domain fell below the threshold.
+            3 Repair suggestions: NA.
+            "
+         ::= { hwAAATraps 152}
+
+        hwUserAbnormalOnlineFailureAlarm NOTIFICATION-TYPE
+        OBJECTS { hwAAAOnlineFailCode, hwAAAOnlineFailReason, hwAAAOnlineFailNumber }
+        STATUS current
+        DESCRIPTION
+            "
+        1 Notice/Trap name:  The number of user login failures with the abnormal cause in a period reached the alarm threshold.
+        2 Notice/Trap generation cause:  The number of user login failures with the abnormal cause in a period reached the alarm threshold.
+        3 Repair suggestions: NA.
+        "
+        ::= { hwAAATraps 153}
+
+        hwUserAbnormalOnlineFailureAlarmResume NOTIFICATION-TYPE
+        OBJECTS { hwAAAOnlineFailCode, hwAAAOnlineFailReason, hwAAAOnlineFailNumber }
+        STATUS current
+        DESCRIPTION
+            "
+        1 Notice/Trap name:  The number of user login failures with the abnormal cause in a period fell below the alarm clearance threshold.
+        2 Notice/Trap generation cause:  The number of user login failures with the abnormal cause in a period fell below the alarm clearance threshold.
+        3 Repair suggestions: NA.
+        "
+        ::= { hwAAATraps 154}
+
+        hwUserTrafficUnidirectionalAlarm  NOTIFICATION-TYPE
+        OBJECTS { hwUnidirectionalUserNumber, hwUnidirectionalUserThreshold }
+        STATUS current
+        DESCRIPTION
+            "
+        1 Notice/Trap name:  The number of users with uplink traffic but no downlink traffic exceeds the threshold.
+        2 Notice/Trap generation cause:  The number of users with uplink traffic but no downlink traffic exceeds the threshold.
+        3 Repair suggestions: NA.
+        "
+        ::= { hwAAATraps 155}
+
+        hwUserTrafficUnidirectionalResume  NOTIFICATION-TYPE
+        OBJECTS { hwUnidirectionalUserNumber, hwUnidirectionalUserThreshold }
+        STATUS current
+        DESCRIPTION
+            "
+        1 Notice/Trap name:  The number of users with uplink traffic but no downlink traffic falls below seven-eighths of the threshold.
+        2 Notice/Trap generation cause:  The number of users with uplink traffic but no downlink traffic falls below seven-eighths of the threshold.
+        3 Repair suggestions: NA.
+        "
+        ::= { hwAAATraps 156}
+
+        hwCUUserTrafficUnidirectionalAlarm  NOTIFICATION-TYPE
+        OBJECTS { hwAAAInstanceName, hwAAALoadBalanceInstance, hwUnidirectionalUserNumber, hwUnidirectionalUserThreshold }
+        STATUS current
+        DESCRIPTION
+            "
+        1 Notice/Trap name:  The number of users with uplink traffic but no downlink traffic exceeds the threshold.
+        2 Notice/Trap generation cause:  The number of users with uplink traffic but no downlink traffic exceeds the threshold.
+        3 Repair suggestions: NA.
+        "
+        ::= { hwAAATraps 157}
+
+        hwCUUserTrafficUnidirectionalResume  NOTIFICATION-TYPE
+        OBJECTS { hwAAAInstanceName, hwAAALoadBalanceInstance, hwUnidirectionalUserNumber, hwUnidirectionalUserThreshold }
+        STATUS current
+        DESCRIPTION
+            "
+        1 Notice/Trap name:  The number of users with uplink traffic but no downlink traffic falls below seven-eighths of the threshold.
+        2 Notice/Trap generation cause:  The number of users with uplink traffic but no downlink traffic falls below seven-eighths of the threshold.
+        3 Repair suggestions: NA.
+        "
+        ::= { hwAAATraps 158}
+
+        hwBindAuthenProfileFail NOTIFICATION-TYPE
+            OBJECTS { hwInterfaceIfIndex, hwInterfaceIfName, hwAuthenProfileName, hwConfigDestSlot }
+            STATUS current
+            DESCRIPTION
+                "The authentication template bound to the port cannot take effect."
+            ::= { hwAAATraps 159}
+
+        hwECGWGlobalFamilyThresholdAlarm NOTIFICATION-TYPE
+        OBJECTS { hwECGWFamilyNumber, hwECGWFamilyMaxNumber, hwECGWFamilyPercentageThreshold }
+        STATUS current
+        DESCRIPTION
+            "
+        1 Notice/Trap name: The number of ECGW global family reached the threshold.
+        2 Notice/Trap generation cause: The number of ECGW global family reached the threshold.
+        3 Repair suggestions: NA.
+        "
+        ::= { hwAAATraps 160}
+
+        hwECGWGlobalFamilyThresholdResume NOTIFICATION-TYPE
+        OBJECTS { hwECGWFamilyNumber, hwECGWFamilyMaxNumber, hwECGWFamilyPercentageThreshold }
+        STATUS current
+        DESCRIPTION
+            "
+        1 Notice/Trap name: The number of ECGW family is less than the resume threshold.
+        2 Notice/Trap generation cause: The number of ECGW family is less than the resume threshold.
+        3 Repair suggestions: NA.
+        "
+        ::= { hwAAATraps 161}
+
+        hwECGWMHAccessUserThresholdAlarm NOTIFICATION-TYPE
+        OBJECTS { hwECGWMHMaxUserNumber, hwECGWMHCurrentUserNumber, hwECGWMHPercentageThreshold }
+        STATUS current
+        DESCRIPTION
+            "
+        1 Notice/Trap name: The number of mobile home users on the device reached the threshold.
+        2 Notice/Trap generation cause: The number of mobile home users on the device reached the threshold.
+        3 Repair suggestions: NA.
+        "
+        ::= { hwAAATraps 162}
+
+        hwECGWMHAccessUserThresholdResume NOTIFICATION-TYPE
+        OBJECTS { hwECGWMHMaxUserNumber, hwECGWMHCurrentUserNumber, hwECGWMHPercentageThreshold }
+        STATUS current
+        DESCRIPTION
+            "
+        1 Notice/Trap name: The number of mobile home users on the device restored to normal.
+        2 Notice/Trap generation cause: The number of mobile home users on the device restored to normal.
+        3 Repair suggestions: NA.
+        "
+        ::= { hwAAATraps 163}
+
+        hwECGWMHVniThresholdAlarm NOTIFICATION-TYPE
+        OBJECTS { hwECGWMHVasGroupId, hwECGWMHTotalVniNumber, hwECGWMHUsedVniNumber, hwECGWMHPercentageThreshold }
+        STATUS current
+        DESCRIPTION
+            "
+        1 Notice/Trap name: The resource of VNI usage reached the threshold.
+        2 Notice/Trap generation cause: The resource of VNI usage reached the threshold.
+        3 Repair suggestions: NA.
+        "
+        ::= { hwAAATraps 164}
+
+        hwECGWMHVniThresholdResume NOTIFICATION-TYPE
+        OBJECTS { hwECGWMHVasGroupId, hwECGWMHTotalVniNumber, hwECGWMHUsedVniNumber, hwECGWMHPercentageThreshold }
+        STATUS current
+        DESCRIPTION
+            "
+        1 Notice/Trap name: The resource of VNI usage restored to normal.
+        2 Notice/Trap generation cause: The resource of VNI usage restored to normal.
+        3 Repair suggestions: NA.
+        "
+        ::= { hwAAATraps 165}
+
+        hwNacConfigAclFail NOTIFICATION-TYPE
+            OBJECTS { hwConfigDestSlot, hwNacTemplate, hwConfigInfo }
+            STATUS current
+            DESCRIPTION
+                "The NAC configuration does not take effect."
+            ::= { hwAAATraps 166}
+
         hwLAMTrapsDefine OBJECT IDENTIFIER ::= { hwAAAMibTrap 3 }
 
         hwLAMTraps OBJECT IDENTIFIER ::= { hwLAMTrapsDefine 0 }
@@ -7853,7 +8563,31 @@ This object indicates the clear alarm when the number of users on the board fall
                 3 Repair suggestions:
                     NA
                 "
-            ::= { hwLAMTraps 7 }			
+            ::= { hwLAMTraps 7 }
+
+        hwFirstloginNeedAdminUserAlarm NOTIFICATION-TYPE
+           OBJECTS { hwNoAdminUserReason}
+           STATUS current
+           DESCRIPTION
+                "
+                1 Notice/Trap name:  Administrator account is missing.
+                2 Notice/Trap generation cause:  Administrator first login flag has been cleared, but administrator account is missing.
+                3 Repair suggestions:
+                    NA
+                "
+           ::= { hwLAMTraps 9 }
+
+        hwFirstloginNeedAdminUserResume NOTIFICATION-TYPE
+           STATUS current
+           DESCRIPTION
+                "
+                1 Notice/Trap name: An administrator account is successfully created.
+                2 Notice/Trap generation cause:  Administrator account is successfully created.
+                3 Repair suggestions:
+                    NA
+                "
+           ::= { hwLAMTraps 10 }
+			
             
         hwCutAccessUserTable OBJECT IDENTIFIER  ::= { hwAAAMibObjects 28 }
         
@@ -15660,6 +16394,94 @@ This object indicates the clear alarm when the number of users on the board fall
             DESCRIPTION
                 "Specifies the number of total BRAS users with pevlan specified."
             ::= { hwPevlanStatEntry 9 }
+
+        hwAccessUserSummaryTable OBJECT IDENTIFIER ::= { hwAAAMibObjects 85 }
+
+        hwAccessUserSummaryEntry OBJECT IDENTIFIER ::= { hwAccessUserSummaryTable 1 }
+
+        hwNormalRegistrationUserNum OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "Specifies the number of normal users."
+            ::= { hwAccessUserSummaryEntry 1 }
+
+        hwLocalRegistrationUserNum OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "Specifies the number of local registration BRAS users."
+            ::= { hwAccessUserSummaryEntry 2 }
+
+        hwRemoteRegistrationUserNum OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "Specifies the number of remote registration BRAS users."
+            ::= { hwAccessUserSummaryEntry 3 }
+
+       hwBRASCUAccessUserEngineStatisticTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwBRASCUAccessUserEngineStatisticEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The vBRAS-CP queries the number of users on the UP forwarding engine."
+            ::= { hwAAAMibObjects 86 }
+
+        hwBRASCUAccessUserEngineStatisticEntry OBJECT-TYPE
+            SYNTAX HwBRASCUAccessUserEngineStatisticEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The vBRAS-CP queries the number of users on the UP forwarding engine."
+            INDEX { hwBRASCUAccessUserUpBoardId, hwBRASCUAccessUserEngine}
+            ::= { hwBRASCUAccessUserEngineStatisticTable 1 }
+
+        HwBRASCUAccessUserEngineStatisticEntry ::=
+            SEQUENCE {
+                hwBRASCUAccessUserUpBoardId
+                    Unsigned32,
+                hwBRASCUAccessUserEngine
+                    Unsigned32,
+                hwBRASCUAccessUserUpBoard
+                    DisplayString,
+                hwBRASCUAccessUserNumber
+                    Unsigned32
+             }
+
+        hwBRASCUAccessUserUpBoardId OBJECT-TYPE
+            SYNTAX Unsigned32 (0..4294967295)
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The board of the UP connected to a vBRAS-CP."
+            ::= { hwBRASCUAccessUserEngineStatisticEntry 1 }
+        hwBRASCUAccessUserEngine OBJECT-TYPE
+            SYNTAX Unsigned32 (0..4294967295)
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The forwarding engine ID connected to the vBRAS-CP."
+            ::= { hwBRASCUAccessUserEngineStatisticEntry 2 }
+
+        hwBRASCUAccessUserUpBoard OBJECT-TYPE
+            SYNTAX DisplayString (SIZE (1..15))
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The board of the UP connected to a vBRAS-CP."
+            ::= { hwBRASCUAccessUserEngineStatisticEntry 3 }
+        hwBRASCUAccessUserNumber OBJECT-TYPE
+            SYNTAX Unsigned32 (0..4294967295)
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "Number of online users."
+            ::= { hwBRASCUAccessUserEngineStatisticEntry 4 }
+
  --======                          
            
             --  ============== conformance information ==============
@@ -15838,7 +16660,7 @@ This object indicates the clear alarm when the number of users on the board fall
                       hwTotalIPv6FlowUpByte, hwTotalIPv6FlowUpPkt, hwHistoricMaxOnlineAcctReadyNum,
                       hwPubicLacUserNum, hwHistoricMaxOnlineLocalNum, hwHistoricMaxOnlineRemoteNum,
                       hwTotalLacOnlineNum,hwTotalLnsOnlineNum,hwTotalWlsOnlineNum,hwTotalWrdOnlineNum, hwDhcpUserOnlineFailCount,
-					  hwTotalFamilyUserByUsernameOnlineNum, hwDhcpUserOnlineV6FailCount ,hwHistoricMaxOnlineNumDate}                   
+					  hwTotalFamilyUserByUsernameOnlineNum, hwDhcpUserOnlineV6FailCount ,hwHistoricMaxOnlineNumDate,hwUnidirectionalUserNumber,hwUnidirectionalUserThreshold}                   
             STATUS current
             DESCRIPTION                                          
                 "The AAA statistics group configuration."
@@ -16040,7 +16862,8 @@ This object indicates the clear alarm when the number of users on the board fall
                             hwCUIPLowerlimitWarningResume,hwCUIPv6AddressLowerlimitAlarm,hwCUIPv6AddressLowerlimitResume,hwCUIPv6NDRAPrefixLowerlimitAlarm,
                             hwCUIPv6NDRAPrefixLowerlimitResume,hwCUIPv6PDPrefixLowerlimitAlarm,hwCUIPv6PDPrefixLowerlimitResume,hwCUUserDelegationPrefixAllocAlarm,
                             hwCUUserDelegationPrefixAllocAlarmResume,hwCUUserIPAllocAlarm,hwCUUserIPAllocAlarmResume,hwCUUserIPv6AddressAllocAlarm,
-                            hwCUUserIPv6AddressAllocAlarmResume,hwCUUserNDRAPrefixAllocAlarm,hwCUUserNDRAPrefixAllocAlarmResume}
+                            hwCUUserIPv6AddressAllocAlarmResume,hwCUUserNDRAPrefixAllocAlarm,hwCUUserNDRAPrefixAllocAlarmResume,hwUserTrafficUnidirectionalAlarm,hwUserTrafficUnidirectionalResume,
+                            hwCUUserTrafficUnidirectionalAlarm,hwCUUserTrafficUnidirectionalResume,hwECGWGlobalFamilyThresholdAlarm,hwECGWGlobalFamilyThresholdResume}
             STATUS current
             DESCRIPTION 
                 "The AAA traps."

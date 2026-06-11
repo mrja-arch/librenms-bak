@@ -1,9 +1,9 @@
 -- ==================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI-OSPFV2-MIB provides information about OSPFv2
 -- Reference:
--- Version: V2.27
+-- Version: V2.38
 -- History:
 -- <author>,   <date>,  <contents>
 --  HUAWEI   2008-1-05  OSPF private MIB
@@ -32,7 +32,7 @@
     
 
         hwOspfv2MIB MODULE-IDENTITY 
-            LAST-UPDATED "202208151236Z"      
+            LAST-UPDATED "202506122104Z"      
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -48,6 +48,39 @@
                 It defines the model used to represent configuration data that exists elsewhere 
                 in the system and on peripheral devices. The MIB is proper for system configuration.
                 There are no constraints on this MIB."
+            
+            REVISION "202506122104Z"
+            DESCRIPTION "Added hwOspfv2InterfaceIp"
+
+            REVISION "202412061751Z"
+            DESCRIPTION "Added hwOspfv2SrMplsPortLcsInactive, hwOspfv2SrMplsPortLcsInactiveClear, hwOspfv2IfCount"
+
+            REVISION "202405092143Z"
+            DESCRIPTION "Modify hwOspfv2ConflictRouterId2, hwOspfv2IPConflict, hwOspfv2IPConflictClear"
+
+            REVISION "202405061609Z"
+            DESCRIPTION "Added hwOspfv2ConflictType, hwOspfv2ConflictIp, hwOspfv2ConflictRouterId, hwOspfv2IPConflict, hwOspfv2IPConflictClear"
+
+            REVISION "202306251621Z"
+            DESCRIPTION "Deleted hwOspfv2RecvLsaUpper from OBJECT-GROUP"
+
+            REVISION "202306201453Z"
+            DESCRIPTION "Added hwOspfv2RecvLsaUpper to OBJECT-GROUP"
+
+            REVISION "202306161456Z"
+            DESCRIPTION "Added object hwOspfv2RecvLsaUpper, hwOspfv2RecvLsaExceedThreshold, hwOspfv2RecvLsaExceedThresholdClear"
+
+            REVISION "202306141005Z"
+            DESCRIPTION "Deleted hwOspfv2RecvLsaUpper, hwOspfv2RecvLsaExceedThreshold, hwOspfv2RecvLsaExceedThresholdClear"
+
+            REVISION "202304251649Z"
+            DESCRIPTION "Added object hwOspfv2RecvLsaUpper, hwOspfv2RecvLsaExceedThreshold, hwOspfv2RecvLsaExceedThresholdClear"
+
+            REVISION "202304191941Z"
+            DESCRIPTION "Added object hwOspfv2IfName"
+
+            REVISION "202304111441Z"
+            DESCRIPTION "Added object hwOspfv2LsaRetranExceedLimit, hwOspfv2LsaRetranExceedLimitClear"
 
             REVISION "202208151236Z"
             DESCRIPTION "Added object hwOspfv2NbrThresholdUpper, hwOspfv2NbrExceedThreshold, hwOspfv2NbrExceedThresholdClear"
@@ -1939,6 +1972,70 @@
                   "This object indicates the upper alarm threshold for the number of neighbors. "
             ::= { hwOspfv2TrapsObjects 39 }
 
+        hwOspfv2IfName OBJECT-TYPE
+            SYNTAX          OCTET STRING (SIZE (1..64))
+            MAX-ACCESS      accessible-for-notify
+            STATUS          current
+            DESCRIPTION
+                "The interface name"
+            ::= { hwOspfv2TrapsObjects 40 }
+
+        hwOspfv2RecvLsaUpper OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                  "This object indicates the upper alarm threshold for the number of received AS-external and NSSA LSAs."
+            ::= { hwOspfv2TrapsObjects 41 }
+
+        hwOspfv2ConflictType OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (1..255))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Type of conflict."
+            ::= { hwOspfv2TrapsObjects 42 }
+
+        hwOspfv2ConflictIp OBJECT-TYPE
+            SYNTAX IpAddress
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The conflicting IPv4 prefix address."
+            ::= { hwOspfv2TrapsObjects 43 }
+
+        hwOspfv2ConflictRouterId OBJECT-TYPE
+            SYNTAX IpAddress
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The conflicting router ID."
+            ::= { hwOspfv2TrapsObjects 44 }
+
+        hwOspfv2ConflictRouterId2 OBJECT-TYPE
+            SYNTAX IpAddress
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The second conflicting router ID."
+            ::= { hwOspfv2TrapsObjects 45 }
+
+        hwOspfv2IfCount OBJECT-TYPE
+                SYNTAX Unsigned32
+                MAX-ACCESS accessible-for-notify
+                STATUS current
+                DESCRIPTION
+                    "Interface count."
+                ::= { hwOspfv2TrapsObjects 46 }
+
+        hwOspfv2InterfaceIp OBJECT-TYPE
+            SYNTAX IpAddress
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Interface IP Address."
+            ::= { hwOspfv2TrapsObjects 47 }
+
         hwOspfv2Traps OBJECT IDENTIFIER ::= { hwOspfv2MIB 31 }
         
         hwOspfV2NeighborUnavailable NOTIFICATION-TYPE
@@ -1979,7 +2076,7 @@
             ::= { hwOspfv2Traps 5 }
 	    
         hwOspfv2PeerFlappingSuppressStatusChange NOTIFICATION-TYPE
-            OBJECTS { hwOspfv2ProcessIdIndex, hwOspfv2AreaId, hwOspfv2InterfaceName, hwOspfv2PeerFlappingSuppressStatus, hwOspfv2PeerFlappingSuppressReason }
+            OBJECTS { hwOspfv2ProcessIdIndex, hwOspfv2AreaId, hwOspfv2InterfaceName, hwOspfv2PeerFlappingSuppressStatus, hwOspfv2PeerFlappingSuppressReason, hwOspfv2InterfaceIp }
             STATUS current
             DESCRIPTION
                 "The object is used to monitor the peer flapping-suppress status of interface in ospfv2."
@@ -2274,6 +2371,64 @@
                 "This object indicates that the number of ospfv2 has been less than the the configed threshold."
             ::= { hwOspfv2Traps  43}
 
+        hwOspfv2LsaRetranExceedLimit NOTIFICATION-TYPE
+            OBJECTS { hwOspfv2ProcessIdIndex, hwOspfv2AreaId, hwOspfv2IfName }
+            STATUS current
+            DESCRIPTION
+                "This object indicates that the number of OSPF LSA retransmissions on an interface exceeds the limit."
+            ::= { hwOspfv2Traps  44}
+
+        hwOspfv2LsaRetranExceedLimitClear NOTIFICATION-TYPE
+            OBJECTS { hwOspfv2ProcessIdIndex, hwOspfv2AreaId, hwOspfv2IfName }
+            STATUS current
+            DESCRIPTION
+                "This object indicates that the number of OSPF LSA retransmissions on an interface is lower than the limit."
+            ::= { hwOspfv2Traps  45}
+
+        hwOspfv2RecvLsaExceedThreshold NOTIFICATION-TYPE
+            OBJECTS { hwOspfv2ProcessIdIndex, hwOspfv2RecvLsaUpper }
+            STATUS current
+            DESCRIPTION
+                "This object indicates that the number of received AS-external and NSSA LSAs exceeds the configed threshold."
+            ::= { hwOspfv2Traps  46}
+ 
+        hwOspfv2RecvLsaExceedThresholdClear NOTIFICATION-TYPE
+            OBJECTS { hwOspfv2ProcessIdIndex, hwOspfv2RecvLsaUpper }
+            STATUS current
+            DESCRIPTION
+                "This object indicates that the number of received AS-external and NSSA LSAs has been less than the the configed threshold."
+            ::= { hwOspfv2Traps  47}
+
+        hwOspfv2IPConflict NOTIFICATION-TYPE
+            OBJECTS { hwOspfv2ProcessIdIndex, hwOspfv2AreaId, hwOspfv2ConflictType, hwOspfv2ConflictIp,
+                hwOspfv2ConflictRouterId, hwOspfv2ConflictRouterId2 }
+            STATUS current
+            DESCRIPTION
+                "IP address conflict was detected between the local device and another device."
+            ::= { hwOspfv2Traps 48 }
+
+        hwOspfv2IPConflictClear NOTIFICATION-TYPE
+            OBJECTS { hwOspfv2ProcessIdIndex, hwOspfv2AreaId, hwOspfv2ConflictType, hwOspfv2ConflictIp,
+                hwOspfv2ConflictRouterId, hwOspfv2ConflictRouterId2 }
+            STATUS current
+            DESCRIPTION
+                "IP address conflict was cleared."
+            ::= { hwOspfv2Traps 49 }
+
+        hwOspfv2SrMplsPortLcsInactive NOTIFICATION-TYPE
+            OBJECTS { hwOspfv2ProcessIdIndex, hwOspfv2IfName, hwOspfv2IfCount }
+            STATUS current
+            DESCRIPTION
+                "No SR-MPLS license authorization was available."
+            ::= { hwOspfv2Traps 50 }
+
+        hwOspfv2SrMplsPortLcsInactiveClear NOTIFICATION-TYPE
+            OBJECTS { hwOspfv2ProcessIdIndex, hwOspfv2IfName, hwOspfv2IfCount }
+            STATUS current
+            DESCRIPTION
+                "The alarm indicating that no SR-MPLS license authorization was available was cleared."
+            ::= { hwOspfv2Traps 51 }
+
         hwOspfv2Conformance OBJECT IDENTIFIER ::= { hwOspfv2MIB 32 }
         
         hwOspfv2Compliances OBJECT IDENTIFIER ::= { hwOspfv2Conformance 1 }  
@@ -2551,7 +2706,15 @@
 		            hwOspfPrefixSidConflict,
 		            hwOspfPrefixSidConflictClear,
 		            hwOspfv2NbrExceedThreshold,
-		            hwOspfv2NbrExceedThresholdClear
+		            hwOspfv2NbrExceedThresholdClear,
+		            hwOspfv2LsaRetranExceedLimit,
+		            hwOspfv2LsaRetranExceedLimitClear,
+                    hwOspfv2RecvLsaExceedThreshold,
+                    hwOspfv2RecvLsaExceedThresholdClear,
+                    hwOspfv2IPConflict,
+                    hwOspfv2IPConflictClear,
+                    hwOspfv2SrMplsPortLcsInactive,
+                    hwOspfv2SrMplsPortLcsInactiveClear
 		           }
             STATUS current
             DESCRIPTION 
@@ -2559,7 +2722,7 @@
             ::= { hwOspfv2Groups 8 }
         
         hwOspfv2TrapsObjectsGroup OBJECT-GROUP
-            OBJECTS { hwOspfv2NbrChgReason, hwOspfv2IfChgReason, hwOspfv2AreaId, hwOspfv2NewRouterId, hwOspfv2ProcessIdIndex, hwOspfv2PeerFlappingSuppressStatus, hwOspfv2PeerFlappingSuppressReason, hwOspfv2LsaId, hwOspfv2LsaAge, hwOspfv2PurgeHostName, hwOspfv2PurgeIpAddress, hwOspfv2PurgeRouterId, hwOspfv2FlushLsaNum, hwOspfv2AffectedNodeNum, hwOspfv2TotalNodeNum, hwOspfv2PurgeStatPeriod, hwOspfv2RuledOutDeviceNum, hwOspfv2PurgeHostName1, hwOspfv2PurgeHostName2, hwOspfv2PurgeHostName3, hwOspfv2PurgeIpAddress1, hwOspfv2PurgeIpAddress2, hwOspfv2PurgeIpAddress3, hwOspfv2PurgeRouterId1, hwOspfv2PurgeRouterId2, hwOspfv2PurgeRouterId3, hwOspfv2InsecureAuthMode, hwOspfv2LoopDetectType, hwOspfv2LoopDetectProtocolAttr, hwOspfv2LoopDetectRedistributeID1, hwOspfv2LoopDetectRedistributeID2, hwOspfCostAdjustReason, hwOspfOriginalCost, hwOspfAdjustedCost, hwOspfPrefixSid, hwOspfPrefixAddress, hwOspfPrefixAddressMask, hwOspfAlgorithm, hwOspfConflictType, hwOspfv2NbrThresholdUpper}
+            OBJECTS { hwOspfv2NbrChgReason, hwOspfv2IfChgReason, hwOspfv2AreaId, hwOspfv2NewRouterId, hwOspfv2ProcessIdIndex, hwOspfv2PeerFlappingSuppressStatus, hwOspfv2PeerFlappingSuppressReason, hwOspfv2LsaId, hwOspfv2LsaAge, hwOspfv2PurgeHostName, hwOspfv2PurgeIpAddress, hwOspfv2PurgeRouterId, hwOspfv2FlushLsaNum, hwOspfv2AffectedNodeNum, hwOspfv2TotalNodeNum, hwOspfv2PurgeStatPeriod, hwOspfv2RuledOutDeviceNum, hwOspfv2PurgeHostName1, hwOspfv2PurgeHostName2, hwOspfv2PurgeHostName3, hwOspfv2PurgeIpAddress1, hwOspfv2PurgeIpAddress2, hwOspfv2PurgeIpAddress3, hwOspfv2PurgeRouterId1, hwOspfv2PurgeRouterId2, hwOspfv2PurgeRouterId3, hwOspfv2InsecureAuthMode, hwOspfv2LoopDetectType, hwOspfv2LoopDetectProtocolAttr, hwOspfv2LoopDetectRedistributeID1, hwOspfv2LoopDetectRedistributeID2, hwOspfCostAdjustReason, hwOspfOriginalCost, hwOspfAdjustedCost, hwOspfPrefixSid, hwOspfPrefixAddress, hwOspfPrefixAddressMask, hwOspfAlgorithm, hwOspfConflictType, hwOspfv2NbrThresholdUpper, hwOspfv2InterfaceIp}
             STATUS current
             DESCRIPTION 
                 "The objects are used to monitor/manage the neighbor state change from full to others."
@@ -2581,7 +2744,7 @@
             ::= { hwOspfv2Groups 11 }
 
         hwOspfv2PeerFlappingGroup OBJECT-GROUP
-            OBJECTS { hwOspfv2ProcessIdIndex, hwOspfv2NewRouterId, hwOspfv2AreaId, hwOspfv2InterfaceName, hwOspfv2PeerFlappingSuppressStatus, hwOspfv2PeerFlappingSuppressReason }
+            OBJECTS { hwOspfv2ProcessIdIndex, hwOspfv2NewRouterId, hwOspfv2AreaId, hwOspfv2InterfaceName, hwOspfv2PeerFlappingSuppressStatus, hwOspfv2PeerFlappingSuppressReason, hwOspfv2InterfaceIp }
             STATUS current
             DESCRIPTION 
                 "These objects are used to monitor/manage changed OSPF peer flapping suppress status."

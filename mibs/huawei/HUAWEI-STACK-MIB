@@ -1,9 +1,9 @@
 -- =====================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 --
 -- Description: Huawei Stack MIB
 -- Reference:   HUAWEI Stack MIB
--- Version:  V1.69
+-- Version: V3.00
 -- History:
 -- Monday, Aug 29, 2022 at 10:58:30
 --
@@ -25,7 +25,7 @@ HUAWEI-STACK-MIB DEFINITIONS ::= BEGIN
             FROM HUAWEI-MIB;
 
     huaweiStackMIB MODULE-IDENTITY
-                  LAST-UPDATED "202208291058Z"           
+                  LAST-UPDATED "202503071801Z"           
                   ORGANIZATION 
                   "Huawei Technologies Co.,Ltd."
                   CONTACT-INFO  
@@ -35,10 +35,43 @@ HUAWEI-STACK-MIB DEFINITIONS ::= BEGIN
             People's Republic of China
             Website: http://www.huawei.com
             Email: support@huawei.com
-           "        
+           "  
 
-        DESCRIPTION 
+        DESCRIPTION
         " "
+        REVISION "202503071801Z" 
+        DESCRIPTION "Update hwStackLinkAlarmThreshold,hwStackMemberThreshold"
+
+        REVISION "202502171119Z" 
+        DESCRIPTION "Update hwStackUnsupportedCableAlarm"
+
+        REVISION "202501241037Z" 
+        DESCRIPTION "Update hwCssMemberConfigEnable"
+        
+        REVISION "202409271037Z" 
+        DESCRIPTION "Update hwStackPENMemberExceedSpec"
+
+        REVISION "202406131037Z" 
+        DESCRIPTION "Update hwStackRenStkidNoResetAlarm"
+
+        REVISION "202402281037Z" 
+        DESCRIPTION "Update hwStackMemPortAutoRepairDownAlarm"
+
+        REVISION "202312222055Z" 
+        DESCRIPTION "Update hwStackModeConflictAlarm"
+
+        REVISION "202312141846Z" 
+        DESCRIPTION "Add hwStackModeConflictAlarm"
+
+        REVISION "202308111057Z" 
+        DESCRIPTION "Add hwStackCmngMemberNumExceedAlarm, hwStackCmngMemberNumExceedResume"
+
+        REVISION "202303301649Z" 
+        DESCRIPTION "Add hwStackNotDowngradeAlarm, hwStackNotDowngradeAlarmResume"
+
+        REVISION "202303231512Z"   
+        DESCRIPTION "Updated hwStackProPacketTamper to hwStackProPacketTamperAlarm" 
+
         REVISION "202208291058Z"   
         DESCRIPTION "Updated to include support for STACK" 
 
@@ -302,7 +335,7 @@ HUAWEI-STACK-MIB DEFINITIONS ::= BEGIN
 
         hwStackLinkAlarmThreshold OBJECT-TYPE
             SYNTAX Integer32 (1..32)
-            MAX-ACCESS read-write
+            MAX-ACCESS accessible-for-notify
             STATUS current
             DESCRIPTION
                 "The alarm threshold of stack link. "
@@ -310,7 +343,7 @@ HUAWEI-STACK-MIB DEFINITIONS ::= BEGIN
 
         hwStackMemberThreshold OBJECT-TYPE
             SYNTAX Integer32 (1..256)
-            MAX-ACCESS read-only
+            MAX-ACCESS accessible-for-notify
             STATUS current
             DESCRIPTION
                 "Maximum number of stack members."   
@@ -1466,21 +1499,102 @@ HUAWEI-STACK-MIB DEFINITIONS ::= BEGIN
                 "The subcard which is not support stack function is support stack function."
             ::= { hwStackEventsV2 73}
 
-        hwStackProPacketTamper NOTIFICATION-TYPE
+        hwStackProPacketTamperAlarm NOTIFICATION-TYPE
             OBJECTS {hwStackPeerSlotName, hwPacketPaddingContent}
             STATUS current
             DESCRIPTION     
                 "The CSS or stack protocol packets are tampered with."
             ::= { hwStackEventsV2 74}         
 
-       hwStackProPacketTamperResume NOTIFICATION-TYPE
+       hwStackProPacketTamperAlarmResume NOTIFICATION-TYPE
             OBJECTS {hwStackPeerSlotName, hwPacketPaddingContent}
             STATUS current
             DESCRIPTION     
                 "The fault that CSS or stack protocol packets are tampered with has been rectified."
             ::= { hwStackEventsV2 75}  
 
---
+       hwStackNotDowngradeAlarm NOTIFICATION-TYPE
+            STATUS current
+            DESCRIPTION     
+                "The system software is incompatible with the hardware."
+            ::= { hwStackEventsV2 76}
+
+       hwStackNotDowngradeAlarmResume NOTIFICATION-TYPE
+            STATUS current
+            DESCRIPTION     
+                "The system software is compatible with the hardware."
+            ::= { hwStackEventsV2 77}
+
+       hwStackCmngMemberNumExceedAlarm NOTIFICATION-TYPE
+            OBJECTS {hwMemberCurrentStackId}
+            STATUS current
+            DESCRIPTION
+                "The number of stack members onboarded on iMaster NCE-Campus exceeds the upper limit."
+            ::= { hwStackEventsV2 78}
+
+       hwStackCmngMemberNumExceedResume NOTIFICATION-TYPE
+            OBJECTS {hwMemberCurrentStackId}
+            STATUS current
+            DESCRIPTION
+                "The number of stack members onboarded on iMaster NCE-Campus is below the upper limit."
+            ::= { hwStackEventsV2 79}
+
+        hwStackModeConflictAlarm NOTIFICATION-TYPE
+            OBJECTS {hwStackLocalIfName, hwStackPeerIfName, hwStackLocalMode, hwStackPeerMode}
+            STATUS current
+            DESCRIPTION
+                "The stack mode of stack members are conflict."
+            ::= { hwStackEventsV2 80 }
+
+        hwStackMemPortAutoRepairDownAlarm NOTIFICATION-TYPE
+            OBJECTS {hwStackLocalIfName}
+            STATUS current
+            DESCRIPTION     
+                "An entry exception is detected on a stack member interface, and automatic repair triggers the physical interface to go Down.."
+            ::= { hwStackEventsV2 81 }
+			
+        hwStackMemPortAutoRepairDownAlarmResume NOTIFICATION-TYPE
+            OBJECTS {hwStackLocalIfName}
+            STATUS current
+            DESCRIPTION     
+                "The physical interface that goes Down due to an entry exception on a stack member interface is restored."
+            ::= { hwStackEventsV2 82}
+
+        hwStackRenStkidNoResetAlarm NOTIFICATION-TYPE
+            OBJECTS {hwStackLocalSlotID}
+            STATUS current
+            DESCRIPTION     
+                "The stack is not restarted after the stack ID is changed."
+            ::= { hwStackEventsV2 83}
+        
+        hwStackPENMemberExceedSpec NOTIFICATION-TYPE
+            OBJECTS { hwStackMemberSpec }
+            STATUS current
+            DESCRIPTION
+                "The number of stack members in PEN stack system exceeds the upper limit."
+            ::= { hwStackEventsV2  84}
+        
+        hwStackPENMemberExceedSpecResume NOTIFICATION-TYPE
+            OBJECTS { hwStackMemberSpec }
+            STATUS current
+            DESCRIPTION
+                "The number of stack members in PEN stack system exceeds the upper limit."
+            ::= { hwStackEventsV2  85}
+
+        hwStackUnsupportedCableAlarm NOTIFICATION-TYPE
+            OBJECTS {hwStackLocalIfName}
+            STATUS current
+            DESCRIPTION
+                "An unsupported cable is connected to the corresponding port of the device."
+            ::= { hwStackEventsV2 86 }
+ 
+        hwStackUnsupportedCableAlarmResume NOTIFICATION-TYPE
+            OBJECTS {hwStackLocalIfName}
+            STATUS current
+            DESCRIPTION
+                "The alarm on the port with an unsupported cable connected is cleared."
+            ::= { hwStackEventsV2 87 }
+
 --  TABLE: hwStackUpgradeTable definition
 --
         hwStackUpgradeTable OBJECT-TYPE
@@ -2270,6 +2384,22 @@ HUAWEI-STACK-MIB DEFINITIONS ::= BEGIN
                 "The packert padding content"
             ::= { hwStackTrapObject 28 }
 
+        hwStackLocalMode OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Local Stack Mode"
+            ::= { hwStackTrapObject 29 }
+
+        hwStackPeerMode OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Peer Stack Mode"
+            ::= { hwStackTrapObject 30 }
+
 --
 --  TABLE: hwStackPortInfoTable definition
 --			   			   
@@ -2630,7 +2760,7 @@ HUAWEI-STACK-MIB DEFINITIONS ::= BEGIN
             disabled(2),
             unknown(255)
             }
-        MAX-ACCESS read-write
+        MAX-ACCESS read-only
         STATUS current
         DESCRIPTION
             "Configured enable status for CSS member."
@@ -3415,7 +3545,9 @@ hwCssPortInfoTable OBJECT-TYPE
                         hwStackLinkTopoAlarm,hwStackLinkTopoAlarmResume,hwStackMemberPortTypeDifferentAlarm,hwStackMemberPortTypeDifferentAlarmResume,
                         hwStackLinkTopoSinglePortAlarm,hwStackLinkTopoSinglePortAlarmResume, hwStackSipPortSingleLinkAlarm, hwStackSipPortSingleLinkAlarmResume, hwStackPortErrorDown, 
                         hwStackPortErrorDownRecovery, hwStackSetUpFailure,hwStackMemberPortLoopAlarm,hwStackMemberPortLoopAlarmResume,hwStackAutoConfigFailed,hwStackPortLinkErr,hwPhyStackPortDownResume,hwSipPortHaveMediumAlarm,hwSipPortHaveMediumAlarmResume,
-                        hwSipPortLinkProtocolAlarm, hwSipPortLinkProtocolAlarmResume,hwStackSubCardMismatch,hwStackSubCardNotSupport,hwStackSubCardNotSupportResume,hwStackProPacketTamper,hwStackProPacketTamperResume
+                        hwSipPortLinkProtocolAlarm, hwSipPortLinkProtocolAlarmResume,hwStackSubCardMismatch,hwStackSubCardNotSupport,hwStackSubCardNotSupportResume,hwStackProPacketTamperAlarm,hwStackProPacketTamperAlarmResume,hwStackNotDowngradeAlarm, hwStackNotDowngradeAlarmResume,
+                        hwStackCmngMemberNumExceedResume,hwStackCmngMemberNumExceedAlarm,hwStackModeConflictAlarm,hwStackMemPortAutoRepairDownAlarm, hwStackMemPortAutoRepairDownAlarmResume,
+                        hwStackPENMemberExceedSpec, hwStackPENMemberExceedSpecResume, hwStackUnsupportedCableAlarm, hwStackUnsupportedCableAlarmResume
                         }
         STATUS current
         DESCRIPTION
@@ -3430,7 +3562,7 @@ hwCssPortInfoTable OBJECT-TYPE
                  hwStackMemberId, hwStackLeafMemberId, hwStackReason, hwStackLeafPort,
                  hwStackCurrentLinkNum, hwFabricCurrentLinkNum, hwStackErrorDownRecoverReason, hwStackPortErrorDownType, 
                  hwStackSetUpFailureDescription, hwStackLocalSlotID, hwStackPeerSlotID,hwStackAutoConfigFailedSlotID,hwStackAutoConfigFailedIfName,hwStackAutoConfigFailedReason,hwStackSipIfName,
-                 hwStackPeerSlotName, hwPacketPaddingContent
+                 hwStackPeerSlotName, hwPacketPaddingContent, hwStackLocalMode, hwStackPeerMode
                  }
         STATUS current
         DESCRIPTION

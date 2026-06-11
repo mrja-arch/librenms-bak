@@ -1,10 +1,10 @@
 
 -- =================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved
+-- Copyright (C) 2020 by  HUAWEI TECHNOLOGIES. All rights reserved
 -- 
 -- Description:
 -- Reference:
--- Version: V1.47
+-- Version: V1.43
 -- History:
 -- shaoyu,2009-03-12,<contents>
 -- =================================================================
@@ -26,7 +26,7 @@
 	
 		-- 1.3.6.1.4.1.2011.6.122.15.1
 		hwSecStatGlobal MODULE-IDENTITY 
-			LAST-UPDATED "202203181007Z"		-- March 18, 2022 at 10:07 GMT
+			LAST-UPDATED "202010210948Z"		-- Oct 21, 2020 at 09:48 GMT
 			ORGANIZATION 
 				"Huawei Technologies Co.,Ltd."
 			CONTACT-INFO
@@ -42,14 +42,6 @@
 				The HUAWEI-SECSTAT-MIB contains objects to manage the security statistics for firewall product.
 				"
 			--  Revision history
-                                REVISION   "202203181007Z"       
-                                DESCRIPTION "V1.47 add hwSecStatDevicePerfObjects  node."     
-                                REVISION   "202105201507Z"       
-                                DESCRIPTION "V1.45 modify hwSecStatDevice node." 
-								REVISION   "202105121607Z"       
-                                DESCRIPTION "V1.42 modify hwSecStatFastSessOverThreshold node." 
-                                REVISION   "202105101940Z"       
-                                DESCRIPTION "V1.42 modify hwSecStatFastSessBelowThreshold node." 
                                 REVISION   "202010210948Z"       
                                 DESCRIPTION "V1.42 add hwSecStatCPUFwdCongestionPacketLoss,hwSecStatCPUFwdCongestionPacketLossRecover node." 
                                 REVISION   "202006051640Z"       
@@ -2531,7 +2523,7 @@
 			OBJECTS { hwSecStatTrapSlot, hwSecStatTrapCPU, hwSecStatSessTrapCount, hwSecStatSessTrapThreshold }
 			STATUS current
 			DESCRIPTION 
-				"The fast-forwarding session count exceeds the upper limit of the threshold."
+				"The fast-forwarding session count of the SPU exceeds the upper limit of the threshold."
 			::= { hwSecStatSessTraps 5 }
 
 		
@@ -2540,7 +2532,7 @@
 			OBJECTS { hwSecStatTrapSlot, hwSecStatTrapCPU, hwSecStatSessTrapCount, hwSecStatSessTrapThreshold }
 			STATUS current
 			DESCRIPTION 
-				"The fast-forwarding session count restores to be lower than the threshold corresponding to the upper limit of the threshold."
+				"The fast-forwarding session count of the SPU restores to be lower than the threshold corresponding to the upper limit of the threshold."
 			::= { hwSecStatSessTraps 6 }     
 		
 		
@@ -3678,25 +3670,6 @@
 			DESCRIPTION
 				"The items of the session log send to device."
 			::= { hwSecStatDevice 6}
-			
-		-- 1.3.6.1.4.1.2011.6.122.15.6.7 		
-		hwSecStatDeviceThroughputAbroad OBJECT-TYPE
-			SYNTAX OCTET STRING
-			MAX-ACCESS read-only
-			STATUS current
-			DESCRIPTION
-				"The throughput of the abroad device."
-			::= { hwSecStatDevice 7 }
-
-		-- 1.3.6.1.4.1.2011.6.122.15.6.8 		
-		hwSecStatDeviceThroughputLimitAbroad OBJECT-TYPE
-			SYNTAX Integer32
-			MAX-ACCESS read-only
-			STATUS current
-			DESCRIPTION
-				"The limit throughput of the abroad device."
-			::= { hwSecStatDevice 8 }
-			
 --      OR:add by lvliang 00272204 for V5R1C00 for forward framework.
 		-- 1.3.6.1.4.1.2011.6.122.15.7
 		hwSecStatFwdFramework OBJECT IDENTIFIER ::= { hwSecStatMibObjects 7 }
@@ -3812,99 +3785,5 @@
 			DESCRIPTION
 				"The value of downstream bytes matching a security policy."
 			::= { hwSecStatSecPolicyRateEntry 6 }
-
-	         -- 1.3.6.1.4.1.2011.6.122.15.9
-		hwSecStatDevicePerfObjects OBJECT IDENTIFIER ::= { hwSecStatMibObjects 9 }
-				
-		-- 1.3.6.1.4.1.2011.6.122.15.9.1
-		hwSecStatDevicePerfTable OBJECT-TYPE
-			SYNTAX SEQUENCE OF HwSecStatDevicePerfEntry
-			MAX-ACCESS not-accessible
-			STATUS current
-			DESCRIPTION
-				"This table displays CPU performance of each slot in which traffic is limited for the device outside China."
-			::= { hwSecStatDevicePerfObjects 1 }
-
-		-- 1.3.6.1.4.1.2011.6.122.15.9.1.1
-		hwSecStatDevicePerfEntry OBJECT-TYPE
-			SYNTAX HwSecStatDevicePerfEntry
-			MAX-ACCESS not-accessible
-			STATUS current
-			DESCRIPTION
-				"The information includes the current performance, allocated performance, and performance usage of each slot CPU of the global version."
-			INDEX { hwSecStatDevicePerfIndex, hwSecStatDevicePerfSlot,
-					hwSecStatDevicePerfCpu }
-			::= { hwSecStatDevicePerfTable 1 }
-
-		HwSecStatDevicePerfEntry ::=
-			SEQUENCE {
-				hwSecStatDevicePerfIndex
-					Integer32,
-				hwSecStatDevicePerfSlot
-					Gauge32,
-				hwSecStatDevicePerfCpu
-					Gauge32,
-				hwSecStatDeviceCurrentusedperf
-					Counter64,
-				hwSecStatDeviceAssignedperf
-					Counter64,
-				hwSecStatDevicePerfusage
-					Gauge32
-			 }
-
-		-- 1.3.6.1.4.1.2011.6.122.15.9.1.1.1
-		hwSecStatDevicePerfIndex OBJECT-TYPE
-			SYNTAX Integer32 (0..255)
-			MAX-ACCESS not-accessible
-			STATUS current
-			DESCRIPTION
-				"The index of frame of the deviceperf."
-			::= { hwSecStatDevicePerfEntry 1 }
-
-		-- 1.3.6.1.4.1.2011.6.122.15.9.1.1.2
-		hwSecStatDevicePerfSlot OBJECT-TYPE
-			SYNTAX Gauge32 (0..16)
-			MAX-ACCESS not-accessible
-			STATUS current
-			DESCRIPTION
-				"Slot number."
-			::= { hwSecStatDevicePerfEntry 2 }
-
-		-- 1.3.6.1.4.1.2011.6.122.15.9.1.1.3
-		hwSecStatDevicePerfCpu OBJECT-TYPE
-			SYNTAX Gauge32 (0..4)
-			MAX-ACCESS not-accessible
-			STATUS current
-			DESCRIPTION
-				"CPU number."
-			::= { hwSecStatDevicePerfEntry 3 }
-
-		-- 1.3.6.1.4.1.2011.6.122.15.9.1.1.4
-		hwSecStatDeviceCurrentusedperf OBJECT-TYPE
-			SYNTAX Counter64
-			MAX-ACCESS read-only
-			STATUS current
-			DESCRIPTION
-				"The Current Performance of the cpu."
-			::= { hwSecStatDevicePerfEntry 4 }
-
-		-- 1.3.6.1.4.1.2011.6.122.15.9.1.1.5
-		hwSecStatDeviceAssignedperf OBJECT-TYPE
-			SYNTAX Counter64
-			MAX-ACCESS read-only
-			STATUS current
-			DESCRIPTION
-				"The Assigned Performance of the cpu."
-			::= { hwSecStatDevicePerfEntry 5 }
-
-		-- 1.3.6.1.4.1.2011.6.122.15.9.1.1.6
-		hwSecStatDevicePerfusage OBJECT-TYPE
-			SYNTAX Gauge32 (0..100)
-			MAX-ACCESS read-only
-			STATUS current
-			DESCRIPTION
-				"The Performance usage."
-
-			::= { hwSecStatDevicePerfEntry 6 }
 								
 	END

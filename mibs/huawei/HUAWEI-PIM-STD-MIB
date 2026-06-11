@@ -1,10 +1,10 @@
 -- ============================================================================
--- Copyright (C) 2022 by HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2023-2024 by HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI-PIM-STD-MIB.my , this MIB module for management of 
 --              the Protocol Independent Multicast (PIM) protocols for PIM routers.
 -- Reference:  
--- Version: V2.18
+-- Version: V2.23
 -- History:
 --    
 -- ============================================================================
@@ -33,7 +33,7 @@ IMPORTS
 hwMcast      OBJECT IDENTIFIER      ::= { hwDatacomm 149 }
 
 hwPimStdMib MODULE-IDENTITY
-    LAST-UPDATED  "202202110000Z" -- 11 Feb 2022
+    LAST-UPDATED  "202404260000Z" -- 26 Apr 2024
     ORGANIZATION
             "Huawei Technologies Co.,Ltd."
     CONTACT-INFO
@@ -50,7 +50,25 @@ hwPimStdMib MODULE-IDENTITY
             Huawei Technologies co.,Ltd . Supplementary information may
             be available at:
             http://www.huawei.com"
+			
+    REVISION     "202404260000Z" -- 26 Apr 2024
+    DESCRIPTION  "1.Add hwBsrBsmReachLimit.
+                  2.Add hwBsrBsmReachLimitResume."
+
+    REVISION     "202404070000Z" -- 07 Apr 2024
+    DESCRIPTION  "1.Add hwBsrCrpReachLimit.
+                  2.Add hwBsrCrpReachLimitResume."
+
+    REVISION     "202310310000Z" -- 31 Oct 2023
+    DESCRIPTION  "1.Modify hwPimSrcPerGrpLimitCount."
     
+    REVISION     "202308240000Z" -- 24 Aug 2023
+    DESCRIPTION  "1.Add hwPimSrcPerGrpNumLimit.
+                  2.Add hwPimSrcPerGrpNumLimitClear."
+
+    REVISION     "202304070000Z" -- 07 Apr 2023
+    DESCRIPTION  "1.Add hwPimSGInactiveThreshold."
+
     REVISION     "202202110000Z" -- 11 Feb 2022
     DESCRIPTION  "Modify comment."
 
@@ -1131,6 +1149,38 @@ hwPimNotificationOifThresholdClearReasonType  OBJECT-TYPE
              "The reason for trap sending:
              2:utgoing interface is deleted"
     ::= { hwPim 90 }
+
+hwPimNotificationAlarmInterval  OBJECT-TYPE
+    SYNTAX      Unsigned32 (60..65535)
+    MAX-ACCESS  accessible-for-notify
+    STATUS      current
+    DESCRIPTION                                                                
+             "The alarm interval."
+    ::= { hwPim 91 }
+
+hwPimNotificationInactiveThreshold  OBJECT-TYPE
+    SYNTAX      Unsigned32 (1..64000)
+    MAX-ACCESS  accessible-for-notify
+    STATUS      current
+    DESCRIPTION                                                                
+             "The alarm threshold for the maximum number of inactive (S, G) entries."
+    ::= { hwPim 92 }
+
+hwPimNotificationInactiveCount  OBJECT-TYPE
+    SYNTAX      Unsigned32 (1..64000)
+    MAX-ACCESS  accessible-for-notify
+    STATUS      current
+    DESCRIPTION                                                                
+             "The real number of inactive (S, G) entries."
+    ::= { hwPim 93 }
+
+hwPimSrcPerGrpLimitCount OBJECT-TYPE
+    SYNTAX     Unsigned32  (0..4294967295)
+    MAX-ACCESS accessible-for-notify
+    STATUS     current
+    DESCRIPTION
+		    "Maximum number of multicast sources for a multicast group."
+    ::= { hwPim 94 }
 
 hwPimInterfaceTable OBJECT-TYPE
     SYNTAX     SEQUENCE OF HwPimInterfaceEntry
@@ -3511,6 +3561,38 @@ hwPimVrfSGLimit OBJECT-TYPE
 		    "The current number of PIM (S, G) entries limit of one VPN instance."
     ::= { hwPimVrfRouteCountEntry 7 }    
 
+hwPimNotificationBsrAddr OBJECT-TYPE
+    SYNTAX     InetAddress (SIZE (0|4|8|16|20))
+    MAX-ACCESS accessible-for-notify
+    STATUS     current
+    DESCRIPTION
+            "IP address of the BSR."
+    ::= { hwPim 95 } 
+
+hwPimNotificationCrpCurrentCount OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..262144)   
+    MAX-ACCESS  accessible-for-notify
+    STATUS      current
+    DESCRIPTION                                                                
+             "Number of C-RP entries received by the BSR." 
+    ::= { hwPim 96 }
+
+hwPimNotificationCrpLimit OBJECT-TYPE
+    SYNTAX      Unsigned32 (0..262144)   
+    MAX-ACCESS  accessible-for-notify
+    STATUS      current
+    DESCRIPTION                                                                
+             "Upper limit of the number of C-RP entries that can be accepted by the BSR." 
+    ::= { hwPim 97 }
+
+hwPimNotificationAdminScope OBJECT-TYPE
+    SYNTAX     DisplayString (SIZE(0..64))
+    MAX-ACCESS   accessible-for-notify
+    STATUS       current
+    DESCRIPTION
+            "BSR admin scope."
+    ::= { hwPim 98 } 
+
 hwPimNeighborLoss NOTIFICATION-TYPE
     OBJECTS { hwPimNeighborUpTime, 
               hwPimNeighborIfName,
@@ -4016,6 +4098,86 @@ hwPimGlobalTypeOifThresholdExceedClear NOTIFICATION-TYPE
             "A hwPimGlobalTypeOifThresholdExceedClear notification signifies that outgoing interfaces of PIM entries fell below the lower threshold."
       ::= { hwPimNotifications 39 }
 
+hwPimSGInactiveThreshold  NOTIFICATION-TYPE
+    OBJECTS { hwPimNotificationAddressType,
+              hwPimInstanceName,
+              hwPimNotificationAlarmInterval,
+              hwPimNotificationInactiveThreshold,
+              hwPimNotificationInactiveCount
+            }
+    STATUS  current
+    DESCRIPTION
+            "A hwPimSGInactiveThreshold notification signifies that the number of inactive (S,G) entries reached threshold."
+    ::= { hwPimNotifications 40 }
+
+hwPimSrcPerGrpNumLimit NOTIFICATION-TYPE
+    OBJECTS { hwPimNotificationAddressType,
+              hwPimInstanceName,
+              hwPimSrcPerGrpLimitCount
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwPimSrcPerGrpNumLimit notification signifies that at least one multicast group's multicast source number reached the upper limit. ."
+      ::= { hwPimNotifications 41 }
+
+hwPimSrcPerGrpNumLimitClear NOTIFICATION-TYPE
+    OBJECTS { hwPimNotificationAddressType,
+              hwPimInstanceName,
+              hwPimSrcPerGrpLimitCount
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwPimSrcPerGrpNumLimitClear notification signifies that all multicast group's multicast source number fell below the upper limit."
+      ::= { hwPimNotifications 42 }
+
+hwBsrCrpReachLimit NOTIFICATION-TYPE
+    OBJECTS { hwPimNotificationAddressType,
+              hwPimInstanceName,
+              hwPimNotificationBsrAddr,
+              hwPimNotificationAdminScope,
+              hwPimNotificationCrpCurrentCount,
+              hwPimNotificationCrpLimit
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwBsrCrpReachLimit notification signifies that tThe number of C-RP entries received by the BSR reached the upper limit."
+      ::= { hwPimNotifications 43 }
+
+hwBsrCrpReachLimitResume NOTIFICATION-TYPE
+    OBJECTS {hwPimNotificationAddressType,
+             hwPimInstanceName,
+             hwPimNotificationBsrAddr,
+             hwPimNotificationAdminScope,
+             hwPimNotificationCrpCurrentCount,
+             hwPimNotificationCrpLimit
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwBsrCrpReachLimitResume notification signifies that the number of C-RP entries received by the BSR fell below the upper limit."
+      ::= { hwPimNotifications 44 }
+
+hwBsrBsmReachLimit NOTIFICATION-TYPE
+    OBJECTS {hwPimNotificationAddressType,
+             hwPimInstanceName,
+             hwPimNotificationBsrAddr,
+             hwPimNotificationAdminScope
+            }
+    STATUS      current
+    DESCRIPTION
+            "A hwBsrBsmReachLimit notification signifies that the size of the BSM packet has reached the upper limit. "
+      ::= { hwPimNotifications 45 }
+
+hwBsrBsmReachLimitResume NOTIFICATION-TYPE
+    OBJECTS { hwPimNotificationAddressType,
+             hwPimInstanceName,
+             hwPimNotificationBsrAddr,
+             hwPimNotificationAdminScope
+            }
+    STATUS     current
+    DESCRIPTION
+            "A hwBsrBsmReachLimitResume notification signifies that the size of the BSM packet fell below the upper limit. "
+    ::= { hwPimNotifications 46 }
+
 hwPimMibConformance OBJECT IDENTIFIER ::= { hwPimStdMib 2 }
 hwPimMibCompliances OBJECT IDENTIFIER ::= { hwPimMibConformance 1 }
 hwPimMibGroups      OBJECT IDENTIFIER ::= { hwPimMibConformance 2 }
@@ -4399,7 +4561,11 @@ hwPimNetMgmtNotificationObjects OBJECT-GROUP
               hwPimSGTotalCount,
               hwPimSGThreshold,
               hwPimNotificationSrcAddr,
-              hwPimNotificationGrpAddr
+              hwPimNotificationGrpAddr,
+              hwPimNotificationBsrAddr,
+              hwPimNotificationCrpCurrentCount,
+              hwPimNotificationCrpLimit,
+              hwPimNotificationAdminScope
             }
     STATUS  current
     DESCRIPTION
@@ -4444,7 +4610,14 @@ hwPimNetMgmtNotificationGroup NOTIFICATION-GROUP
                     hwPimRpfAssertWinnerFlapping,
                     hwPimRpfAssertWinnerFlappingClear,
                     hwPimGlobalTypeOifThresholdExceed,
-                    hwPimGlobalTypeOifThresholdExceedClear
+                    hwPimGlobalTypeOifThresholdExceedClear,
+                    hwPimSGInactiveThreshold,
+                    hwPimSrcPerGrpNumLimit,
+                    hwPimSrcPerGrpNumLimitClear,
+                    hwBsrCrpReachLimit,
+                    hwBsrCrpReachLimitResume,
+		    hwBsrBsmReachLimit,
+		    hwBsrBsmReachLimitResume
                   }
     STATUS  current
     DESCRIPTION

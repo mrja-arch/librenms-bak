@@ -1,12 +1,7 @@
 --  ===================================================================
--- Copyright (C) 2022 by HUAWEI TECHNOLOGIES. All rights reserved.
---
--- Description:
--- Reference:
--- Version: V3.04
--- History:
--- <z00808233>,<2022-11-03>,<fix syntax problems>
--- ===================================================================
+-- Copyright (C) 2013-2025 by HUAWEI TECHNOLOGIES. All rights reserved.
+-- Version: V8.01
+-- ====================================================================
 	HUAWEI-SECURITY-MIB DEFINITIONS ::= BEGIN
  
 		IMPORTS
@@ -16,14 +11,14 @@
 				FROM P-BRIDGE-MIB			
 			OBJECT-GROUP, MODULE-COMPLIANCE, NOTIFICATION-GROUP			
 				FROM SNMPv2-CONF			
-			Integer32, Unsigned32, IpAddress, OBJECT-TYPE, MODULE-IDENTITY, NOTIFICATION-TYPE			
+			Integer32, Counter64, Unsigned32, IpAddress, OBJECT-TYPE, MODULE-IDENTITY, NOTIFICATION-TYPE			
 				FROM SNMPv2-SMI			
 			DisplayString, DateAndTime			
 				FROM SNMPv2-TC;
 	
 	
 		hwSecurityMIB MODULE-IDENTITY 
-			LAST-UPDATED "202211032045Z"		-- Nov 03, 2022 at 20:45 GMT
+			LAST-UPDATED "202506091735Z"		-- June  9, 2025 at 17:35 GMT
 			ORGANIZATION 
 				"Huawei Technologies Co.,Ltd."
 			CONTACT-INFO 
@@ -33,7 +28,45 @@
 				 People's Republic of China
 				 Website: http://www.huawei.com
 				 Email: support@huawei.com"
+			DESCRIPTION
+				"Huawei secutiy OID MIB definition."
+				
+		
+            REVISION "202506091735Z"		-- June  9, 2025 at 17:35 GMT
+			DESCRIPTION
+                "Correct copyright year errors"
+			REVISION "202504282010Z"		-- April 28, 2025 at 20:10 GMT
+			DESCRIPTION
+                "Modify the SYNTAX value of hwSecurityTrapObject"
+			REVISION "202411061431Z"		-- Sep 06, 2024 at 14:31 GMT
+			DESCRIPTION
+                "Add node for hwLinkupCarTrapObject and hwLinkupCarTrap."	 
+			REVISION "202408141819Z"		-- Aug 14, 2024 at 18:19 GMT
+			DESCRIPTION
+				"Anti-snowslide modify"
+           REVISION "202402011442Z"             -- Feb 1, 2024 at 14:42 GMT
+			DESCRIPTION
+				"Add hwSecurityArpSnoopingTable hwSecurityArpSnpVlan hwSecurityArpSnpCVlan hwSecurityArpSnpIpAddr hwSecurityArpSnpMacAddr hwSecurityArpSnpIfIndex hwSecurityArpSnpExpire"
 
+            REVISION "202311011442Z"             -- Nov 1, 2023 at 14:42 GMT
+			DESCRIPTION
+				"Add hwArpsVbdifGatewayConflic"
+            REVISION "202310061819Z"		-- Oct 6, 2023 at 18:19 GMT
+			DESCRIPTION
+				"Delete the job ID in the file header"
+            REVISION "202308261513Z"		-- Aug 26, 2023 at 15:13 GMT
+			DESCRIPTION
+				"Modify Strom to Storm"
+            REVISION "202307051838Z"		-- July 24, 2023 at 15:25 GMT
+			DESCRIPTION
+				"Add hwStromSuppTrapObject and hwStromSuppTrap and revert the modification of 2022-11-03"
+            REVISION "202307051838Z"		-- July 5, 2023 at 18:38 GMT
+			DESCRIPTION
+				"Delete node for hwBaseSecurityTtlExpiredLoop and hwBaseSecurityTtlExpiredLoopResume"
+            REVISION "202301061106Z"		-- Jan 6, 2023 at 11:06 GMT
+			DESCRIPTION
+				"Modify node for hwL3LoopDetectAlarmVpn and hwL3LoopDetectAlarmVpnResume"
+            REVISION "202211281442Z"		-- Nov 28, 2022 at 14:42 GMT
 			DESCRIPTION
 				"Add OBJECT-GROUP from hwMacFilterModeObjectGroup to hwTrafficSuppressionObjectGroup"
             REVISION "202211032045Z"		-- Nov 03, 2022 at 20:45 GMT
@@ -957,6 +990,8 @@
 				hwSocAttackIPAddr
 					OCTET STRING,
 				hwSocAttackIPv6Addr
+					OCTET STRING,
+				hwSocAttackVniIndex
 					OCTET STRING
 			 }
 
@@ -1049,14 +1084,23 @@
 			DESCRIPTION
 				"This object indicates the attacked IP address."
 			::= { hwSocAttackInfoEntry 10 }
-		
+
+		-- 1.3.6.1.4.1.2011.5.25.165.1.7.1.1.11
+		hwSocAttackVniIndex OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (0..64))
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"This object indicates the VNI of the attack."
+			::= { hwSocAttackInfoEntry 11 }
+
 		-- 1.3.6.1.4.1.2011.5.25.165.1.11
 		hwBaseSecurityNotifications OBJECT IDENTIFIER ::= { hwBaseSecurityMIBObjects 11 }
 		
 		-- 1.3.6.1.4.1.2011.5.25.165.1.11.1
 		hwBaseSecurityUrpfDiscardedRateRising NOTIFICATION-TYPE
-			OBJECTS { hwLocalUrpfCurrentRateLow, hwLocalUrpfCurrentRateHigh, hwLocalUrpfRateThreshold, hwLocalUrpfChassisId, hwLocalUrpfSlotId
-				 }
+			OBJECTS { hwLocalUrpfCurrentRateLow, hwLocalUrpfCurrentRateHigh, hwLocalUrpfNotifyEnabledStatus, hwLocalUrpfRateThreshold, hwLocalUrpfRateInterval,
+			    hwLocalUrpfChassisId, hwLocalUrpfSlotId }
 			STATUS current
 			DESCRIPTION 
 				" This object indicates that the alarm about packet discarding through URPF is generated."
@@ -1064,8 +1108,8 @@
 		
 		-- 1.3.6.1.4.1.2011.5.25.165.1.11.2
 		hwBaseSecurityUrpfDiscardedRateResume NOTIFICATION-TYPE
-			OBJECTS { hwLocalUrpfCurrentRateLow, hwLocalUrpfCurrentRateHigh, hwLocalUrpfRateThreshold, hwLocalUrpfChassisId, hwLocalUrpfSlotId
-				 }
+			OBJECTS { hwLocalUrpfCurrentRateLow, hwLocalUrpfCurrentRateHigh, hwLocalUrpfNotifyEnabledStatus, hwLocalUrpfRateThreshold, hwLocalUrpfRateInterval,
+			    hwLocalUrpfChassisId, hwLocalUrpfSlotId }
 			STATUS current
 			DESCRIPTION 
 				" This object indicates that the alarm about packet discarding through URPF is rectified."
@@ -1136,8 +1180,7 @@
 		-- 1.3.6.1.4.1.2011.5.25.165.1.11.12
 		hwBaseSocAttackTrap NOTIFICATION-TYPE
 			OBJECTS { hwSocAttackSeqNo, hwSocAttackPossib, hwSocAttackReason, hwSocAttackIfName, hwSocAttackSubIfName, 
-				hwSocAttackVlanIndex, hwSocAttackUserQinQIndex, hwSocAttackMacAddr, hwSocAttackIPAddr, hwSocAttackIPv6Addr
-				 }
+				hwSocAttackVlanIndex, hwSocAttackUserQinQIndex, hwSocAttackMacAddr, hwSocAttackIPAddr, hwSocAttackIPv6Addr, hwSocAttackVniIndex }
 			STATUS current
 			DESCRIPTION 
 				"This object indicates that an alarm is generated when the CPU usages of the device and packet delivery process go high and a large number of packets monitored by the Security Management Center are discarded. "
@@ -1146,8 +1189,7 @@
 		-- 1.3.6.1.4.1.2011.5.25.165.1.11.13
 		hwBaseSocAttackResumeTrap NOTIFICATION-TYPE
 			OBJECTS { hwSocAttackSeqNo, hwSocAttackPossib, hwSocAttackReason, hwSocAttackIfName, hwSocAttackSubIfName, 
-				hwSocAttackVlanIndex, hwSocAttackUserQinQIndex, hwSocAttackMacAddr, hwSocAttackIPAddr, hwSocAttackIPv6Addr
-				 }
+				hwSocAttackVlanIndex, hwSocAttackUserQinQIndex, hwSocAttackMacAddr, hwSocAttackIPAddr, hwSocAttackIPv6Addr, hwSocAttackVniIndex }
 			STATUS current
 			DESCRIPTION 
 				"This object indicates that the alarm is cleared when an attack event does not reoccur within half an hour."
@@ -1160,24 +1202,6 @@
 			DESCRIPTION 
 				"This object indicates that the alarm is cleared when an interface loop is removed."
 			::= { hwBaseSecurityNotifications 14 }
-		
-		-- 1.3.6.1.4.1.2011.5.25.165.1.11.15
-		hwBaseSecurityTtlExpiredLoop NOTIFICATION-TYPE
-			OBJECTS { hwTtlExpiredLoopChassisId, hwTtlExpiredLoopSlotId, hwTtlExpiredLoopLastRateLow, hwTtlExpiredLoopLastRateHigh, hwTtlExpiredLoopCurrentRateLow, 
-				hwTtlExpiredLoopCurrentRateHigh, hwTtlExpiredLoopRateInterval, hwTtlExpiredLoopRateThreshold }
-			STATUS current
-			DESCRIPTION 
-				"This object indicates that an alarm is generated when a loop occurs due to TTL timeout."
-			::= { hwBaseSecurityNotifications 15 }
-		
-		-- 1.3.6.1.4.1.2011.5.25.165.1.11.16
-		hwBaseSecurityTtlExpiredLoopResume NOTIFICATION-TYPE
-			OBJECTS { hwTtlExpiredLoopChassisId, hwTtlExpiredLoopSlotId, hwTtlExpiredLoopLastRateLow, hwTtlExpiredLoopLastRateHigh, hwTtlExpiredLoopCurrentRateLow, 
-				hwTtlExpiredLoopCurrentRateHigh, hwTtlExpiredLoopRateInterval, hwTtlExpiredLoopRateThreshold }
-			STATUS current
-			DESCRIPTION 
-				"This object indicates that the alarm generated when a loop occurs due to TTL timeout is cleared."
-			::= { hwBaseSecurityNotifications 16 }
 		
 		-- 1.3.6.1.4.1.2011.5.25.165.1.11.17
 		hwBaseArpVlanCarTrap NOTIFICATION-TYPE
@@ -1265,7 +1289,7 @@
 			
 		-- 1.3.6.1.4.1.2011.5.25.165.1.11.27
 		hwL3LoopDetectAlarmVpn NOTIFICATION-TYPE
-			OBJECTS { hwL3LoopDetectChassisID, hwL3LoopDetectSlotID, hwL3LoopDetectIPAddr, hwL3LoopDetectVpnName
+			OBJECTS { hwL3LoopDetectVpnChassisID, hwL3LoopDetectVpnSlotID, hwL3LoopDetectVpnIPAddr, hwL3LoopDetectVpnName
 				 }
 			STATUS current
 			DESCRIPTION 
@@ -1274,7 +1298,7 @@
 		
 		-- 1.3.6.1.4.1.2011.5.25.165.1.11.28
 		hwL3LoopDetectAlarmVpnResume NOTIFICATION-TYPE
-			OBJECTS { hwL3LoopDetectChassisID, hwL3LoopDetectSlotID, hwL3LoopDetectIPAddr, hwL3LoopDetectVpnName
+			OBJECTS { hwL3LoopDetectVpnChassisID, hwL3LoopDetectVpnSlotID, hwL3LoopDetectVpnIPAddr, hwL3LoopDetectVpnName
 				 }
 			STATUS current
 			DESCRIPTION 
@@ -1540,120 +1564,6 @@
 			DESCRIPTION
 				"This object indicates the VLAN where the ARP flooding attack occurs."
 			::= { hwBaseArpVlanCarInfoEntry 3 }
-		
-		-- 1.3.6.1.4.1.2011.5.25.165.1.15
-		hwTtlExpiredLoop OBJECT IDENTIFIER ::= { hwBaseSecurityMIBObjects 15 }
-		
-		-- 1.3.6.1.4.1.2011.5.25.165.1.15.1
-		hwTtlExpiredLoopTable OBJECT-TYPE
-			SYNTAX SEQUENCE OF HwTtlExpiredLoopEntry
-			MAX-ACCESS not-accessible
-			STATUS current
-			DESCRIPTION
-				"A Table about TTL-expired loop information."
-			::= { hwTtlExpiredLoop 1 }
-		
-		-- 1.3.6.1.4.1.2011.5.25.165.1.15.1.1
-		hwTtlExpiredLoopEntry OBJECT-TYPE
-			SYNTAX HwTtlExpiredLoopEntry
-			MAX-ACCESS not-accessible
-			STATUS current
-			DESCRIPTION
-				"Description."
-			INDEX { hwTtlExpiredLoopChassisId, hwTtlExpiredLoopSlotId }
-			::= { hwTtlExpiredLoopTable 1 }
-		
-		HwTtlExpiredLoopEntry ::=
-			SEQUENCE { 
-				hwTtlExpiredLoopChassisId
-					Unsigned32,
-				hwTtlExpiredLoopSlotId
-					Unsigned32,
-				hwTtlExpiredLoopLastRateLow
-					Unsigned32,
-				hwTtlExpiredLoopLastRateHigh
-					Unsigned32,
-				hwTtlExpiredLoopCurrentRateLow
-					Unsigned32,
-				hwTtlExpiredLoopCurrentRateHigh
-					Unsigned32,
-				hwTtlExpiredLoopRateInterval
-					Unsigned32,
-				hwTtlExpiredLoopRateThreshold
-					Unsigned32
-			 }
-
-		-- 1.3.6.1.4.1.2011.5.25.165.1.15.1.1.1
-		hwTtlExpiredLoopChassisId OBJECT-TYPE
-			SYNTAX Unsigned32
-			MAX-ACCESS accessible-for-notify
-			STATUS current
-			DESCRIPTION
-				"The chassis ID indicates the chassis ttl-expired loop occur."
-			::= { hwTtlExpiredLoopEntry 1 }
-		
-		-- 1.3.6.1.4.1.2011.5.25.165.1.15.1.1.2
-		hwTtlExpiredLoopSlotId OBJECT-TYPE
-			SYNTAX Unsigned32
-			MAX-ACCESS accessible-for-notify
-			STATUS current
-			DESCRIPTION
-				"The slot ID indicates the slot ttl-expired loop occur."
-			::= { hwTtlExpiredLoopEntry 2 }
-		
-		-- 1.3.6.1.4.1.2011.5.25.165.1.15.1.1.3
-		hwTtlExpiredLoopLastRateLow OBJECT-TYPE
-			SYNTAX Unsigned32
-			MAX-ACCESS read-only
-			STATUS current
-			DESCRIPTION
-				"The lower 32 bits of last discard bytes."
-			::= { hwTtlExpiredLoopEntry 3 }
-		
-		-- 1.3.6.1.4.1.2011.5.25.165.1.15.1.1.4
-		hwTtlExpiredLoopLastRateHigh OBJECT-TYPE
-			SYNTAX Unsigned32
-			MAX-ACCESS read-only
-			STATUS current
-			DESCRIPTION
-				"The high 32 bits of last discard bytes."
-			::= { hwTtlExpiredLoopEntry 4 }
-		
-		-- 1.3.6.1.4.1.2011.5.25.165.1.15.1.1.5
-		hwTtlExpiredLoopCurrentRateLow OBJECT-TYPE
-			SYNTAX Unsigned32
-			MAX-ACCESS read-only
-			STATUS current
-			DESCRIPTION
-				"The lower 32 bits of current discard bytes."
-			::= { hwTtlExpiredLoopEntry 5 }
-		
-		-- 1.3.6.1.4.1.2011.5.25.165.1.15.1.1.6
-		hwTtlExpiredLoopCurrentRateHigh OBJECT-TYPE
-			SYNTAX Unsigned32
-			MAX-ACCESS read-only
-			STATUS current
-			DESCRIPTION
-				"The high 32 bits of current discard bytes."
-			::= { hwTtlExpiredLoopEntry 6 }
-		
-		-- 1.3.6.1.4.1.2011.5.25.165.1.15.1.1.7
-		hwTtlExpiredLoopRateInterval OBJECT-TYPE
-			SYNTAX Unsigned32
-			MAX-ACCESS read-only
-			STATUS current
-			DESCRIPTION
-				"Interval."
-			::= { hwTtlExpiredLoopEntry 7 }
-		
-		-- 1.3.6.1.4.1.2011.5.25.165.1.15.1.1.8
-		hwTtlExpiredLoopRateThreshold OBJECT-TYPE
-			SYNTAX Unsigned32
-			MAX-ACCESS read-only
-			STATUS current
-			DESCRIPTION
-				"Threshold."
-			::= { hwTtlExpiredLoopEntry 8 }
 		
 		-- 1.3.6.1.4.1.2011.5.25.165.1.16
 		hwAntiAttack OBJECT IDENTIFIER ::= { hwBaseSecurityMIBObjects 16 }
@@ -1960,13 +1870,72 @@
 		hwL3LoopDetectVpnObject OBJECT IDENTIFIER ::= { hwBaseSecurityMIBObjects 20 }
 
 		-- 1.3.6.1.4.1.2011.5.25.165.1.20.1
+		hwL3LoopDetectVpnTable OBJECT-TYPE
+			SYNTAX SEQUENCE OF HwL3LoopDetectVpnEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"A Table about l3 loop detect information."
+			::= { hwL3LoopDetectVpnObject 1 }
+
+		-- 1.3.6.1.4.1.2011.5.25.165.1.20.1.1
+		hwL3LoopDetectVpnEntry OBJECT-TYPE
+			SYNTAX HwL3LoopDetectVpnEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"Description."
+			INDEX { hwL3LoopDetectVpnChassisID, hwL3LoopDetectVpnSlotID, hwL3LoopDetectVpnIPAddr, hwL3LoopDetectVpnName
+				 }
+			::= { hwL3LoopDetectVpnTable 1 }
+		
+		HwL3LoopDetectVpnEntry ::=
+			SEQUENCE { 
+				hwL3LoopDetectVpnChassisID
+					Integer32,
+				hwL3LoopDetectVpnSlotID
+					Integer32,
+				hwL3LoopDetectVpnIPAddr
+					OCTET STRING,
+				hwL3LoopDetectVpnName
+					OCTET STRING
+			 }
+
+		-- 1.3.6.1.4.1.2011.5.25.165.1.20.1.1.1
+		hwL3LoopDetectVpnChassisID OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"The chassis ID indicates the chassis L3 loop occur."
+			::= {hwL3LoopDetectVpnEntry 1 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.165.1.20.1.1.2
+		hwL3LoopDetectVpnSlotID OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"The slot ID indicates the slot L3 loop occur."
+			::= { hwL3LoopDetectVpnEntry 2 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.165.1.20.1.1.3
+		hwL3LoopDetectVpnIPAddr OBJECT-TYPE
+			SYNTAX OCTET STRING 
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"IP address."
+			::= { hwL3LoopDetectVpnEntry 3 }
+
+		-- 1.3.6.1.4.1.2011.5.25.165.1.20.1.1.4
 		hwL3LoopDetectVpnName OBJECT-TYPE
 			SYNTAX OCTET STRING 
 			MAX-ACCESS read-only
 			STATUS current
 			DESCRIPTION
 				"Vpn name."
-			::= { hwL3LoopDetectVpnObject 1 }
+			::= { hwL3LoopDetectVpnEntry 4 }
 
 		-- 1.3.6.1.4.1.2011.5.25.165.2
 		hwMeSecurityMIBObjects OBJECT IDENTIFIER ::= { hwSecurityMIB 2 }
@@ -2178,7 +2147,7 @@
 		
 		-- 1.3.6.1.4.1.2011.5.25.165.2.1.3.1
 		hwIpsgPacketDropNum OBJECT-TYPE
-			SYNTAX Integer32
+			SYNTAX Counter64
 			MAX-ACCESS accessible-for-notify
 			STATUS current
 			DESCRIPTION
@@ -2823,6 +2792,23 @@
 					"The actual percentage of time below health threshold."
 				::= { hwAccessRateRemainsLowTrapObject 5 }
 
+            -- 1.3.6.1.4.1.2011.5.25.165.2.1.18.6
+			hwAccessRateRemainsLowUpId OBJECT-TYPE
+				SYNTAX Integer32
+				MAX-ACCESS accessible-for-notify
+				STATUS current
+				DESCRIPTION
+					"User plane id."
+				::= { hwAccessRateRemainsLowTrapObject 6 }
+
+            -- 1.3.6.1.4.1.2011.5.25.165.2.1.18.7
+			hwAccessRateRemainsLowInstanceId OBJECT-TYPE
+				SYNTAX Integer32
+				MAX-ACCESS accessible-for-notify
+				STATUS current
+				DESCRIPTION
+					"Indicate which one instance."
+				::= { hwAccessRateRemainsLowTrapObject 7 }
                -- 1.3.6.1.4.1.2011.5.25.165.2.1.19
 			hwEngineFlowTrapObject OBJECT IDENTIFIER ::= { hwSecurityTrapObject 19 }
 
@@ -2900,6 +2886,98 @@
 				DESCRIPTION
 					"Description."
 				::= { hwEngineAppFeatureTrapObject 4 }
+
+                        hwStormSuppTrapObject OBJECT IDENTIFIER ::= { hwSecurityTrapObject 21 }
+
+			hwStormSuppIfName OBJECT-TYPE
+				SYNTAX OCTET STRING
+				MAX-ACCESS accessible-for-notify
+				STATUS current
+				DESCRIPTION
+					"The interface name of storm suppression."
+				::= { hwStormSuppTrapObject 1 }
+
+			hwStormSupptVsiId OBJECT-TYPE
+				SYNTAX Unsigned32
+				MAX-ACCESS accessible-for-notify
+				STATUS current
+				DESCRIPTION
+					"The vsi id of storm suppression"
+				::= { hwStormSuppTrapObject 2 }
+
+			hwStormSuppPktType OBJECT-TYPE
+				SYNTAX OCTET STRING
+				MAX-ACCESS accessible-for-notify
+				STATUS current
+				DESCRIPTION
+					"The packet type of storm suppression"
+				::= { hwStormSuppTrapObject 3 }
+			
+			hwStormSuppThreshold OBJECT-TYPE
+				SYNTAX Unsigned32
+				MAX-ACCESS accessible-for-notify
+				STATUS current
+				DESCRIPTION
+					"The threshold of storm suppression."
+				::= { hwStormSuppTrapObject 4 }
+			
+			hwStormSuppMode OBJECT-TYPE
+				SYNTAX OCTET STRING
+				
+				MAX-ACCESS accessible-for-notify
+				STATUS current
+				DESCRIPTION
+					"The mode of storm suppression."
+				::= { hwStormSuppTrapObject 5 }
+			
+				
+			hwStormSuppDropCnt OBJECT-TYPE
+				SYNTAX Counter64
+				MAX-ACCESS accessible-for-notify
+				STATUS current
+				DESCRIPTION
+					"The drop packet count of storm suppression."
+
+                                ::= { hwStormSuppTrapObject 6 }
+
+		-- 1.3.6.1.4.1.2011.5.25.165.2.1.23
+		hwLinkupCarTrapObject OBJECT IDENTIFIER ::= { hwSecurityTrapObject 23 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.165.2.1.23.1
+		hwLinkupCarDropPacketSlotStr OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (0..32))
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"The slot in which rate of packets to cpu exceeded the linkup car limit."
+			::= { hwLinkupCarTrapObject 1 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.165.2.1.23.2
+		hwLinkupCarDropPacketProtocol OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (0..32))
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"Rate of packets of the protocol exceeded the linkup car limit."
+			::= { hwLinkupCarTrapObject 2 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.165.2.1.23.3
+		hwLinkupCarDropPacketCir OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"Committed information rate."
+			::= { hwLinkupCarTrapObject 3 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.165.2.1.23.4
+		hwLinkupCarDropPacketNum OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (0..32))
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"The number of packets discarded by linkup car."
+			::= { hwLinkupCarTrapObject 4 }
 
 		-- 1.3.6.1.4.1.2011.5.25.165.2.2
 		hwSecurityTraps OBJECT IDENTIFIER ::= { hwMeSecurityMIBObjects 2 }
@@ -3102,7 +3180,15 @@
 			DESCRIPTION 
 				"The alarm of VLAN Dai."
 			::= { hwArpsTrap 17 }
-            
+
+        -- 1.3.6.1.4.1.2011.5.25.165.2.2.2.18
+        hwArpsVbdifGatewayConflict NOTIFICATION-TYPE
+            OBJECTS { hwArpsSourceInterface, hwArpsSourceIp, hwArpsSourceMac, hwArpsBD }
+            STATUS current
+            DESCRIPTION 
+                "VBDIF gateway conflict."
+            ::= { hwArpsTrap 18 }
+
 		-- 1.3.6.1.4.1.2011.5.25.165.2.2.3
 		hwIpsgTrap OBJECT IDENTIFIER ::= { hwSecurityTraps 3 }
 		
@@ -3445,6 +3531,42 @@
             "Access rate remains low alarm cleared."
         ::= { hwAccessRateTrap 2 } 
 
+        -- 1.3.6.1.4.1.2011.5.25.165.2.2.18.3
+        hwCuFirstAccessRateRemainsLowAlarm NOTIFICATION-TYPE
+        OBJECTS { hwAccessRateRemainsLowSlot, hwAccessRateRemainsLowUpId, hwAccessRateRemainsLowInterval, hwAccessRateRemainsLowThreshold, hwAccessRateRemainsLowConfigPercent, hwAccessRateRemainsLowActualPercent
+             }
+        STATUS current
+        DESCRIPTION 
+            "First access rate remains low alarmed."
+        ::= { hwAccessRateTrap 3 }
+ 
+        -- 1.3.6.1.4.1.2011.5.25.165.2.2.18.4
+        hwCuFirstAccessRateRemainsLowAlarmResume NOTIFICATION-TYPE
+        OBJECTS { hwAccessRateRemainsLowSlot, hwAccessRateRemainsLowUpId, hwAccessRateRemainsLowInterval, hwAccessRateRemainsLowThreshold, hwAccessRateRemainsLowConfigPercent, hwAccessRateRemainsLowActualPercent
+             }
+        STATUS current
+        DESCRIPTION 
+            "First access rate remains low alarm cleared."
+        ::= { hwAccessRateTrap 4 }
+ 
+        -- 1.3.6.1.4.1.2011.5.25.165.2.2.18.5
+        hwCuSecondAccessRateRemainsLowAlarm NOTIFICATION-TYPE
+        OBJECTS { hwAccessRateRemainsLowSlot, hwAccessRateRemainsLowInstanceId, hwAccessRateRemainsLowInterval, hwAccessRateRemainsLowThreshold, hwAccessRateRemainsLowConfigPercent, hwAccessRateRemainsLowActualPercent
+             }
+        STATUS current
+        DESCRIPTION 
+            "Second access rate remains low alarmed."
+        ::= { hwAccessRateTrap 5 }
+ 
+        -- 1.3.6.1.4.1.2011.5.25.165.2.2.18.6
+        hwCuSecondAccessRateRemainsLowAlarmResume NOTIFICATION-TYPE
+        OBJECTS { hwAccessRateRemainsLowSlot, hwAccessRateRemainsLowInstanceId, hwAccessRateRemainsLowInterval, hwAccessRateRemainsLowThreshold, hwAccessRateRemainsLowConfigPercent, hwAccessRateRemainsLowActualPercent
+             }
+        STATUS current
+        DESCRIPTION 
+            "Second access rate remains low alarm cleared."
+        ::= { hwAccessRateTrap 6 } 
+ 
         	-- 1.3.6.1.4.1.2011.5.25.165.2.2.19
 		hwEngineFlowTrap OBJECT IDENTIFIER ::= { hwSecurityTraps 19 }
 
@@ -3492,6 +3614,74 @@
 			DESCRIPTION 
 				"SSH attack occurred."
 			::= { hwSSHAttackTrap 1 }
+
+
+		hwStormSuppTrap OBJECT IDENTIFIER ::= { hwSecurityTraps 22 }
+			
+		hwStormSuppIfmAlarm NOTIFICATION-TYPE
+				OBJECTS { hwStormSuppIfName, hwStormSuppPktType,  hwStormSuppThreshold, hwStormSuppMode,  hwStormSuppDropCnt }
+				STATUS current
+				DESCRIPTION 
+					"The alarm of interface storm suppression drop packets."
+				::= { hwStormSuppTrap 1 }	
+			
+		hwStormSuppIfmAlarmResume NOTIFICATION-TYPE
+				OBJECTS { hwStormSuppIfName, hwStormSuppPktType,  hwStormSuppThreshold, hwStormSuppMode }
+				STATUS current
+				DESCRIPTION 
+					"The resume alarm of interface storm suppression drop packets."
+				::= { hwStormSuppTrap 2 }
+				
+		hwStormSuppVlanAlarm NOTIFICATION-TYPE
+				OBJECTS { hwStormSupptVsiId, hwStormSuppPktType,  hwStormSuppThreshold, hwStormSuppMode,  hwStormSuppDropCnt }
+				STATUS current
+				DESCRIPTION 
+					"The alarm of vlan storm suppression drop packets."
+				::= { hwStormSuppTrap 3 }	
+			
+		hwStormSuppVlanAlarmResume NOTIFICATION-TYPE
+				OBJECTS { hwStormSupptVsiId, hwStormSuppPktType,  hwStormSuppThreshold, hwStormSuppMode }
+				STATUS current
+				DESCRIPTION 
+					"The resume alarm of vlan storm suppression drop packets."
+				::= { hwStormSuppTrap 4 }
+			
+		hwStormSuppBdAlarm NOTIFICATION-TYPE
+				OBJECTS { hwStormSupptVsiId, hwStormSuppPktType,  hwStormSuppThreshold, hwStormSuppMode,  hwStormSuppDropCnt }
+				STATUS current
+				DESCRIPTION 
+					"The alarm of bd storm suppression drop packets."
+				::= { hwStormSuppTrap 5 }	
+			
+		hwStormSuppBdAlarmResume NOTIFICATION-TYPE
+				OBJECTS { hwStormSupptVsiId, hwStormSuppPktType,  hwStormSuppThreshold, hwStormSuppMode }
+				STATUS current
+				DESCRIPTION 
+					"The resume alarm of bd storm suppression drop packets."
+				::= { hwStormSuppTrap 6 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.165.2.2.23
+		hwLinkupCarTrap OBJECT IDENTIFIER ::= { hwSecurityTraps 23 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.165.2.2.23.1
+		hwLinkupCarDropPacketAlarm NOTIFICATION-TYPE
+			OBJECTS { hwLinkupCarDropPacketSlotStr, hwLinkupCarDropPacketProtocol, hwLinkupCarDropPacketCir, hwLinkupCarDropPacketNum
+				 }
+			STATUS current
+			DESCRIPTION 
+				"The alarm of linkup car drop packets."
+			::= { hwLinkupCarTrap 1 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.165.2.2.23.2
+		hwLinkupCarDropPacketAlarmResume NOTIFICATION-TYPE
+			OBJECTS { hwLinkupCarDropPacketSlotStr, hwLinkupCarDropPacketProtocol, hwLinkupCarDropPacketCir, hwLinkupCarDropPacketNum
+				 }
+			STATUS current
+			DESCRIPTION 
+				"The resume alarm of linkup car drop packets."
+			::= { hwLinkupCarTrap 2 }
+				
+
 
 		-- 1.3.6.1.4.1.2011.5.25.165.2.3
 		hwTrafficSuppression OBJECT IDENTIFIER ::= { hwMeSecurityMIBObjects 3 }
@@ -3543,6 +3733,98 @@
 				that the broadcast isn't suppressed."
 			::= { hwTrafficSuppressionEntry 2 }
 		
+                -- 1.3.6.1.4.1.2011.5.25.165.2.4
+		hwSecurityArpSnoopingObject OBJECT IDENTIFIER ::= { hwMeSecurityMIBObjects 4 }
+
+		-- 1.3.6.1.4.1.2011.5.25.165.2.4.1
+		hwSecurityArpSnoopingTable OBJECT-TYPE
+			SYNTAX SEQUENCE OF HwSecurityArpSnoopingEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"A Table about arp snooping information."
+			::= { hwSecurityArpSnoopingObject 1 }
+
+		-- 1.3.6.1.4.1.2011.5.25.165.2.4.1.1
+		hwSecurityArpSnoopingEntry OBJECT-TYPE
+			SYNTAX HwSecurityArpSnoopingEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"Description."
+			INDEX { hwSecurityArpSnpVlan, hwSecurityArpSnpCVlan, hwSecurityArpSnpIpAddr }
+			::= { hwSecurityArpSnoopingTable 1 }
+		
+		HwSecurityArpSnoopingEntry ::=
+			SEQUENCE { 
+				hwSecurityArpSnpVlan
+					Integer32,
+				hwSecurityArpSnpCVlan
+					Integer32,
+				hwSecurityArpSnpIpAddr
+					Integer32,
+				hwSecurityArpSnpIfIndex
+					Integer32,
+				hwSecurityArpSnpMacAddr
+					OCTET STRING,
+				hwSecurityArpSnpExpire
+					Integer32
+			 }
+
+		-- 1.3.6.1.4.1.2011.5.25.165.2.4.1.1.1
+		hwSecurityArpSnpVlan OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"The outer vlan of arp snooping entry."
+			::= {hwSecurityArpSnoopingEntry 1 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.165.2.4.1.1.2
+		hwSecurityArpSnpCVlan OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"The inner vlan of arp snooping entry."
+			::= { hwSecurityArpSnoopingEntry 2 }
+		
+		-- 1.3.6.1.4.1.2011.5.25.165.2.4.1.1.3
+		hwSecurityArpSnpIpAddr OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"The ip address of arp snooping entry."
+			::= { hwSecurityArpSnoopingEntry 3 }
+
+		-- 1.3.6.1.4.1.2011.5.25.165.2.4.1.1.4
+		hwSecurityArpSnpIfIndex OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"The interface index of arp snooping entry."
+			::= { hwSecurityArpSnoopingEntry 4 }
+
+		-- 1.3.6.1.4.1.2011.5.25.165.2.4.1.1.5
+		hwSecurityArpSnpMacAddr OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (6))
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"The mac address of arp snooping entry."
+			::= { hwSecurityArpSnoopingEntry 5 }
+
+		-- 1.3.6.1.4.1.2011.5.25.165.2.4.1.1.6
+		hwSecurityArpSnpExpire OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"The expire time of arp snooping entry."
+			::= { hwSecurityArpSnoopingEntry 6 }
+
 		-- 1.3.6.1.4.1.2011.5.25.165.11
 		hwSecurityConformance OBJECT IDENTIFIER ::= { hwSecurityMIB 11 }
 		
@@ -3604,7 +3886,7 @@
 		hwBaseSecurityNotificationsObjectGroup NOTIFICATION-GROUP
 			NOTIFICATIONS { hwBaseSecurityUrpfDiscardedRateRising, hwBaseSecurityUrpfDiscardedRateResume, hwBaseSecurityTcpIpAttackDiscardedRateRising, hwBaseSecurityTcpIpAttackDiscardedRateResume, hwBaseSecurityMaDiscardedRateRising, 
 				hwBaseSecurityMaDiscardedRateResume, hwBaseSecurityApplicationApperceiveDiscardedRateRising, hwBaseSecurityApplicationApperceiveDiscardedRateResume, hwBaseSecurityStormControlInterface, hwBaseSocAttackTrap, 
-				hwBaseSocAttackResumeTrap, hwBaseSecurityStormControlInterfaceResume, hwBaseSecurityTtlExpiredLoop, hwBaseSecurityTtlExpiredLoopResume, hwBaseArpVlanCarTrap, 
+				hwBaseSocAttackResumeTrap, hwBaseSecurityStormControlInterfaceResume, hwBaseArpVlanCarTrap, 
 				hwBaseArpVlanCarResumeTrap, hwBaseSecurityAntiAttackRateRising, hwBaseSecurityAntiAttackRateResume, hwBaseArpVlanCarEnhanceTrap, hwBaseArpVlanCarEnhanceResumeTrap, hwL3LoopDetectAlarm, hwL3LoopDetectAlarmResume, hwBaseNdVlanCarTrap, hwBaseNdVlanCarResumeTrap, hwL3LoopDetectAlarmVpn, hwL3LoopDetectAlarmVpnResume
 				 }
 			STATUS current
@@ -3615,7 +3897,7 @@
 		-- 1.3.6.1.4.1.2011.5.25.165.11.2.7
 		hwMeSecurityObjectGroup OBJECT-GROUP
 			OBJECTS { hwStrackTotalPacket, hwStrackEndTime, hwStrackSourceMac, hwStrackPacketPVlan, hwStrackPacketCVlan, 
-				hwStrackPacketIfName, hwStrackSourceIp, hwStrackSlotid, hwStrackNormalAverage, hwStrackActualRate, hwStrackPacketType, hwArpsSourceInterface, hwArpsSourceIp, hwArpsSourceMac, 
+				hwStrackPacketIfName, hwStrackSourceIp, hwArpsSourceInterface, hwArpsSourceIp, hwArpsSourceMac, 
 				hwArpsPVlan, hwArpsCVlan, hwArpsPacketDropNum, hwArpsAlarmThreshold, hwArpsBlockTime, hwArpsBD, hwArpsPktInfo,
 				hwIpsgPacketDropNum, hwIpsgAlarmThreshold, hwIpsgSourceInterface, hwIpsgVlan, hwIpsgPktInfo, hwIpsgPercent, hwIpsgSlot, hwIcmpPacketDropNum, hwIcmpAlarmThreshold, 
 				hwIcmpSourceInterface, hwDapPortChange, hwCfgApUserName, hwCfgApIPAddress, hwCfgApApID, 
@@ -3624,11 +3906,8 @@
 				hwStrackPortPacketType, hwCpcarAutoDefendIfName, hwCpcarAutoDefendSlotStr, hwCpcarAutoDefendProtocol, hwCpcarAutoDefendReasonDescription, hwCpcarReduceCarSlotStr, hwDapDeviceIP,
 				hwOlcSlotStr, hwOlcThreshold1, hwOlcCurrentCpuUsage, hwOlcCpuSampleCycle, 
 				hwEngineCurrSessNum, hwPPEDropPacketSlotStr,  hwPPEDropPacketNum, hwAutoPortViaMflpSlotStr, hwAutoPortViaMflpProtocol, hwAutoPortViaMflpIfName, hwAutoPortViaMflpReasonDescription, 
-				hwWeakEAConfigExist, hwTerminalIfName, hwTerminalSourceMac, hwTerminalType, hwTerminalSourceIp, hwTerminalNumMaximum, 
-				hwSessionCarProtoType, hwSessionCarSrcIP, hwSessionCarDstIP, hwSessionCarSrcIPV6, hwSessionCarDstIPV6, hwSessionCarSrcPort, hwSessionCarDstPort, hwSessionCarSrcMAC, hwSessionCarDstMAC,
-				hwL3LoopDetectVpnName, hwAccessRateRemainsLowSlot, hwAccessRateRemainsLowInterval, hwAccessRateRemainsLowThreshold, hwAccessRateRemainsLowConfigPercent, hwAccessRateRemainsLowActualPercent,
-				hwEngineFlowSlot, hwEngineFlowTotalNum, hwEngineFlowUsedNum, hwEngineFlowThreshold,
-				hwEngineAppFeatureSlot, hwEngineAppFeatureTotalNum, hwEngineAppFeatureUsedNum, hwEngineAppFeatureThreshold
+				hwStormSuppIfName, hwStormSupptVsiId, hwStormSuppPktType, hwStormSuppThreshold, hwStormSuppMode, hwStormSuppDropCnt,
+				hwLinkupCarDropPacketSlotStr, hwLinkupCarDropPacketProtocol, hwLinkupCarDropPacketCir, hwLinkupCarDropPacketNum
 				}
 			STATUS current
 			DESCRIPTION 
@@ -3637,19 +3916,19 @@
 		
 		-- 1.3.6.1.4.1.2011.5.25.165.11.2.8
 		hwMeSecurityTrapGroup NOTIFICATION-GROUP
-			NOTIFICATIONS { hwStrackUserInfo, hwStrackIfVlanInfo, hwStrackDenyPacket, hwStrackErrorDown, hwStrackIpInfo, hwStrackUserAbnormal,
+			NOTIFICATIONS { hwStrackUserInfo, hwStrackIfVlanInfo, hwStrackDenyPacket, hwStrackErrorDown, hwStrackIpInfo,
 				hwArpsGatewayConflict, hwArpsEntryCheck, hwArpsPacketCheck, hwArpsDaiDropALarm, hwArpGlobleSpeedLimitALarm, 
 				hwArpIfSpeedLimitALarm, hwArpVlanSpeedLimitALarm, hwArpMissGlobleSpeedLimitALarm, hwArpMissIfSpeedLimitALarm, hwArpMissVlanSpeedLimitALarm, 
-				hwArpSourceIpSpeedLimitALarm, hwArpMissSourceIpSpeedLimitALarm, hwArpIfRateLimitBlockALarm, hwArpsLearnStrictCheck, hwArpSourceMacSpeedLimitALarm, hwArpsDaiBDDropALarm, hwArpsDaiVlanDropALarm,
+				hwArpSourceIpSpeedLimitALarm, hwArpMissSourceIpSpeedLimitALarm, hwArpIfRateLimitBlockALarm, hwArpsLearnStrictCheck, hwArpSourceMacSpeedLimitALarm, hwArpsDaiBDDropALarm, hwArpsDaiVlanDropALarm, hwArpsVbdifGatewayConflict,
 				hwIpsgDropALarm, hwIpsgVlanDropALarm, hwIpsgv4ResourceALarm, hwIpsgv4ResourceResume, hwIpsgv6ResourceALarm, hwIpsgv6ResourceResume, hwIcmpGlobleDropALarm, hwIcmpIfDropALarm, hwDapMibPortChange, hwCfgApTrapFailAlarm, 
 				hwCpcarDropPacketAlarm, hwMACsecFailNotify, hwStrackPortAtk, hwTeSourceInterfaceCheckAlarm, hwTeSourceInterfaceCheckResume,hwCpcarDropPacketAlarmResume, hwCpcarAutoPortDefendAlarm,
 				hwCpcarAutoPortDefendAlarmResume, hwCpcarReduceCarAlarm, hwCpcarReduceCarAlarmResume, hwDapMibAuthRequest, 
 				hwOlcStartAlarm, hwOlcStopAlarm, 
 				hwEngineSessThresholdAlarm, hwEngineSessThresholdResume,
-                hwPPEDropPacketAlarm, hwPPEDropPacketAlarmResume, hwSessionCarAttackInfo, hwAutoPortDefendViaMflpAlarm, hwAutoPortDefendViaMflpAlarmResume,
-                hwWeakEAConfigAlarm, hwTerminalStatusAbnormal, hwTerminalStatusResume, hwTerminalNumAlarm,
-				hwAccessRateRemainsLowAlarm, hwAccessRateRemainsLowAlarmResume, hwEngineFlowAlarm, hwEngineFlowAlarmResume, hwEngineAppFeatureAlarm, hwEngineAppFeatureAlarmResume,
-				hwSSHAttackAlarm
+                                hwPPEDropPacketAlarm, hwPPEDropPacketAlarmResume, hwSessionCarAttackInfo, hwAutoPortDefendViaMflpAlarm, hwAutoPortDefendViaMflpAlarmResume,
+                                hwStormSuppIfmAlarm, hwStormSuppIfmAlarmResume, hwStormSuppVlanAlarm, hwStormSuppVlanAlarmResume, hwStormSuppBdAlarm, hwStormSuppBdAlarmResume,
+                                hwCuFirstAccessRateRemainsLowAlarm, hwCuFirstAccessRateRemainsLowAlarmResume, hwCuSecondAccessRateRemainsLowAlarm, hwCuSecondAccessRateRemainsLowAlarmResume,
+								hwLinkupCarDropPacketAlarm,hwLinkupCarDropPacketAlarmResume
 				 }
 			STATUS current
 			DESCRIPTION 
@@ -3658,7 +3937,7 @@
 		
 		-- 1.3.6.1.4.1.2011.5.25.165.11.2.9
 		hwDefdPortVlanObjectGroup OBJECT-GROUP
-			OBJECTS { hwDefdPortVlanIfName, hwDefdPortVlanId, hwDefdPortVlanCheckProtocol, hwDefdPortVlanIfIndex }
+			OBJECTS { hwDefdPortVlanIfName, hwDefdPortVlanId, hwDefdPortVlanCheckProtocol}
 			STATUS current
 			DESCRIPTION 
 				"The alarm parameter of l2 ring-route ."
@@ -3667,8 +3946,7 @@
 		-- 1.3.6.1.4.1.2011.5.25.165.11.2.11
 		hwSocAttackTrapGroup OBJECT-GROUP
 			OBJECTS { hwSocAttackSeqNo, hwSocAttackPossib, hwSocAttackReason, hwSocAttackIfName, hwSocAttackSubIfName, 
-				hwSocAttackVlanIndex, hwSocAttackUserQinQIndex, hwSocAttackMacAddr, hwSocAttackIPAddr, hwSocAttackIPv6Addr
-				 }
+				hwSocAttackVlanIndex, hwSocAttackUserQinQIndex, hwSocAttackMacAddr, hwSocAttackIPAddr, hwSocAttackIPv6Addr, hwSocAttackVniIndex }
 			STATUS current
 			DESCRIPTION 
 				"The alarm parameter of Security Operation Center"
@@ -3689,81 +3967,6 @@
 			DESCRIPTION 
 				"A collection of items of te source interface check."
 			::= { hwBaseSecurityGroups 13 }
-
-		-- 1.3.6.1.4.1.2011.5.25.165.11.2.14
-		hwMacFilterModeObjectGroup OBJECT-GROUP
-			OBJECTS { hwMacFilterInterface, hwMacFilterEnableMode, hwMacFilterMatchNum, hwMacFilterIfIndex }
-			STATUS current
-			DESCRIPTION 
-				"A collection of items of Mac Filter Mode."
-			::= { hwBaseSecurityGroups 14 }
-			
-		-- 1.3.6.1.4.1.2011.5.25.165.11.2.15
-		hwMacFilterAddrObjectGroup OBJECT-GROUP
-			OBJECTS { hwMacFilterInterfaceBuf, hwMacFilterMacAddr, hwMacFilterIfindex }
-			STATUS current
-			DESCRIPTION 
-				"A collection of items of Mac Filter Addr."
-			::= { hwBaseSecurityGroups 15 }
-			
-		-- 1.3.6.1.4.1.2011.5.25.165.11.2.16
-		hwBaseSecurityStormControlInterfaceObjectGroup OBJECT-GROUP
-			OBJECTS { hwBaseSecurityStormControlInterfaceChassisId, hwBaseSecurityStormControlInterfaceSlotId, hwBaseSecurityStormControlInterfaceName, hwBaseSecurityStormControlInterfaceVlanID }
-			STATUS current
-			DESCRIPTION 
-				"A collection of items of Base Security Storm Control Interface."
-			::= { hwBaseSecurityGroups 16 }
-			
-		-- 1.3.6.1.4.1.2011.5.25.165.11.2.17
-		hwBaseArpVlanCarInfoObjectGroup OBJECT-GROUP
-			OBJECTS { hwBaseArpVlanCarLogIfName, hwBaseArpVlanCarPhyIfName, hwBaseArpVlanCarVlanId }
-			STATUS current
-			DESCRIPTION 
-				"A collection of items of Base Arp Vlan Car Info."
-			::= { hwBaseSecurityGroups 17 }
-			
-		-- 1.3.6.1.4.1.2011.5.25.165.11.2.18
-		hwTtlExpiredLoopObjectGroup OBJECT-GROUP
-			OBJECTS { hwTtlExpiredLoopChassisId, hwTtlExpiredLoopSlotId, hwTtlExpiredLoopLastRateLow, hwTtlExpiredLoopLastRateHigh, 
-					hwTtlExpiredLoopCurrentRateLow, hwTtlExpiredLoopCurrentRateHigh, hwTtlExpiredLoopRateInterval, hwTtlExpiredLoopRateThreshold 
-				}
-			STATUS current
-			DESCRIPTION 
-				"A collection of items of Ttl Expired Loop."
-			::= { hwBaseSecurityGroups 18 }
-			
-		-- 1.3.6.1.4.1.2011.5.25.165.11.2.19
-		hwBaseArpVlanCarEnhanceInfoObjectGroup OBJECT-GROUP
-			OBJECTS { hwBaseArpVlanCarEnhanceLogIfName, hwBaseArpVlanCarEnhancePhyIfName, hwBaseArpVlanCarEnhancePeVlanId, hwBaseArpVlanCarEnhanceCeVlanId, 
-					hwBaseArpVlanCarEnhanceSampleRate }
-			STATUS current
-			DESCRIPTION 
-				"A collection of items of Base Arp Vlan Car Enhance Info."
-			::= { hwBaseSecurityGroups 19 }
-			
-		-- 1.3.6.1.4.1.2011.5.25.165.11.2.20
-		hwL3LoopDetectObjectGroup OBJECT-GROUP
-			OBJECTS { hwL3LoopDetectChassisID, hwL3LoopDetectSlotID, hwL3LoopDetectIPAddr }
-			STATUS current
-			DESCRIPTION 
-				"A collection of items of L3 Loop Detect."
-			::= { hwBaseSecurityGroups 20 }
-			
-		-- 1.3.6.1.4.1.2011.5.25.165.11.2.21
-		hwBaseNdVlanCarInfoObjectGroup OBJECT-GROUP
-			OBJECTS { hwBaseNdVlanCarNdType, hwBaseNdVlanCarLogIfName, hwBaseNdVlanCarPhyIfName, hwBaseNdVlanCarPeVlanId, hwBaseNdVlanCarCeVlanId, hwBaseNdVlanCarSampleRate }
-			STATUS current
-			DESCRIPTION 
-				"A collection of items of Base Nd Vlan Car Info."
-			::= { hwBaseSecurityGroups 21 }
-			
-		-- 1.3.6.1.4.1.2011.5.25.165.11.2.22
-		hwTrafficSuppressionObjectGroup OBJECT-GROUP
-			OBJECTS { hwTrafficSuppressionBcastRatio }
-			STATUS current
-			DESCRIPTION 
-				"A collection of items of Traffic Suppression."
-			::= { hwBaseSecurityGroups 22 }
 		
 	
 	END

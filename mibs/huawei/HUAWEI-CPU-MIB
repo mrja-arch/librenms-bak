@@ -1,9 +1,9 @@
 -- =================================================================
--- Copyright (C) 2018 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2024 by  HUAWEI TECHNOLOGIES. All rights reserved.
 --
 -- Description: the huawei cpu mib from huawei-device-mib
 -- Reference:
--- Version:     V1.04
+-- Version:     V1.05
 -- History:
 --    
 -- =================================================================
@@ -24,7 +24,7 @@ HUAWEI-CPU-MIB DEFINITIONS ::= BEGIN
     --from device by the mib.
     
     hwDev MODULE-IDENTITY
-        LAST-UPDATED "201801240000Z"
+        LAST-UPDATED "202401230000Z"
         ORGANIZATION "Huawei Technologies Co.,Ltd."
         CONTACT-INFO 
             "Huawei Industrial Base
@@ -36,7 +36,10 @@ HUAWEI-CPU-MIB DEFINITIONS ::= BEGIN
             " 
         DESCRIPTION 
             "huawei device  mib."	
-   
+ 
+    REVISION     "202401230000Z"
+        DESCRIPTION  "Added the following node to hwCpuDevEntry:hwDataplaneCpuUsage"
+
     REVISION     "201801240000Z"
         DESCRIPTION  "Add new node of hwCpuDevEntry"
 
@@ -102,6 +105,8 @@ HUAWEI-CPU-MIB DEFINITIONS ::= BEGIN
                 hwCpuCongestionNum
                     Integer32,
                 hwCpuCongestionTime
+                    Integer32,
+                hwDataplaneCpuUsage
                     Integer32
             }
 
@@ -203,6 +208,16 @@ HUAWEI-CPU-MIB DEFINITIONS ::= BEGIN
                 Duration of CPU congestion(s).
                 "
             ::= { hwCpuDevEntry 9 }
+
+        -- 1.3.6.1.4.1.2011.6.3.4.1.10
+        hwDataplaneCpuUsage OBJECT-TYPE
+            SYNTAX Integer32 (0..100)
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "
+                The value of this object identifies the current data-plane CPU occupancy of a board or an entity."
+        ::= { hwCpuDevEntry 10 }
 
         -- 1.3.6.1.4.1.2011.6.3.33
         hwMultiCpuDevTable OBJECT-TYPE

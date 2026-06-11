@@ -4,11 +4,11 @@
 --
 
 --    ==================================================================
--- Copyright (C) 2020 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2023 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI PERFMGMT MIB
 -- Reference:
--- Version: V4.18
+-- Version: V5.00
 -- History:  V4.08  huqing, 2015-09-21,Modify nodes 
 -- created 2014-05-05
 -- ==================================================================
@@ -31,7 +31,7 @@
 -- February 27, 2009 at 11:41 GMT
         -- 1.3.6.1.4.1.2011.5.25.190
         hwPerfMgmt MODULE-IDENTITY 
-            LAST-UPDATED "202012300956Z"        --Dec30, 2020 at 09:56GMT
+            LAST-UPDATED "202307071542Z"        --Jul 7, 2023 at 15:42GMT
             ORGANIZATION 
                   "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -42,6 +42,11 @@
                      Website: http://www.huawei.com
                      Email: support@huawei.com
                    "
+          DESCRIPTION 
+                "V5.00 modify MIB nodes max-access of pm server source."
+
+           REVISION "202307071542Z"        --Jul 7, 2023 at 15:42GMT
+
           DESCRIPTION 
                 "V4.18 modify MIB nodes for mistakes in description ." 
 
@@ -826,10 +831,11 @@ For a long period, the value ranges from 1 to 3."
 
         hwPMServerSrcAddrType OBJECT-TYPE
              SYNTAX InetAddressType
-             MAX-ACCESS read-only
+             MAX-ACCESS read-create
              STATUS current 
               DESCRIPTION
-            "Server source ip-address type."    
+            "Server source ip-address type. When hwPMServerSrcAddrType is ipv4, hwPMServerSrcIfName can be configured, but hwPMServerSrcAddr not.
+When hwPMServerSrcAddrType is ipv6, hwPMServerSrcAddr can be configured, but hwPMServerSrcIfName not."    
             DEFVAL { ipv4 }
             ::= { hwPMServerEntry 2 }   
             
@@ -837,10 +843,10 @@ For a long period, the value ranges from 1 to 3."
             
         hwPMServerSrcAddr OBJECT-TYPE
             SYNTAX InetAddress
-            MAX-ACCESS read-only
+            MAX-ACCESS read-create
             STATUS current
             DESCRIPTION
-            "The server source ip-address, reservation node, don't support now."
+            "The server source ip-address."
             ::= { hwPMServerEntry 3 }
 
         
@@ -899,10 +905,10 @@ For a long period, the value ranges from 1 to 3."
 
         hwPMServerSrcIfName OBJECT-TYPE
             SYNTAX OCTET STRING (SIZE (0..48))
-            MAX-ACCESS read-only
+            MAX-ACCESS read-create
             STATUS current
             DESCRIPTION
-            "The server source interface name, reservation node, don't support now."
+            "The server source interface name."
             ::= { hwPMServerEntry 10 }
 
         hwPMServerRetryTimes OBJECT-TYPE
