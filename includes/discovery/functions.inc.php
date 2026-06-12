@@ -17,6 +17,7 @@ use App\Facades\LibrenmsConfig;
 use App\Models\Device;
 use App\Models\Eventlog;
 use App\Models\Port;
+use App\Services\DeviceDiscoveryCandidateService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -89,6 +90,24 @@ function discover_new_device($hostname, $device, $method, $interface = null)
 
     if (! $ip->inNetworks(LibrenmsConfig::get('nets'))) {
         Log::debug("$ip not in a matched network - skipping\n");
+
+        return false;
+    }
+
+    if (LibrenmsConfig::get('autodiscovery.require_approval', true)) {
+        app(DeviceDiscoveryCandidateService::class)->record(
+            $hostname,
+            (string) $ip,
+            $method,
+            $device['device_id'] ?? null,
+            $interface,
+        );
+        Eventlog::log(
+            "$method discovery recorded $hostname ($ip) as a candidate awaiting approval",
+            $device['device_id'] ?? null,
+            'discovery',
+            Severity::Notice
+        );
 
         return false;
     }

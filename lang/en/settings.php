@@ -1913,6 +1913,14 @@ return [
             'help' => 'Networks from which devices will be discovered automatically.',
         ],
         'autodiscovery' => [
+            'require_approval' => [
+                'description' => 'Require approval for automatically discovered devices',
+                'help' => 'Record devices as candidates instead of adding them directly.',
+            ],
+            'candidate_scan_enabled' => [
+                'description' => 'Enable scheduled candidate scans',
+                'help' => 'Scan configured autodiscovery networks every six hours and record responsive hosts as candidates.',
+            ],
             'bgp' => [
                 'description' => 'Enable BGP neighbor discovery',
                 'help' => 'Add links and neighbors based on BGP peers',

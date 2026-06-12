@@ -193,6 +193,10 @@
                         @can('create', \App\Models\Device::class)
                         <li><a href="{{ url('addhost') }}"><i class="fa fa-plus fa-fw fa-lg"
                                                               aria-hidden="true"></i> {{ __('Add Device') }}</a></li>
+                        <li><a href="{{ route('devices.discovery') }}"><i class="fa fa-binoculars fa-fw fa-lg"
+                                                              aria-hidden="true"></i> {{ __('Automatic Discovery') }}</a></li>
+                        <li><a href="{{ route('operations.index') }}"><i class="fa fa-tasks fa-fw fa-lg"
+                                                              aria-hidden="true"></i> {{ __('Operation Center') }}</a></li>
                         @endcan
                         @can('delete', \App\Models\Device::class)
                         <li><a href="{{ route('device.delete') }}"><i class="fa fa-trash fa-fw fa-lg"

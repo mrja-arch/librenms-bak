@@ -11,6 +11,7 @@ x-librenms-env: &librenms-env
   DB_TIMEOUT: ${DB_TIMEOUT:-60}
   REDIS_HOST: redis
   REDIS_PORT: 6379
+  QUEUE_CONNECTION: redis
   BASE_URL: ${APP_URL:-http://localhost:8000}
   APP_URL: ${APP_URL:-http://localhost:8000}
   SNMP_TRAP_COMMUNITY: ${SNMP_TRAP_COMMUNITY:-public}
@@ -91,6 +92,24 @@ services:
       <<: *librenms-env
       DISPATCHER_NODE_ID: ${DISPATCHER_NODE_ID:-dispatcher-1}
       SIDECAR_DISPATCHER: "1"
+    volumes:
+      - librenms-data:/data
+    restart: unless-stopped
+
+  operations-worker:
+    image: ${LIBRENMS_CUSTOM_IMAGE:-mrja/librenms:26.5.1-custom}
+    depends_on:
+      librenms:
+        condition: service_started
+      redis:
+        condition: service_started
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      <<: *librenms-env
+    entrypoint: ["/bin/sh", "-lc"]
+    command: ["exec s6-setuidgid librenms php /opt/librenms/artisan queue:work redis --queue=operations --sleep=2 --tries=1 --timeout=900"]
     volumes:
       - librenms-data:/data
     restart: unless-stopped

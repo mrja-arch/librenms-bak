@@ -912,6 +912,20 @@
             "order": 12,
             "type": "boolean"
         },
+        "autodiscovery.require_approval": {
+            "default": true,
+            "group": "discovery",
+            "section": "autodiscovery",
+            "order": 1,
+            "type": "boolean"
+        },
+        "autodiscovery.candidate_scan_enabled": {
+            "default": true,
+            "group": "discovery",
+            "section": "autodiscovery",
+            "order": 3,
+            "type": "boolean"
+        },
         "autodiscovery.cdp_exclude.platform_regexp": {
             "type": "array",
             "default": [],

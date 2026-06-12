@@ -88,6 +88,16 @@ return [
         ],
     ],
     'settings' => [
+        'autodiscovery' => [
+            'require_approval' => [
+                'description' => '自动发现设备必须审批',
+                'help' => '将自动发现的设备记录到候选池，而不是直接纳管。',
+            ],
+            'candidate_scan_enabled' => [
+                'description' => '启用定时候选设备扫描',
+                'help' => '每六小时扫描全局自动发现网段，并将可达主机记录为候选设备。',
+            ],
+        ],
         'active_directory' => [
             'users_purge' => [
                 'description' => '保留未登入使用者于',

@@ -8,7 +8,10 @@ use App\Console\Commands\MaintenanceFetchRSS;
 use App\Console\Commands\MaintenanceRefreshSslCertificates;
 use App\Facades\LibrenmsConfig;
 use App\Jobs\PingCheck;
+use App\Jobs\RunDiscoveryScan;
+use App\Models\DeviceDiscoveryScan;
 use App\Models\Eventlog;
+use App\Enums\OperationTaskStatus;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schedule;
@@ -177,6 +180,23 @@ Artisan::command('scan
 Schedule::call(function (): void {
     Cache::put('scheduler_working', now(), now()->addMinutes(6));
 })->name('schedule operational check')->everyFiveMinutes();
+
+Schedule::call(function (): void {
+    $networks = (array) LibrenmsConfig::get('nets', []);
+    if ($networks === []) {
+        return;
+    }
+
+    $scan = DeviceDiscoveryScan::create([
+        'status' => OperationTaskStatus::Queued,
+        'networks' => $networks,
+    ]);
+    RunDiscoveryScan::dispatch($scan->id);
+})->name('candidate discovery scan')
+    ->everySixHours()
+    ->onOneServer()
+    ->withoutOverlapping()
+    ->when(fn () => LibrenmsConfig::get('autodiscovery.candidate_scan_enabled', true));
 
 // schedule maintenance, should be after all others
 $maintenance_log_file = LibrenmsConfig::get('log_dir') . '/maintenance.log';

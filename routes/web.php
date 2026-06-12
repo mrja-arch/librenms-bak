@@ -14,6 +14,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardWidgetController;
 use App\Http\Controllers\Device;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\DeviceDiscoveryController;
 use App\Http\Controllers\DeviceGroupController;
 use App\Http\Controllers\GraphController;
 use App\Http\Controllers\Install;
@@ -28,6 +29,7 @@ use App\Http\Controllers\Maps\CustomMapNodeImageController;
 use App\Http\Controllers\Maps\DeviceDependencyController;
 use App\Http\Controllers\NacController;
 use App\Http\Controllers\OuiLookupController;
+use App\Http\Controllers\OperationController;
 use App\Http\Controllers\OutagesController;
 use App\Http\Controllers\OverviewController;
 use App\Http\Controllers\PluginLegacyController;
@@ -146,6 +148,16 @@ Route::middleware(['auth'])->group(function (): void {
     Route::view('vminfo', 'vminfo');
 
     Route::get('nac', [NacController::class, 'index']);
+
+    Route::get('devices/discovery', [DeviceDiscoveryController::class, 'index'])->name('devices.discovery');
+    Route::post('devices/discovery/scans', [DeviceDiscoveryController::class, 'scan'])->name('devices.discovery.scans');
+    Route::post('devices/discovery/candidates/bulk-approve', [DeviceDiscoveryController::class, 'bulkApprove'])->name('devices.discovery.candidates.bulk-approve');
+    Route::post('devices/discovery/candidates/{candidate}/approve', [DeviceDiscoveryController::class, 'approve'])->name('devices.discovery.candidates.approve');
+    Route::patch('devices/discovery/candidates/{candidate}/ignore', [DeviceDiscoveryController::class, 'ignore'])->name('devices.discovery.candidates.ignore');
+    Route::patch('devices/discovery/candidates/{candidate}/restore', [DeviceDiscoveryController::class, 'restore'])->name('devices.discovery.candidates.restore');
+    Route::get('operations', [OperationController::class, 'index'])->name('operations.index');
+    Route::post('operations/devices/{device}/{operation}', [OperationController::class, 'store'])
+        ->whereIn('operation', ['discover', 'poll', 'ping'])->name('operations.devices.store');
 
     // Device Tabs
     Route::middleware('can:admin')->group(function (): void {
