@@ -108,13 +108,13 @@ $pagetitle[] = 'Add host';
   <div class="col-sm-6">
 <form name="form1" method="post" action="" class="form-horizontal" role="form">
     <?php echo csrf_field() ?>
-  <div><h2>Add Device</h2></div>
-  <div class="alert alert-info">Devices will be checked for Ping/SNMP reachability before being probed.</div>
+  <div><h2><?= __('Add Device') ?></h2></div>
+  <div class="alert alert-info"><?= __('Devices will be checked for Ping/SNMP reachability before being probed.') ?></div>
   <div class="well well-lg">
       <div class="form-group">
-          <label for="hostname" class="col-sm-3 control-label">Hostname or IP</label>
+          <label for="hostname" class="col-sm-3 control-label"><?= __('Hostname or IP') ?></label>
           <div class="col-sm-9">
-              <input type="text" id="hostname" name="hostname" class="form-control input-sm" placeholder="Hostname">
+              <input type="text" id="hostname" name="hostname" class="form-control input-sm" placeholder="<?= __('Hostname') ?>">
           </div>
       </div>
       <div class='form-group'>
@@ -125,19 +125,19 @@ $pagetitle[] = 'Add host';
     </div>
     <div id='snmp_override' style="display: none;">
         <div class='form-group'>
-            <label for='sysName' class='col-sm-3 control-label'>sysName (optional)</label>
+            <label for='sysName' class='col-sm-3 control-label'>sysName <?= __('(optional)') ?></label>
             <div class='col-sm-9'>
                 <input id='sysName' class='form-control' name='sysName' placeholder="sysName (optional)"/>
             </div>
         </div>
         <div class='form-group'>
-            <label for='hardware' class='col-sm-3 control-label'>Hardware (optional)</label>
+            <label for='hardware' class='col-sm-3 control-label'><?= __('Hardware') ?> <?= __('(optional)') ?></label>
             <div class='col-sm-9'>
                 <input id='hardware' class='form-control' name='hardware' placeholder="Hardware (optional)"/>
             </div>
         </div>
         <div class='form-group'>
-            <label for='os' class='col-sm-3 control-label'>OS (optional)</label>
+            <label for='os' class='col-sm-3 control-label'>OS <?= __('(optional)') ?></label>
             <div class='col-sm-9'>
                 <select id='os' class='form-control' name='os' placeholder="OS (optional)"></select>
             </div>
@@ -145,7 +145,7 @@ $pagetitle[] = 'Add host';
     </div>
     <div id="snmp_conf" style="display: block;">
         <div class="form-group">
-          <label for="snmpver" class="col-sm-3 control-label">SNMP Version</label>
+          <label for="snmpver" class="col-sm-3 control-label"><?= __('SNMP Version') ?></label>
           <div class="col-sm-3">
             <select name="snmpver" id="snmpver" class="form-control input-sm" onChange="changeForm();">
                 <?php
@@ -158,7 +158,7 @@ $pagetitle[] = 'Add host';
 	    </select>
           </div>
           <div class="col-sm-3">
-            <input type="text" name="port" placeholder="port (blank uses snmp.port)" class="form-control input-sm">
+            <input type="text" name="port" placeholder="<?= __('port (blank uses snmp.port)') ?>" class="form-control input-sm">
           </div>
           <div class="col-sm-3">
             <select name="transport" id="transport" class="form-control input-sm">
@@ -172,7 +172,7 @@ foreach (LibrenmsConfig::get('snmp.transports', 'udp') as $transport) {
           </div>
         </div>
         <div class="form-group">
-          <label for="port_association_mode" class="col-sm-3 control-label">Port Association Mode</label>
+          <label for="port_association_mode" class="col-sm-3 control-label"><?= __('Port Association Mode') ?></label>
           <div class="col-sm-3">
             <select name="port_assoc_mode" id="port_assoc_mode" class="form-control input-sm">
 <?php
@@ -189,24 +189,24 @@ foreach (PortAssociationMode::getModes() as $mode) {
         <div id="snmpv1_2">
           <div class="form-group">
             <div class="col-sm-12 alert alert-info">
-              <label class="control-label text-left input-sm">SNMPv1/2c Configuration</label>
+              <label class="control-label text-left input-sm"><?= __('SNMPv1/2c Configuration') ?></label>
             </div>
           </div>
           <div class="form-group">
-            <label for="community" class="col-sm-3 control-label">Community</label>
+            <label for="community" class="col-sm-3 control-label"><?= __('Community') ?></label>
             <div class="col-sm-9">
-              <input type="text" name="community" id="community" placeholder="Community (blank tries all snmp.community communities)" class="form-control input-sm">
+              <input type="text" name="community" id="community" placeholder="<?= __('Community (blank tries all snmp.community communities)') ?>" class="form-control input-sm">
             </div>
           </div>
         </div>
         <div id="snmpv3">
           <div class="form-group">
             <div class="col-sm-12 alert alert-info">
-              <label class="control-label text-left input-sm">SNMPv3 Configuration</label>
+              <label class="control-label text-left input-sm"><?= __('SNMPv3 Configuration') ?></label>
             </div>
           </div>
           <div class="form-group">
-            <label for="authlevel" class="col-sm-3 control-label">Auth Level</label>
+            <label for="authlevel" class="col-sm-3 control-label"><?= __('Auth Level') ?></label>
             <div class="col-sm-3">
               <select name="authlevel" id="authlevel" class="form-control input-sm">
                   <?php
@@ -220,19 +220,19 @@ foreach (PortAssociationMode::getModes() as $mode) {
             </div>
           </div>
           <div class="form-group">
-            <label for="authname" class="col-sm-3 control-label">Auth User Name</label>
+            <label for="authname" class="col-sm-3 control-label"><?= __('Auth User Name') ?></label>
             <div class="col-sm-9">
               <input type="text" name="authname" id="authname" class="form-control input-sm" autocomplete="off">
             </div>
           </div>
           <div class="form-group">
-            <label for="authpass" class="col-sm-3 control-label">Auth Password</label>
+            <label for="authpass" class="col-sm-3 control-label"><?= __('Auth Password') ?></label>
             <div class="col-sm-9">
               <input type="text" name="authpass" id="authpass" placeholder="AuthPass" class="form-control input-sm" autocomplete="off">
             </div>
           </div>
           <div class="form-group">
-            <label for="authalgo" class="col-sm-3 control-label">Auth Algorithm</label>
+            <label for="authalgo" class="col-sm-3 control-label"><?= __('Auth Algorithm') ?></label>
             <div class="col-sm-9">
               <select name="authalgo" id="authalgo" class="form-control input-sm">
                   <?php
@@ -243,18 +243,18 @@ foreach (PortAssociationMode::getModes() as $mode) {
                   ?>
               </select>
               <?php if (! \LibreNMS\SNMPCapabilities::supportsSHA2()) {?>
-              <label class="text-left"><small>Some options are disabled. <a href="https://docs.librenms.org/Support/FAQ/#optional-requirements-for-snmpv3-sha2-auth">Read more here</a></small></label>
+              <label class="text-left"><small><?= __('Some options are disabled.') ?> <a href="https://docs.librenms.org/Support/FAQ/#optional-requirements-for-snmpv3-sha2-auth"><?= __('Read more here') ?></a></small></label>
               <?php } ?>
             </div>
           </div>
           <div class="form-group">
-            <label for="cryptopass" class="col-sm-3 control-label">Crypto Password</label>
+            <label for="cryptopass" class="col-sm-3 control-label"><?= __('Crypto Password') ?></label>
             <div class="col-sm-9">
               <input type="text" name="cryptopass" id="cryptopass" placeholder="Crypto Password" class="form-control input-sm" autocomplete="off">
             </div>
           </div>
           <div class="form-group">
-            <label for="cryptoalgo" class="col-sm-3 control-label">Crypto Algorithm</label>
+            <label for="cryptoalgo" class="col-sm-3 control-label"><?= __('Crypto Algorithm') ?></label>
             <div class="col-sm-9">
               <select name="cryptoalgo" id="cryptoalgo" class="form-control input-sm">
                   <?php
@@ -265,7 +265,7 @@ foreach (PortAssociationMode::getModes() as $mode) {
                   ?>
               </select>
               <?php if (! \LibreNMS\SNMPCapabilities::supportsAES256()) {?>
-              <label class="text-left"><small>Some options are disabled. <a href="https://docs.librenms.org/Support/FAQ/#optional-requirements-for-snmpv3-sha2-auth">Read more here</a></small></label>
+              <label class="text-left"><small><?= __('Some options are disabled.') ?> <a href="https://docs.librenms.org/Support/FAQ/#optional-requirements-for-snmpv3-sha2-auth"><?= __('Read more here') ?></a></small></label>
               <?php } ?>
             </div>
           </div>
@@ -293,13 +293,13 @@ if (LibrenmsConfig::get('distributed_poller') === true) {
                   }//endif
 ?>
       <div class="form-group">
-          <label for="force_add" class="col-sm-3 control-label">Force add<br><small>(No ICMP or SNMP checks performed)</small></label>
+          <label for="force_add" class="col-sm-3 control-label"><?= __('Force add') ?><br><small><?= __('(No ICMP or SNMP checks performed)') ?></small></label>
           <div class="col-sm-9">
                   <input type="checkbox" name="force_add" id="force_add" data-size="small">
           </div>
       </div>
     <hr>
-    <center><button type="submit" class="btn btn-default" name="Submit">Add Device</button></center>
+    <center><button type="submit" class="btn btn-default" name="Submit"><?= __('Add Device') ?></button></center>
   </div>
 </form>
   </div>

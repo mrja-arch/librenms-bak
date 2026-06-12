@@ -5,24 +5,24 @@
     <table id="ports" class="table table-condensed table-hover table-striped" data-url="{{ route('table.ports') }}">
         <thead>
         <tr>
-            <th data-column-id="hostname" data-formatter="device">Device</th>
-            <th data-column-id="ifDescr" @if(! $errors) data-order="asc" @endif data-formatter="port">Port</th>
-            <th data-column-id="secondsIfLastChange" data-converter="duration">Status Changed</th>
-            <th data-column-id="ifConnectorPresent" data-visible="false">Connected</th>
-            <th data-column-id="ifSpeed" data-converter="human-bps">Speed</th>
-            <th data-column-id="ifDuplex" data-css-class="green" data-formatter="duplex">Duplex</th>
+            <th data-column-id="hostname" data-formatter="device">{{ __('Device') }}</th>
+            <th data-column-id="ifDescr" @if(! $errors) data-order="asc" @endif data-formatter="port">{{ __('Port') }}</th>
+            <th data-column-id="secondsIfLastChange" data-converter="duration">{{ __('Status Changed') }}</th>
+            <th data-column-id="ifConnectorPresent" data-visible="false">{{ __('Connected') }}</th>
+            <th data-column-id="ifSpeed" data-converter="human-bps">{{ __('Speed') }}</th>
+            <th data-column-id="ifDuplex" data-css-class="green" data-formatter="duplex">{{ __('Duplex') }}</th>
             <th data-column-id="ifMtu" data-visible="false">MTU</th>
-            <th data-column-id="ifInOctets_rate" data-searchable="false" data-css-class="green" data-converter="human-bps">In</th>
-            <th data-column-id="ifOutOctets_rate" data-searchable="false" data-css-class="blue" data-converter="human-bps">Out</th>
-            <th data-column-id="ifInUcastPkts_rate" data-searchable="false" data-visible="{{ $show_detail }}" data-css-class="green" data-converter="human-pps">Packets In</th>
-            <th data-column-id="ifOutUcastPkts_rate" data-searchable="false" data-visible="{{ $show_detail }}" data-css-class="blue" data-converter="human-pps">Packets Out</th>
-            <th data-column-id="ifInErrors_delta" data-searchable="false" data-visible="{{ $show_errors }}" data-css-class="red">Errors In Rate</th>
-            <th data-column-id="ifOutErrors_delta" data-searchable="false" data-visible="{{ $show_errors }}" data-css-class="red">Errors Out Rate</th>
-            <th data-column-id="ifInErrors" data-searchable="false" data-visible="{{ $show_errors }}" data-css-class="red">Errors In</th>
-            <th data-column-id="ifOutErrors" data-searchable="false" data-visible="{{ $show_errors }}" data-css-class="red">Errors Out</th>
-            <th data-column-id="ifType">Media</th>
-            <th data-column-id="ifAlias">Description</th>
-            <th data-column-id="actions" data-sortable="false" data-searchable="false">Actions</th>
+            <th data-column-id="ifInOctets_rate" data-searchable="false" data-css-class="green" data-converter="human-bps">{{ __('In') }}</th>
+            <th data-column-id="ifOutOctets_rate" data-searchable="false" data-css-class="blue" data-converter="human-bps">{{ __('Out') }}</th>
+            <th data-column-id="ifInUcastPkts_rate" data-searchable="false" data-visible="{{ $show_detail }}" data-css-class="green" data-converter="human-pps">{{ __('Packets In') }}</th>
+            <th data-column-id="ifOutUcastPkts_rate" data-searchable="false" data-visible="{{ $show_detail }}" data-css-class="blue" data-converter="human-pps">{{ __('Packets Out') }}</th>
+            <th data-column-id="ifInErrors_delta" data-searchable="false" data-visible="{{ $show_errors }}" data-css-class="red">{{ __('Errors In Rate') }}</th>
+            <th data-column-id="ifOutErrors_delta" data-searchable="false" data-visible="{{ $show_errors }}" data-css-class="red">{{ __('Errors Out Rate') }}</th>
+            <th data-column-id="ifInErrors" data-searchable="false" data-visible="{{ $show_errors }}" data-css-class="red">{{ __('Errors In') }}</th>
+            <th data-column-id="ifOutErrors" data-searchable="false" data-visible="{{ $show_errors }}" data-css-class="red">{{ __('Errors Out') }}</th>
+            <th data-column-id="ifType">{{ __('Media') }}</th>
+            <th data-column-id="ifAlias">{{ __('Description') }}</th>
+            <th data-column-id="actions" data-sortable="false" data-searchable="false">{{ __('Actions') }}</th>
         </tr>
         </thead>
     </table>
@@ -45,6 +45,14 @@
     var grid = $("#ports").bootgrid({
         ajax: true,
         rowCount: [25, 50, 100, 250, -1],
+        labels: {
+            all: @json(__('All')),
+            infos: @json(__('Showing {{ctx.start}} to {{ctx.end}} of {{ctx.total}} entries')),
+            loading: @json(__('Loading...')),
+            noResults: @json(__('No results found!')),
+            refresh: @json(__('Refresh')),
+            search: @json(__('Search'))
+        },
         converters: {
             'duration': {
                 to: function (value) { return moment.duration(value, 'seconds').humanize(); }

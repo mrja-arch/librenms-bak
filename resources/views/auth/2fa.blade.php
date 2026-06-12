@@ -22,7 +22,7 @@
                             <div class="tw:inline-block tw:bg-white tw:p-4 tw:pb-2 tw:rounded-lg" id="twofactorqr"></div>
                         </div>
                         <div class="col-md-12 text-center">
-                            <button class="btn btn-default" onclick="$('#twofactorqrcontainer').hide(); $('#twofactorkeycontainer').show();">Manual</button>
+                            <button class="btn btn-default" onclick="$('#twofactorqrcontainer').hide(); $('#twofactorkeycontainer').show();">{{ __('Manual') }}</button>
                         </div>
                     </div>
 
@@ -34,7 +34,7 @@
                             {{ $key }}
                         </div>
                         <div class="col-sm-12 text-center">
-                            <button class="btn btn-default" onclick="$('#twofactorkeycontainer').hide(); $('#twofactorqrcontainer').show();">QR</button>
+                            <button class="btn btn-default" onclick="$('#twofactorkeycontainer').hide(); $('#twofactorqrcontainer').show();">{{ __('QR') }}</button>
                         </div>
                     </div>
                     <script>$("#twofactorqr").qrcode({"text": "{!! $uri !!}"});</script>

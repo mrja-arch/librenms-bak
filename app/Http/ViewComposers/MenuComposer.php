@@ -179,7 +179,7 @@ class MenuComposer
                     [
                         'url' => 'vrf',
                         'icon' => 'arrows',
-                        'text' => 'VRFs',
+                        'text' => __('VRFs'),
                     ],
                 ];
             }
@@ -189,7 +189,7 @@ class MenuComposer
                     [
                         'url' => 'mpls',
                         'icon' => 'tag',
-                        'text' => 'MPLS',
+                        'text' => __('MPLS'),
                     ],
                 ];
             }
@@ -199,7 +199,7 @@ class MenuComposer
                     [
                         'url' => 'ospf',
                         'icon' => 'circle-o-notch fa-rotate-180',
-                        'text' => 'OSPF Devices',
+                        'text' => __('OSPF Devices'),
                     ],
                 ];
             }
@@ -209,7 +209,7 @@ class MenuComposer
                     [
                         'url' => 'ospfv3',
                         'icon' => 'circle-o-notch fa-rotate-180',
-                        'text' => 'OSPFv3 Devices',
+                        'text' => __('OSPFv3 Devices'),
                     ],
                 ];
             }
@@ -219,7 +219,7 @@ class MenuComposer
                     [
                         'url' => 'isis',
                         'icon' => 'arrows-alt',
-                        'text' => 'ISIS Adjacencies',
+                        'text' => __('ISIS Adjacencies'),
                     ],
                 ];
             }
@@ -229,7 +229,7 @@ class MenuComposer
                     [
                         'url' => 'cisco-otv',
                         'icon' => 'exchange',
-                        'text' => 'Cisco OTV',
+                        'text' => __('Cisco OTV'),
                     ],
                 ];
             }
@@ -241,17 +241,17 @@ class MenuComposer
                     [
                         'url' => 'bgp/type=all/graph=NULL',
                         'icon' => 'circle-o',
-                        'text' => 'BGP All Sessions',
+                        'text' => __('BGP All Sessions'),
                     ],
                     [
                         'url' => 'bgp/type=external/graph=NULL',
                         'icon' => 'external-link',
-                        'text' => 'BGP External',
+                        'text' => __('BGP External'),
                     ],
                     [
                         'url' => 'bgp/type=internal/graph=NULL',
                         'icon' => 'external-link fa-rotate-180',
-                        'text' => 'BGP Internal',
+                        'text' => __('BGP Internal'),
                     ],
                 ];
             } else {
@@ -264,7 +264,7 @@ class MenuComposer
                     [
                         'url' => 'cef',
                         'icon' => 'exchange',
-                        'text' => 'Cisco CEF',
+                        'text' => __('Cisco CEF'),
                     ],
                 ];
             }

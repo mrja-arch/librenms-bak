@@ -808,8 +808,8 @@
             display: 'name',
             valueKey: 'name',
             templates: {
-                header: '<h5><strong>&nbsp;Devices</strong></h5>',
-                suggestion: Handlebars.compile('<p><a href="@{{url}}"><img src="@{{device_image}}" class="tw:h-8 tw:float-left  tw:m-1 tw:dark:bg-gray-50 tw:dark:rounded-lg tw:dark:p-1 tw:mr-2"> <small><strong>@{{name}}</strong> | @{{device_os}} | @{{version}} <br /> @{{device_hardware}} with @{{device_ports}} port(s) | @{{location}}</small></a></p>')
+                header: '<h5><strong>&nbsp;{{ __('Devices') }}</strong></h5>',
+                suggestion: Handlebars.compile('<p><a href="@{{url}}"><img src="@{{device_image}}" class="tw:h-8 tw:float-left  tw:m-1 tw:dark:bg-gray-50 tw:dark:rounded-lg tw:dark:p-1 tw:mr-2"> <small><strong>@{{name}}</strong> | @{{device_os}} | @{{version}} <br /> @{{device_hardware}} {{ __('with') }} @{{device_ports}} {{ __('port(s)') }} | @{{location}}</small></a></p>')
             }
         },
         {
@@ -819,7 +819,7 @@
             display: 'name',
             valueKey: 'name',
             templates: {
-                header: '<h5><strong>&nbsp;Ports</strong></h5>',
+                header: '<h5><strong>&nbsp;{{ __('Ports') }}</strong></h5>',
                 suggestion: Handlebars.compile('<p><a href="@{{url}}"><small><i class="fa fa-link fa-sm icon-theme" aria-hidden="true"></i> <strong>@{{name}}</strong> – @{{hostname}}<br /><i>@{{description}}</i></small></a></p>')
             }
         },
@@ -830,7 +830,7 @@
             display: 'name',
             valueKey: 'name',
             templates: {
-                header: '<h5><strong>&nbsp;BGP Sessions</strong></h5>',
+                header: '<h5><strong>&nbsp;{{ __('BGP Sessions') }}</strong></h5>',
                 suggestion: Handlebars.compile('<p><a href="@{{url}}"><small><i class="@{{bgp_image}}" aria-hidden="true"></i> @{{name}} - @{{hostname}}<br />AS@{{localas}} -> AS@{{remoteas}}</small></a></p>')
             }
         }).on('typeahead:select', function (ev, suggestion) {
