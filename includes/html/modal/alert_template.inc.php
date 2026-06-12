@@ -18,34 +18,34 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="Create">Alert Template :: <a target="_blank" href="https://docs.librenms.org/Alerting/Templates/"><i class="fa fa-book fa-1x"></i> Docs</a></h4>
+                <h4 class="modal-title" id="Create"><?= __('Alert Template') ?> :: <a target="_blank" href="https://docs.librenms.org/Alerting/Templates/"><i class="fa fa-book fa-1x"></i> <?= __('Docs') ?></a></h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="name">Template name </label>
+                            <label for="name"><?= __('Template Name') ?> </label>
                             <input type="text" class="form-control input-sm" id="name" name="name">
                         </div>
                         <div class="form-group">
-                            <label for="template">Template </label>
+                            <label for="template"><?= __('Template') ?> </label>
                             <textarea class="form-control" id="template" name="template" style="font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;" rows="15"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="rules_list">Attach template to rules </label>
+                            <label for="rules_list"><?= __('Attach Template to Rules') ?> </label>
                             <select id="rules_list" name="rules_list[]" class="form-control" multiple="multiple"></select>
                         </div>
                         <div class="form-group">
-                            <label for="title">Alert title </label>
-                            <input type="text" class="form-control input-sm" id="title" name="title" placeholder="Alert Title">
+                            <label for="title"><?= __('Alert Title') ?> </label>
+                            <input type="text" class="form-control input-sm" id="title" name="title" placeholder="<?= __('Alert Title') ?>">
                         </div>
                         <div class="form-group">
-                            <label for="title_rec">Recovery title </label>
-                            <input type="text" class="form-control input-sm" id="title_rec" name="title_rec" placeholder="Recovery Title">
+                            <label for="title_rec"><?= __('Recovery Title') ?> </label>
+                            <input type="text" class="form-control input-sm" id="title_rec" name="title_rec" placeholder="<?= __('Recovery Title') ?>">
                         </div>
-                        <button type="button" class="btn btn-primary btn-sm" name="create-template" id="create-template">Create template</button>
+                        <button type="button" class="btn btn-primary btn-sm" name="create-template" id="create-template"><?= __('Create Template') ?></button>
                         <!--//FIXME remove Deprecated template-->
-                        <button type="button" class="btn btn-default btn-sm" name="convert-template" id="convert-template" title="Convert template to new syntax" style="display: none">Convert template</button>
+                        <button type="button" class="btn btn-default btn-sm" name="convert-template" id="convert-template" title="<?= __('Convert Template to New Syntax') ?>" style="display: none"><?= __('Convert Template') ?></button>
                     </div>
                 </div>
             </div>

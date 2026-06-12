@@ -40,7 +40,7 @@ $alert_severities = [
 ];
 $admin_verbose_details = '';
 if (Gate::allows('detail', Alert::class)) {
-    $admin_verbose_details = '<th data-column-id="verbose_details" data-sortable="false">Details</th>';
+    $admin_verbose_details = '<th data-column-id="verbose_details" data-sortable="false">' . e(__('Details')) . '</th>';
 }
 
 //if( defined('SHOW_SETTINGS') || empty($widget_settings) ) {
@@ -182,7 +182,7 @@ if (defined('SHOW_SETTINGS')) {
     $sort = $widget_settings['sort'] ?? '';
     $unique_id ??= '';
 
-    $title = 'Alerts';
+    $title = __('Alerts');
 
     // state can be 0 or '', be sure they are treated differently
     if (is_numeric($state)) {
@@ -238,13 +238,13 @@ if (defined('SHOW_SETTINGS')) {
         <thead>
             <tr>
                 <th data-column-id="severity"></th>
-                <th data-column-id="timestamp">Timestamp</th>
-                <th data-column-id="rule">Rule</th>
+                <th data-column-id="timestamp">' . e(__('Timestamp')) . '</th>
+                <th data-column-id="rule">' . e(__('Rule')) . '</th>
                 <th data-column-id="details" data-sortable="false"></th>
-                <th data-column-id="hostname">Hostname</th>
-                <th data-column-id="location">Location</th>
-                <th data-column-id="ack_ico" data-sortable="false">ACK</th>
-                <th data-column-id="notes" data-sortable="false">Notes</th>
+                <th data-column-id="hostname">' . e(__('Hostname')) . '</th>
+                <th data-column-id="location">' . e(__('Location')) . '</th>
+                <th data-column-id="ack_ico" data-sortable="false">' . e(__('ACK')) . '</th>
+                <th data-column-id="notes" data-sortable="false">' . e(__('Notes')) . '</th>
                 ' . $admin_verbose_details . '';
 
     if ($proc == '1') {
@@ -259,6 +259,14 @@ if (defined('SHOW_SETTINGS')) {
 <script>
 var alerts_grid = $("#alerts_' . $unique_id . '").bootgrid({
     ajax: true,
+    labels: {
+        all: ' . json_encode(__('All')) . ',
+        infos: ' . json_encode(__('Showing {{ctx.start}} to {{ctx.end}} of {{ctx.total}} entries')) . ',
+        loading: ' . json_encode(__('Loading...')) . ',
+        noResults: ' . json_encode(__('No results found!')) . ',
+        refresh: ' . json_encode(__('Refresh')) . ',
+        search: ' . json_encode(__('Search')) . '
+    },
     post: function ()
     {
         return {

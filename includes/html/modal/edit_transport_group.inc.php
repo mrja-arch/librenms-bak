@@ -19,7 +19,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h5 class="modal-title" id="Edit-transport">Alert Transport Groups :: <a target="_blank" href="https://docs.librenms.org/Alerting/">Docs <i class="fa fa-book fa-1x"></i></a> </h5>
+                    <h5 class="modal-title" id="Edit-transport"><?= __('Alert Transport Groups') ?> :: <a target="_blank" href="https://docs.librenms.org/Alerting/"><?= __('Docs') ?> <i class="fa fa-book fa-1x"></i></a> </h5>
                 </div>
                 <div class="modal-body">
                     <form method="post" role="form" id="transport-group" class="form-horizontal transport-group-form">
@@ -27,13 +27,13 @@
                         <input type="hidden" name="group_id" id="group_id" value="">
                         <input type="hidden" name="type" id="type" value="transport-groups">
                         <div class='form-group' title="The description of this transport group.">
-                            <label for='name' class='col-sm-3 col-md-2 control-label'>Group Name: </label>
+                            <label for='name' class='col-sm-3 col-md-2 control-label'><?= __('Group Name') ?>: </label>
                             <div class='col-sm-9 col-md-10'>
                                 <input type='text' id='group-name' name='name' class='form-control validation' maxlength='200' required>
                             </div>
                         </div>
                         <div class="form-group" title="The members for this transport group.">
-                            <label for='transport-choice' class='col-sm-3 col-md-2 control-label'>Group Members: </label>
+                            <label for='transport-choice' class='col-sm-3 col-md-2 control-label'><?= __('Group Members') ?>: </label>
                             <div class="col-sm-9 col-md-10">
                                 <select name='members[]' id='members' class='form-control' multiple="multiple"></select>
                             </div>
@@ -41,7 +41,7 @@
                         <div class="form-group">
                             <div class="col-sm-12 text-center">
                                 <button type="button" class="btn btn-success" id="save-group" name="save-group">
-                                Save Transport Group
+                                <?= __('Save Transport Group') ?>
                                 </button>
                             </div>
                         </div>
@@ -59,16 +59,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h5 class="modal-title" id="Delete">Confirm Group Delete</h5>
+                    <h5 class="modal-title" id="Delete"><?= __('Confirm Group Delete') ?></h5>
                 </div>
                 <div class="modal-body">
-                    <p>If you would like to remove this transport group then please click Delete.</p>
+                    <p><?= __('Click Delete to remove this transport group.') ?></p>
                 </div>
                 <div class="modal-footer">
                     <form role="form" class="remove_contract_group">
                         <?php echo csrf_field() ?>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger danger" id="remove-transport-group" data-target="remove-transport-group">Delete</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><?= __('Cancel') ?></button>
+                        <button type="button" class="btn btn-danger danger" id="remove-transport-group" data-target="remove-transport-group"><?= __('Delete') ?></button>
                         <input type="hidden" name="group_id" id="delete_group_id" value="">
                     </form>
                 </div>
@@ -137,7 +137,7 @@
 
     $("#members").select2({
         width: "100%",
-        placeholder: "Transport Name",
+        placeholder: <?= json_encode(__('Transport Name')) ?>,
         ajax: {
             url: '<?php echo route('ajax.select.alert-transport') ?>',
             delay: 150

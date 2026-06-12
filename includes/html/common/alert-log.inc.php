@@ -18,7 +18,7 @@ use App\Models\Alert;
 
 $param = [];
 
-$pagetitle[] = 'Alert Log';
+$pagetitle[] = __('Alert History');
 
 $alert_states = [
     // divined from librenms/alerts.php
@@ -40,14 +40,14 @@ $alert_severities = [
 
 $admin_verbose_details = '';
 if (Gate::allows('detail', Alert::class)) {
-    $admin_verbose_details = '<th data-column-id="verbose_details" data-sortable="false">Details</th>';
+    $admin_verbose_details = '<th data-column-id="verbose_details" data-sortable="false">' . e(__('Details')) . '</th>';
 }
 
 $common_output[] = '<div class="panel panel-default panel-condensed">
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-md-2">
-                            <strong>Alert Log entries</strong>
+                            <strong>' . e(__('Alert Log Entries')) . '</strong>
                         </div>
                     </div>
                 </div>
@@ -61,12 +61,12 @@ $common_output[] = '
     <table id="alertlog" class="table table-hover table-condensed table-striped" data-url="' . route('table.alertlog') . '">
         <thead>
         <tr>
-            <th data-column-id="status">State</th>
-            <th data-column-id="time_logged" data-order="desc" data-converter="datetime">Timestamp</th>
+            <th data-column-id="status">' . e(__('State')) . '</th>
+            <th data-column-id="time_logged" data-order="desc" data-converter="datetime">' . e(__('Timestamp')) . '</th>
             <th data-column-id="details" data-sortable="false">&nbsp;</th>
-            <th data-column-id="hostname">Device</th>
-            <th data-column-id="alert_rule">Alert</th>
-            <th data-column-id="severity">Severity</th>
+            <th data-column-id="hostname">' . e(__('Device')) . '</th>
+            <th data-column-id="alert_rule">' . e(__('Alert')) . '</th>
+            <th data-column-id="severity">' . e(__('Severity')) . '</th>
             ' . $admin_verbose_details . '
         </tr>
         </thead>
@@ -79,6 +79,14 @@ document.addEventListener("DOMContentLoaded", function () {
     var grid = $("#alertlog").bootgrid({
         ajax: true,
         rowCount: [50, 100, 250, -1],
+        labels: {
+            all: ' . json_encode(__('All')) . ',
+            infos: ' . json_encode(__('Showing {{ctx.start}} to {{ctx.end}} of {{ctx.total}} entries')) . ',
+            loading: ' . json_encode(__('Loading...')) . ',
+            noResults: ' . json_encode(__('No results found!')) . ',
+            refresh: ' . json_encode(__('Refresh')) . ',
+            search: ' . json_encode(__('Search')) . '
+        },
         templates: {
             header: \'<div id="{{ctx.id}}" class="{{css.header}}"><div class="row"> \
                 <div class="col-sm-8 actionBar"><span class="pull-left"> \
@@ -99,7 +107,7 @@ $common_output[] = '<div class="form-group"> \
 $selected_state = request()->input('state', '');
 foreach ($alert_states as $text => $value) {
     $selected = $value == $selected_state ? ' selected' : '';
-    $common_output[] = '<option value="' . htmlspecialchars((string) $value) . "\"$selected>$text</option> \\";
+    $common_output[] = '<option value="' . htmlspecialchars((string) $value) . "\"$selected>" . e(__($text)) . '</option> \\';
 }
 $common_output[] = '</select> \
                </div> \
@@ -108,11 +116,11 @@ $common_output[] = '</select> \
 $selected_severity = request()->input('severity', []);
 foreach ($alert_severities as $text => $value) {
     $selected = in_array($value, (array) $selected_severity) ? ' selected' : '';
-    $common_output[] = "<option value=\"$value\"$selected>$text</option> \\";
+    $common_output[] = "<option value=\"$value\"$selected>" . e(__($text)) . '</option> \\';
 }
 $common_output[] = '</select> \
                </div> \
-               <button id="filter" type="submit" class="btn btn-default input-sm">Filter</button> \
+               <button id="filter" type="submit" class="btn btn-default input-sm">' . e(__('Filter')) . '</button> \
                </form></span></div> \
                <div class="col-sm-4 actionBar"><p class="{{css.search}}"></p><p class="{{css.actions}}"></p></div></div></div>\'
         },
@@ -175,12 +183,12 @@ $common_output[] = '</select> \
     });
 
     $("#severity").select2({
-        placeholder: "Any Severity",
+        placeholder: ' . json_encode(__('Any Severity')) . ',
         width: "13.1em",
         maximumSelectionLength: 2,
         containerCssClass: "severity-select-box"
      });
-    init_select2("#device_id", "device", {}, ' . $device_selected . ' , "All Devices");
+    init_select2("#device_id", "device", {}, ' . $device_selected . ' , ' . json_encode(__('All Devices')) . ');
 
     $("#alertlog-filter-form").on("submit", function (e) {
         e.preventDefault();

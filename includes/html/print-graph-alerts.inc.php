@@ -17,7 +17,7 @@
  * @author     LibreNMS Contributors
 */
 
-$pagetitle[] = 'Alert Stats';
+$pagetitle[] = __('Alert Statistics');
 $param = [];
 $sql = '';
 if (isset($device['device_id']) && $device['device_id'] > 0) {
@@ -39,7 +39,7 @@ $query = "SELECT DATE_FORMAT(time_logged, '" . \App\Facades\LibrenmsConfig::get(
 <br>
 <div class="panel panel-default">
     <div class="panel-heading">
-        Device alerts
+        <?= __('Device Alerts') ?>
     </div>
     <br>
     <div style="margin:0 auto;width:99%;">

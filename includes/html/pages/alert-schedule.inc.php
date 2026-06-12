@@ -14,7 +14,7 @@
 
 use App\Models\AlertSchedule;
 
-$pagetitle[] = 'Alert Schedule';
+$pagetitle[] = __('Scheduled Maintenance');
 $no_refresh = true;
 if (Gate::allows('viewAny', AlertSchedule::class)) {
     include_once 'includes/html/modal/alert_schedule.inc.php';
@@ -31,18 +31,18 @@ if (Gate::allows('viewAny', AlertSchedule::class)) {
         <table id="alert-schedule" class="table table-condensed">
             <thead>
                 <tr>
-                    <th data-column-id="title">Title</th>
-                    <th data-column-id="behavior">Behavior</th>
-                    <th data-column-id="recurring">Recurring</th>
-                    <th data-column-id="start" data-order="desc">Start (no recurring)</th>
-                    <th data-column-id="end">End (no recurring)</th>
-                    <th data-column-id="start_recurring_dt">Start recurring dt</th>
-                    <th data-column-id="end_recurring_dt">End recurring dt</th>
-                    <th data-column-id="start_recurring_hr">Start recurring hr</th>
-                    <th data-column-id="end_recurring_hr">End recurring hr</th>
-                    <th data-column-id="recurring_day" data-sortable="false" data-searchable="false">Recurring on days</th>
-                    <th data-column-id="actions" data-sortable="false" data-searchable="false" data-formatter="commands">Actions</th>
-                    <th data-column-id="status" data-searchable="false" data-formatter="schedstatus">Status</th>
+                    <th data-column-id="title"><?= __('Title') ?></th>
+                    <th data-column-id="behavior"><?= __('Behavior') ?></th>
+                    <th data-column-id="recurring"><?= __('Recurring') ?></th>
+                    <th data-column-id="start" data-order="desc"><?= __('Start (no recurring)') ?></th>
+                    <th data-column-id="end"><?= __('End (no recurring)') ?></th>
+                    <th data-column-id="start_recurring_dt"><?= __('Start recurring date') ?></th>
+                    <th data-column-id="end_recurring_dt"><?= __('End recurring date') ?></th>
+                    <th data-column-id="start_recurring_hr"><?= __('Start recurring hour') ?></th>
+                    <th data-column-id="end_recurring_hr"><?= __('End recurring hour') ?></th>
+                    <th data-column-id="recurring_day" data-sortable="false" data-searchable="false"><?= __('Recurring on days') ?></th>
+                    <th data-column-id="actions" data-sortable="false" data-searchable="false" data-formatter="commands"><?= __('Actions') ?></th>
+                    <th data-column-id="status" data-searchable="false" data-formatter="schedstatus"><?= __('Status') ?></th>
                 </tr>
             </thead>
         </table>
@@ -52,6 +52,14 @@ if (Gate::allows('viewAny', AlertSchedule::class)) {
 
 var grid = $("#alert-schedule").bootgrid({
     ajax: true,
+    labels: {
+        all: <?= json_encode(__('All')) ?>,
+        infos: <?= json_encode(__('Showing {{ctx.start}} to {{ctx.end}} of {{ctx.total}} entries')) ?>,
+        loading: <?= json_encode(__('Loading...')) ?>,
+        noResults: <?= json_encode(__('No results found!')) ?>,
+        refresh: <?= json_encode(__('Refresh')) ?>,
+        search: <?= json_encode(__('Search')) ?>
+    },
     formatters: {
         "commands": function(column, row) {
             var response = "<button type=\"button\" class=\"btn btn-xs btn-primary command-edit\" data-toggle='modal' data-target='#schedule-maintenance' data-schedule_id=\"" + row.id + "\"><span class=\"fa fa-pencil\"></span></button> " +
@@ -60,11 +68,11 @@ var grid = $("#alert-schedule").bootgrid({
         },
         "schedstatus": function(column, row) {
             if (row.status == "1") {
-                response = '<span class="label label-danger">Lapsed</span>';
+                response = '<span class="label label-danger"><?= __('Lapsed') ?></span>';
             } else if (row.status == "2") {
-                response = '<span class="label label-success">Current</span>';
+                response = '<span class="label label-success"><?= __('Current') ?></span>';
             } else if (row.status == "0") {
-                response = '<span class="label label-warning">Set</span>';
+                response = '<span class="label label-warning"><?= __('Set') ?></span>';
             }
 
             return response;
@@ -73,7 +81,7 @@ var grid = $("#alert-schedule").bootgrid({
     templates: {
         header: "<div id=\"{{ctx.id}}\" class=\"{{css.header}}\"><div class=\"row\">"+
                 "<div class=\"col-sm-4 actionBar\"><span class=\"pull-left\">"+
-                "<button type=\"button\" class=\"btn btn-primary btn-sm\" data-toggle=\"modal\" data-target=\"#schedule-maintenance\">Schedule maintenance</button>"+
+                "<button type=\"button\" class=\"btn btn-primary btn-sm\" data-toggle=\"modal\" data-target=\"#schedule-maintenance\"><?= __('Schedule Maintenance') ?></button>"+
                 "</span></div>"+
                 "<div class=\"col-sm-8 actionBar\"><p class=\"{{css.search}}\"></p><p class=\"{{css.actions}}\"></p></div></div></div>"
     },

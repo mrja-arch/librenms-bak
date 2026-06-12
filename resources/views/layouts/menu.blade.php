@@ -579,11 +579,11 @@
                             aria-hidden="true"></i> <span class="tw:md:hidden tw:2xl:inline-block">{{ __('Alerts') }}</span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ url('alerts') }}"><i class="fa fa-bell fa-fw fa-lg"
-                                                             aria-hidden="true"></i> {{ __('Notifications') }}</a></li>
+                                                             aria-hidden="true"></i> {{ __('Alert Notifications') }}</a></li>
                         <li><a href="{{ url('alert-log') }}"><i class="fa fa-file-text fa-fw fa-lg"
                                                                 aria-hidden="true"></i> {{ __('Alert History') }}</a></li>
                         <li><a href="{{ url('alert-stats') }}"><i class="fa fa-bar-chart fa-fw fa-lg"
-                                                                  aria-hidden="true"></i> {{ __('Statistics') }}</a></li>
+                                                                  aria-hidden="true"></i> {{ __('Alert Statistics') }}</a></li>
                         @if($show_alert_divider)
                         <li role="presentation" class="divider"></li>
                         @endif

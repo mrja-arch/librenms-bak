@@ -10,17 +10,17 @@ use App\Facades\LibrenmsConfig;
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h5 class="modal-title" id="alert_notes">Acknowledge Alert</h5>
+                    <h5 class="modal-title" id="alert_notes"><?= __('Acknowledge Alert') ?></h5>
                 </div>
                 <div class="modal-body">
                     <div class='form-group'>
-                        <label for='ack_msg' class='col-sm-4 col-md-3 control-label' title="Add a message to the acknowledgement">(Un)Acknowledgement note: </label>
+                        <label for='ack_msg' class='col-sm-4 col-md-3 control-label' title="<?= __('Add a message to the acknowledgement') ?>"><?= __('Acknowledgement Note') ?>: </label>
                         <div class="col-sm-8 col-md-9">
                             <input type='text' id='ack_msg' name='ack_msg' class='form-control' autofocus>
                         </div>
                     </div>
                     <div class="form-group" id="ack_section">
-                        <label for="ack_until_clear" class="col-sm-4 col-md-3 control-label" title="Acknowledge until alert clears">Acknowledge until clear:</label>
+                        <label for="ack_until_clear" class="col-sm-4 col-md-3 control-label" title="<?= __('Acknowledge until alert clears') ?>"><?= __('Acknowledge Until Clear') ?>:</label>
                         <div class="col-sm-8 col-md-9">
                             <input type='checkbox' name='ack_until_clear' id='ack_until_clear'>
                         </div>
@@ -29,7 +29,7 @@ use App\Facades\LibrenmsConfig;
                         <div class="col-sm-offset-4 col-md-offset-3 col-sm-3 col-md-2">
                             <input type="hidden" id="ack_alert_id" name="ack_alert_id" value="">
                             <input type="hidden" id="ack_alert_state" name="ack_alert_state" value="">
-                            <button class="btn btn-success" id="ack-alert" name="ack-alert">Ack alert</button>
+                            <button class="btn btn-success" id="ack-alert" name="ack-alert"><?= __('Acknowledge Alert') ?></button>
                         </div>
                     </div>
                 </div>
@@ -41,10 +41,10 @@ use App\Facades\LibrenmsConfig;
 <script>
     $('#alert_ack_modal').on('show.bs.modal', function () {
         if ($("#ack_alert_state").val() == 2) {
-            var button_label = 'Un-acknowledge alert';
+            var button_label = <?= json_encode(__('Unacknowledge Alert')) ?>;
             $('#ack_section').hide();
         } else {
-            var button_label = 'Acknowledge alert';
+            var button_label = <?= json_encode(__('Acknowledge Alert')) ?>;
             $('#ack_section').show();
         }
         document.getElementById('ack-alert').innerText = button_label;

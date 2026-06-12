@@ -15,10 +15,10 @@ include 'includes/html/modal/delete_alert_template.inc.php';
       <thead>
           <tr>
             <th data-column-id="id" data-searchable="false" data-identifier="true" data-type="numeric">#</th>
-            <th data-column-id="templatename">Name</th>
-            <th data-column-id="alert_rules" data-searchable="false" data-formatter="alert_rules">Alert Rules</th>
-            <th data-column-id="actions" data-searchable="false" data-formatter="commands">Action</th>
-            <th data-column-id="old_template" data-searchable="false" data-visible="false">Old template</th>
+            <th data-column-id="templatename"><?= __('Name') ?></th>
+            <th data-column-id="alert_rules" data-searchable="false" data-formatter="alert_rules"><?= __('Alert Rules') ?></th>
+            <th data-column-id="actions" data-searchable="false" data-formatter="commands"><?= __('Actions') ?></th>
+            <th data-column-id="old_template" data-searchable="false" data-visible="false"><?= __('Legacy Template') ?></th>
           </tr>
       </thead>
       <tbody>
@@ -65,13 +65,21 @@ foreach ($templates as $template) {
 $(document).ready(function() {
     var grid = $('#templatetable').bootgrid({
         rowCount: [50, 100, 250, -1],
+        labels: {
+            all: <?= json_encode(__('All')) ?>,
+            infos: <?= json_encode(__('Showing {{ctx.start}} to {{ctx.end}} of {{ctx.total}} entries')) ?>,
+            loading: <?= json_encode(__('Loading...')) ?>,
+            noResults: <?= json_encode(__('No results found!')) ?>,
+            refresh: <?= json_encode(__('Refresh')) ?>,
+            search: <?= json_encode(__('Search')) ?>
+        },
         templates: {
         header: '<div id="{{ctx.id}}" class="{{css.header}}"> \
                     <div class="row"> \
 <?php if (Gate::allows('create', AlertTemplate::class)) { ?>
                         <div class="col-sm-8 actionBar"> \
                             <span class="pull-left"> \
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#alert-template" data-template_id="">Create new alert template</button> \
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#alert-template" data-template_id=""><?= __('Create Alert Template') ?></button> \
                             </span> \
                         </div> \
                 <div class="col-sm-4 actionBar"><p class="{{css.search}}"></p><p class="{{css.actions}}"></p></div></div></div>'

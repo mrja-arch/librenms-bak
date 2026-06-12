@@ -14,12 +14,12 @@
 */
 
 $no_refresh = true;
-$page_title = 'Alerts';
+$page_title = __('Alerts');
 ?>
 
 <div class="panel panel-default panel-condensed">
     <div class="panel-heading">
-        <strong>Alerts</strong>
+        <strong><?= __('Alerts') ?></strong>
     </div>
 
     <?php

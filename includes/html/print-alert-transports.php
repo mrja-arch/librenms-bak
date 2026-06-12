@@ -17,7 +17,7 @@ require_once 'includes/html/modal/edit_alert_transport.inc.php';
 require_once 'includes/html/modal/edit_transport_group.inc.php';
 
 if (Gate::allows('create', AlertTransport::class)) {
-    echo "<button type='button' class='btn btn-primary btn-sm' data-toggle='modal' data-target='#edit-alert-transport'>Create alert transport</button>";
+    echo "<button type='button' class='btn btn-primary btn-sm' data-toggle='modal' data-target='#edit-alert-transport'>" . __('Create Alert Transport') . '</button>';
 }
 ?>
 <br>
@@ -25,11 +25,11 @@ if (Gate::allows('create', AlertTransport::class)) {
 <div class="table-responsive">
     <table class="table table-hover table-condensed">
     <tr>
-        <th>Transport Name</th>
-        <th>Transport Type</th>
-        <th>Default</th>
-        <th>Details</th>
-        <th style="width:136px;">Action</th>
+        <th><?= __('Transport Name') ?></th>
+        <th><?= __('Transport Type') ?></th>
+        <th><?= __('Default') ?></th>
+        <th><?= __('Details') ?></th>
+        <th style="width:136px;"><?= __('Actions') ?></th>
     </tr>
 <?php
 
@@ -39,7 +39,7 @@ foreach (\App\Models\AlertTransport::orderBy('transport_name', 'asc')->get() as 
     echo "<tr id=\"alert-transport-{$transport->transport_id}\">";
     echo '<td>' . htmlentities((string) $transport->transport_name) . '</td>';
     echo '<td>' . htmlentities((string) $instance->name()) . '</td>';
-    echo $transport->is_default ? '<td>Yes</td>' : '<td>No</td>';
+    echo $transport->is_default ? '<td>' . __('Yes') . '</td>' : '<td>' . __('No') . '</td>';
     echo '<td class="col-sm-4"><i>' . nl2br(htmlentities((string) $instance->displayDetails())) . '</i></td>';
 
     echo '<td>';
@@ -64,7 +64,7 @@ foreach (\App\Models\AlertTransport::orderBy('transport_name', 'asc')->get() as 
 <br>
 <?php
 if (Gate::allows('create', AlertTransport::class)) {
-    echo "<button type='button' class='btn btn-primary btn-sm' data-toggle='modal' data-target='#edit-transport-group'>Create transport group</button>";
+    echo "<button type='button' class='btn btn-primary btn-sm' data-toggle='modal' data-target='#edit-transport-group'>" . __('Create Transport Group') . '</button>';
 }
 ?>
 
@@ -73,9 +73,9 @@ if (Gate::allows('create', AlertTransport::class)) {
 <div class="table-responsive">
     <table class="table table-hover table-condensed">
     <tr>
-    <th>Transport Group</th>
-    <th>Members</th>
-    <th style="width:136px;">Action</th>
+    <th><?= __('Transport Group') ?></th>
+    <th><?= __('Members') ?></th>
+    <th style="width:136px;"><?= __('Actions') ?></th>
     </tr>
 <?php
 

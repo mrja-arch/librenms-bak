@@ -98,14 +98,14 @@ echo '<div class="table-responsive">';
 echo '<div class="col pull-left">';
 $device_id = $device['device_id'] ?? 0;
 if (Gate::allows('create', AlertRule::class)) {
-    echo '<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#create-alert" data-device_id="' . $device_id . '">Create new alert rule</button>';
-    echo '<i> - OR - </i>';
-    echo '<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#search_rule_modal" data-device_id="' . $device_id . '">Create rule from collection</button>';
+    echo '<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#create-alert" data-device_id="' . $device_id . '">' . __('Create Alert Rule') . '</button>';
+    echo '<i> - ' . __('OR') . ' - </i>';
+    echo '<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#search_rule_modal" data-device_id="' . $device_id . '">' . __('Create Rule From Collection') . '</button>';
 }
 echo '</div>';
 
 echo '<div class="col pull-right">';
-echo '<select data-toggle="popover" data-placement="left" data-content="results per page" name="results" id="results" class="form-control input-sm" onChange="updateResults(this);">';
+echo '<select data-toggle="popover" data-placement="left" data-content="' . __('Results Per Page') . '" name="results" id="results" class="form-control input-sm" onChange="updateResults(this);">';
 $result_options = [
     '10',
     '50',
@@ -179,16 +179,16 @@ $start = (($page_number - 1) * $results);
 <table id="alert-rules-table" class="table table-condensed table-hover table-striped">
 <thead>
     <tr>
-        <th data-column-id="Type">Type<th>
-        <th data-column-id="Name">Name</th>
-        <th data-column-id="Devices">Devices<th>
-        <th data-column-id="Transports">Transports<th>
-        <th data-column-id="Extra">Notification Settings</th>
-        <th data-column-id="Rule">Rule</th>
-        <th data-column-id="Severity">Severity</th>
-        <th data-column-id="Status">Status</th>
-        <th data-column-id="Enabled">Enabled</th>
-        <th data-column-id="Action" style="width:86px;">Action</th>
+        <th data-column-id="Type"><?= __('Type') ?><th>
+        <th data-column-id="Name"><?= __('Name') ?></th>
+        <th data-column-id="Devices"><?= __('Devices') ?><th>
+        <th data-column-id="Transports"><?= __('Transports') ?><th>
+        <th data-column-id="Extra"><?= __('Notification Settings') ?></th>
+        <th data-column-id="Rule"><?= __('Rule') ?></th>
+        <th data-column-id="Severity"><?= __('Severity') ?></th>
+        <th data-column-id="Status"><?= __('Status') ?></th>
+        <th data-column-id="Enabled"><?= __('Enabled') ?></th>
+        <th data-column-id="Action" style="width:86px;"><?= __('Actions') ?></th>
     </tr>
 </thead>
 <tbody>
@@ -404,13 +404,13 @@ foreach ($rule_list as $rule) {
         }
     }
     if ($op_summary === '') {
-        $op_summary = '<small class="text-muted">No operation (notifications suppressed)</small>';
+        $op_summary = '<small class="text-muted">' . __('No Operation (Notifications Suppressed)') . '</small>';
     }
     $def_step = '';
     if (! empty($rule['alert_operation_id']) && isset($opDefaults[$rule['alert_operation_id']]) && $opDefaults[$rule['alert_operation_id']] !== null) {
         $def_step = (int) $opDefaults[$rule['alert_operation_id']];
     }
-    echo '<td><small>Default step dur.: ' . e((string) $def_step) . 's</small><br />' . $op_summary . '</td>';
+    echo '<td><small>' . __('Default Step Duration') . ': ' . e((string) $def_step) . 's</small><br />' . $op_summary . '</td>';
 
     // Rule
 
