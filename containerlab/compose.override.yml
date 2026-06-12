@@ -1,0 +1,20 @@
+services:
+  librenms:
+    networks:
+      default:
+      campus-mgmt:
+        ipv4_address: 172.31.255.2
+  dispatcher:
+    networks:
+      default:
+      campus-mgmt:
+  operations-worker:
+    networks:
+      default:
+      campus-mgmt:
+
+networks:
+  campus-mgmt:
+    external: true
+    name: campus-mgmt
+

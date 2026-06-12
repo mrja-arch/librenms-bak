@@ -1,0 +1,6 @@
+images/*
+!images/.gitkeep
+vrnetlab/
+clab-*/
+*.log
+

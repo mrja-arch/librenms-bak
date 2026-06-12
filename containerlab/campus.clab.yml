@@ -1,0 +1,91 @@
+name: huawei-campus
+
+mgmt:
+  network: campus-mgmt
+  ipv4-subnet: 172.31.255.0/24
+
+topology:
+  defaults:
+    env:
+      SNMP_COMMUNITY: librenms-lab
+
+  kinds:
+    huawei_vrp:
+      image: ${CE_IMAGE:=vrnetlab/huawei_vrp:ce12800-V800R023}
+    linux:
+      image: ${ACCESS_IMAGE:=mrja/campus-access:1.0}
+
+  nodes:
+    core01:
+      kind: huawei_vrp
+      mgmt-ipv4: 172.31.255.11
+      startup-config: configs/core01.cfg
+
+    agg01:
+      kind: linux
+      image: ${AGG_IMAGE:=mrja/campus-aggregation:1.0}
+      mgmt-ipv4: 172.31.255.21
+      env:
+        NODE_NAME: agg01
+        TRUNK_PORTS: "eth2:110 eth3:120 eth4:130"
+      binds:
+        - configs/agg01/daemons:/etc/frr/daemons
+        - configs/agg01/frr.conf:/etc/frr/frr.conf
+
+    agg02:
+      kind: linux
+      image: ${AGG_IMAGE:=mrja/campus-aggregation:1.0}
+      mgmt-ipv4: 172.31.255.22
+      env:
+        NODE_NAME: agg02
+        TRUNK_PORTS: "eth2:210 eth3:220 eth4:230"
+      binds:
+        - configs/agg02/daemons:/etc/frr/daemons
+        - configs/agg02/frr.conf:/etc/frr/frr.conf
+
+    access11:
+      kind: linux
+      mgmt-ipv4: 172.31.255.31
+      env:
+        NODE_NAME: access11
+        ACCESS_VLAN: "110"
+    access12:
+      kind: linux
+      mgmt-ipv4: 172.31.255.32
+      env:
+        NODE_NAME: access12
+        ACCESS_VLAN: "120"
+    access13:
+      kind: linux
+      mgmt-ipv4: 172.31.255.33
+      env:
+        NODE_NAME: access13
+        ACCESS_VLAN: "130"
+    access21:
+      kind: linux
+      mgmt-ipv4: 172.31.255.34
+      env:
+        NODE_NAME: access21
+        ACCESS_VLAN: "210"
+    access22:
+      kind: linux
+      mgmt-ipv4: 172.31.255.35
+      env:
+        NODE_NAME: access22
+        ACCESS_VLAN: "220"
+    access23:
+      kind: linux
+      mgmt-ipv4: 172.31.255.36
+      env:
+        NODE_NAME: access23
+        ACCESS_VLAN: "230"
+
+  links:
+    - endpoints: ["core01:eth1", "agg01:eth1"]
+    - endpoints: ["core01:eth2", "agg02:eth1"]
+    - endpoints: ["agg01:eth2", "access11:eth1"]
+    - endpoints: ["agg01:eth3", "access12:eth1"]
+    - endpoints: ["agg01:eth4", "access13:eth1"]
+    - endpoints: ["agg02:eth2", "access21:eth1"]
+    - endpoints: ["agg02:eth3", "access22:eth1"]
+    - endpoints: ["agg02:eth4", "access23:eth1"]
