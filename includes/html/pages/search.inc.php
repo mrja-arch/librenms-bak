@@ -2,7 +2,7 @@
 
 $no_refresh = true;
 
-$pagetitle[] = 'Search';
+$pagetitle[] = __('Search');
 
 $sections = [
     'ipv4' => 'IPv4 Address',
@@ -20,7 +20,7 @@ $search_type = basename($vars['search'] ?? 'ipv4');
 
 print_optionbar_start('', '');
 
-echo '<span style="font-weight: bold;">Search</span> &#187; ';
+echo '<span style="font-weight: bold;">' . __('Search') . '</span> &#187; ';
 
 $sep = '';
 foreach ($sections as $type => $texttype) {
@@ -30,7 +30,7 @@ foreach ($sections as $type => $texttype) {
     }
 
     // echo('<a href="search/' . $type . ($_GET['optb'] ? '/' . $_GET['optb'] : ''). '/">' . $texttype .'</a>');
-    echo generate_link($texttype, ['page' => 'search', 'search' => $type]);
+    echo generate_link(__($texttype), ['page' => 'search', 'search' => $type]);
 
     if ($vars['search'] == $type) {
         echo '</span>';
@@ -44,5 +44,5 @@ print_optionbar_end();
 if (file_exists("includes/html/pages/search/$search_type.inc.php")) {
     include "includes/html/pages/search/$search_type.inc.php";
 } else {
-    echo 'Unknown search type';
+    echo __('Unknown search type');
 }

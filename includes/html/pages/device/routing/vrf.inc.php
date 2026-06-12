@@ -16,7 +16,7 @@ print_optionbar_start();
 
 echo "<span style='font-weight: bold;'>VRFs</span> &#187; ";
 
-$menu_options = ['basic' => 'Basic',
+$menu_options = ['basic' => __('Basic'),
     // 'detail' => 'Detail',
 ];
 
@@ -40,13 +40,13 @@ foreach ($menu_options as $option => $text) {
 
 unset($sep);
 
-echo ' Graphs: ';
+echo ' ' . __('Graphs') . ': ';
 
 $graph_types = [
-    'bits' => 'Bits',
-    'upkts' => 'Unicast Packets',
-    'nupkts' => 'Non-Unicast Packets',
-    'errors' => 'Errors',
+    'bits' => __('Bits'),
+    'upkts' => __('Unicast Packets'),
+    'nupkts' => __('Non-Unicast Packets'),
+    'errors' => __('Errors'),
     'etherlike' => 'Etherlike',
 ];
 

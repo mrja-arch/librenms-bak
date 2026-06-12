@@ -19,11 +19,11 @@ $common_output[] = '
     <table id="eventlog" class="table table-hover table-condensed table-striped">
         <thead>
             <tr>
-                <th data-column-id="datetime" data-order="desc">Timestamp</th>
-                <th data-column-id="type">Type</th>
-                <th data-column-id="device_id">Hostname</th>
-                <th data-column-id="message">Message</th>
-                <th data-column-id="username">User</th>
+                <th data-column-id="datetime" data-order="desc">' . e(__('Timestamp')) . '</th>
+                <th data-column-id="type">' . e(__('Type')) . '</th>
+                <th data-column-id="device_id">' . e(__('Hostname')) . '</th>
+                <th data-column-id="message">' . e(__('Message')) . '</th>
+                <th data-column-id="username">' . e(__('User')) . '</th>
             </tr>
         </thead>
     </table>
@@ -33,6 +33,14 @@ $common_output[] = '
 var eventlog_grid = $("#eventlog").bootgrid({
     ajax: true,
     rowCount: [50, 100, 250, -1],
+    labels: {
+        all: ' . json_encode(__('All')) . ',
+        infos: ' . json_encode(__('Showing {{ctx.start}} to {{ctx.end}} of {{ctx.total}} entries')) . ',
+        loading: ' . json_encode(__('Loading...')) . ',
+        noResults: ' . json_encode(__('No results found!')) . ',
+        refresh: ' . json_encode(__('Refresh')) . ',
+        search: ' . json_encode(__('Search')) . '
+    },
     post: function ()
     {
         return {

@@ -77,14 +77,14 @@ class PortsController extends Controller
             'perPage' => $perPage,
             'paginationOptions' => [12, 24, 48, 128, 568, 4096],
             'nav' => [
-                'basic' => ['text' => 'Basic', 'link' => route('ports', $request->query())],
-                'detail' => ['text' => 'Detail', 'link' => route('ports', ['view' => 'detail', ...$request->query()])],
+                'basic' => ['text' => __('Basic'), 'link' => route('ports', $request->query())],
+                'detail' => ['text' => __('Detail'), 'link' => route('ports', ['view' => 'detail', ...$request->query()])],
             ],
             'graphNav' => [
-                'bits' => ['text' => 'Bits', 'link' => route('ports', ['view' => 'graph', 'graph' => 'bits', ...$request->query()])],
-                'upkts' => ['text' => 'Unicast Packets', 'link' => route('ports', ['view' => 'graph', 'graph' => 'upkts', ...$request->query()])],
-                'nupkts' => ['text' => 'Non-Unicast Packets', 'link' => route('ports', ['view' => 'graph', 'graph' => 'nupkts', ...$request->query()])],
-                'errors' => ['text' => 'Errors', 'link' => route('ports', ['view' => 'graph', 'graph' => 'errors', ...$request->query()])],
+                'bits' => ['text' => __('Bits'), 'link' => route('ports', ['view' => 'graph', 'graph' => 'bits', ...$request->query()])],
+                'upkts' => ['text' => __('Unicast Packets'), 'link' => route('ports', ['view' => 'graph', 'graph' => 'upkts', ...$request->query()])],
+                'nupkts' => ['text' => __('Non-Unicast Packets'), 'link' => route('ports', ['view' => 'graph', 'graph' => 'nupkts', ...$request->query()])],
+                'errors' => ['text' => __('Errors'), 'link' => route('ports', ['view' => 'graph', 'graph' => 'errors', ...$request->query()])],
             ],
             'bare' => $bare,
             'bareLink' => $bare ? $request->fullUrlWithoutQuery('bare') : $request->fullUrlWithQuery(['bare' => 'yes']),
@@ -138,7 +138,7 @@ class PortsController extends Controller
             ],
             [
                 'key' => 'device.hostname',
-                'label' => 'Hostname',
+                'label' => __('Hostname'),
                 'type' => 'text',
             ],
             [
@@ -149,12 +149,12 @@ class PortsController extends Controller
             ],
             [
                 'key' => 'search',
-                'label' => 'Description',
+                'label' => __('Description'),
                 'type' => 'text',
             ],
             [
                 'key' => 'state',
-                'label' => 'Oper Status',
+                'label' => __('Oper Status'),
                 'type' => 'select',
                 'options' => [
                     'up',
@@ -164,7 +164,7 @@ class PortsController extends Controller
             ],
             [
                 'key' => 'ifSpeed',
-                'label' => 'Speed',
+                'label' => __('Speed'),
                 'type' => 'select',
                 'endpoint' => route('ajax.select.port-field'),
                 'params' => [
@@ -173,7 +173,7 @@ class PortsController extends Controller
             ],
             [
                 'key' => 'ifType',
-                'label' => 'Media',
+                'label' => __('Media'),
                 'type' => 'select',
                 'endpoint' => route('ajax.select.port-field'),
                 'params' => [
@@ -182,23 +182,23 @@ class PortsController extends Controller
             ],
             [
                 'key' => 'ifDuplex',
-                'label' => 'Duplex',
+                'label' => __('Duplex'),
                 'type' => 'select',
                 'options' => [
-                    'fullDuplex' => 'Full',
-                    'halfDuplex' => 'Half',
-                    'unknown' => 'unknown',
+                    'fullDuplex' => __('Full'),
+                    'halfDuplex' => __('Half'),
+                    'unknown' => __('Unknown'),
                 ],
             ],
             [
                 'key' => 'groups.id',
-                'label' => 'Group',
+                'label' => __('Group'),
                 'type' => 'select',
                 'endpoint' => route('ajax.select.port-group'),
             ],
             [
                 'key' => 'port_type',
-                'label' => 'Port Type',
+                'label' => __('Port Type'),
                 'type' => 'select',
                 'endpoint' => route('ajax.select.port-field'),
                 'params' => [
@@ -207,28 +207,28 @@ class PortsController extends Controller
             ],
             [
                 'key' => 'device.groups.id',
-                'label' => 'Device Group',
+                'label' => __('Device Group'),
                 'type' => 'select',
                 'endpoint' => route('ajax.select.device-group'),
             ],
             [
                 'key' => 'errors',
-                'label' => 'Errors',
+                'label' => __('Errors'),
                 'type' => 'boolean',
             ],
             [
                 'key' => 'ignore',
-                'label' => 'Ignored',
+                'label' => __('Ignored'),
                 'type' => 'boolean',
             ],
             [
                 'key' => 'disabled',
-                'label' => 'Disabled',
+                'label' => __('Disabled'),
                 'type' => 'boolean',
             ],
             [
                 'key' => 'deleted',
-                'label' => 'Deleted',
+                'label' => __('Deleted'),
                 'type' => 'boolean',
             ],
         ];

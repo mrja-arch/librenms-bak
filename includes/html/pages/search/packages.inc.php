@@ -26,18 +26,18 @@ print_optionbar_start(28);
 <form method="post" action="" class="form-inline" role="form">
     <?php echo csrf_field() ?>
     <div class="form-group">
-        <label for="package">Package</label>
-        <input type="text" name="package" id="package" size=20 value="<?php echo htmlspecialchars((string) $_POST['package']); ?>" class="form-control input-sm" placeholder="Any" />
+        <label for="package"><?= __('Package') ?></label>
+        <input type="text" name="package" id="package" size=20 value="<?php echo htmlspecialchars((string) $_POST['package']); ?>" class="form-control input-sm" placeholder="<?= __('Any') ?>" />
     </div>
     <div class="form-group">
-        <label for="version">Version</label>
-        <input type="text" name="version" id="version" size=20 value="<?php echo htmlspecialchars((string) $_POST['version']); ?>" class="form-control input-sm" placeholder="Any" />
+        <label for="version"><?= __('Version') ?></label>
+        <input type="text" name="version" id="version" size=20 value="<?php echo htmlspecialchars((string) $_POST['version']); ?>" class="form-control input-sm" placeholder="<?= __('Any') ?>" />
     </div>
     <div class="form-group">
-        <label for="version">Arch</label>
-        <input type="text" name="arch" id="arch" size=20 value="<?php echo htmlspecialchars((string) $_POST['arch']); ?>" class="form-control input-sm" placeholder="Any" />
+        <label for="version"><?= __('Arch') ?></label>
+        <input type="text" name="arch" id="arch" size=20 value="<?php echo htmlspecialchars((string) $_POST['arch']); ?>" class="form-control input-sm" placeholder="<?= __('Any') ?>" />
     </div>
-    <button type="submit" class="btn btn-default input-sm">Search</button>
+    <button type="submit" class="btn btn-default input-sm"><?= __('Search') ?></button>
 </form>
 <?php
 print_optionbar_end();
@@ -53,7 +53,7 @@ if (isset($_POST['results_amount']) && $_POST['results_amount'] > 0) {
     <?php echo csrf_field() ?>
     <table class="table table-hover table-condensed table-striped">
         <tr>
-            <td colspan="3"><strong>Packages</strong></td>
+            <td colspan="3"><strong><?= __('Packages') ?></strong></td>
             <td><select name="results" id="results" class="form-control input-sm" onChange="updateResults(this);">
                 <?php
                 $result_options = ['10', '50', '100', '250', '500', '1000', '5000'];
@@ -111,10 +111,10 @@ $full_query = $query . " LIMIT $start,$results";
 
 ?>
         <tr>
-            <th>Package</th>
-            <th>Version</th>
-            <th>Arch</th>
-            <th>Device</th>
+            <th><?= __('Package') ?></th>
+            <th><?= __('Version') ?></th>
+            <th><?= __('Arch') ?></th>
+            <th><?= __('Device') ?></th>
         </tr>
 <?php
 

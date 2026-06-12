@@ -76,13 +76,13 @@ class VlansController implements DeviceTab
             'error' => null,
             'submenu' => [
                 [
-                    ['name' => 'Basic', 'url' => ''],
+                    ['name' => __('Basic'), 'url' => ''],
                 ],
-                'Graphs' => [
-                    ['name' => 'Bits', 'url' => 'bits'],
-                    ['name' => 'Unicast Packets', 'url' => 'upkts'],
-                    ['name' => 'Non-Unicast Packets', 'url' => 'nupkts'],
-                    ['name' => 'Errors', 'url' => 'errors'],
+                __('Graphs') => [
+                    ['name' => __('Bits'), 'url' => 'bits'],
+                    ['name' => __('Unicast Packets'), 'url' => 'upkts'],
+                    ['name' => __('Non-Unicast Packets'), 'url' => 'nupkts'],
+                    ['name' => __('Errors'), 'url' => 'errors'],
                 ],
             ],
         ];

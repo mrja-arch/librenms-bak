@@ -1,17 +1,17 @@
 <div class="panel panel-default panel-condensed">
     <div class="panel-heading">
-        <strong>ARP Entries</strong>
+        <strong><?= __('ARP Entries') ?></strong>
     </div>
     <table id="arp-search" class="table table-hover table-condensed table-striped">
         <thead>
             <tr>
-                <th data-column-id="mac_address" data-formatter="tooltip">MAC Address</th>
-                <th data-column-id="mac_oui" data-sortable="false" data-visible="<?php echo \App\Facades\LibrenmsConfig::get('mac_oui.enabled') ? 'true' : 'false' ?>" data-formatter="tooltip">Vendor</th>
-                <th data-column-id="ipv4_address" data-formatter="tooltip">IP Address</th>
-                <th data-column-id="hostname" data-order="asc">Device</th>
-                <th data-column-id="interface">Interface</th>
-                <th data-column-id="remote_device" data-sortable="false">Remote device</th>
-                <th data-column-id="remote_interface" data-sortable="false">Remote interface</th>
+                <th data-column-id="mac_address" data-formatter="tooltip"><?= __('MAC Address') ?></th>
+                <th data-column-id="mac_oui" data-sortable="false" data-visible="<?php echo \App\Facades\LibrenmsConfig::get('mac_oui.enabled') ? 'true' : 'false' ?>" data-formatter="tooltip"><?= __('Vendor') ?></th>
+                <th data-column-id="ipv4_address" data-formatter="tooltip"><?= __('IP Address') ?></th>
+                <th data-column-id="hostname" data-order="asc"><?= __('Device') ?></th>
+                <th data-column-id="interface"><?= __('Interface') ?></th>
+                <th data-column-id="remote_device" data-sortable="false"><?= __('Remote Device') ?></th>
+                <th data-column-id="remote_interface" data-sortable="false"><?= __('Remote Interface') ?></th>
             </tr>
         </thead>
     </table>
@@ -22,6 +22,14 @@
 var grid = $("#arp-search").bootgrid({
     ajax: true,
     rowCount: [50, 100, 250, -1],
+    labels: {
+        all: <?= json_encode(__('All')) ?>,
+        infos: <?= json_encode(__('Showing {{ctx.start}} to {{ctx.end}} of {{ctx.total}} entries')) ?>,
+        loading: <?= json_encode(__('Loading...')) ?>,
+        noResults: <?= json_encode(__('No results found!')) ?>,
+        refresh: <?= json_encode(__('Refresh')) ?>,
+        search: <?= json_encode(__('Search')) ?>
+    },
     templates: {
         header: "<div id=\"{{ctx.id}}\" class=\"{{css.header}}\"><div class=\"row\">"+
                 "<div class=\"col-sm-9 actionBar\"><span class=\"pull-left\">"+
@@ -29,7 +37,7 @@ var grid = $("#arp-search").bootgrid({
                 "<?php echo addslashes(csrf_field()) ?>"+
                 "<div class=\"form-group\">"+
                 "<select name=\"device_id\" id=\"device_id\" class=\"form-control input-sm\">"+
-                "<option value=\"\">All Devices</option>"+
+                "<option value=\"\"><?= __('All Devices') ?></option>"+
 <?php
 
             // Select the devices only with ARP tables
@@ -68,7 +76,7 @@ if ($searchby != 'ip') {
 }
 ?>
 
-                ">MAC Address</option>"+
+                "><?= __('MAC Address') ?></option>"+
                 "<option value=\"ip\" "+
 <?php
 if ($searchby == 'ip') {
@@ -76,7 +84,7 @@ if ($searchby == 'ip') {
 }
 ?>
 
-                ">IP Address</option>"+
+                "><?= __('IP Address') ?></option>"+
                 "</select>"+
                 "</div>"+
                 "<div class=\"form-group\">"+
@@ -85,9 +93,9 @@ if ($searchby == 'ip') {
 echo '"' . htmlspecialchars((string) $searchPhrase) . '"+';
 ?>
 
-                "\" class=\"form-control input-sm\" placeholder=\"Address\" />"+
+                "\" class=\"form-control input-sm\" placeholder=\"<?= __('Address') ?>\" />"+
                 "</div>"+
-                "<button type=\"submit\" class=\"btn btn-default input-sm\">Search</button>"+
+                "<button type=\"submit\" class=\"btn btn-default input-sm\"><?= __('Search') ?></button>"+
                 "</form></span></div>"+
                "<div class=\"col-sm-3 actionBar\"><p class=\"{{css.actions}}\"></p></div></div></div>"
     },

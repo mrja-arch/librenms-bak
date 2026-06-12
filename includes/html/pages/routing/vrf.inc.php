@@ -18,7 +18,7 @@ if (Gate::denies('viewAny', Vrf::class)) {
 
     echo "<span style='font-weight: bold;'>VRFs</span> &#187; ";
 
-    $menu_options = ['basic' => 'Basic',
+    $menu_options = ['basic' => __('Basic'),
     ];
 
     if (! $vars['view']) {
@@ -41,13 +41,13 @@ if (Gate::denies('viewAny', Vrf::class)) {
 
     unset($sep);
 
-    echo ' Graphs: ';
+    echo ' ' . __('Graphs') . ': ';
 
     $graph_types = [
-        'bits' => 'Bits',
-        'upkts' => 'Unicast Packets',
-        'nupkts' => 'Non-Unicast Packets',
-        'errors' => 'Errors',
+        'bits' => __('Bits'),
+        'upkts' => __('Unicast Packets'),
+        'nupkts' => __('Non-Unicast Packets'),
+        'errors' => __('Errors'),
         'etherlike' => 'Etherlike',
     ];
 
