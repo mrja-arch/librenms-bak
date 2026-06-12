@@ -20,7 +20,7 @@
                         <h4>Scan with your Two Factor Authenticator.</h4>
                         <div class="col-md-12 text-center" id="twofactorqr"></div>
                         <div class="col-md-12 text-center">
-                            <button class="btn btn-default" onclick="$('#twofactorqrcontainer').hide(); $('#twofactorkeycontainer').show();">Manual</button>
+                            <button class="btn btn-default" onclick="$('#twofactorqrcontainer').hide(); $('#twofactorkeycontainer').show();">{{ __('Manual') }}</button>
                         </div>
                     </div>
 
@@ -32,7 +32,7 @@
                             {{ $key }}
                         </div>
                         <div class="col-sm-12 text-center">
-                            <button class="btn btn-default" onclick="$('#twofactorkeycontainer').hide(); $('#twofactorqrcontainer').show();">QR</button>
+                            <button class="btn btn-default" onclick="$('#twofactorkeycontainer').hide(); $('#twofactorqrcontainer').show();">{{ __('QR') }}</button>
                         </div>
                     </div>
                     <script>$("#twofactorqr").qrcode({"text": "{!! $uri !!}"});</script>

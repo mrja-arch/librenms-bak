@@ -10,4 +10,10 @@ COPY mib-archives /opt/librenms/mib-archives
 COPY docs-custom /opt/librenms/docs-custom
 COPY scripts/huawei-mib-workflow.php /opt/librenms/scripts/huawei-mib-workflow.php
 
-RUN chmod +x /opt/librenms/scripts/huawei-mib-workflow.php
+# Include local UI localization changes in the deployable image.
+COPY lang/zh-CN.json /opt/librenms/lang/zh-CN.json
+COPY docker/apply-ui-localization.py /tmp/apply-ui-localization.py
+
+RUN python3 /tmp/apply-ui-localization.py \
+    && rm /tmp/apply-ui-localization.py \
+    && chmod +x /opt/librenms/scripts/huawei-mib-workflow.php

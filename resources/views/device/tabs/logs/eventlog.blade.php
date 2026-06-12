@@ -60,7 +60,7 @@
                 '<option value=\"' + @json($eventtype) + '\">' + @json($eventtype) + '</option>' +
             '</select>' +
             '</div>&nbsp;&nbsp;' +
-            '<button type="submit" class="btn btn-default">Filter</button>' +
+            '<button type="submit" class="btn btn-default">{{ __('Filter') }}</button>' +
             '</form>' +
             '</div>'
         );

@@ -81,7 +81,7 @@
             '<div class="form-group">' +
             '&nbsp;&nbsp;<input name="to" type="text" class="form-control" id="dtpickerto" maxlength="16" value="' + @json($to) + '" placeholder="To" data-date-format="YYYY-MM-DD HH:mm">' +
             '</div>' +
-            '&nbsp;&nbsp;<button type="submit" class="btn btn-default">Filter</button>' +
+            '&nbsp;&nbsp;<button type="submit" class="btn btn-default">{{ __('Filter') }}</button>' +
             '</form>' +
             '</div>' +
             '</div>' +

@@ -74,7 +74,7 @@
                             "<option value=\"1209600\">Search last 14 days</option>"+
                             "<option value=\"2592000\">Search last 30 days</option>"+
                             "</select>&nbsp;</div>"+
-                    "<button type=\"submit\" class=\"btn btn-success\">Filter</button>&nbsp;"+
+                    "<button type=\"submit\" class=\"btn btn-success\">{{ __('Filter') }}</button>&nbsp;"+
                     "</form></div>"+
             "<div class=\"col-sm-4 actionBar\"><p class=\"@{{css.search}}\"></p><p class=\"@{{css.actions}}\"></p></div></div></div>";
 
