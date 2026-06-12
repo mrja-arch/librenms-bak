@@ -1316,6 +1316,25 @@ nav.navbar-sticky-top {
   border-radius: 0;
 }
 
+/* Keep Bootstrap modals above the sticky navigation and clear of the header. */
+.modal {
+  z-index: 1150;
+}
+
+.modal-backdrop {
+  z-index: 1140;
+}
+
+.modal-dialog {
+  margin-top: 64px;
+}
+
+@media (max-width: 767px) {
+  .modal-dialog {
+    margin: 58px 10px 10px;
+  }
+}
+
 .navbar-brand {
   padding: 8px 15px 8px 15px !important;
   line-height: 32px;

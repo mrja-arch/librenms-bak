@@ -32,16 +32,16 @@ use LibreNMS\Alerting\QueryBuilderParser;
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h5 class="modal-title" id="search_alert_rule_list">Running Alert rules</h5>
+                <h5 class="modal-title" id="search_alert_rule_list"><?= __('Running Alert Rules') ?></h5>
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
                     <table id="alert_rule_list" class="table table-condensed table-hover">
                         <thead>
                             <tr>
-                                <th data-column-id="alert_name" data-width="200px">Name</th>
-                                <th data-column-id="alert_rule">Rule</th>
-                                <th data-column-id="alert_severity">Severity</th>
+                                <th data-column-id="alert_name" data-width="200px"><?= __('Name') ?></th>
+                                <th data-column-id="alert_rule"><?= __('Rule') ?></th>
+                                <th data-column-id="alert_severity"><?= __('Severity') ?></th>
                                 <td data-column-id="alert_action" data-formatter="alert_action"></td>
                             </tr>
                         </thead>
@@ -49,7 +49,7 @@ use LibreNMS\Alerting\QueryBuilderParser;
                         $alert_rules = dbFetchRows('SELECT * FROM alert_rules order by name');
                         foreach ($alert_rules as $rule) {
                             if (isset($rule_extra['options']['override_query']) && ($rule_extra['options']['override_query'] === 'on' || $rule_extra['options']['override_query'] === true)) {
-                                $rule_display = 'Custom SQL Query';
+                                $rule_display = __('Custom SQL Query');
                             } else {
                                 $rule_display = QueryBuilderParser::fromJson($rule['builder'])->toSql(false);
                             }
@@ -57,7 +57,7 @@ use LibreNMS\Alerting\QueryBuilderParser;
                                 <tr>
                                     <td>" . e(strip_tags((string) $rule['name'])) . "</td>
                                     <td><i>" . e(strip_tags((string) $rule_display)) . "</i></td>
-                                    <td>{$rule['severity']}</td>
+                                    <td>" . e(__(ucfirst((string) $rule['severity']))) . "</td>
                                     <td>{$rule['id']}</td>
                                 </tr>
                             ";
@@ -67,9 +67,17 @@ use LibreNMS\Alerting\QueryBuilderParser;
                     <script>
                         var alert_grid = $("#alert_rule_list").bootgrid({
                             caseSensitive: false,
+                            labels: {
+                                all: <?= json_encode(__('All')) ?>,
+                                infos: <?= json_encode(__('Showing {{ctx.start}} to {{ctx.end}} of {{ctx.total}} entries')) ?>,
+                                loading: <?= json_encode(__('Loading...')) ?>,
+                                noResults: <?= json_encode(__('No results found!')) ?>,
+                                refresh: <?= json_encode(__('Refresh')) ?>,
+                                search: <?= json_encode(__('Search')) ?>
+                            },
                             formatters: {
                                 "alert_action": function (column, row) {
-                                    return "<button type=\"button\" id=\"alert_rule_from_list\" name=\"alert_rule_from_list\" data-rule_id=\"" + row.alert_action + "\" class=\"btn btn-sm btn-primary alert_rule_from_list\">Select</button";
+                                    return "<button type=\"button\" id=\"alert_rule_from_list\" name=\"alert_rule_from_list\" data-rule_id=\"" + row.alert_action + "\" class=\"btn btn-sm btn-primary alert_rule_from_list\"><?= e(__('Select')) ?></button>";
                                 }
                             },
                             templates: {
@@ -95,7 +103,7 @@ use LibreNMS\Alerting\QueryBuilderParser;
                                         }
                                     },
                                     error: function () {
-                                        toastr.error('Failed to process template');
+                                        toastr.error(<?= json_encode(__('Failed to Process Template')) ?>);
                                     }
                                 });
                             }).end();

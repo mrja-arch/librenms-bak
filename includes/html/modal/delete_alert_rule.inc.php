@@ -13,21 +13,21 @@
 
 ?>
 
-<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="Delete" aria-hidden="true">
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="delete-alert-rule-title" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h5 class="modal-title" id="Delete">Confirm Delete</h5>
+                <h5 class="modal-title" id="delete-alert-rule-title"><?= __('Delete Alert Rule') ?></h5>
             </div>
             <div class="modal-body">
-                <p>If you would like to remove the alert rule then please click Delete.</p>
+                <p id="delete-alert-rule-message"><?= __('Click Delete to remove this alert rule.') ?></p>
             </div>
             <div class="modal-footer">
                 <form role="form" class="remove_token_form">
                     <?php echo csrf_field() ?>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger danger" id="alert-rule-removal" data-target="alert-rule-removal">Delete</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?= __('Cancel') ?></button>
+                    <button type="submit" class="btn btn-danger danger" id="alert-rule-removal" data-target="alert-rule-removal"><?= __('Delete') ?></button>
                     <input type="hidden" name="alert_id" id="alert_id" value="">
                     <input type="hidden" name="alert_name" id="alert_name" value="">
                     <input type="hidden" name="confirm" id="confirm" value="yes">
@@ -43,7 +43,8 @@ $('#confirm-delete').on('show.bs.modal', function(event) {
     alert_name = $(event.relatedTarget).data('alert_name');
     $("#alert_id").val(alert_id);
     $("#alert_name").val(alert_name);
-    $( "p" ).first().text( 'If you would like to remove the alert rule named \''+alert_name+'\' then please click Delete.' );
+    var deleteMessage = <?= json_encode(__('Click Delete to remove alert rule ":name".')) ?>;
+    $("#delete-alert-rule-message").text(deleteMessage.replace(':name', alert_name));
 });
 
 $('#alert-rule-removal').on('click', function(event) {
@@ -57,12 +58,12 @@ $('#alert-rule-removal').on('click', function(event) {
             if(msg.status === 200) {
                 $("#rule_id_"+alert_id).remove();
             } else {
-                toastr.error('ERROR: ajax post failed; unable to delete alert rule');
+                toastr.error(<?= json_encode(__('Failed to Delete Alert Rule')) ?>);
             }
             $("#confirm-delete").modal('hide');
         },
         error: function() {
-            toastr.error('ERROR: ajax post failed; unable to delete alert rule');
+            toastr.error(<?= json_encode(__('Failed to Delete Alert Rule')) ?>);
             $("#confirm-delete").modal('hide');
         }
     });

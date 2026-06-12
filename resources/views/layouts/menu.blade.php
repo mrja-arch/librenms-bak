@@ -625,6 +625,26 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown"
+                       title="{{ __('Language') }}" aria-label="{{ __('Language') }}">
+                        <i class="fa fa-language fa-fw fa-lg fa-nav-icons" aria-hidden="true"></i>
+                        <span>{{ app()->getLocale() === 'zh-CN' ? '中文' : 'EN' }}</span>
+                        <span class="visible-xs-inline-block">{{ __('Language') }}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li @class(['active' => app()->getLocale() === 'zh-CN'])>
+                            <a href="#" class="navbar-locale-option" data-locale="zh-CN">
+                                <i @class(['fa', 'fa-fw', 'fa-check' => app()->getLocale() === 'zh-CN']) aria-hidden="true"></i> 中文
+                            </a>
+                        </li>
+                        <li @class(['active' => app()->getLocale() === 'en'])>
+                            <a href="#" class="navbar-locale-option" data-locale="en">
+                                <i @class(['fa', 'fa-fw', 'fa-check' => app()->getLocale() === 'en']) aria-hidden="true"></i> English
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">
                         <i class="fa fa-user fa-fw fa-lg fa-nav-icons" aria-hidden="true"></i>
                         <span class="badge badge-navbar-user count-notif {{ $notification_count ? 'badge-danger' : 'badge-default' }}">{{ $notification_count ?: '' }}</span>
@@ -722,6 +742,27 @@
 </nav>
 
 <script>
+    $('.navbar-locale-option').on('click', function (event) {
+        event.preventDefault();
+
+        $.ajax({
+            url: @json(route('preferences.store')),
+            dataType: 'json',
+            type: 'POST',
+            data: {
+                _token: @json(csrf_token()),
+                pref: 'locale',
+                value: $(this).data('locale')
+            },
+            success: function () {
+                location.reload();
+            },
+            error: function () {
+                toastr.error(@json(__('Failed to Change Language')));
+            }
+        });
+    });
+
     var devices = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,

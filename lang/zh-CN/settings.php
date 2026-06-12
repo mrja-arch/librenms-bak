@@ -1,31 +1,62 @@
 <?php
 
 return [
+    'title' => '设置',
     'readonly' => '在 config.php 里被设定成只读，请由 config.php 移除它来启用。',
     'groups' => [
-        'alerting' => '警报',
+        'alerting' => '告警',
+        'api' => 'API',
+        'apps' => '应用',
         'auth' => '验证',
+        'authorization' => '授权',
         'external' => '外部整合',
         'global' => '全域',
         'os' => '操作系统',
-        'discovery' => '探索',
+        'discovery' => '自动发现',
+        'graphing' => '图形',
         'poller' => '轮询器',
         'system' => '系统',
         'webui' => 'Web UI',
     ],
     'sections' => [
         'alerting' => [
-            'general' => ['name' => '一般警报设定'],
-            'email' => ['name' => '电子邮件设定'],
+            'general' => ['name' => '常规告警设置'],
+            'email' => ['name' => '电子邮件设置'],
+            'rules' => ['name' => '告警规则默认设置'],
+            'scheduled-maintenance' => ['name' => '计划维护'],
+        ],
+        'api' => [
+            'cors' => ['name' => 'CORS'],
+        ],
+        'apps' => [
+            'powerdns-recursor' => ['name' => 'PowerDNS Recursor'],
+            'oslv_monitor' => ['name' => 'OSLV Monitor'],
+            'sneck' => ['name' => 'Sneck'],
+            'ssl-certificates' => ['name' => 'SSL 证书'],
         ],
         'auth' => [
             'general' => ['name' => '一般验证设定'],
             'ad' => ['name' => 'Active Directory 设定'],
             'ldap' => ['name' => 'LDAP 设定'],
+            'radius' => ['name' => 'RADIUS 设置'],
+            'socialite' => ['name' => 'Socialite 设置'],
+            'http' => ['name' => 'HTTP 验证设置'],
+            'sso' => ['name' => '单点登录'],
+        ],
+        'authorization' => [
+            'device-group' => ['name' => '设备组设置'],
         ],
         'discovery' => [
-            'general' => ['name' => '一般探索设定'],
-            'route' => ['name' => '路由探索模块'],
+            'general' => ['name' => '常规自动发现设置'],
+            'route' => ['name' => '路由自动发现模块'],
+            'discovery_modules' => ['name' => '自动发现模块'],
+            'autodiscovery' => ['name' => '网络自动发现'],
+            'ports' => ['name' => '端口模块'],
+            'storage' => ['name' => '存储模块'],
+            'processor' => ['name' => '处理器模块'],
+            'ipmi' => ['name' => 'IPMI 模块'],
+            'sensors' => ['name' => '传感器模块'],
+            'virtualization' => ['name' => '虚拟化模块'],
         ],
         'external' => [
             'binaries' => ['name' => '执行文件位置'],
@@ -69,16 +100,16 @@ return [
         ],
         'alert' => [
             'ack_until_clear' => [
-                'description' => '预设认可值到警报解除选项',
-                'help' => '预设认可值到警报解除',
+                'description' => '默认确认状态保持到告警解除',
+                'help' => '默认确认状态保持到告警解除',
             ],
             'admins' => [
-                'description' => '向管理员发送警报',
-                'help' => '管理员警报',
+                'description' => '向管理员发送告警',
+                'help' => '管理员告警',
             ],
             'default_copy' => [
-                'description' => '复制所有的邮件警报给预设连络人',
-                'help' => '复制所有的邮件警报给预设连络人',
+                'description' => '将所有邮件告警抄送给默认联系人',
+                'help' => '将所有邮件告警抄送给默认联系人',
             ],
             'default_if_none' => [
                 'description' => '无法在 WebUI 设定？',
@@ -89,29 +120,29 @@ return [
                 'help' => '预设连络人邮件地址',
             ],
             'default_only' => [
-                'description' => '只发送警报给预设连络人',
-                'help' => '只发送警报给预设邮件连络人',
+                'description' => '仅向默认联系人发送告警',
+                'help' => '仅向默认邮件联系人发送告警',
             ],
             'disable' => [
-                'description' => '停用警报',
-                'help' => '停止产生警报',
+                'description' => '停用告警',
+                'help' => '停止产生告警',
             ],
             'fixed-contacts' => [
                 'description' => '更新联系电子邮件地址未得到认可',
-                'help' => '如果设为TRUE，任何对sysContact或用户电子邮件的更改在警报激活期间将不被采纳。',
+                'help' => '如果设为 TRUE，告警激活期间不会采用对 sysContact 或用户电子邮件的更改。',
             ],
             'globals' => [
-                'description' => '只发送警报给只读使用者',
-                'help' => '只发送警报给只读管理员',
+                'description' => '仅向只读用户发送告警',
+                'help' => '仅向只读管理员发送告警',
             ],
             'syscontact' => [
-                'description' => '发送警报给 sysContact',
-                'help' => '发送警报邮件给 SNMP 中的 sysContact',
+                'description' => '向 sysContact 发送告警',
+                'help' => '向 SNMP 中的 sysContact 发送告警邮件',
             ],
             'transports' => [
                 'mail' => [
-                    'description' => '启用邮件警报',
-                    'help' => '启用以邮件传输警报',
+                    'description' => '启用邮件告警',
+                    'help' => '启用通过邮件传送告警',
                 ],
             ],
             'tolerance_window' => [
@@ -119,12 +150,12 @@ return [
                 'help' => 'Tolerance window in seconds',
             ],
             'users' => [
-                'description' => '发送警报给一般使用者',
-                'help' => '警报通知一般使用者',
+                'description' => '向普通用户发送告警',
+                'help' => '向普通用户发送告警通知',
             ],
         ],
         'alert_log_purge' => [
-            'description' => '警报记录项目大于',
+            'description' => '告警记录保留时间',
             'help' => 'Cleanup done by daily.sh',
         ],
         'allow_duplicate_sysName' => [
@@ -194,7 +225,7 @@ return [
         ],
         'auth_ldap_binduser' => [
             'description' => '系结使用者',
-            'help' => '当没有用户登录时（如警报、API等），用于查询LDAP服务器',
+            'help' => '当没有用户登录时（如告警、API 等），用于查询 LDAP 服务器',
         ],
         'auth_ad_binddn' => [
             'description' => '系结 DN (覆写系结使用者名称)',
@@ -206,7 +237,7 @@ return [
         ],
         'auth_ad_binduser' => [
             'description' => '系结使用者名称',
-            'help' => '当没有用户登录时（例如，警报、API等），用于查询AD服务器',
+            'help' => '当没有用户登录时（例如告警、API 等），用于查询 AD 服务器',
         ],
         'auth_ad_starttls' => [
             'description' => '使用 STARTTLS',
@@ -597,7 +628,7 @@ return [
             'help' => '允许不登入的情况下，显示设备的状态信息。',
         ],
         'routes_max_number' => [
-            'description' => '允许探索路由的最大路由数',
+            'description' => '允许自动发现路由的最大路由数',
             'help' => '如果路由表的大小超过此数值，将不会发现任何路由信息',
         ],
         'route_purge' => [
