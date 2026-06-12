@@ -1,8 +1,8 @@
 -- ============================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2021 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- Description: The mib is used for station.
 -- Reference: 
--- Version: V1.47
+-- Version: V1.45
 -- ============================================================================
 -- Module definition
 
@@ -28,7 +28,7 @@
 				FROM SNMPv2-TC;
 		--1.3.6.1.4.1.2011.6.139.18
 		hwWlanStation MODULE-IDENTITY
-            LAST-UPDATED "202207122132Z"		-- Jul 12, 2022 at 21:32 GMT
+            LAST-UPDATED "202111252006Z"		-- Nov 25, 2021 at 20:06 GMT
 			ORGANIZATION 
 				"Huawei Technologies Co.,Ltd."
 			CONTACT-INFO 
@@ -38,13 +38,6 @@
 				   People's Republic of China
 				   Website: http://www.huawei.com
 				   Email: support@huawei.com " 
-			DESCRIPTION 
-				"V1.47, modify the index of hwWlanCPECommandStatisEntry."
-             REVISION "202207122132Z"		-- Jul 12, 2022 at 21:32 GMT
-			DESCRIPTION 
-				"V1.46, Delete node of hwCPEAlarmCPEID in the hwCPEAlarmTrap and modify hwWlanCPETable."
-             REVISION "202206301001Z"		-- Jun 30, 2022 at 10:01 GMT
-			
 			DESCRIPTION 
 				"V1.45, Add node of hwCPEAlarmTrap, hwCPEAlarmString, hwCPEAlarmCPEID. Add table hwWlanCPETable, hwWlanCPECommandStatusTable, hwWlanCPECommandStatisTable"
              REVISION "202111252006Z"		-- Nov 25, 2021 at 20:06 GMT
@@ -353,7 +346,7 @@
 
 		-- 1.3.6.1.4.1.2011.6.139.18.1.1.1.16
 		hwCPEAlarmTrap NOTIFICATION-TYPE
-			OBJECTS { hwWlanStaMac, hwWlanApMac, hwWlanApName, hwWlanApId, hwCPEAlarmString }
+			OBJECTS { hwWlanStaMac, hwWlanApMac, hwWlanApName, hwWlanApId, hwCPEAlarmString, hwCPEAlarmCPEID }
 			STATUS current
 			DESCRIPTION 
 				"A CPE reported an alarm."
@@ -563,6 +556,15 @@
 			DESCRIPTION 
 				"The alarm content CPE reported."
 			::= { hwWlanStaTrapObjects 22 }
+
+		--1.3.6.1.4.1.2011.6.139.18.1.1.2.23
+		hwCPEAlarmCPEID OBJECT-TYPE
+			SYNTAX OCTET STRING
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION 
+				"This object indicates the CPE ID."
+			::= { hwWlanStaTrapObjects 23 }
 
 		--1.3.6.1.4.1.2011.6.139.18.1.2
 		hwWlanStationTable OBJECT-TYPE
@@ -3332,34 +3334,45 @@
 			STATUS current
 			DESCRIPTION
 				"Description."
-			INDEX { hwWlanCPEMac }
+			INDEX { hwWlanCPEID, hwWlanCPEMac }
 			::= { hwWlanCPETable 1 }
 		
 		HwWlanCPEEntry ::=
 			SEQUENCE { 
+				hwWlanCPEID
+					OCTET STRING,
 				hwWlanCPEMac
 					MacAddress,
-				hwWlanCPEID
+				hwWlanCPName
 					OCTET STRING
 			 }
 
 		-- 1.3.6.1.4.1.2011.6.139.18.1.10.1.1
+		hwWlanCPEID OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (0..256))
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"This object indicates the CPE ID."
+			::= { hwWlanCPEEntry 1 }
+		
+		-- 1.3.6.1.4.1.2011.6.139.18.1.10.1.2
 		hwWlanCPEMac OBJECT-TYPE
 			SYNTAX MacAddress
 			MAX-ACCESS not-accessible
 			STATUS current
 			DESCRIPTION
 				"This object indicates the CPE MAC."
-			::= { hwWlanCPEEntry 1 }
-
-		-- 1.3.6.1.4.1.2011.6.139.18.1.10.1.2
-		hwWlanCPEID OBJECT-TYPE
+			::= { hwWlanCPEEntry 2 }
+		
+		-- 1.3.6.1.4.1.2011.6.139.18.1.10.1.3
+		hwWlanCPName OBJECT-TYPE
 			SYNTAX OCTET STRING (SIZE (0..256))
 			MAX-ACCESS read-only
 			STATUS current
 			DESCRIPTION
-				"This object indicates the CPE ID."
-			::= { hwWlanCPEEntry 2 }
+				"This object indicates the CPE name."
+			::= { hwWlanCPEEntry 3 }
 
                 -- 1.3.6.1.4.1.2011.6.139.18.1.11
 		hwWlanCPECommandStatusTable OBJECT-TYPE
@@ -3455,7 +3468,7 @@
 			STATUS current
 			DESCRIPTION
 				"Description."
-			INDEX { hwWlanCPECmdCountCPEID }
+			INDEX { hwWlanCPECommandStatusCpeID, hwWlanCPECommandStatusCmdID }
 			::= { hwWlanCPECommandStatisTable 1 }
 		
 		HwWlanCPECommandStatisEntry ::=

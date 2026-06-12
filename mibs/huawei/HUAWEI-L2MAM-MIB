@@ -1,9 +1,9 @@
 -- ==================================================================
--- Copyright (C) 2021 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 --
 -- Description:  HUAWEI Layer Two mac management MIB
 -- Reference:
--- Version: V2.52
+-- Version: V2.66
 -- History:
 --
 -- ==================================================================
@@ -45,7 +45,7 @@ IMPORTS
     --hwL2Mgmt OBJECT IDENTIFIER ::= { hwDatacomm 42 }
 
     hwL2MAM MODULE-IDENTITY
-            LAST-UPDATED "202111050000Z"
+            LAST-UPDATED "202505270000Z"
             ORGANIZATION 
                     "Huawei Technologies Co.,Ltd."
             CONTACT-INFO
@@ -60,6 +60,59 @@ IMPORTS
                     "This is the layer 2 mac-address management. It contains the layer 2
                     mac-address forwarding information currently operating on this device.
                     And also contains the information of mac-limit rule. "
+        REVISION     "202505270000Z"
+            DESCRIPTION
+                    "Add hwdbCfgBdFdbTable and hwdbDynBdFdbTable attribute. "
+	REVISION     "202405310000Z"
+            DESCRIPTION
+                    "Add hwVsiMacLimitOverThresholdAlarm and hwVsiMacLimitOverThresholdAlarmResume attribute. "
+	REVISION     "202405100000Z"
+            DESCRIPTION
+                    "Modify hwEtreeDropStatisticTable and hwStickyMacDropStatisticTable attribute. "
+	REVISION     "202405060000Z"
+            DESCRIPTION
+                    "Add hwEtreeDropStatisticTable and hwStickyMacDropStatisticTable. "
+	REVISION     "202312220000Z"                            
+            DESCRIPTION
+                    "Change the description of the node hwStickyMacStatisticsDropDispPkts. "
+	REVISION     "202312120000Z"
+            DESCRIPTION
+                    "Delete hwEvplMacHopAlarmRaisingThreshold and hwEvplMacHopAlarmFallingThreshold."
+	REVISION     "202311300000Z"
+            DESCRIPTION
+                    "Change type of hwTraffSuppAlarmDirection and hwTraffSuppAlarmServiceType."
+	REVISION     "202311010000Z"
+            DESCRIPTION
+                    "Add hwEvplMacLimitNumRaisingThresholdAlarm and hwEvplMacLimitNumRaisingThresholdAlarmResume.
+                     Add hwEvplMacHopAlarmRaisingThreshold and hwEvplMacHopAlarmFallingThreshold."
+	REVISION     "202310250000Z"
+            DESCRIPTION
+                    "Add hwTraffSuppAlarmIfIndex."
+        REVISION     "202310250000Z"		
+	   DESCRIPTION			
+	            "Add hwStickyMacStatisticsDropTable and hwStickyMacStatisticsDropDispPkts." 
+
+        REVISION     "202310190000Z"
+          DESCRIPTION
+                     "Add hwTraffSuppAlarm and hwTraffSuppAlarmResume.
+                      Add hwVlanTraffSuppAlarm and hwVlanTraffSuppAlarmResume."
+
+        REVISION     "202307040000Z"
+          DESCRIPTION
+                     "Add hwMacHashConflict."
+
+        REVISION     "202304280000Z"
+           DESCRIPTION
+                    "Add hwStickyMacConflictDomainName.
+                    Change hwBDStickyMacConflictBdId to hwStickyMacConflictDomainType.
+                    Change hwBDStickyMacConflictSlotName to hwStickyMacConflictSlotName.
+                    Change hwBDStickyMacConflictAlarm to hwStickyMacConflictAlarm.
+                    Change hwBDStickyMacConflictAlarmResume to hwStickyMacConflictAlarmResume.
+                    Modify hwStickyMacConflictSlotName and hwStickyMacConflictAlarm and hwStickyMacConflictAlarmResume."
+
+        REVISION     "202302110000Z"
+           DESCRIPTION
+                    "Add alarm node hwBDStickyMacConflictAlarm and hwBDStickyMacConflictAlarmResume. " 
 			
         REVISION    "202111050000Z"
             DESCRIPTION
@@ -536,7 +589,164 @@ VlanIndex ::= TEXTUAL-CONVENTION
                 STATUS          current
                 DESCRIPTION
                     "This object indicates whether dynamic MAC entries are converted into static MAC entries."
-                ::= { hwdbDynFdbEntry 9 }                                                                     
+                ::= { hwdbDynFdbEntry 9 }  
+
+    -- Configured bridge-domain mac-address forwarding table
+        hwdbCfgBdFdbTable OBJECT-TYPE
+                SYNTAX SEQUENCE OF HwdbCfgBdFdbEntry
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "This table is used to configure a BD-based blackhole-based MAC address table or static MAC address table."
+                ::= { hwL2MAMObjects 73 }
+
+        hwdbCfgBdFdbEntry OBJECT-TYPE
+                SYNTAX HwdbCfgBdFdbEntry
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "Entries of The layer 2 mac-address forwarding table."
+                INDEX { hwCfgBdFdbMac, hwCfgBdFdbBdId}
+                ::= { hwdbCfgBdFdbTable 1 }
+
+        HwdbCfgBdFdbEntry::=
+                SEQUENCE {
+                        hwCfgBdFdbMac
+                                MacAddress,
+                        hwCfgBdFdbBdId
+                                Unsigned32,
+                        hwCfgBdFdbPort
+                                InterfaceIndexOrZero,
+                        hwCfgBdFdbType
+                                INTEGER,
+                        hwCfgBdFdbRowstatus
+                                RowStatus
+                 }
+
+        hwCfgBdFdbMac OBJECT-TYPE
+                SYNTAX MacAddress
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "This object indicates unicast MAC entries in the BD-based static MAC address table."
+                ::= { hwdbCfgBdFdbEntry 1 }
+
+        hwCfgBdFdbBdId OBJECT-TYPE
+                SYNTAX Unsigned32(1..16777215)
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "The number of broadcast domain leaves exceeded the limit."
+                ::= { hwdbCfgBdFdbEntry 2 }
+                
+        hwCfgBdFdbPort OBJECT-TYPE
+                SYNTAX InterfaceIndexOrZero
+                MAX-ACCESS read-create
+                STATUS current
+                DESCRIPTION
+                        "This object indicates the port index of the forwarding port. The port must be of the Ethernet type."
+                ::= { hwdbCfgBdFdbEntry 3 }
+
+        hwCfgBdFdbType OBJECT-TYPE
+                SYNTAX INTEGER
+                        {
+                        static(2),
+                        blackhole(3)
+                        }
+                MAX-ACCESS read-create
+                STATUS current
+                DESCRIPTION
+                        "This object indicates the BD-based MAC entry type. This object cannot be created if the MAC entry is dynamic."
+                ::= { hwdbCfgBdFdbEntry 4 }
+        
+        hwCfgBdFdbRowstatus OBJECT-TYPE
+                SYNTAX RowStatus
+                MAX-ACCESS read-create
+                STATUS current
+                DESCRIPTION
+                        "This object indicates the operating status."
+                ::= { hwdbCfgBdFdbEntry 5 }
+
+
+    -- Dynamic (Leaned) mac-address forwarding table
+        hwdbDynBdFdbTable OBJECT-TYPE
+                SYNTAX SEQUENCE OF HwdbDynBdFdbEntry
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "This table is used to manage a device's dynamic MAC address table. Data in this table is generated after the device automatically learns MAC addresses and ages. Data in this table can be deleted instead of being added by users."
+                ::= { hwL2MAMObjects 74 }
+        hwdbDynBdFdbEntry OBJECT-TYPE
+                SYNTAX HwdbDynBdFdbEntry
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "Entries of The layer 2 mac-address forwarding table."
+                INDEX { hwDynBdFdbMac, hwDynBdFdbBdId}
+                ::= { hwdbDynBdFdbTable 1 }
+        HwdbDynBdFdbEntry::=
+                SEQUENCE {
+                        hwDynBdFdbMac
+                                MacAddress,
+                        hwDynBdFdbBdId
+                                Unsigned32,
+                        hwDynBdFdbPort
+                                InterfaceIndexOrZero,
+                        hwDynBdFdbPeVlan
+                                VlanIdOrNone,
+                        hwDynBdFdbCeVlan
+                                VlanIdOrNone,
+                        hwDynBdFdbRowstatus
+                                RowStatus
+                 }
+
+        hwDynBdFdbMac OBJECT-TYPE
+                SYNTAX MacAddress
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "This object indicates unicast MAC entries in the BD-based dynamic MAC address table."
+                ::= { hwdbDynBdFdbEntry 1 }
+
+        hwDynBdFdbBdId OBJECT-TYPE
+                SYNTAX Unsigned32(1..16777215)
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "The number of broadcast domain leaves exceeded the limit."
+                ::= { hwdbDynBdFdbEntry 2 }
+                
+        hwDynBdFdbPort OBJECT-TYPE
+                SYNTAX InterfaceIndexOrZero
+                MAX-ACCESS read-create
+                STATUS current
+                DESCRIPTION
+                        "This object indicates the port index of the forwarding port. The port must be of the Ethernet type."
+                ::= { hwdbDynBdFdbEntry 3 }
+
+        hwDynBdFdbPeVlan OBJECT-TYPE
+                SYNTAX VlanIdOrNone
+                MAX-ACCESS read-create
+                STATUS current
+                DESCRIPTION
+                        "The PE VLAN ID."
+                ::= { hwdbDynBdFdbEntry 4 }
+
+        hwDynBdFdbCeVlan OBJECT-TYPE
+                SYNTAX VlanIdOrNone
+                MAX-ACCESS read-create
+                STATUS current
+                DESCRIPTION
+                        "The CE VLAN ID."
+                ::= { hwdbDynBdFdbEntry 5 }
+
+        hwDynBdFdbRowstatus OBJECT-TYPE
+                SYNTAX RowStatus
+                MAX-ACCESS read-create
+                STATUS current
+                DESCRIPTION
+                        "This object indicates the operating status."
+                ::= { hwdbDynBdFdbEntry 6 }
                                               
   -- MacLimit
         hwMacLimitTable OBJECT-TYPE
@@ -752,6 +962,48 @@ VlanIndex ::= TEXTUAL-CONVENTION
                DESCRIPTION
                "This object indicates that the MAC address usage fell below the alarm threshold."
         ::= { hwMacUsageEntry 2 }
+
+    --EvplMacLimit
+        hwEvplMacLimitTable OBJECT-TYPE
+                SYNTAX SEQUENCE OF HwEvplMacLimitEntry
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "A table containing the mac-address learning-limit rule information for device."
+                ::= { hwL2MAMObjects 70 }
+
+        hwEvplMacLimitEntry OBJECT-TYPE
+                SYNTAX HwEvplMacLimitEntry
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "Entries of the mac-address learning-limit table."
+                INDEX { hwEvplMacLimitBdId,hwEvplMacLimitEvplId}
+                ::= { hwEvplMacLimitTable 1 }
+
+        HwEvplMacLimitEntry ::=
+                SEQUENCE {
+                        hwEvplMacLimitBdId
+                                Unsigned32,
+                        hwEvplMacLimitEvplId
+                                Unsigned32
+                       }
+
+        hwEvplMacLimitBdId OBJECT-TYPE
+                SYNTAX Unsigned32(1..16777215)
+                MAX-ACCESS accessible-for-notify
+                STATUS current
+                DESCRIPTION
+                        "The bd id which will be configured evpl instance."
+                ::= { hwEvplMacLimitEntry 1 }
+
+        hwEvplMacLimitEvplId OBJECT-TYPE
+                SYNTAX Unsigned32(1..4294967295)
+                MAX-ACCESS accessible-for-notify
+                STATUS current
+                DESCRIPTION
+                        "The evpl id which will be configured mac limit."
+                ::= { hwEvplMacLimitEntry 2 }
 
     -- hwMacHopAlarmTable
         hwMacHopAlarmTable OBJECT-TYPE
@@ -1194,6 +1446,37 @@ VlanIndex ::= TEXTUAL-CONVENTION
 
 -- not support  te over gre
 
+		hwStickyMacStatisticsDropTable OBJECT-TYPE
+                SYNTAX SEQUENCE OF HwStickyMacStatisticsDropEntry
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "This table is used to describe sticky MAC addresses conflict drop."
+                ::= { hwL2MAMObjects 69 }
+
+        hwStickyMacStatisticsDropEntry OBJECT-TYPE
+                SYNTAX HwStickyMacStatisticsDropEntry
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "Entries of the statistics of sticky MAC addresses conflict drop table."
+                INDEX { entPhysicalIndex }
+                ::= { hwStickyMacStatisticsDropTable 1 }
+                
+        HwStickyMacStatisticsDropEntry ::=
+                SEQUENCE {
+                        hwStickyMacStatisticsDropDispPkts
+                                Counter64                              
+                         }      
+                       
+        hwStickyMacStatisticsDropDispPkts OBJECT-TYPE
+                SYNTAX Counter64
+                MAX-ACCESS read-only
+                STATUS current
+                DESCRIPTION
+                        "This object indicates the number of packets dropped due to source MAC address check failures in sticky MAC addresses scenarios."
+                ::= { hwStickyMacStatisticsDropEntry 1 }
+
 --vll vpn qos not support tunnel 
         hwVllVpnQosNotSupportTunnelTable OBJECT-TYPE
                SYNTAX SEQUENCE OF HwVllVpnQosNotSupportTunnelEntry
@@ -1401,6 +1684,97 @@ VlanIndex ::= TEXTUAL-CONVENTION
                         the meaning is that there isn't limiting rule to
                         the mac-address number."
                 ::= { hwL2MAMObjects 64} 
+        hwStickyMacConflictDomainType OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE (0..40))
+                MAX-ACCESS accessible-for-notify
+                STATUS current
+                DESCRIPTION "This object indicates the domain type with sticky MAC addresses conflicting."
+                ::= { hwL2MAMObjects 65 }
+        hwStickyMacConflictDomainName OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE (0..40))
+                MAX-ACCESS accessible-for-notify
+                STATUS current
+                DESCRIPTION "This object indicates the domain name with sticky MAC addresses conflicting."
+                ::= { hwL2MAMObjects 66 }
+        hwStickyMacConflictSlotName OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE (0..40))
+                MAX-ACCESS accessible-for-notify
+                STATUS current
+                DESCRIPTION "This object indicates the name of the slot with sticky MAC addresses conflicting."
+                ::= { hwL2MAMObjects 67 }
+
+        hwTraffSuppAlarmTable OBJECT-TYPE
+                SYNTAX SEQUENCE OF HwTraffSuppAlarmEntry
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "This table is used to indicate traffic suppression alarm."
+
+                ::= { hwL2MAMObjects 68 }
+
+        hwTraffSuppAlarmEntry OBJECT-TYPE
+                SYNTAX HwTraffSuppAlarmEntry
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "Entries of traffic suppression alarm."
+                INDEX {hwTraffSuppAlarmIfIndex}
+                ::= { hwTraffSuppAlarmTable 1 }
+
+        HwTraffSuppAlarmEntry::=
+                SEQUENCE {
+                        hwTraffSuppAlarmIfIndex
+                            Integer32,
+                        hwTraffSuppAlarmIfName
+                            OCTET STRING,
+                        hwTraffSuppAlarmServiceType
+                            Unsigned32,
+                        hwTraffSuppAlarmDirection
+                            Unsigned32,
+                        hwTraffSuppAlarmVlanId
+                            Integer32
+                        }
+
+        hwTraffSuppAlarmIfIndex OBJECT-TYPE
+                SYNTAX Integer32
+                MAX-ACCESS not-accessible
+                STATUS current
+                DESCRIPTION
+                        "This object indicates the ifindex of traffic suppression alarm."
+                ::= { hwTraffSuppAlarmEntry 1 }
+
+        hwTraffSuppAlarmIfName OBJECT-TYPE
+                SYNTAX OCTET STRING (SIZE (1..31))
+                MAX-ACCESS accessible-for-notify
+                STATUS current
+                DESCRIPTION
+                        "This object indicates the port name of the forwarding port."
+                ::= { hwTraffSuppAlarmEntry 2 }
+
+        hwTraffSuppAlarmServiceType OBJECT-TYPE
+                SYNTAX Unsigned32
+                MAX-ACCESS accessible-for-notify
+                STATUS current
+                DESCRIPTION
+                        "This object indicates the servicetype of traffic suppression alarm."
+                ::= { hwTraffSuppAlarmEntry 3 }
+
+        hwTraffSuppAlarmDirection OBJECT-TYPE
+                SYNTAX Unsigned32
+                MAX-ACCESS accessible-for-notify
+                STATUS current
+                DESCRIPTION
+                        "This object indicates the direction of traffic suppression alarm."
+                ::= { hwTraffSuppAlarmEntry 4 }
+
+        hwTraffSuppAlarmVlanId OBJECT-TYPE
+                SYNTAX Integer32 (1..4094)
+                MAX-ACCESS accessible-for-notify
+                STATUS current
+                DESCRIPTION
+                        "This object indicates the vlanId of traffic suppression alarm."
+                ::= { hwTraffSuppAlarmEntry 5 }
+
     hwL2MacTraps OBJECT IDENTIFIER ::= { hwL2MAMObjects 7 }
 
     hwMacUsageRaisingThreshold NOTIFICATION-TYPE
@@ -1889,6 +2263,80 @@ VlanIndex ::= TEXTUAL-CONVENTION
                 "This object indicates port perform of the protect action shutdown or restrict is resumed."
             ::= { hwL2MacTraps 72 }
 
+        hwStickyMacConflictAlarm NOTIFICATION-TYPE
+            OBJECTS {hwStickyMacConflictDomainType, hwStickyMacConflictDomainName, hwStickyMacConflictSlotName}
+            STATUS current
+            DESCRIPTION
+                "This object indicates the name of the instance with sticky MAC addresses conflicting."
+            ::= { hwL2MacTraps 73 }
+
+        hwStickyMacConflictAlarmResume NOTIFICATION-TYPE
+            OBJECTS {hwStickyMacConflictDomainType, hwStickyMacConflictDomainName, hwStickyMacConflictSlotName}
+            STATUS current
+            DESCRIPTION
+                "This object indicates the name of the instance which sticky MAC addresses conflicting has been resumed."
+            ::= { hwL2MacTraps 74 }
+		
+	hwMacHashConflict NOTIFICATION-TYPE
+            STATUS current
+            DESCRIPTION
+                "This object indicates a hash conflict occurs in MAC addresses."
+            ::= { hwL2MacTraps 75 }
+
+	hwTraffSuppAlarm NOTIFICATION-TYPE
+            OBJECTS {hwTraffSuppAlarmIfName, hwTraffSuppAlarmServiceType, hwTraffSuppAlarmDirection}
+            STATUS current
+            DESCRIPTION
+                "This object indicates traffic over the suppression threshold."
+            ::= { hwL2MacTraps 76 }
+        
+        hwTraffSuppAlarmResume NOTIFICATION-TYPE
+            OBJECTS {hwTraffSuppAlarmIfName, hwTraffSuppAlarmServiceType, hwTraffSuppAlarmDirection}
+            STATUS current
+            DESCRIPTION
+                "This object indicates traffic under the suppression threshold."
+            ::= { hwL2MacTraps 77 }
+
+        hwVlanTraffSuppAlarm NOTIFICATION-TYPE
+            OBJECTS {hwTraffSuppAlarmIfName, hwTraffSuppAlarmServiceType, hwTraffSuppAlarmDirection, hwTraffSuppAlarmVlanId}
+            STATUS current
+            DESCRIPTION
+                "This object indicates vlan type traffic over the suppression threshold."
+            ::= { hwL2MacTraps 78 }
+        
+        hwVlanTraffSuppAlarmResume NOTIFICATION-TYPE
+            OBJECTS {hwTraffSuppAlarmIfName, hwTraffSuppAlarmServiceType, hwTraffSuppAlarmDirection, hwTraffSuppAlarmVlanId}
+            STATUS current
+            DESCRIPTION
+                "This object indicates vlan type traffic under the suppression threshold."
+            ::= { hwL2MacTraps 79 }
+
+    hwEvplMacLimitNumRaisingThresholdAlarm NOTIFICATION-TYPE
+            OBJECTS { hwBaseTrapSeverity, hwBaseTrapProbableCause, hwBaseTrapEventType, hwMacDynAddressLearnNum, hwMacLimitMaxMac, hwEvplMacLimitBdId, hwEvplMacLimitEvplId }
+            STATUS current
+            DESCRIPTION
+                "The evpl beyond the mac limited learning number."
+            ::= { hwL2MacTraps 80 }           
+    hwEvplMacLimitNumRaisingThresholdAlarmResume NOTIFICATION-TYPE
+            OBJECTS { hwBaseTrapSeverity, hwBaseTrapProbableCause, hwBaseTrapEventType, hwMacDynAddressLearnNum, hwMacLimitMaxMac, hwEvplMacLimitBdId, hwEvplMacLimitEvplId }
+            STATUS current
+            DESCRIPTION
+                "The evpl release from the mac limited learning number."
+            ::= { hwL2MacTraps 81 }
+
+	hwVsiMacLimitOverThresholdAlarm NOTIFICATION-TYPE
+            OBJECTS {hwMacLimitVsiName, hwMacLimitMaxMac}
+                STATUS current
+                DESCRIPTION
+                    "Beyond the mac limited learning number. "
+            ::= { hwL2MacTraps 82 } 
+
+        hwVsiMacLimitOverThresholdAlarmResume NOTIFICATION-TYPE
+            OBJECTS {hwMacLimitVsiName, hwMacLimitMaxMac}
+                STATUS current
+                DESCRIPTION
+                    "Less than the mac limited learning number. "
+             ::= { hwL2MacTraps 83 } 
 -- untarget mac number            
     hwUntargetMacNum  OBJECT-TYPE
         SYNTAX  Counter64
@@ -4852,6 +5300,168 @@ HwL2DomainMacLimitAlarmEntry::=SEQUENCE {
 			   
 -- hwL2DomainMacLimitAlarmTable end
 
+    hwEtreeDropStatisticTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwEtreeDropStatisticEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                 "A table containing the E-TREE drop statistics for BD instance."
+            ::= { hwL2MAMObjects 71 }
+
+    hwEtreeDropStatisticEntry OBJECT-TYPE
+            SYNTAX HwEtreeDropStatisticEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                    "Entries of the E-TREE drop statistics table."
+            INDEX { hwEtreeDropStatisticBdId}
+            ::= { hwEtreeDropStatisticTable 1 }
+
+    HwEtreeDropStatisticEntry ::=
+            SEQUENCE {
+                    hwEtreeDropStatisticBdId
+                         Unsigned32,
+                    hwEtreeInDropTotalPack 
+                         Counter64,
+                    hwEtreeInDropTotalByte
+                         Counter64,
+                    hwEtreeInDropUcPack
+                         Counter64,
+                    hwEtreeOutDropTotalPack
+                         Counter64,
+                    hwEtreeOutDropTotalByte
+                         Counter64,
+                    hwEtreeOutDropUnUcPack
+                         Counter64,
+                    hwEtreeOutBrDropPack
+                         Counter64,
+                    hwEtreeOutUnMulDropPack
+                         Counter64
+                }
+
+    hwEtreeDropStatisticBdId OBJECT-TYPE
+            SYNTAX Unsigned32(1..16777215)
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "This object indicates the bd id."
+            ::= { hwEtreeDropStatisticEntry 1 }
+
+    hwEtreeInDropTotalPack OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the total number of dropped packets for traffic in the inbound direction."
+            ::= { hwEtreeDropStatisticEntry 2 }
+
+    hwEtreeInDropTotalByte OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the total number of dropped bytes for traffic in the inbound direction."
+            ::= { hwEtreeDropStatisticEntry 3 }
+
+     hwEtreeInDropUcPack OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of dropped packets for unicast traffic in the inbound direction."
+            ::= { hwEtreeDropStatisticEntry 4 }
+
+     hwEtreeOutDropTotalPack OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the total number of dropped packets for traffic in the outbound direction."
+            ::= { hwEtreeDropStatisticEntry 5 }
+
+    hwEtreeOutDropTotalByte OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the total number of dropped bytes for traffic in the outbound direction."
+            ::= { hwEtreeDropStatisticEntry 6 }
+
+    hwEtreeOutDropUnUcPack OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of dropped packets for unknown unicast traffic in the outbound direction."
+            ::= { hwEtreeDropStatisticEntry 7 }
+
+    hwEtreeOutBrDropPack OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of dropped packets for broadcast traffic in the outbound direction."
+            ::= { hwEtreeDropStatisticEntry 8 }
+
+    hwEtreeOutUnMulDropPack OBJECT-TYPE
+            SYNTAX Counter64
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of dropped packets for multicast traffic in the outbound direction."
+            ::= { hwEtreeDropStatisticEntry 9 }
+
+hwStickyMacDropStatisticTable  OBJECT-TYPE
+        SYNTAX SEQUENCE OF HwStickyMacDropStatisticEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "A table containing the sticky MAC conflict drop statistics for BD instance."
+            ::= { hwL2MAMObjects 72 }
+
+hwStickyMacDropStatisticEntry OBJECT-TYPE
+        SYNTAX HwStickyMacDropStatisticEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+                "Entries of the sticky MAC conflict drop statistics table."
+        INDEX { hwStickyMacDropBdId}
+        ::= { hwStickyMacDropStatisticTable 1 }
+
+HwStickyMacDropStatisticEntry ::=
+        SEQUENCE {
+                hwStickyMacDropBdId
+                     Unsigned32,
+                hwStickyMacDropPack 
+                     Counter64,
+                hwStickyMacDropByte
+                     Counter64
+            }
+
+hwStickyMacDropBdId OBJECT-TYPE
+        SYNTAX Unsigned32(1..16777215)
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "This object indicates the bd id."
+        ::= { hwStickyMacDropStatisticEntry 1 }
+
+hwStickyMacDropPack OBJECT-TYPE
+        SYNTAX Counter64
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "This object indicates the number of packets dropped due to source MAC address check failures in sticky MAC addresses scenarios."
+        ::= { hwStickyMacDropStatisticEntry 2 }
+
+hwStickyMacDropByte OBJECT-TYPE
+        SYNTAX Counter64
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "This object indicates the number of bytes dropped due to source MAC address check failures in sticky MAC addresses scenarios."
+        ::= { hwStickyMacDropStatisticEntry 3 }
+
 hwL2MAMConformance OBJECT IDENTIFIER ::= { hwL2MAM 2 }
 
 hwL2MAMGroups OBJECT IDENTIFIER ::= { hwL2MAMConformance 1 }
@@ -5359,7 +5969,18 @@ hwL2MAMCompliance MODULE-COMPLIANCE
             hwPortMacLimitOverThreshold,
             hwPortMacLimitOverThresholdResume,
             hwNotSupportTeOverGre,
-	    hwPortSecRcvInsecurePktAlarmResume}
+            hwPortSecRcvInsecurePktAlarmResume,
+            hwStickyMacConflictAlarm,
+            hwStickyMacConflictAlarmResume,
+            hwMacHashConflict,
+            hwTraffSuppAlarm,
+            hwTraffSuppAlarmResume,
+            hwVlanTraffSuppAlarm,
+            hwVlanTraffSuppAlarmResume,
+            hwEvplMacLimitNumRaisingThresholdAlarm,
+            hwEvplMacLimitNumRaisingThresholdAlarmResume,
+            hwVsiMacLimitOverThresholdAlarm,
+            hwVsiMacLimitOverThresholdAlarmResume}
             STATUS current
             DESCRIPTION
                 "L2 MAC tap group."

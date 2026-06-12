@@ -1,9 +1,9 @@
 -- =================================================================
--- Copyright (C) 2022 by HUAWEI TECHNOLOGIES. All rights reserved
+-- Copyright (C) 2025 by HUAWEI TECHNOLOGIES. All rights reserved
 -- 
 -- Description:HUAWEI DHCP SNOOPING MIB
 -- Reference:
--- Version: V2.23
+-- Version: V4.00
 -- History:
 --      wangcheng initial 16/02/2006
 --      hexiaoqin modified 25/12/2006
@@ -30,6 +30,12 @@
 --      modified by zhangminghui 2022/05/12
 --      modified by lianzhen 2022/09/15
 --      modified by dinglei 2022/10/21
+--      modified by liujiejie 2023/02/14
+--      modified by wangzehua 2024/06/28
+--      modified by zhengzhibo 2024/07/17
+--      modified by zhengzhibo 2024/07/18
+--      modified by wangwenqiang 2024/12/10
+--      modified by zuochuheng 2025/01/03
 -- =================================================================
     
     HUAWEI-DHCP-SNOOPING-MIB DEFINITIONS ::= BEGIN
@@ -98,11 +104,32 @@
 -- Module Identifier                
 --
     hwDhcpSnpMib MODULE-IDENTITY 
-        LAST-UPDATED "202210210000Z"           
+        LAST-UPDATED "202501030000Z"           
         ORGANIZATION 
              "Huawei Technologies Co.,Ltd."
         CONTACT-INFO 
-"Huawei Industrial Base  Bantian, Longgang   Shenzhen 518129   People's Republic of China   Website: http://www.huawei.com   Email: support@huawei.com "     
+"Huawei Industrial Base  Bantian, Longgang   Shenzhen 518129   People's Republic of China   Website: http://www.huawei.com   Email: support@huawei.com "  
+       DESCRIPTION
+            "Modify hwDhcpDegradeLevel, hwDhcpDegradeRate and hwDhcpDegradeReason."
+       REVISION "202501030000Z"
+       DESCRIPTION
+            "Modify hwDhcpSnpBindPVlanIndex, hwDhcpSnpBindCVlanIndex, hwDhcpSnpBindIfDescr, hwDhcpSnpBindPVlanId, hwDhcpSnpBindCVlanId, hwDhcpSnpBindMac, hwDhcpSnpBindIp and hwDhcpSnpBindStatus."
+       REVISION "202412100000Z"
+ 	   DESCRIPTION
+            "Modify hwIpv6UntrustedReplyPktNum and hwUntrustedV6ReplyPktAlarmBd."
+       REVISION "202407180000Z" 
+	   DESCRIPTION
+            "Add hwUntrustedV6ReplyPktAlarmBd."
+       REVISION "202407170000Z" 
+	   
+	   DESCRIPTION
+            "Add hwUntrustedV6ReplyPktAlarm."
+       REVISION "202406280000Z"
+
+	   DESCRIPTION
+            "Add hwNomatchSnpBindTblDhcpv6PktAlarmBd."
+       REVISION "202302140000Z"
+
 	   DESCRIPTION
             "Add hwDhcpv6PktRateAlarm."
        REVISION "202210210000Z"
@@ -340,7 +367,7 @@
 
     hwDhcpDegradeReason OBJECT-TYPE
         SYNTAX     DisplayString(SIZE(1..32))
-        MAX-ACCESS read-only
+        MAX-ACCESS accessible-for-notify
         STATUS current
         DESCRIPTION
             "DHCP degrade reason. "
@@ -348,7 +375,7 @@
 
     hwDhcpDegradeLevel OBJECT-TYPE
         SYNTAX     DisplayString(SIZE(1..32))
-        MAX-ACCESS read-only
+        MAX-ACCESS accessible-for-notify
         STATUS current
         DESCRIPTION
             "DHCP degrade level. "
@@ -356,7 +383,7 @@
 
     hwDhcpDegradeRate OBJECT-TYPE
         SYNTAX     DisplayString(SIZE(1..32))
-        MAX-ACCESS read-only
+        MAX-ACCESS accessible-for-notify
         STATUS current
         DESCRIPTION
             "DHCP degrade rate. "
@@ -860,13 +887,13 @@
     HWDhcpSnpBindEntry ::=
             SEQUENCE { 
                 hwDhcpSnpBindIpIndex        IpAddress,
-                hwDhcpSnpBindPVlanIndex        VlanId,
-                hwDhcpSnpBindCVlanIndex        VlanId,
+                hwDhcpSnpBindPVlanIndex        Integer32,
+                hwDhcpSnpBindCVlanIndex        Integer32,
                 hwDhcpSnpBindVRFIdIndex        Integer32,
                 hwDhcpSnpBindVsiIndex        Integer32,
                 hwDhcpSnpBindIfDescr        DisplayString,
-                hwDhcpSnpBindPVlanId        VlanId,
-                hwDhcpSnpBindCVlanId        VlanId,
+                hwDhcpSnpBindPVlanId        Integer32,
+                hwDhcpSnpBindCVlanId        Integer32,
                 hwDhcpSnpBindVRFId            Integer32,
                 hwDhcpSnpBindVsiId            Integer32,
                 hwDhcpSnpBindMac             MacAddress,
@@ -885,7 +912,7 @@
                ::= { hwDhcpSnpBindEntry 1 }
                
     hwDhcpSnpBindPVlanIndex OBJECT-TYPE
-               SYNTAX  VlanId
+               SYNTAX  Integer32 (0..4094)
                MAX-ACCESS not-accessible
                STATUS current
                DESCRIPTION 
@@ -893,7 +920,7 @@
                ::= { hwDhcpSnpBindEntry 2 }
                
     hwDhcpSnpBindCVlanIndex OBJECT-TYPE
-               SYNTAX  VlanId
+               SYNTAX  Integer32 (0..4094)
                MAX-ACCESS not-accessible
                STATUS current
                DESCRIPTION 
@@ -919,7 +946,7 @@
     
     hwDhcpSnpBindIfDescr OBJECT-TYPE
                SYNTAX  DisplayString (SIZE (0..47))
-               MAX-ACCESS read-only
+               MAX-ACCESS read-create
                STATUS current
                DESCRIPTION 
                    "The description of the interfaces that bound."
@@ -927,16 +954,16 @@
     
     
     hwDhcpSnpBindPVlanId OBJECT-TYPE
-               SYNTAX  VlanId
-               MAX-ACCESS read-only
+               SYNTAX  Integer32 (0..4094)
+               MAX-ACCESS read-create
                STATUS current
                DESCRIPTION 
                    "The PVLAN Id."
                ::= { hwDhcpSnpBindEntry 7 }
                
     hwDhcpSnpBindCVlanId OBJECT-TYPE
-               SYNTAX  VlanId
-               MAX-ACCESS read-only
+               SYNTAX  Integer32 (0..4094)
+               MAX-ACCESS read-create
                STATUS current
                DESCRIPTION 
                    "The CVLAN Id."
@@ -961,7 +988,7 @@
           
     hwDhcpSnpBindMac OBJECT-TYPE
                SYNTAX  MacAddress
-               MAX-ACCESS read-only
+               MAX-ACCESS read-create
                STATUS current
                DESCRIPTION 
                     "Mac-address bind. Value of hwDhcpSnpBindMac is optional, if you did not specify 
@@ -972,7 +999,7 @@
            
     hwDhcpSnpBindIp OBJECT-TYPE
                SYNTAX  IpAddress
-               MAX-ACCESS read-only
+               MAX-ACCESS read-create
                STATUS current
                DESCRIPTION 
                    "Ip-address bind."
@@ -985,7 +1012,7 @@
                    dynamic(1),
                    static(2)
                    }
-               MAX-ACCESS read-only
+               MAX-ACCESS read-create
                STATUS current
                DESCRIPTION 
                    "The bind status:dynamic(1) or static(2)."
@@ -1649,6 +1676,14 @@
                 "The false IPv6 packets do not match DHCPv6 snooping bind entry count"
             ::= { hwDhcpSnpTrapObjects 7 }
 
+    hwIpv6UntrustedReplyPktNum OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The distrusted port DHCPv6 reply packets count."
+            ::= { hwDhcpSnpTrapObjects 8 }
+
 --
 -- Traps Identifier
 --
@@ -2001,7 +2036,26 @@
                 "The rate of Dhcpv6 packets received is too large."
             ::= { hwDhcpSnpTraps 53 }
 
+     hwNomatchSnpBindTblDhcpv6PktAlarmBd NOTIFICATION-TYPE
+            OBJECTS { hwDhcpSnpStatisticIfDescr,hwDhcpSnpStatisticBdId,hwIpv6Nomatchv6SnpBindTblPktNum } 
+            STATUS current     
+            DESCRIPTION 
+                "There are Dhcpv6 request packets do not match the snooping bind table."
+            ::= {hwDhcpSnpTraps 54 }   
 
+     hwUntrustedV6ReplyPktAlarm NOTIFICATION-TYPE
+            OBJECTS { hwDhcpSnpStatisticIfDescr,hwDhcpSnpStatisticVlanId,hwIpv6UntrustedReplyPktNum} 
+            STATUS current     
+            DESCRIPTION 
+                "Untrusted ports have received the Dhcpv6 reply packets."
+            ::= {hwDhcpSnpTraps 55 }
+
+    hwUntrustedV6ReplyPktAlarmBd NOTIFICATION-TYPE
+            OBJECTS { hwDhcpSnpStatisticIfDescr,hwDhcpSnpStatisticBdId,hwIpv6UntrustedReplyPktNum} 
+            STATUS current     
+            DESCRIPTION 
+                "Untrusted ports have received the Dhcpv6 reply packets."
+            ::= { hwDhcpSnpTraps 56 }			
     hwDhcpSnpCompliance OBJECT IDENTIFIER ::= { hwDhcpSnpMib 3 }
     
     
@@ -2024,7 +2078,7 @@
                     hwDhcpSnpCarEnable,hwDhcpSnpCarCir,hwDhcpSnpCarPir,hwDhcpSnpCaCbs,hwDhcpSnpCarPbs,hwDhcpSnpCarYellow,hwDhcpSnpCarRed,
                     hwDhcpSnpGlobalOption82Format,hwDhcpSnpGlobalOption82PacketFormat,hwDhcpSnpGlobalOption82RemoteId,hwDhcpSnpGlobalOption82RemoteIdSysName,hwDhcpSnpGlobalOption82CircuitId,
                     hwDhcpSnpGlobalOption82PktFormat,hwDhcpSnpGlobalOption82DefString,
-                    hwDhcpSnpCarRowStatus, hwDhcpSnpServerDetectStatus, hwSnpBindingItemGlobalNum, hwSnpBindingItemResourceSize, hwDhcpSnpTrapRemoteBackupType }
+                    hwDhcpSnpCarRowStatus, hwDhcpSnpServerDetectStatus, hwSnpBindingItemGlobalNum, hwSnpBindingItemResourceSize, hwDhcpSnpTrapRemoteBackupType}
 
              STATUS current
             DESCRIPTION 
@@ -2061,7 +2115,8 @@
             hwNomatchSnpBindTblNDPktAlarmBd, hwDhcpSnpChaddrAlarmBd, hwNomatchSnpBindTblDhcpPktAlarmBd, hwUntrustedReplyPktAlarmBd,
             hwDhcpSnpBindTblThreshold, hwDhcpSnpBindTblThresholdResume, hwDhcpSnpBindTblExhaust, hwDhcpSnpBindTblExhaustResume,
             hwDhcpv6SnpBindTblThreshold, hwDhcpv6SnpBindTblThresholdResume, hwDhcpv6SnpBindTblExhaust, hwDhcpv6SnpBindTblExhaustResume, hwIpv6NomatchV6SnpBindTblPktAlarm,
-            hwDHCPv6SnpDetectAlarm, hwRequestNoTrustPktAlarmBd, hwDhcpDegradation, hwDhcpDegradationResume, hwDhcpv6PktRateAlarm}
+            hwDHCPv6SnpDetectAlarm, hwRequestNoTrustPktAlarmBd, hwDhcpDegradation, hwDhcpDegradationResume, hwDhcpv6PktRateAlarm, hwNomatchSnpBindTblDhcpv6PktAlarmBd,
+			hwUntrustedV6ReplyPktAlarm, hwUntrustedV6ReplyPktAlarmBd}
             STATUS current
             DESCRIPTION 
                 "The DHCPSNP's Notification group."
@@ -2077,7 +2132,7 @@
             ::= { hwDhcpSnpMibGroups 5 }
 
     hwDhcpSnpTrapObjectGroup OBJECT-GROUP
-            OBJECTS { hwDhcpSnpUsrNum, hwDhcpSnpMaxUsrNum, hwDhcpv6SnpUsrNum, hwDhcpv6SnpMaxUsrNum, hwDhcpv6SnpIfIndex, hwDhcpv6SnpIfName, hwIpv6Nomatchv6SnpBindTblPktNum}
+            OBJECTS { hwDhcpSnpUsrNum, hwDhcpSnpMaxUsrNum, hwDhcpv6SnpUsrNum, hwDhcpv6SnpMaxUsrNum, hwDhcpv6SnpIfIndex, hwDhcpv6SnpIfName, hwIpv6Nomatchv6SnpBindTblPktNum, hwIpv6UntrustedReplyPktNum}
             STATUS current
             DESCRIPTION 
                 "The DHCPSNP's Statistic group on the device."

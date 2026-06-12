@@ -1,9 +1,9 @@
 -- ==================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2024 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI NVO3 MIB
 -- Reference:
--- Version: V1.15
+-- Version: V1.17
 -- History: V1.0 gaoyuan, 2014-07-02,publish
 -- created 2014-7-2
 -- ==================================================================
@@ -25,7 +25,7 @@
 				FROM IPV6-TC;
 
         hwNvo3Mgmt MODULE-IDENTITY 
-            LAST-UPDATED "202212151658Z"        -- Dec 15, 2022 at 16:58GMT
+            LAST-UPDATED "202402201626Z"        -- Feb 20, 2024 at 16:26GMT
             ORGANIZATION 
                   "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -37,7 +37,15 @@
                      Email: support@huawei.com
                    "
             DESCRIPTION 
-                "The MIB module for nvo3 management." 
+                "The MIB module for nvo3 management."
+
+            REVISION "202402201626Z"        -- Feb 20, 2024 at 16:26GMT
+            DESCRIPTION 
+                "V1.17 Add hwVxlanMlagByPassTunnelCfg." 
+
+            REVISION "202305172037Z"        -- May 17, 2023 at 20:37GMT
+            DESCRIPTION 
+                "V1.16 The modify revision of this MIB module." 
 
             REVISION "202212151658Z"        -- Dec 15, 2022 at 16:58GMT
             DESCRIPTION 
@@ -514,6 +522,88 @@
                 "The ip packet TTL."
             ::= { hwVxlanIpPathDetectEntry 13 }
 
+        hwNvo3VxlanTnlDelTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwNvo3VxlanTnlDelEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The Nvo3 vxlan tunnel delete table, providing read operations."
+            ::= { hwNvo3MIBInstances 7 }
+
+        hwNvo3VxlanTnlDelEntry OBJECT-TYPE
+            SYNTAX HwNvo3VxlanTnlDelEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hwNvo3VxlanTnlDelTable ."
+            INDEX { hwNvo3VxlanTnlDelSrcIpAddr , hwNvo3VxlanTnlDelDestIpAddr}
+            ::= { hwNvo3VxlanTnlDelTable 1 }
+
+        HwNvo3VxlanTnlDelEntry ::=
+            SEQUENCE { 
+                hwNvo3VxlanTnlDelSrcIpAddr
+                    IpAddress,
+                hwNvo3VxlanTnlDelDestIpAddr
+                    IpAddress
+                }
+
+        hwNvo3VxlanTnlDelSrcIpAddr OBJECT-TYPE
+            SYNTAX IpAddress
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The IPv4 VXLAN tunnel source address."
+            ::= { hwNvo3VxlanTnlDelEntry 1 }
+
+        hwNvo3VxlanTnlDelDestIpAddr OBJECT-TYPE
+            SYNTAX IpAddress
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The IPv4 VXLAN tunnel destination address."
+            ::= { hwNvo3VxlanTnlDelEntry 2 }
+
+        hwNvo3VxlanIpv6TnlDelTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HwNvo3VxlanIpv6TnlDelEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The IPv6 VXLAN tunnel table, providing read operations."
+            ::= { hwNvo3MIBInstances 8 }
+
+        hwNvo3VxlanIpv6TnlDelEntry OBJECT-TYPE
+            SYNTAX HwNvo3VxlanIpv6TnlDelEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hwNvo3VxlanIpv6TnlDelTable."
+            INDEX { hwNvo3VxlanTnlDelSrcIpv6Addr, hwNvo3VxlanTnlDelDestIpv6Addr }
+            ::= { hwNvo3VxlanIpv6TnlDelTable 1 }
+
+        HwNvo3VxlanIpv6TnlDelEntry ::=
+            SEQUENCE { 
+                hwNvo3VxlanTnlDelSrcIpv6Addr
+                    Ipv6Address,
+                hwNvo3VxlanTnlDelDestIpv6Addr
+                    Ipv6Address
+                }
+				
+        hwNvo3VxlanTnlDelSrcIpv6Addr OBJECT-TYPE
+            SYNTAX Ipv6Address
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The IPv6 VXLAN tunnel source address."
+            ::= { hwNvo3VxlanIpv6TnlDelEntry 1 }
+
+        hwNvo3VxlanTnlDelDestIpv6Addr OBJECT-TYPE
+            SYNTAX Ipv6Address
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The IPv6 VXLAN tunnel destination address."
+            ::= { hwNvo3VxlanIpv6TnlDelEntry 2 }
+
      hwNvo3TnlStatusEvent OBJECT IDENTIFIER ::= { hwNvo3Mgmt 2 }
         
      hwNvo3VxlanTnlDown NOTIFICATION-TYPE
@@ -921,5 +1011,30 @@
               "The Evpl Ccc status changes."
           ::= { hwEvplCccEvent 2 }
 
+    hwNvo3TnlDelEvent OBJECT IDENTIFIER ::= { hwNvo3Mgmt 11 }
+         hwNvo3VxlanTnlDel NOTIFICATION-TYPE
+           OBJECTS {hwNvo3VxlanTnlDelSrcIpAddr, hwNvo3VxlanTnlDelDestIpAddr}
+           STATUS current
+           DESCRIPTION
+               "The SNMP trap that is generated when an IPv4 VXLAN tunnel was deleted."
+           ::= { hwNvo3TnlDelEvent 1 }
+         hwNvo3VxlanIpv6TnlDel NOTIFICATION-TYPE
+           OBJECTS {hwNvo3VxlanTnlDelSrcIpv6Addr, hwNvo3VxlanTnlDelDestIpv6Addr}
+           STATUS current
+           DESCRIPTION
+               "The SNMP trap that is generated when an IPv6 VXLAN tunnel was deleted."
+           ::= { hwNvo3TnlDelEvent 2 }
+
+    hwMlagByPassTunnelCheck OBJECT IDENTIFIER ::= { hwNvo3Mgmt 12 }
+         hwVxlanMlagByPassTunnelCfg NOTIFICATION-TYPE
+           STATUS current
+           DESCRIPTION
+               "The SNMP trap that is generated when the bypass VXLAN tunnel is not configured."
+           ::= { hwMlagByPassTunnelCheck 1 }
+         hwVxlanMlagByPassTunnelCfgResume NOTIFICATION-TYPE
+           STATUS current
+           DESCRIPTION
+               "The SNMP trap that is generated when the bypass VXLAN tunnel is configured."
+           ::= { hwMlagByPassTunnelCheck 2 }
 
     END

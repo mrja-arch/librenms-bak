@@ -1,0 +1,162 @@
+-- =================================================================
+-- Copyright (C) 2023 by HUAWEI TECHNOLOGIES. All rights reserved.
+-- Description: High-availability Seamless Redundancy.
+-- Reference:
+-- Version:     V1.00
+--
+-- =================================================================
+
+    HUAWEI-HSR-MIB DEFINITIONS ::= BEGIN
+
+        IMPORTS
+            hwDatacomm
+                FROM HUAWEI-MIB
+            OBJECT-GROUP, MODULE-COMPLIANCE, NOTIFICATION-GROUP            
+                FROM SNMPv2-CONF            
+            Integer32, Unsigned32, Counter64, OBJECT-TYPE, MODULE-IDENTITY, 
+            NOTIFICATION-TYPE            
+                FROM SNMPv2-SMI            
+            RowStatus, DateAndTime            
+                FROM SNMPv2-TC;
+
+        hwHsrMIB MODULE-IDENTITY
+            LAST-UPDATED "202302080000Z"
+            ORGANIZATION "Huawei Technologies Co.,Ltd."
+            CONTACT-INFO
+                "Huawei Industrial Base
+                  Bantian, Longgang
+                   Shenzhen 518129
+                   People's Republic of China
+                   Website: http://www.huawei.com
+                   Email: support@huawei.com
+                "
+            DESCRIPTION
+                "High-availability Seamless Redundancy."
+
+            -- Revision history   
+            REVISION     "202302080000Z"        
+            DESCRIPTION  "V1.00, initial version." 
+
+            ::= { hwDatacomm 373 }
+--
+-- Node definitions
+--
+		hwHsrRedboxTable OBJECT-TYPE
+			SYNTAX SEQUENCE OF HwHsrRedboxEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"The HSR redbox table."
+			::= { hwHsrMIB 1 }
+		
+		hwHsrRedboxEntry OBJECT-TYPE
+			SYNTAX HwHsrRedboxEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"Entries appear in this table when redboxes are raised.  They
+				are removed when the redboxes is cleared."
+			INDEX { hwHsrRedboxId }
+			::= { hwHsrRedboxTable 1 }
+		
+		HwHsrRedboxEntry ::=
+			SEQUENCE { 
+				hwHsrRedboxId
+					Unsigned32,
+				hwHsrRedboxRowStatus
+					RowStatus
+			 }
+		
+		hwHsrRedboxId OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"HSR RedBox ID."
+			::= { hwHsrRedboxEntry 1 }
+		
+		hwHsrRedboxRowStatus OBJECT-TYPE
+			SYNTAX RowStatus
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"HSR redbox row status."
+			::= { hwHsrRedboxEntry 2 }
+		
+        hwHsrTraps OBJECT IDENTIFIER ::= { hwHsrMIB 2 }
+    
+        hwHsrProxyNodeTableFull NOTIFICATION-TYPE
+            OBJECTS { hwHsrRedboxId }
+            STATUS current
+            DESCRIPTION 
+                "This alarm is generated when the proxy node table of an HSR redbox is full."
+            ::= { hwHsrTraps 1 }
+
+        hwHsrProxyNodeTableFullResume NOTIFICATION-TYPE
+            OBJECTS { hwHsrRedboxId }
+            STATUS current
+            DESCRIPTION 
+                "The utilization rate of  the proxy node table of an HSR redbox is lower than 90%."
+            ::= { hwHsrTraps 2 }
+    
+        hwHsrNodesTableFull NOTIFICATION-TYPE
+            OBJECTS { hwHsrRedboxId }
+            STATUS current
+            DESCRIPTION 
+                "This alarm is generated when the nodes table of an HSR redbox is full."
+            ::= { hwHsrTraps 3 }
+
+        hwHsrNodesTableFullResume NOTIFICATION-TYPE
+            OBJECTS { hwHsrRedboxId }
+            STATUS current
+            DESCRIPTION 
+                "The utilization rate of  the nodes table of an HSR redbox is lower than 90%."
+            ::= { hwHsrTraps 4 }
+			    
+        hwHsrFlowTableFull NOTIFICATION-TYPE
+            OBJECTS { hwHsrRedboxId }
+            STATUS current
+            DESCRIPTION 
+                "This alarm is generated when the flow table of an HSR redbox is full."
+            ::= { hwHsrTraps 5 }
+
+        hwHsrFlowTableFullResume NOTIFICATION-TYPE
+            OBJECTS { hwHsrRedboxId }
+            STATUS current
+            DESCRIPTION 
+                "The utilization rate of  the flow table of an HSR redbox is lower than 90%."
+            ::= { hwHsrTraps 6 }
+			
+        hwHsrConformance OBJECT IDENTIFIER ::= { hwHsrMIB 3 }
+        
+        hwHsrCompliances OBJECT IDENTIFIER ::= { hwHsrConformance 1 }
+        
+        hwHsrCompliance MODULE-COMPLIANCE
+            STATUS current
+            DESCRIPTION 
+                "The compliance statement for entities which implement the Huawei Hsr mib."
+            MODULE -- this module
+                MANDATORY-GROUPS { hwHsrRedboxInfoGroup, hwRedboxTrapGroup }
+            ::= { hwHsrCompliances 1 }
+        
+        hwHsrGroups OBJECT IDENTIFIER ::= { hwHsrConformance 2 }
+        
+        hwHsrRedboxInfoGroup OBJECT-GROUP
+            OBJECTS { hwHsrRedboxId, hwHsrRedboxRowStatus }
+            STATUS current
+            DESCRIPTION 
+                "The objects for redbox list."
+            ::= { hwHsrGroups 1 }
+			
+        hwRedboxTrapGroup NOTIFICATION-GROUP
+            NOTIFICATIONS { hwHsrProxyNodeTableFull, hwHsrProxyNodeTableFullResume, hwHsrNodesTableFull, hwHsrNodesTableFullResume, hwHsrFlowTableFull,hwHsrFlowTableFullResume }
+            STATUS current
+            DESCRIPTION 
+                "The objects for hsr traps."
+            ::= { hwHsrGroups 2 }
+            
+    END  
+         
+--       
+-- HUAWEI-HSR-MIB.mib
+--

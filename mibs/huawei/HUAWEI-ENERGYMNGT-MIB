@@ -1,8 +1,8 @@
 -- ============================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2024 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- Description: This mib is used for defining huawei's energy management MIB objects
 -- Reference: None
--- Version:   V2.09
+-- Version: V2.13
 -- ============================================================================
 HUAWEI-ENERGYMNGT-MIB DEFINITIONS ::= BEGIN
 
@@ -21,7 +21,7 @@ HUAWEI-ENERGYMNGT-MIB DEFINITIONS ::= BEGIN
                 FROM HUAWEI-MIB ;
 
 hwEnergyMngt MODULE-IDENTITY
-       LAST-UPDATED "202202280000Z"
+       LAST-UPDATED "202409120000Z"
        ORGANIZATION "Huawei Technologies Co.,Ltd."
        CONTACT-INFO
 "Huawei Industrial Base
@@ -32,6 +32,19 @@ hwEnergyMngt MODULE-IDENTITY
    Email: support@huawei.com
  "
             DESCRIPTION "huawei energy management MIB."
+
+            REVISION    "202409120000Z"
+            DESCRIPTION "V2.13 Add hwRealPower to hwSysPowerMgntGroup."
+
+            REVISION    "202409040000Z"
+            DESCRIPTION "V2.12 Add hwRealPower to hwSysPowerMgntGroup."
+
+            REVISION    "202409030000Z"
+            DESCRIPTION "V2.11 Add hwRealPower."
+
+	    REVISION    "202307050000Z"
+	    DESCRIPTION "V2.10 Add hwInboundPower."
+			
             REVISION    "202202280000Z"
             DESCRIPTION "V2.09 Add hwChassisPowerMngt."
             
@@ -162,7 +175,7 @@ hwEnergyMngt MODULE-IDENTITY
             MAX-ACCESS read-only
             STATUS current
             DESCRIPTION
-                "This object indicates the average power consumption of an NE within a measurement period."
+                "This object indicates the average power consumption of an NE within a measurement period, For details about the period, see hwPowerStatPeriod."
             ::= { hwSysPowerMgnt 3 }
 
         
@@ -233,6 +246,22 @@ hwEnergyMngt MODULE-IDENTITY
                 "This object indicates the typical consumption of an NE."
             ::= { hwSysPowerMgnt 9 }
 
+	hwInboundPower OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the inbound consumption of an NE."
+            ::= { hwSysPowerMgnt 10 }
+
+        -- 1.1.11
+        hwRealPower OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the real power consumption of an NE."
+            ::= { hwSysPowerMgnt 11 }
 
         -- 1.2
         hwBoardPowerMngt OBJECT IDENTIFIER ::= { hwEnergyMngt 2 }
@@ -844,7 +873,7 @@ hwEnergyMngt MODULE-IDENTITY
 
 --      hwSysPowerMgntGroups OBJECT IDENTIFIER ::= { hwEnergyConformance 3 }
         hwSysPowerMgntGroup OBJECT-GROUP
-            OBJECTS { hwThresholdOfPower,hwPowerConsumption,hwPowerStatPeriod,hwAveragePower,hwRatedPower,hwCurrentPower,hwPSEPower,hwPoEType,hwTypicalPower }
+            OBJECTS { hwThresholdOfPower,hwPowerConsumption,hwPowerStatPeriod,hwAveragePower,hwRatedPower,hwCurrentPower,hwPSEPower,hwPoEType,hwTypicalPower,hwInboundPower,hwRealPower }
             STATUS current
             DESCRIPTION 
                 "Description."
@@ -919,3 +948,10 @@ hwEnergyMngt MODULE-IDENTITY
 --
 -- HUAWEI-ENERGYMNGT-MIB
 --
+
+
+
+
+
+
+

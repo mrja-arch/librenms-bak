@@ -1,9 +1,9 @@
 -- ==================================================================
--- Copyright (C) 2017 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI VLL Management Statistic and PW Performance Statistic MIB
 -- Reference:
--- Version:     V2.02
+-- Version:     V2.03
 -- Revision history:
 
 --     REVISION "201308301452Z"
@@ -34,7 +34,7 @@
     
     
         hwL2VpnVllStatistic MODULE-IDENTITY 
-            LAST-UPDATED "201708170145Z" --Aug 17,2017 at 14:52 GMT
+            LAST-UPDATED "202212212156Z" --Dec 22,2022 at 21:56 GMT
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -48,6 +48,9 @@
             DESCRIPTION 
                 "The HUAWEI-VLL-STATISTIC-MIB contains objects to
                 manage VLL's statistic."
+
+           REVISION "202212212156Z"
+           DESCRIPTION "V1.12, Modify the description of hwVllQosStatisticPassByteRate and hwVllQosStatisticDiscardByteRate."
 
            REVISION  "201708170145Z" --Aug 17,2017 at 14:52 GMT
            DESCRIPTION "mod dispcription."  
@@ -391,7 +394,7 @@
             MAX-ACCESS read-only
             STATUS current
             DESCRIPTION
-                "Rate of passed bytes for the past 300 seconds, based on the interface. Unit: bps"
+                "Rate of passed bytes for the past 300 seconds, based on the interface. Unit: Bps"
             ::= { hwVllQosStatisticEntry 9 }
 
 
@@ -409,7 +412,7 @@
             MAX-ACCESS read-only
             STATUS current
             DESCRIPTION
-                "Rate of discarded bytes for the past 300 seconds, based on the interface. Unit: bps"
+                "Rate of discarded bytes for the past 300 seconds, based on the interface. Unit: Bps"
             ::= { hwVllQosStatisticEntry 11 }
 
 --

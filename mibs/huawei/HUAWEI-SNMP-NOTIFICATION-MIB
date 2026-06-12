@@ -1,10 +1,10 @@
 -- ============================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2024 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- Description: This MIB object is used to describe the interfaces of sending 
 --              the host notifications (including the alarm and event),
 --              and configurations of the log, syslog and trap.  
 -- Reference:  
--- Version: V1.69
+-- Version: V1.70
 -- ============================================================================ 
     HUAWEI-SNMP-NOTIFICATION-MIB  DEFINITIONS ::= BEGIN                       
         IMPORTS                                                           
@@ -25,7 +25,7 @@
                 FROM SNMPv2-TC;                                   
                 
         hwSyntrap  MODULE-IDENTITY                                  
-            LAST-UPDATED "202208300000Z"                              
+            LAST-UPDATED "202404290000Z"                              
             ORGANIZATION "Huawei Technologies Co.,Ltd."                
             CONTACT-INFO                                                        
                          "Huawei Industrial Base                
@@ -42,6 +42,9 @@
                 and configurations of the log, syslog and trap.                
                 "    
 --  Revision history
+             REVISION    "202404290000Z"
+             DESCRIPTION "V1.70, HwSyslogHostEntry add hwSyslogHostPort"
+
 			REVISION    "202208300000Z"
             DESCRIPTION "V1.69, Add the following nodes:
                           hwSSLCertFrameId , hwSSLCertSlotId "
@@ -2589,7 +2592,9 @@
                 hwSyslogHostTransType
                     INTEGER,
                 hwSyslogHostSslPolicyName
-                    OCTET STRING
+                    OCTET STRING,
+                hwSyslogHostPort
+                    Integer32
             }                                        
                 
         hwSyslogHostName OBJECT-TYPE                                           
@@ -2720,7 +2725,20 @@
                 "                                              
                 SSL policy name,a kind of string parameter.
                 "                     
-            ::= { hwSyslogHostEntry 8 }     
+            ::= { hwSyslogHostEntry 8 }
+
+        hwSyslogHostPort OBJECT-TYPE
+            SYNTAX Integer32 (1..65535)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "
+                Port of the syslog host.
+                The udp default value is 514,
+                the tcp default value is 601,
+                the tls default value is 6514.
+                "
+            ::= { hwSyslogHostEntry 9 }
 			
         hwNotificationCause OBJECT IDENTIFIER ::= { hwSyntrap 15 }   
             

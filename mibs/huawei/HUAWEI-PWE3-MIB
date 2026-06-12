@@ -1,11 +1,11 @@
 -- ==================================================================
--- Copyright (C) 2020 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI PWE3 Management MIB
 -- Reference:
--- Version: V2.21
+-- Version: V2.22
 -- History:
---              V1.0 PanJun, 2006-05-10, publish
+--              V1.0 PanJun, 2025-05-10, publish
 -- ==================================================================
 
     HUAWEI-PWE3-MIB DEFINITIONS ::= BEGIN
@@ -36,7 +36,7 @@
     
     
         hwL2VpnPwe3 MODULE-IDENTITY 
-            LAST-UPDATED  "202008071105Z"           --Aug 7, 2020 at 11:05 GMT  
+            LAST-UPDATED  "202503181625Z"           --Mar 18, 2025 at 16:25 GMT  
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -50,6 +50,10 @@
             DESCRIPTION 
                 "The HUAWEI-PWE3-MIB contains objects to
                 manage PWE3."
+
+            REVISION "202503181625Z"           --Mar 18, 2025 at 16:25 GMT 
+             DESCRIPTION               
+             "modify the range of hwPWVcPwTdmEncapsulationNum"
 
             REVISION "202008071105Z"           --Aug 7, 2020 at 11:05 GMT 
              DESCRIPTION               
@@ -978,7 +982,7 @@
             ::= { hwPWVcEntry 53 }   
                     
         hwPWVcPwTdmEncapsulationNum OBJECT-TYPE
-            SYNTAX Unsigned32 (0..40)
+            SYNTAX Unsigned32 (0..64)
             MAX-ACCESS read-create
             STATUS current
             DESCRIPTION
@@ -2465,7 +2469,7 @@
             ::= { hwSvcEntry 34 }   
                     
         hwSvcPwTdmEncapsulationNum OBJECT-TYPE
-            SYNTAX Unsigned32 (0..40)
+            SYNTAX Unsigned32 (0..64)
             MAX-ACCESS read-create
             STATUS current
             DESCRIPTION
@@ -3101,7 +3105,7 @@
             ::= { hwSvcExtEntry 30 }   
                     
         hwSvcExtPwTdmEncapsulationNum OBJECT-TYPE
-            SYNTAX Unsigned32 (0..40)
+            SYNTAX Unsigned32 (0..64)
             MAX-ACCESS read-create
             STATUS current
             DESCRIPTION
@@ -3543,7 +3547,7 @@
             ::= { hwPWTemplateEntry 17 }   
                     
         hwPWTemplatePwTdmEncapsulationNum OBJECT-TYPE
-            SYNTAX Unsigned32 (0..40)
+            SYNTAX Unsigned32 (0..64)
             MAX-ACCESS read-create
             STATUS current
             DESCRIPTION
@@ -4486,7 +4490,7 @@
             ::= { hwPWVcExpandEntry 53 }   
                     
         hwPWVcPwTdmEncapsulationNumExpand OBJECT-TYPE
-            SYNTAX Unsigned32 (0..40)
+            SYNTAX Unsigned32 (0..64)
             MAX-ACCESS read-create
             STATUS current
             DESCRIPTION

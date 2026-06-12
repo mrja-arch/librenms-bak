@@ -1,9 +1,9 @@
 -- ============================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 --
 -- DESCRIPTION:  HUAWEI-IPPOOL-MIB
 -- Reference:  
--- Version: V2.48
+-- Version: V4.00
 -- History:
 --         v3.01
 --         modified by huangjun 2009-12-08
@@ -17,13 +17,13 @@
                 FROM SNMPv2-SMI 
 			MODULE-COMPLIANCE,OBJECT-GROUP,NOTIFICATION-GROUP
 				FROM SNMPv2-CONF
-            DisplayString, RowStatus, TruthValue
+            DisplayString, RowStatus, TruthValue, MacAddress
                 FROM SNMPv2-TC
             Ipv6Address, Ipv6AddressIfIdentifier, Ipv6AddressPrefix
                 FROM IPV6-TC;
 
         hwIppool MODULE-IDENTITY
-            LAST-UPDATED "202204150000Z"
+            LAST-UPDATED "202506131500Z"
             ORGANIZATION 
 			"Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -37,6 +37,37 @@
            
             DESCRIPTION 
                 "The MIB contains objects of module IPPOOL."
+	        REVISION
+            "202506131500Z" --June 13, 2025
+            DESCRIPTION
+            "V3.00-V4.00 Rename hwUntrustedV4ServerRcvClientReqAlarm to hwDhcpv4ServerRcvClientVendorInfo"
+            REVISION
+            "202504210000Z" --April 21, 2025
+            DESCRIPTION
+            "V2.53-V3.00 Add hwIfPoolName"
+            REVISION
+            "202504140000Z" --April 14, 2025
+            DESCRIPTION
+            "V2.52-V2.53 Add MacAddress Declaration"
+            REVISION
+            "202503040000Z" --Mar 4, 2025
+            DESCRIPTION
+            "V2.51-V2.52 Modified server group name length"
+            REVISION
+            "202412260000Z" --Dec 26, 2024
+            DESCRIPTION
+            "V2.50-V2.51 Add hwUntrustedV4ServerRcvClientReqAlarm and hwIfPoolVlanId, hwUserMacAddr, hwUserOption12, hwUserOption60, hwUserOption125"
+
+            REVISION
+            "202310170000Z" --Oct 17, 2023
+            DESCRIPTION
+            "V2.49-V2.50 modify range for hwCUIPDynSubnetStatus"
+
+            REVISION
+            "202304070000Z" --April 07, 2023
+            DESCRIPTION
+            "V2.48-V2.49 modify range for CU mult-instance"
+
             REVISION
             "202204150000Z" --April 15, 2022
             DESCRIPTION
@@ -1068,7 +1099,7 @@
             ::= { hwDhcpSvrGroupEntry 1 }
         
         hwIPPoolDhcpSvrGroupName OBJECT-TYPE
-            SYNTAX DisplayString (SIZE (1..32))
+            SYNTAX DisplayString (SIZE (1..128))
             MAX-ACCESS read-create
             STATUS current
             DESCRIPTION
@@ -1328,7 +1359,7 @@
             ::= { hwRemotePoolEntry 12 }
             
         hwRemoteIPPoolDhcpGroupName OBJECT-TYPE
-            SYNTAX DisplayString (SIZE (1..32))
+            SYNTAX DisplayString (SIZE (1..128))
             MAX-ACCESS read-only
             STATUS current
             DESCRIPTION
@@ -2688,7 +2719,7 @@
             ::= { hwDhcpv6SvrGroupEntry 1 }
 
         hwDhcpv6SvrGroupName OBJECT-TYPE
-            SYNTAX OCTET STRING (SIZE (1..32))
+            SYNTAX OCTET STRING (SIZE (1..128))
             MAX-ACCESS read-create
             STATUS current
             DESCRIPTION
@@ -2841,7 +2872,7 @@
             ::= { hwIPv6RemotePoolEntry 3 }
 
         hwIPv6RemotePoolDhcpv6SvrGroupName OBJECT-TYPE
-            SYNTAX OCTET STRING (SIZE (1..32))
+            SYNTAX OCTET STRING (SIZE (1..128))
             MAX-ACCESS read-create
             STATUS current
             DESCRIPTION
@@ -3623,7 +3654,8 @@
                 {
                 used(2),
                 idle(3),
-                block(4)
+                block(4),
+                conflict(5)
                 }
             MAX-ACCESS read-only
             STATUS current
@@ -4715,6 +4747,62 @@
                 "The Number of BRAS UNR VPN Import Routes threshold."
             ::= { hwIPPoolTrapOid 18 }
 
+         hwIPPoolUpmngInstance OBJECT-TYPE
+            SYNTAX DisplayString (SIZE (1..15))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The name of UPMNG instance."
+            ::= { hwIPPoolTrapOid 19 }
+
+        hwIfPoolVlanId OBJECT-TYPE
+            SYNTAX  Integer32 (0..4094)
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The vlan id of Interface address pool."
+            ::= { hwIPPoolTrapOid 20 }
+
+        hwUserMacAddr OBJECT-TYPE
+            SYNTAX  MacAddress
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The mac address of user."
+            ::= { hwIPPoolTrapOid 21 }
+
+        hwUserOption12 OBJECT-TYPE
+            SYNTAX  DisplayString(SIZE(1..64))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The option12 of user."
+            ::= { hwIPPoolTrapOid 22 }
+
+        hwUserOption60 OBJECT-TYPE
+            SYNTAX  DisplayString(SIZE(1..64))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The option60 of user."
+            ::= { hwIPPoolTrapOid 23 }
+
+        hwUserOption125 OBJECT-TYPE
+            SYNTAX  DisplayString(SIZE(1..128))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The option125 of user."
+            ::= { hwIPPoolTrapOid 24 }
+
+	hwIfPoolName OBJECT-TYPE
+            SYNTAX  DisplayString (SIZE(1..64))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Name of the interface address pool instance."
+            ::= { hwIPPoolTrapOid 25 }
+
         hwIPPoolTrapsDefine OBJECT IDENTIFIER ::= { hwIPPoolMibTrap 2 }
 
         hwIPPoolTraps OBJECT IDENTIFIER ::= { hwIPPoolTrapsDefine 0 }
@@ -5272,6 +5360,35 @@
                 The number of BRAS UNR VPN import route fell below the maximum value.
                 "
             ::= { hwIPPoolTraps 63 }
+
+    hwCUAllocUserIPFailAlarm NOTIFICATION-TYPE
+            OBJECTS { hwIPPoolUpmngInstance, hwIPPoolIndex, hwIPPoolName }
+            STATUS current
+            DESCRIPTION
+                "This object indicates the alarm generated when IP address allocation fails."
+            ::= { hwIPPoolTraps 64 }
+
+    hwCUDhcpServerDown NOTIFICATION-TYPE
+            OBJECTS { hwIPPoolUpmngInstance, hwDHCPServerAddr, hwRemoteIPPoolRouterIPAddr, hwDhcpSvrVrfName, hwDhcpSvrDownReason }
+            STATUS current
+            DESCRIPTION 
+                "This object indicates the alarm generated when the DHCP server goes Down. "
+            ::= { hwIPPoolTraps 65 }
+
+    hwCUDhcpv6ServerDown NOTIFICATION-TYPE
+            OBJECTS { hwIPPoolUpmngInstance, hwDHCPv6ServerAddr, hwDhcpSvrVrfName, hwDhcpSvrDownReason }
+            STATUS current
+            DESCRIPTION
+                "This object indicates the alarm generated when the DHCPv6 server goes Down."
+            ::= { hwIPPoolTraps 66 }
+
+    hwDhcpv4ServerRcvClientVendorInfo NOTIFICATION-TYPE
+            OBJECTS { hwIfPoolName, hwPoolVPNInstance, hwIfPoolVlanId, hwUserMacAddr, hwUserOption12, hwUserOption60, hwUserOption125 }
+            STATUS current
+            DESCRIPTION
+                "The DHCP server receives the vendor information carried by the client."
+            ::= { hwIPPoolTraps 67 }
+    
     --  ============== conformance information ==============
 
         hwIpPoolMIBConformance OBJECT IDENTIFIER ::= { hwIppool 3 }
@@ -5466,7 +5583,8 @@
                             hwCUPoolGroupUsedIPExhaust,hwCUPoolGroupUsedIPExhaustResume,hwDhcpv6ServerDown,
                             hwIPPoolDAPDeviceSubnetFullAlarm,hwIPPoolDAPDeviceSubnetFullAlarmResume,
                             hwIPv6PoolDAPDevicePrefixFullAlarm,hwIPv6PoolDAPDevicePrefixFullAlarmResume,
-                            hwBasUnrImportRouteReachThreshold,hwBasUnrImportRouteReachThresholdResume}
+                            hwBasUnrImportRouteReachThreshold,hwBasUnrImportRouteReachThresholdResume,
+                            hwCUAllocUserIPFailAlarm, hwCUDhcpServerDown, hwCUDhcpv6ServerDown, hwDhcpv4ServerRcvClientVendorInfo}
             STATUS current
             DESCRIPTION 
                 "The HUAWEI IP pool traps group."

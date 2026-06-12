@@ -1,9 +1,9 @@
 -- ==================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2024 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI EVPN Management MIB
 -- Reference:
--- Version: V1.11
+-- Version: V1.13
 -- History:
 --      V1.03 wangxiaoli, 2019-11-06, publish
 --      V1.0 wangyaru, 2018-07-09, publish
@@ -36,7 +36,7 @@ IMPORTS
 --	
 
     hwEvpnMib MODULE-IDENTITY
-        LAST-UPDATED "202212271143Z"
+        LAST-UPDATED "202404221145Z"
     ORGANIZATION 
         "Huawei Technologies Co.,Ltd."
     CONTACT-INFO 
@@ -49,6 +49,12 @@ IMPORTS
          "
     DESCRIPTION
         "This object indicates EVPN management information." 
+
+    REVISION    "202404221145Z"
+        DESCRIPTION "Add trap hwEvpnMacFlappingVpnAlarm and hwEvpnMacFlappingVpnAlarmClear; modify hwEvpnMacFlappingNotificationGroup"
+
+    REVISION    "202309141030Z"
+	DESCRIPTION "Modify hwEvpnMacDupVpnAlarm and hwEvpnMacDupVpnAlarmClear."
 
     REVISION    "202212271143Z"
     DESCRIPTION "Add trap hwEvpnEvplAlarmDown and hwEvpnEvplAlarmUp; modify hwEvpnEvplNotificationGroup"
@@ -148,14 +154,14 @@ IMPORTS
     hwEvpnTraps OBJECT IDENTIFIER ::= { hwEvpnObjects 2 }
     
     hwEvpnMacDupVpnAlarm NOTIFICATION-TYPE
-            OBJECTS {hwEvpnInstanceVpnName, hwEvpnMacRouteTag, hwEvpnInstanceMAC, hwEvpnInstanceIfName1, hwEvpnInstanceIfName2, hwEvpnInstanceIfName3, hwEvpnInstanceIfName4, hwEvpnInstanceIPAddress1, hwEvpnInstanceIPAddress2, hwEvpnInstanceIPAddress3, hwEvpnInstanceIPAddress4, hwEvpnInstanceVcId}
+            OBJECTS {hwEvpnInstanceVpnName, hwEvpnMacRouteTag, hwEvpnInstanceMAC, hwEvpnInstanceIfName1, hwEvpnInstanceIfName2, hwEvpnInstanceIfName3, hwEvpnInstanceIfName4, hwEvpnInstanceIPAddress1, hwEvpnInstanceIPAddress2, hwEvpnInstanceIPAddress3, hwEvpnInstanceIPAddress4, hwEvpnInstanceVcId, hwEvpnEvplInstId1, hwEvpnEvplInstId2, hwEvpnEvplInstId3, hwEvpnEvplInstId4}
             STATUS current
             DESCRIPTION 
                 "This object indicates that an EVPN instance name is used to report an alarm when a MAC address is suppressed in the EVPN instance."
             ::= { hwEvpnTraps 1 }        
 
     hwEvpnMacDupVpnAlarmClear NOTIFICATION-TYPE
-            OBJECTS {hwEvpnInstanceVpnName, hwEvpnMacRouteTag, hwEvpnInstanceMAC, hwEvpnInstanceIfName1, hwEvpnInstanceIfName2, hwEvpnInstanceIfName3, hwEvpnInstanceIfName4, hwEvpnInstanceIPAddress1, hwEvpnInstanceIPAddress2, hwEvpnInstanceIPAddress3, hwEvpnInstanceIPAddress4, hwEvpnInstanceVcId} 
+            OBJECTS {hwEvpnInstanceVpnName, hwEvpnMacRouteTag, hwEvpnInstanceMAC, hwEvpnInstanceIfName1, hwEvpnInstanceIfName2, hwEvpnInstanceIfName3, hwEvpnInstanceIfName4, hwEvpnInstanceIPAddress1, hwEvpnInstanceIPAddress2, hwEvpnInstanceIPAddress3, hwEvpnInstanceIPAddress4, hwEvpnInstanceVcId, hwEvpnEvplInstId1, hwEvpnEvplInstId2, hwEvpnEvplInstId3, hwEvpnEvplInstId4} 
             STATUS current     
             DESCRIPTION 
                 "This object indicates that an EVPN instance name is used to clear an alarm when all MAC addresses are unsuppressed in the EVPN instance."
@@ -239,6 +245,22 @@ IMPORTS
         DESCRIPTION
             "The SNMP alarm trap that is generated when an EVPL instance status change to up."
         ::= { hwEvpnTraps 13 }
+
+    -- 1.3.6.1.4.1.2011.5.25.356.1.1.2.14
+    hwEvpnMacFlappingVpnAlarm NOTIFICATION-TYPE
+            OBJECTS {hwEvpnInstanceVpnName, hwEvpnMacRouteTag, hwEvpnInstanceMAC, hwEvpnInstanceIfName1, hwEvpnInstanceIfName2, hwEvpnInstanceIfName3, hwEvpnInstanceIfName4, hwEvpnInstanceIPAddress1, hwEvpnInstanceIPAddress2, hwEvpnInstanceIPAddress3, hwEvpnInstanceIPAddress4, hwEvpnInstanceVcId, hwEvpnEvplInstId1, hwEvpnEvplInstId2, hwEvpnEvplInstId3, hwEvpnEvplInstId4}
+            STATUS current
+            DESCRIPTION 
+                "This object indicates that an EVPN instance name is used to report an alarm when MAC Addresses were flapping in an EVPN Instance frequently."
+            ::= { hwEvpnTraps 14 }        
+
+    -- 1.3.6.1.4.1.2011.5.25.356.1.1.2.15
+    hwEvpnMacFlappingVpnAlarmClear NOTIFICATION-TYPE
+            OBJECTS {hwEvpnInstanceVpnName, hwEvpnMacRouteTag, hwEvpnInstanceMAC, hwEvpnInstanceIfName1, hwEvpnInstanceIfName2, hwEvpnInstanceIfName3, hwEvpnInstanceIfName4, hwEvpnInstanceIPAddress1, hwEvpnInstanceIPAddress2, hwEvpnInstanceIPAddress3, hwEvpnInstanceIPAddress4, hwEvpnInstanceVcId, hwEvpnEvplInstId1, hwEvpnEvplInstId2, hwEvpnEvplInstId3, hwEvpnEvplInstId4} 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that an EVPN instance name is used to clear an alarm when all MAC address flapping no longer occurs in the EVPN instance."
+            ::= { hwEvpnTraps 15 }                          
 
     hwEvpnTrapOid OBJECT IDENTIFIER ::= { hwEvpnObjects 3 }
     
@@ -386,6 +408,34 @@ IMPORTS
             DESCRIPTION
                 "Pw vc ID."
             ::= { hwEvpnTrapOid 19 }
+    hwEvpnEvplInstId1      OBJECT-TYPE
+            SYNTAX        Unsigned32
+            MAX-ACCESS    accessible-for-notify
+            STATUS        current
+            DESCRIPTION
+                "The EVPL instance ID."
+            ::= { hwEvpnTrapOid 20 }
+     hwEvpnEvplInstId2      OBJECT-TYPE
+            SYNTAX        Unsigned32
+            MAX-ACCESS    accessible-for-notify
+            STATUS        current
+            DESCRIPTION
+                "The EVPL instance ID."
+            ::= { hwEvpnTrapOid 21 }
+     hwEvpnEvplInstId3      OBJECT-TYPE
+            SYNTAX        Unsigned32
+            MAX-ACCESS    accessible-for-notify
+            STATUS        current
+            DESCRIPTION
+                "The EVPL instance ID."
+            ::= { hwEvpnTrapOid 22 }
+      hwEvpnEvplInstId4      OBJECT-TYPE
+            SYNTAX        Unsigned32
+            MAX-ACCESS    accessible-for-notify
+            STATUS        current
+            DESCRIPTION
+                "The EVPL instance ID."
+            ::= { hwEvpnTrapOid 23 }
 --
 --Compliance Defination
 --		
@@ -400,7 +450,8 @@ IMPORTS
                                                    hwEvpnSRv6ModifyGroup, hwEvpnSRv6MdfNotificationGroup, hwEvpnEvplModifyGroup, hwEvpnEvplNotificationGroup, 
                                                    hwEvpnDiscardRouteGroup, hwEvpnDiscdRtNotificationGroup, 
 												   hwEvpnRingIdConflictGroup, hwEvpnRingIdConflictNotificationGroup,
-                                                   hwEvpnQualifyBumTableResNotificationGroup, hwEvpnQualifyBumTableResGroup }
+                                                   hwEvpnQualifyBumTableResNotificationGroup, hwEvpnQualifyBumTableResGroup,
+                                                   hwEvpnMacFlappingNotificationGroup }
                         ::= { hwEvpnCompliances 1 }
 
 	hwEvpnInstanceGroups OBJECT IDENTIFIER ::= { hwEvpnInstConformance 2 }
@@ -497,6 +548,13 @@ IMPORTS
 			DESCRIPTION 
 					"This object indicates the upper limit value of the EVPN qualify BUM resource group."
 			::= { hwEvpnInstanceGroups 13 }
+
+	hwEvpnMacFlappingNotificationGroup NOTIFICATION-GROUP
+			NOTIFICATIONS { hwEvpnMacFlappingVpnAlarmClear, hwEvpnMacFlappingVpnAlarm }
+			STATUS current
+			DESCRIPTION 
+					"This object indicates a MAC flapping alarm group, which is used to prompt an alarm or clear the alarm."
+			::= { hwEvpnInstanceGroups 14 }
 
 END
 

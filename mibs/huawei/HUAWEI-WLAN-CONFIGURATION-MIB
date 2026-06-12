@@ -1,8 +1,8 @@
 -- ============================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2023 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- Description: The mib is used for configuration.
 -- Reference: 
--- Version: V4.17
+-- Version: V4.50
 -- ============================================================================
 -- Module definition
 
@@ -25,7 +25,7 @@
 		--1.3.6.1.4.1.2011.6.139.11
  		hwWlanConfig MODULE-IDENTITY
                                                          
-			LAST-UPDATED "202211031701Z"  --  Nov 3, 2022 at 17:01 GMT
+			LAST-UPDATED "202305261546Z" -- May 26, 2023 at 15:46 GMT
 			ORGANIZATION
 				"Huawei Technologies Co.,Ltd."
 			CONTACT-INFO
@@ -37,6 +37,146 @@
 				   Email: support@huawei.com
 				
 				"
+                                DESCRIPTION
+				"Huawei "
+                                REVISION "202305261546Z" -- May 26, 2023 at 15:46 GMT
+                                DESCRIPTION
+				"V4.47 add ht320 for node hwAPGrpRadioBandwidth, hwAPSpRadioBandwidth, hwDcaChannel6GBandwidth, hwIDIndexedAPSpRadioBandwidth, hwAPSpServiceIdxBandwidth, hwWlanCountryChannelBandwidth."
+                                REVISION "202305041546Z" -- May 04, 2023 at 15:46 GMT
+                                DESCRIPTION
+				"V4.47 modify node range of hwWlanStaDelayOffLineAgingTime."
+                                REVISION "202304281546Z" -- Apr 28, 2023 at 15:46 GMT
+                                DESCRIPTION
+				"V4.47 modify table of hw5gRadioReloadTimeRange."
+                                REVISION "202304191637Z" -- Apr 19, 2023 at 16:37 GMT
+                                DESCRIPTION
+				"V4.47 add hw2gRadioReloadTimeRange, hw5gRadioReloadTimeRange, hwVapProfileMloSwitch, modify hw2gRadioProfileRadioType, hw5gRadioProfileRadioType."
+                                REVISION "202303211637Z" -- Mar 21, 2023 at 16:37 GMT
+                                DESCRIPTION
+				"V4.46 add the node of hwWmiSpectrumDataSwitch."
+				REVISION "202303171044Z" -- Mar 17, 2023 at 10:44 GMT
+                                DESCRIPTION
+				"V4.45 modify the node of hwSecurityWepEncrypt, hwSecurityWepPskMode default value."
+                                REVISION "202303141431Z" -- Mar 6, 2023 at 16:00 GMT
+                                DESCRIPTION
+				"V4.44 modify the default value of hwRrmUacClientSnrThreshold."
+				REVISION "202303091428Z" -- Mar 9, 2023 at 14:28 GMT
+			         DESCRIPTION
+				"V4.42 modify the default value of hwRrmSmartRoamCheckType,
+												   hwRrmSmartRoamRateThreshold,
+												   hwRrmSmartRoamQuickKickoffRateThr,
+												   hwRrmSmartRoamQuickKickoffSnrThr,
+												   hwRrmLoadBalanceGapStaNumThreshold,
+												   hwRrmAntennaModeSwitch,
+												   hwRrmMultimediaOptDLSliceRatioVideoCustom,
+												   hwRrmMultimediaOptDLSliceRatioVideoCustom.
+					   modify the status of hwRrmTpcRequestSwitch,
+											hwRrmLinkMeasurementSwitch"
+				REVISION "202303091428Z" -- Mar 9, 2023 at 14:28 GMT
+                                DESCRIPTION
+				"V4.43 modify the node of hwRrmSmartRoamSnrHighLevelMargin."
+				REVISION "202303081700Z" -- Mar 6, 2023 at 16:00 GMT
+                                DESCRIPTION
+				"V4.41 modify the node of hwVapType."
+				REVISION "202303061600Z" -- Mar 6, 2023 at 16:00 GMT
+                                DESCRIPTION
+				"V4.40 modify name  of hwSsidProfile80211rPrivateSwitch."
+				REVISION "202302281118Z" -- Feb 28, 2023 at 11:18 GMT
+                                DESCRIPTION
+				"V4.39 added the node of rx-stbc."
+				REVISION "202302232043Z" -- Feb 23, 2023 at 20:43 GMT
+				DESCRIPTION
+				"V4.38  modify node description of hwVapAuthenticationProfile."
+				REVISION "202302171025Z" -- Feb 17, 2023 at 10:15 GMT
+                                DESCRIPTION
+				"V4.37 add the node of hwSsidWmmSwitch."
+				REVISION "202302161025Z" -- Feb 16, 2023 at 10:15 GMT
+				DESCRIPTION
+				"V4.36 modify node description of hwApProfSpectrumServerIPAddress and hwApProfCardConnectType."
+				REVISION "202302151700Z" -- Feb 15, 2023 at 17:00 GMT
+				DESCRIPTION
+				"V4.35 modify node hw2gRadioAutonavigationBeaconInterval,
+								   hw5gRadioAutonavigationBeaconInterval,
+								   hwWlanBLEReportInterval,
+								   hwWdsProfileBeacon2gRate"
+				REVISION "202302141124Z" -- Feb 14, 2023 at 11:24 GMT
+				DESCRIPTION
+				"V4.34 modify the name of node hwVapL2Isolation -> hwVapUserbridging"
+				REVISION "202302131014Z" -- Feb 13, 2023 at 10:14 GMT
+				DESCRIPTION
+				"V4.33 modify the node of hwSecurityPolicy."
+				REVISION "202302061557Z" -- Feb 06, 2023 at 15:57 GMT
+				DESCRIPTION
+				"V4.32 add the hwRrmMultimediaOptimizedUlDelayGuarantee of hwRrmProfileEntry."
+				REVISION "202302012113Z" -- Feb 1, 2023 at 21:13 GMT
+				DESCRIPTION
+				"V4.31 add hwWceConfigObjects,
+						   hwWceAPGroupTable,
+						   hwWceAPGroupEntry,
+						   hwWceAPGroupName,
+						   hwWceAPGrpAutoTxPwrSelectSwitch,
+						   hwWceRrmProfileTable,
+						   hwWceRrmProfileEntry,
+						   hwWceRrmProfileName,
+						   hwWceRrmStaLoadBalanceMode,
+						   hwVapL2Isolation,
+					   modify hwWceAPGrpAutoTxPowerSelectSwitch (17->19),
+					   		  hwWceAPGrpAutoChannelSelectSwitch (18->17),
+							  hwWceAPGrpCalibrateManualStartUp (19->18),
+							  hwWlanGlobalCalibrateEnableMode->hwWlanGlobalCalibrateEnableModeNew,
+							  hwWlanGlobalCalibrateScheduleTime->hwWlanGlobalCalibrateScheduleTimeNew,
+							  hwWlanGlobalCalibrateManualStartUp->hwWlanGlobalCalibrateManualStartUpNew,
+							  hwWlanGlobalRssiRoamSwitch->hwWlanGlobalRssiRoamSwitchNew,
+							  hwWlanGlobalStaLoadBalanceSwitch->hwWlanGlobalStaLoadBalanceSwitchNew"
+				REVISION "202301161043Z" -- Jan 19, 2023 at 15:00 GMT
+				DESCRIPTION
+				"V4.30 add hwWlanMeshProfileVlanTagged, modify hwVapOptinon82InsertCidFormat and hwVapOptinon82InsertRidFormat."
+				REVISION "202301161043Z" -- Jan 16, 2023 at 10:43 GMT
+				DESCRIPTION
+				"V4.29 add hwWmiOruDataSwitch."
+				REVISION "202212171502Z" -- Dec 17, 2022 at 15:02 GMT
+				DESCRIPTION
+				"V4.28 modified the node of hwSecurityPolicy."
+				REVISION "202212120930Z"  --  Dec 12, 2022 at 09:30 GMT
+				DESCRIPTION
+				"V4.27 add the node hwIDIndexedAPSpInterferenceVisualSwitch."
+				REVISION "202212101609Z"  --  Dec 10, 2022 at 16:09 GMT
+				DESCRIPTION
+				"V4.26 modify the node hwAPWiredPortProfilePortEthTrunkID."
+				REVISION "202212071000Z"  --  Dec 7, 2022 at 10:00 GMT
+				DESCRIPTION
+				"V4.25 Add the node hwWlanGlobalCalibrateEnableMode,
+									hwWlanGlobalCalibrateScheduleTime,
+									hwWlanGlobalCalibrateManualStartUp,
+									hwWlanGlobalRssiRoamSwitch,
+									hwWlanGlobalStaLoadBalanceSwitch,
+									hwRrmStaLoadBalanceMode,
+									hwWceAPGrpAutoTxPowerSelectSwitch,
+									hwWceAPGrpAutoChannelSelectSwitch,
+									hwWceAPGrpCalibrateManualStartUp."
+				REVISION "202212021002Z"  --  Dec 02, 2022 at 10:02 GMT
+				DESCRIPTION
+				"V4.24 Add the node hwVapStaNetworkDetectAssocSwitch."
+				REVISION "202212011500Z" -- Dec 01, 2022 at 15:00 GMT
+				DESCRIPTION
+				"V4.23 modify the node hwRrmWlanSliceRtt, add the node hwRrmWlanSliceFrerEnhance."
+				REVISION "202211231500Z" -- Nor 23, 2022 at 15:00 GMT
+				DESCRIPTION
+				"V4.22 modify the hwSysWmiSourceInterfaceValue type."
+				REVISION "202211221830Z" -- Nor 22, 2022 at 18:30 GMT
+				DESCRIPTION
+				"V4.21 modify the hwRrmMultimediaOptimizedDlDelayGuaranteeBe hwRrmMultimediaOptimizedDlDelayGuaranteeBk of hwRrmProfileEntry."
+				REVISION "202211212050Z" -- Nor 21, 2022 at 20:50 GMT
+				DESCRIPTION
+				"V4.20 Add the node hwSysWmiQuietUserDataInterval."
+				REVISION "202211211730Z"  --  Nov 21, 2022 at 17:30 GMT
+				DESCRIPTION
+				"V4.19 Add the node hwWlanRadioCalibrate2gSensitivity, hwWlanRadioCalibrate2gSensitivityCustomValue, hwWlanRadioCalibrate5gSensitivity,
+				hwWlanRadioCalibrate5gSensitivityCustomValue, hwWlanRadioCalibrate6gSensitivity, hwWlanRadioCalibrate6gSensitivityCustomValue."
+				REVISION "202211171502Z" -- Nov 17, 2022 at 15:02 GMT
+				DESCRIPTION
+				"V4.18 Add the node hwSecurityWapiLocalKeyPair."
+				REVISION "202211141528Z"  --  Nov 14, 2022 at 17:28 GMT
 				DESCRIPTION
 				"V4.17 Add the node hwSACACLocalSAC."
 				REVISION "202211031701Z"  --  Nov 3, 2022 at 17:01 GMT
@@ -1663,11 +1803,11 @@
 		
 		-- 1.3.6.1.4.1.2011.6.139.11.1.1.23.2
 		hwWlanStaDelayOffLineAgingTime OBJECT-TYPE
-			SYNTAX Integer32 (1..86400)
+			SYNTAX Integer32 (1..604800)
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates the station delay offline aging time. range(1..86400)"
+				"This object indicates the station delay offline aging time. range(1..604800)"
 			DEFVAL { 180 }
 			::= { hwWlanStaDelayOffline 2 }
 		
@@ -2203,6 +2343,64 @@
 			DESCRIPTION
 				"This object indicates the mode of ble monitor. The default value is 1."
 			::= { hwWlanGlobalConfig 44 }	
+		
+		--1.3.6.1.4.1.2011.6.139.11.1.1.45
+ 		hwWlanGlobalCalibrateEnableModeNew OBJECT-TYPE
+ 			SYNTAX INTEGER
+ 				{
+ 				disable(0),
+				manual(2),
+ 				schedule(3)
+ 				}
+ 			MAX-ACCESS read-write
+ 			STATUS current
+ 			DESCRIPTION
+ 				"This object indicates the radio calibration mode. The default value is schedule(3)."
+ 			::= { hwWlanGlobalConfig 45 }
+ 
+ 		--1.3.6.1.4.1.2011.6.139.11.1.1.46
+ 		hwWlanGlobalCalibrateScheduleTimeNew OBJECT-TYPE
+ 			SYNTAX OCTET STRING
+ 			MAX-ACCESS read-write
+ 			STATUS current
+ 			DESCRIPTION
+ 				"This object indicates the scheduled radio calibration time. The default value is 03:00:00."
+ 			::= { hwWlanGlobalConfig 46 }
+ 
+ 		--1.3.6.1.4.1.2011.6.139.11.1.1.47
+ 		hwWlanGlobalCalibrateManualStartUpNew OBJECT-TYPE
+ 			SYNTAX Integer32 (1)
+ 			MAX-ACCESS read-write
+ 			STATUS current
+ 			DESCRIPTION
+ 				"This object indicates the manually triggered radio calibration. It is valid only when the radio calibration mode is manual."
+ 			::= { hwWlanGlobalConfig 47 }
+ 
+ 		--1.3.6.1.4.1.2011.6.139.11.1.1.48
+ 		hwWlanGlobalRssiRoamSwitchNew OBJECT-TYPE
+ 			SYNTAX INTEGER
+ 				{
+ 				disable(1),	
+ 				enable(2)
+ 				}
+ 			MAX-ACCESS read-write
+ 			STATUS current
+ 			DESCRIPTION
+ 				"This object indicates the status of the rssi roam switch function. The default value is 2."
+ 			::= { hwWlanGlobalConfig 48 }
+ 
+ 		--1.3.6.1.4.1.2011.6.139.11.1.1.49
+ 		hwWlanGlobalStaLoadBalanceSwitchNew OBJECT-TYPE
+ 			SYNTAX INTEGER
+ 				{
+ 				disable(1),	
+ 				enable(2)
+ 				}
+ 			MAX-ACCESS read-write
+ 			STATUS current
+ 			DESCRIPTION
+ 				"This object indicates the status of the load balance switch function. The default value is 2."
+ 			::= { hwWlanGlobalConfig 49 }
 	
 		-- 1.3.6.1.4.1.2011.6.139.11.1.2
 		hwApAuthObjects OBJECT IDENTIFIER ::= { hwWlanConfigObjects 2 }
@@ -2410,7 +2608,13 @@
 				hwAPGrpAPIPVersion
 					INTEGER,
 				hwAPGrpScene
-					OCTET STRING
+					OCTET STRING,
+				hwWceAPGrpAutoTxPowerSelectSwitch
+					INTEGER,
+				hwWceAPGrpAutoChannelSelectSwitch
+					INTEGER,
+				hwWceAPGrpCalibrateManualStartUp
+					Integer32
 			 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.3.1.1
@@ -2555,6 +2759,43 @@
 			DESCRIPTION
 				"This object indicates the scene of group."
 			::= { hwAPGroupEntry 16 }
+
+		-- 1.3.6.1.4.1.2011.6.139.11.1.3.1.19
+		hwWceAPGrpAutoTxPowerSelectSwitch OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				disable(1),
+				enable(2)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the status of the automatic power selection function. The default value is 2."
+			DEFVAL { enable }
+			::= { hwAPGroupEntry 19 }
+			
+		-- 1.3.6.1.4.1.2011.6.139.11.1.3.1.17
+		hwWceAPGrpAutoChannelSelectSwitch OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				disable(1),
+				enable(2)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the status of the automatic channel selection function. The default value is 2."
+			DEFVAL { enable }
+			::= { hwAPGroupEntry 17 }
+
+ 		--1.3.6.1.4.1.2011.6.139.11.1.3.1.18
+ 		hwWceAPGrpCalibrateManualStartUp OBJECT-TYPE
+ 			SYNTAX Integer32 (1)
+ 			MAX-ACCESS read-write
+ 			STATUS current
+ 			DESCRIPTION
+ 				"This object indicates the manually triggered radio calibration. It is valid only when the radio calibration mode is manual."
+ 			::= { hwAPGroupEntry 18 }
 
 		-- 1.3.6.1.4.1.2011.6.139.11.1.4
 		hwAPGroupWiredPortTable OBJECT-TYPE
@@ -2837,6 +3078,7 @@
 				ht40Minus(3),
 				ht80(4),
 				ht160(5),
+				ht320(6),
 				invalid(255) 
 				}
 			MAX-ACCESS read-write
@@ -3825,6 +4067,7 @@
 				ht40Minus(3),
 				ht80(4),
 				ht160(5),
+				ht320(6),
 				invalid(255)
 				}
 			MAX-ACCESS read-write
@@ -4441,7 +4684,8 @@
 				bw40MHz(2),
 				bw80MHz(3),
 				bw160MHz(4),
-                                bwAuto(5)
+				bwAuto(5),
+				bw320MHz(6)
 				}
 			MAX-ACCESS read-write
 			STATUS current
@@ -5249,7 +5493,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates the IPv6 address of the spectrum analysis server. You choose an IPv4 or IPv6 address. By default, the IPv4 address 255.255.255.255 is used."
+				"This object indicates the IPv4 address of the spectrum analysis server. You choose an IPv4 or IPv6 address. By default, it is not configured."
 			::= { hwApSystemProfileEntry 50 }
 
 		
@@ -5592,12 +5836,13 @@
 			SYNTAX INTEGER
 				{
 				serial(1),
-				ethernet(2)
+				ethernet(2),
+				container(3)
 				}
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"Description."
+				"This object indicates the connection type between IoT cards and APs. The default value is 1."
 			::= { hwApSystemProfileEntry 82 }
 			
 		-- 1.3.6.1.4.1.2011.6.139.11.1.12.1.83
@@ -6153,11 +6398,11 @@
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.13.1.4
 		hwAPWiredPortProfilePortEthTrunkID OBJECT-TYPE
-			SYNTAX Unsigned32 (0 | 255)
+			SYNTAX Unsigned32 (0..1 | 255)
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION 
-				"This object indicates the ID of a Trunk. 0 is valid and 0xFFFFFFFF is invalid. The default value is 0xFFFFFFFF."
+				"This object indicates the ID of a Trunk. 0 and 1 is valid and 255 is invalid. The default value is 255."
 			::= { hwAPWiredPortProfileEntry 4 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.13.1.5
@@ -7125,7 +7370,11 @@
 				hw2gRadioVipUserBandwidthReservationRatio
 					Unsigned32,
 				hw2GRadioRu26ToleranceSwitch
-				    INTEGER
+				    INTEGER,
+				hw2gRadioRxStbcSwitch
+				    INTEGER,
+				hw2gRadioReloadTimeRange
+				    OCTET STRING
 			 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.16.1.1
@@ -7661,12 +7910,13 @@
 				dot11b(1),
 				dot11g(5),
 				dot11n(9),
-				dot11ax(17)
+				dot11ax(17),
+				dot11be(18)
 				}
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates the type of radio. The default value is 17. "
+				"This object indicates the type of radio. The default value is 18. "
 			::= { hw2gRadioProfileEntry 59 }
 
 		-- 1.3.6.1.4.1.2011.6.139.11.1.16.1.60
@@ -7814,7 +8064,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates a autonavigation beacon interval. The default value is 60. It is expressed in ms."
+				"This object indicates a autonavigation beacon interval. The default value is 60. It is expressed in TU."
 			::= { hw2gRadioProfileEntry 73 }
 		
 		-- 1.3.6.1.4.1.2011.6.139.11.1.16.1.74
@@ -7853,6 +8103,28 @@
 				"This object indicates the status of ru26-tolerance switch. The default value is 2."
 			::= { hw2gRadioProfileEntry 76 }
 
+		--1.3.6.1.4.1.2011.6.139.11.1.16.1.77
+		hw2gRadioRxStbcSwitch OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				disable(1) ,
+				enable(2)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION 
+				"This object indicates the status of the rx stbc function. The default value is 2."
+			::= { hw2gRadioProfileEntry 77 }
+	        
+	        --1.3.6.1.4.1.2011.6.139.11.1.16.1.78
+		hw2gRadioReloadTimeRange OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (0..32))
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the time range for reloading the radio."
+			::= { hw2gRadioProfileEntry 78 }
+			
 		-- 1.3.6.1.4.1.2011.6.139.11.1.17
 		hw5gRadioProfileTable OBJECT-TYPE
 			SYNTAX SEQUENCE OF Hw5gRadioProfileEntry 
@@ -8018,7 +8290,11 @@
 				hw5gRadioVipUserBandwidthReservationRatio
 				    Unsigned32,
 				hw5GRadioRu26ToleranceSwitch
-				    INTEGER					
+				    INTEGER,
+				hw5gRadioRxStbcSwitch
+				    INTEGER,
+				hw5gRadioReloadTimeRange
+				    OCTET STRING
 			 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.17.1.1
@@ -8037,7 +8313,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates a Beacon interval. The default value is 100. It is expressed in ms."
+				"This object indicates a Beacon interval. The default value is 100. It is expressed in TU."
 			::= { hw5gRadioProfileEntry 6 }
 
 		
@@ -8595,12 +8871,13 @@
 				dot11a(2),
 				dot11n(6),
 				dot11ac(14),
-				dot11ax(16)
+				dot11ax(16),
+				dot11be(19)
 				}
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates the type of radio. The default value is 16. "
+				"This object indicates the type of radio. The default value is 19. "
 			::= { hw5gRadioProfileEntry 63 }
 
 		-- 1.3.6.1.4.1.2011.6.139.11.1.17.1.64
@@ -8786,6 +9063,27 @@
 			DESCRIPTION
 				"This object indicates the status of ru26-tolerance switch. The default value is 2."
 			::= { hw5gRadioProfileEntry 80 }
+		--1.3.6.1.4.1.2011.6.139.11.1.17.1.81
+		hw5gRadioRxStbcSwitch OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				disable(1) ,
+				enable(2)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION 
+				"This object indicates the status of the rx stbc function. The default value is 2."
+			::= { hw5gRadioProfileEntry 81 }
+	        
+	        --1.3.6.1.4.1.2011.6.139.11.1.16.1.82
+		hw5gRadioReloadTimeRange OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (0..32))
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the time range for reloading the radio."
+			::= { hw5gRadioProfileEntry 82 }
 			
 		-- 1.3.6.1.4.1.2011.6.139.11.1.18
 		hwRrmProfileTable OBJECT-TYPE
@@ -9004,7 +9302,17 @@
 				hwRrmCoSrEnable
 					INTEGER,
 				hwRrmCalibrateGroupingInterThr
-					Integer32
+					Integer32,
+				hwRrmWlanSliceFrerEnhance
+					INTEGER,
+				hwRrmMultimediaOptimizedDlDelayGuaranteeBe
+					INTEGER,
+				hwRrmMultimediaOptimizedDlDelayGuaranteeBk
+					INTEGER,
+				hwRrmStaLoadBalanceMode
+					INTEGER,
+				hwRrmMultimediaOptimizedUlDelayGuarantee
+					INTEGER
 			 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.18.1.1
@@ -9092,7 +9400,7 @@
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.18.1.8
 		hwRrmUacClientSnrThreshold OBJECT-TYPE
-			SYNTAX Unsigned32 (5..45 | 255)
+			SYNTAX Unsigned32 (5..45)
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
@@ -9245,7 +9553,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION 
-				"This object indicates whether STA active roaming is triggered by rate check or SNR check.The values are as follows:?	1: checkSnr?	2: checkRate?	3: checkAll."
+				"This object indicates whether STA active roaming is triggered by rate check or SNR check.The values are as follows:?	1: checkSnr?	2: checkRate?	3: checkAll. The default value is 1."
 			::= { hwRrmProfileEntry 22 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.18.1.23
@@ -9277,7 +9585,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION 
-				"This object indicates the rate threshold for triggering the smart roaming function. It is expressed in the percentage against the maximum rate supported by the terminal. The default value is 0. It is expressed in percentage."
+				"This object indicates the rate threshold for triggering the smart roaming function. It is expressed in the percentage against the maximum rate supported by the terminal. The default value is 20. It is expressed in percentage."
 			::= { hwRrmProfileEntry 25 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.18.1.26
@@ -9286,7 +9594,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION 
-				"This object indicates the upper SNR difference threshold for triggering smart roaming. The default value is 15. It is expressed in dB."
+				"This object indicates the upper SNR difference threshold for triggering smart roaming. The default value is 12. It is expressed in dB."
 			::= { hwRrmProfileEntry 26 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.18.1.27
@@ -9351,7 +9659,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"Smart roam quick-kickoff rate threshold"
+				"Smart roam quick-kickoff rate threshold. The default value is 20."
 			::= { hwRrmProfileEntry 33 }
 		
 		-- 1.3.6.1.4.1.2011.6.139.11.1.18.1.34
@@ -9360,7 +9668,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"Smart roam quick-kickoff SNR threshold"
+				"Smart roam quick-kickoff SNR threshold. The default value is 15."
 			::= { hwRrmProfileEntry 34 }
 			
 		-- 1.3.6.1.4.1.2011.6.139.11.1.18.1.35
@@ -9696,7 +10004,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates the load difference threshold for triggering dynamic load balancing based on the number of STAs. The value 0 indicates that load balancing is based on the percentage of STAs."
+				"This object indicates the load difference threshold for triggering dynamic load balancing based on the number of STAs. The value 0 indicates that load balancing is based on the percentage of STAs. The default value is 3."
 			::= { hwRrmProfileEntry 65 }
 			
 		-- 1.3.6.1.4.1.2011.6.139.11.1.18.1.66
@@ -9819,7 +10127,7 @@
 				enable(2)
 				}
 			MAX-ACCESS read-write
-			STATUS current
+			STATUS obsolete
 			DESCRIPTION
 				"This object indicates the status of the tpc request function. The default value is 1."
 			DEFVAL { disable }
@@ -9832,7 +10140,7 @@
 				enable(2)
 				}
 			MAX-ACCESS read-write
-			STATUS current
+			STATUS obsolete
 			DESCRIPTION
 				"This object indicates the status of the link measurement function. The default value is 2."
 			DEFVAL { enable }
@@ -9890,7 +10198,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates the status of the antenna mode switch function."
+				"This object indicates the status of the antenna mode switch function. The default value is 3."
 			::= { hwRrmProfileEntry 83 }
 		
 		-- 1.3.6.1.4.1.2011.6.139.11.1.18.1.84
@@ -10011,7 +10319,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates multimedia optimized downlink slice ratio for voice traffic."
+				"This object indicates multimedia optimized downlink slice ratio for voice traffic. The default value is 0."
 			::= { hwRrmProfileEntry 92 }
 			
 		-- 1.3.6.1.4.1.2011.6.139.11.1.18.1.93	
@@ -10020,7 +10328,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates multimedia optimized downlink slice ratio for video traffic."
+				"This object indicates multimedia optimized downlink slice ratio for video traffic. The default value is 0."
 			::= { hwRrmProfileEntry 93 }
 			
 		-- 1.3.6.1.4.1.2011.6.139.11.1.18.1.94	
@@ -10039,7 +10347,7 @@
 			
 		-- 1.3.6.1.4.1.2011.6.139.11.1.18.1.95	
 		hwRrmWlanSliceRtt OBJECT-TYPE
-			SYNTAX Unsigned32 (20..1000)
+			SYNTAX Unsigned32 (10..1000)
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
@@ -10081,6 +10389,81 @@
 			DEFVAL { -127 }
 			::= { hwRrmProfileEntry 98 }
 			
+		-- 1.3.6.1.4.1.2011.6.139.11.1.18.1.99
+		hwRrmWlanSliceFrerEnhance OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				disable(1),
+				enable(2)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the wlan high-reliability slice frer-enhance status."
+			DEFVAL { disable }
+			::= { hwRrmProfileEntry 99 }
+			
+		-- 1.3.6.1.4.1.2011.6.139.11.1.18.1.100
+		hwRrmMultimediaOptimizedDlDelayGuaranteeBe OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				medium(1),
+				low(2),
+				high(3),
+				off(4)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates multimedia optimized downlink delay guarantee best-effect value. The default value is 1."
+			DEFVAL { medium}
+			::= { hwRrmProfileEntry 100 }
+
+		-- 1.3.6.1.4.1.2011.6.139.11.1.18.1.101
+		hwRrmMultimediaOptimizedDlDelayGuaranteeBk OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				medium(1),
+				low(2),
+				high(3),
+				off(4)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates multimedia optimized downlink delay guarantee background value. The default value is 1."
+			DEFVAL { medium}
+			::= { hwRrmProfileEntry 101 }
+ 
+ 		-- 1.3.6.1.4.1.2011.6.139.11.1.18.1.102	
+ 		hwRrmStaLoadBalanceMode OBJECT-TYPE
+ 			SYNTAX INTEGER
+ 				{
+				disable(0),
+				accessBalance(1),
+				roamBalance(2),
+				all(3)
+ 				}
+ 			MAX-ACCESS read-write
+ 			STATUS current
+ 			DESCRIPTION
+ 				"This object indicates load balance mode to hide ssid-broadcast when radio is in high load state. The default value is 0."
+ 			::= { hwRrmProfileEntry 102 }
+
+		-- 1.3.6.1.4.1.2011.6.139.11.1.18.1.103
+		hwRrmMultimediaOptimizedUlDelayGuarantee OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				disable(1),
+				enable(2)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates multimedia optimized uplink delay guarantee status. The default value is 2."
+			DEFVAL { enable }
+			::= { hwRrmProfileEntry 103 }
+
 		-- 1.3.6.1.4.1.2011.6.139.11.1.19
 		hwAirScanProfileTable OBJECT-TYPE
 			SYNTAX SEQUENCE OF HwAirScanProfileEntry 
@@ -10426,6 +10809,12 @@
                                 hwVapTrackInterfaceName
 					OCTET STRING,
 				hwVapiConnectParseUrlSwitch
+					INTEGER,
+				hwVapStaNetworkDetectAssocSwitch
+					INTEGER,
+				hwVapUserbridging
+					INTEGER,
+				hwVapProfileMloSwitch
 					INTEGER
 			 }
 
@@ -10535,7 +10924,8 @@
 				serviceBackupApOffline(4),
 				radiusdownBackup(5),
 				serviceNaviAc(6),
-				managementLeaderAp(7)
+				managementLeaderAp(7),
+				serviceBackupDistribute(8)
 				}
 			MAX-ACCESS read-write
 			STATUS current
@@ -10703,7 +11093,14 @@
 				apName(4),
 				apNameSsid(5),
 				apLocation(6),
-				apLocationSsid(7)
+				apLocationSsid(7),
+				apGroup(8),
+				apGroupApMac(9),
+				apGroupApMacSsid(10),
+				apGroupApName(11),
+				apGroupApNameSsid(12),
+				apGroupApLocation(13),
+				apGroupApLocationSsid(14)
 				}
 			MAX-ACCESS read-write
 			STATUS current
@@ -10770,7 +11167,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION 
-				"The object indicates the authentication profile that is bound to the VAP. The default value is default."
+				"The object indicates the authentication profile that is bound to the VAP."
 			::= { hwVapProfileEntry 29 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.20.1.30
@@ -10856,7 +11253,14 @@
 				apName(4),
 				apNameSsid(5),
 				apLocation(6),
-				apLocationSsid(7)
+				apLocationSsid(7),
+				apGroup(8),
+				apGroupApMac(9),
+				apGroupApMacSsid(10),
+				apGroupApName(11),
+				apGroupApNameSsid(12),
+				apGroupApLocation(13),
+				apGroupApLocationSsid(14)
 				}
 			MAX-ACCESS read-write
 			STATUS current
@@ -11486,6 +11890,47 @@
 			DESCRIPTION
 				"This object indicates the switch of iconnect parsing url. The default value is 1."
 			::= { hwVapProfileEntry 90 }
+			
+		-- 1.3.6.1.4.1.2011.6.139.11.1.20.1.91
+		hwVapStaNetworkDetectAssocSwitch OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				disable(1),
+				enable(2)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the status of association station network reachable detect function. The default value is 1."
+			::= { hwVapProfileEntry 91 }
+		
+		-- 1.3.6.1.4.1.2011.6.139.11.1.20.1.92
+		hwVapUserbridging OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				enable(1),
+				disable(2)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the switch of VAP user bridging. The default value is 2."
+		::= { hwVapProfileEntry 92 }
+		
+		-- 1.3.6.1.4.1.2011.6.139.11.1.20.1.93
+		hwVapProfileMloSwitch OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				disable(1),
+				enable(2)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the multi-link operation switch."
+			DEFVAL { enable }
+		::= { hwVapProfileEntry 93 }
+ 
 
 		-- 1.3.6.1.4.1.2011.6.139.11.1.21
 		hwSsidProfileTable OBJECT-TYPE
@@ -11633,13 +12078,15 @@
 					INTEGER,
 				hwSsidTwtSwitch
 					INTEGER,
-				hwSsidProfile80211rPrivateSwitch
+				hwSsidProfile80211rPrivate
 					INTEGER,
 				hwSsidGameTurboSwitch
 					INTEGER,
 				hwSsidBeacon6gRate
 					INTEGER,
 				hwSsidErSuSwitch
+					INTEGER,
+				hwSsidWmmSwitch
 					INTEGER
 			 }
 
@@ -12306,7 +12753,7 @@
 			::= { hwSsidProfileEntry 62 }		
 
 		-- 1.3.6.1.4.1.2011.6.139.11.1.21.1.63
-		hwSsidProfile80211rPrivateSwitch OBJECT-TYPE
+		hwSsidProfile80211rPrivate OBJECT-TYPE
 			SYNTAX INTEGER
 				{
 				disable(1),
@@ -12362,7 +12809,22 @@
 			DESCRIPTION
 				"This object indicates the switch of ER SU, The default value is 2."
 			::= { hwSsidProfileEntry 66 }
-		-- 1.3.6.1.4.1.2011.6.139.11.1.22
+
+		-- 1.3.6.1.4.1.2011.6.139.11.1.21.1.67
+		hwSsidWmmSwitch OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				default(1),
+				enable(2),
+				disable(3)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the status of WMM switch. The default value is 1."
+			::= { hwSsidProfileEntry 67 }
+
+			-- 1.3.6.1.4.1.2011.6.139.11.1.22
 		hwSecurityProfileTable OBJECT-TYPE
 			SYNTAX SEQUENCE OF HwSecurityProfileEntry
 			MAX-ACCESS not-accessible
@@ -12469,7 +12931,9 @@
 				hwSecurityDot1xServerIp
 					IpAddress,
 				hwSecurityDot1xServerPort
-					Unsigned32
+					Unsigned32,
+                                                                             hwSecurityWapiLocalKeyPair
+                                                                                                OCTET STRING
 			 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.22.1.1
@@ -12507,7 +12971,9 @@
                 wpaDpsk(19),
                 wpa2Dpsk(20), 
                 wpaWpa2Dpsk(21),
-				owe(22)
+		owe(22),
+		wpa2Rpsk(23),
+                wpa2Wpa3Dot1x(24)
                 }
             MAX-ACCESS read-write
             STATUS current
@@ -12521,7 +12987,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION 
-				"This object indicates the WEP encryption algorithm. The default value is 4369."
+				"This object indicates the WEP encryption algorithm. The default value is 0."
 			::= { hwSecurityProfileEntry 3 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.22.1.4
@@ -12530,7 +12996,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION 
-				"This object indicates that the WEP PSK mode is PassPhase or Hex. The default value is 4369."
+				"This object indicates that the WEP PSK mode is PassPhase or Hex. The default value is 0."
 			::= { hwSecurityProfileEntry 4 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.22.1.5
@@ -12587,12 +13053,12 @@
 				wpaTkip(2),
 				wpaAesTkip(3),
 				wpaTkipWpa2Aes(4),
-                                                                             wpaGcmp256(5)
+                                wpaGcmp256(5)
 				}
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION 
-				"This object indicates the WPA/WPA2/WPA3 encryption algorithm."
+				"This object indicates the WPA/WPA2/WPA3 encryption algorithm.  The default value is 0."
 			::= { hwSecurityProfileEntry 10 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.22.1.11
@@ -12778,9 +13244,7 @@
 			SYNTAX INTEGER
 				{
 				disabled(1) ,
-				timeBased(2) ,
-				packetBased(3) ,
-				timepacketBased(4)
+				timeBased(2)
 				}
 			MAX-ACCESS read-write
 			STATUS current
@@ -12793,9 +13257,7 @@
 			SYNTAX INTEGER
 				{
 				disabled(1) ,
-				timeBased(2) ,
-				packetBased(3) ,
-				timepacketBased(4)
+				timeBased(2)
 				}
 			MAX-ACCESS read-write
 			STATUS current
@@ -12917,6 +13379,16 @@
 			DESCRIPTION 
 				"This object indicate the dot1x authentication server port."
 			::= { hwSecurityProfileEntry 43 }
+
+		 --1.3.6.1.4.1.2011.6.139.11.1.22.1.44
+		hwSecurityWapiLocalKeyPair OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (0..64))
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION 
+				"The object indicates the local private key that is bound to the WAPI."
+			::= { hwSecurityProfileEntry 44 }
+
 		--1.3.6.1.4.1.2011.6.139.11.1.23
 		hwAPTrafficProfileTable OBJECT-TYPE
 			SYNTAX SEQUENCE OF HwAPTrafficProfileEntry 
@@ -13259,7 +13731,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION 
-				"This object indicates the status of the unicast DHCP function. The default value is 1."
+				"This object indicates the status of the unicast DHCP function. The default value is 2."
 			::= { hwAPTrafficProfileEntry 22 }
 
 		 --1.3.6.1.4.1.2011.6.139.11.1.23.1.23
@@ -13309,7 +13781,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates the tunnel priority mapping mode."
+				"This object indicates the tunnel priority mapping mode.  The default value is 1."
 			::= { hwAPTrafficProfileEntry 26 }
 
 		
@@ -13397,7 +13869,7 @@
 		hwAPTrafficProfilePriorityMapUpPayloadTrustMode OBJECT-TYPE
 			SYNTAX INTEGER
 			{
-				trust80211E(1),
+				trust80211e(1),
 				trustDSCP(2)
 			}
 			MAX-ACCESS read-write
@@ -13451,7 +13923,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates whether to allow mDNS packets to pass through when the device is configured to discard multicast and broadcast packets. This configuration is valid only when denyAll is set to enable. The default value is 2."
+				"This object indicates whether to allow mDNS packets to pass through when the device is configured to discard multicast and broadcast packets. This configuration is valid only when denyAll is set to enable. The default value is 1."
 			::= { hwAPTrafficProfileEntry 39 }
 
 		--1.3.6.1.4.1.2011.6.139.11.1.24
@@ -14699,7 +15171,9 @@
 				hwWlanMeshProfileSwitchProbeInterval
 					Unsigned32,
 				hwWlanMeshProfileBeacon6gRate
-					INTEGER
+					INTEGER,
+				hwWlanMeshProfileVlanTagged
+					OCTET STRING
 			 }
 
 -- 1.3.6.1.4.1.2011.6.139.11.1.36.1.1
@@ -15132,6 +15606,15 @@
 			DESCRIPTION
 				"This object indicates the mesh 6G beacon rate. The default value is 6."
 			::= { hwWlanMeshProfileEntry 38 }
+
+		-- 1.3.6.1.4.1.2011.6.139.11.1.36.1.39
+		hwWlanMeshProfileVlanTagged OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (0..1024))
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION 
+				"This object indicates the tagged VLANs used in a Mesh profile. By default, no VLAN is configured in the Mesh profile."
+			::= { hwWlanMeshProfileEntry 39 }
 
 		
 -- 1.3.6.1.4.1.2011.6.139.11.1.37.1
@@ -15654,7 +16137,7 @@
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"This object indicates the wds 2g beacon rate. The default value is 1."
+				"This object indicates the wds 2g beacon rate. The default value is 5."
 			::= { hwWdsProfileEntry 13 }
 
 		-- 1.3.6.1.4.1.2011.6.139.11.1.40.1.14
@@ -17951,7 +18434,7 @@ The default value is medium(1)."
 
 		-- 1.3.6.1.4.1.2011.6.139.11.1.57.15
         	hwWlanRadioCalibrateSensitivityCustomValue OBJECT-TYPE
-			SYNTAX Unsigned32 (0..95)
+			SYNTAX Unsigned32 (0..100)
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
@@ -18000,6 +18483,84 @@ The default value is medium(1)."
 			DESCRIPTION
 				"This object indicates the status of the referencing rogue-AP-interference function. The default value is 2."
 			::= { hwWlanRadioCalibrateManagement 19 }
+
+		-- 1.3.6.1.4.1.2011.6.139.11.1.57.20
+		hwWlanRadioCalibrate2gSensitivity OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				medium(1),
+				high(2),
+				low(3),
+				insensitivity(4),
+				custom(5)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the radio 2g calibration sensitivity.
+				The default value is medium(1)."
+			::= { hwWlanRadioCalibrateManagement 20 }
+			
+		-- 1.3.6.1.4.1.2011.6.139.11.1.57.21
+        	hwWlanRadioCalibrate2gSensitivityCustomValue OBJECT-TYPE
+			SYNTAX Unsigned32 (0..100)
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the custom threshold of calibrate sensitivity. It can be set when hwWlanRadioCalibrate2gSensitivity is custom(5). A larger value indicates lower calibration sensitivity."
+			::= { hwWlanRadioCalibrateManagement 21 }
+		
+		-- 1.3.6.1.4.1.2011.6.139.11.1.57.22
+		hwWlanRadioCalibrate5gSensitivity OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				medium(1),
+				high(2),
+				low(3),
+				insensitivity(4),
+				custom(5)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the radio 5g calibration sensitivity.
+				The default value is medium(1)."
+			::= { hwWlanRadioCalibrateManagement 22 }
+
+		-- 1.3.6.1.4.1.2011.6.139.11.1.57.23
+        	hwWlanRadioCalibrate5gSensitivityCustomValue OBJECT-TYPE
+			SYNTAX Unsigned32 (0..100)
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the custom threshold of calibrate sensitivity. It can be set when hwWlanRadioCalibrate5gSensitivity is custom(5). A larger value indicates lower calibration sensitivity."
+			::= { hwWlanRadioCalibrateManagement 23 }
+
+		-- 1.3.6.1.4.1.2011.6.139.11.1.57.24
+		hwWlanRadioCalibrate6gSensitivity OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				medium(1),
+				high(2),
+				low(3),
+				insensitivity(4),
+				custom(5)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the radio 6g calibration sensitivity.
+				The default value is medium(1)."
+			::= { hwWlanRadioCalibrateManagement 24 }
+
+		-- 1.3.6.1.4.1.2011.6.139.11.1.57.25
+        	hwWlanRadioCalibrate6gSensitivityCustomValue OBJECT-TYPE
+			SYNTAX Unsigned32 (0..100)
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the custom threshold of calibrate sensitivity. It can be set when hwWlanRadioCalibrate6gSensitivity is custom(5). A larger value indicates lower calibration sensitivity."
+			::= { hwWlanRadioCalibrateManagement 25 }
 		                 
 --    1.3.6.1.4.1.2011.6.139.11.1.61
 -- 1.3.6.1.4.1.2011.6.139.11.1.58
@@ -20807,6 +21368,8 @@ The default value is disconnect(1)."
 				hwIDIndexedAPSpChannelMonitorSwitch
 					INTEGER,
 				hwIDIndexedAPSpReference3dData
+					INTEGER,
+				hwIDIndexedAPSpInterferenceVisualSwitch
 					INTEGER
 			 }
 		 --1.3.6.1.4.1.2011.6.139.11.1.71.1.1
@@ -20901,7 +21464,8 @@ The default value is disconnect(1)."
 				ht40Plus(2),
 				ht40Minus(3),
 				ht80(4),
-                                                                             ht160(5),
+				ht160(5),
+				ht320(6),
 				invalid(255)
 				}
 			MAX-ACCESS read-write
@@ -21263,6 +21827,21 @@ The default value is disconnect(1)."
 			DEFVAL { invalid }
 			::= { hwIDIndexedAPSpecificRadioEntry 39 }
 
+		-- 1.3.6.1.4.1.2011.6.139.11.1.71.1.40
+		hwIDIndexedAPSpInterferenceVisualSwitch OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				disable(1),
+				enable(2),
+				invalid(255)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the status of the interference visualization function. The default value is 255."
+			DEFVAL { invalid }
+			::= { hwIDIndexedAPSpecificRadioEntry 40 }
+
 		-- 1.3.6.1.4.1.2011.6.139.11.1.72
 		hwIDIndexedAPSpecificVapTable OBJECT-TYPE
 			SYNTAX SEQUENCE OF HwIDIndexedAPSpecificVapEntry 
@@ -21608,7 +22187,7 @@ The default value is disconnect(1)."
 		
 		-- 1.3.6.1.4.1.2011.6.139.11.1.73.1.19
 		hwWlanBLEReportInterval OBJECT-TYPE
-			SYNTAX Integer32 (1..600)
+			SYNTAX Integer32 (0..600)
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
@@ -24496,7 +25075,11 @@ The default value is disconnect(1)."
 				hwWmiBackupServerIPv4
 					IpAddress,
 				hwWmiBackupServerPort
-					Unsigned32
+					Unsigned32,
+				hwWmiOruDataSwitch
+					INTEGER,
+                                hwWmiSpectrumDataSwitch
+					INTEGER
 			 }
 
 		-- 1.3.6.1.4.1.2011.6.139.11.1.91.1.1
@@ -24839,7 +25422,34 @@ The default value is disconnect(1)."
 				"This object indicates the backup server port number attribute of this wmi server profile."
 			::= { hwWmiProfileEntry 32 }
 		
+		-- 1.3.6.1.4.1.2011.6.139.11.1.91.1.33
+		hwWmiOruDataSwitch OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				disable(1),
+				enable(2)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the optical remote unit data collecting switch attribute of this wmi server profile. "
+			DEFVAL { enable }
+			::= { hwWmiProfileEntry 33 }
 
+                -- 1.3.6.1.4.1.2011.6.139.11.1.91.1.34
+		hwWmiSpectrumDataSwitch OBJECT-TYPE
+			SYNTAX INTEGER
+                            {
+                            disable(1),
+			    enable(2)
+                            }
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the spectrum data collecting switch attribute of this wmi server profile. The default value is disable. "
+			DEFVAL { disable }
+			::= { hwWmiProfileEntry 34 }
+		
 		-- 1.3.6.1.4.1.2011.6.139.11.1.92
 		hwApSystemWmiProfileTable OBJECT-TYPE
 			SYNTAX SEQUENCE OF HwApSystemWmiProfileEntry
@@ -24982,7 +25592,9 @@ The default value is disconnect(1)."
 				hwSysWmiSourceInterfaceMethod
 					INTEGER,
 				hwSysWmiSourceInterfaceValue
-					INTEGER
+					Integer32,
+				hwSysWmiQuietUserDataInterval
+					Unsigned32
 			 }
 
 		-- 1.3.6.1.4.1.2011.6.139.11.1.93.1.1
@@ -25339,6 +25951,17 @@ The default value is disconnect(1)."
 			DESCRIPTION
 				"This object indicates the interface number when hwSysWmiSourceInterfaceMethod is set to vlanif(2) or loopback(3)."
 			::= { hwSysWmiConfigEntry 33 }
+
+		-- 1.3.6.1.4.1.2011.6.139.11.1.93.1.34
+		hwSysWmiQuietUserDataInterval OBJECT-TYPE
+			SYNTAX Unsigned32 (0 | 5..1800)
+			UNITS "s"
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the interval for reporting the list of quiet users. The default value is 0, indicating that the reporting function is disabled."
+			DEFVAL { 0 }
+			::= { hwSysWmiConfigEntry 34 }
 
 		-- 1.3.6.1.4.1.2011.6.139.11.1.94
 		hwWlanLicenseCentralizedTable OBJECT-TYPE
@@ -25926,6 +26549,7 @@ The default value is disconnect(1)."
 				ht40Minus(3),
 				ht80(4),
 				ht160(5),
+				ht320(6),
 				invalid(255)
 				}
 			MAX-ACCESS read-write
@@ -26483,7 +27107,8 @@ The default value is disconnect(1)."
 				ht40Plus(2),
 				ht40Minus(3),
 				ht80(4),
-				ht160(5)
+				ht160(5),
+				ht320(6)
 				}
 			MAX-ACCESS not-accessible
 			STATUS current
@@ -26977,7 +27602,8 @@ The default value is disconnect(1)."
 				hwWlanProtectRestoreSwitch, hwUndoWlanProtectIpAddress, hwUndoWlanProtectPriority, hwWlanCfgHsbServiceType, hwWlanCfgHsbGroupId, 
 				hwWlanCfgHsbTunnelId, hwWlanConfigCommit, hwWlanReportStaInfo, hwWlanBLELowPowerWarningThreshold, hwWlanReportStaAssocInfo,hwWlanGlobalRogueDeviceLogSwitch,
 				hwWlanGlobalAntiInterferenceSwitch, hwWlanGlobalAntiInterferencePerPacketTpcSwitch, hwWlanGlobalAeroscoutLocalIPv4, hwWlanGlobalAeroscoutLocalIPv6,
-				hwWlanGlobalApLoadRtuFileName,hwWlanGlobalStaProfilingSwitch, hwWlanGlobalTemporaryManagementPsk, hwWlanGlobalApAutoReplace, hwTunnelApUserIsolateL2, hwWlanBLEMonitorMode }
+				hwWlanGlobalApLoadRtuFileName,hwWlanGlobalStaProfilingSwitch, hwWlanGlobalTemporaryManagementPsk, hwWlanGlobalApAutoReplace, hwTunnelApUserIsolateL2,hwWlanBLEMonitorMode,
+				hwWlanGlobalCalibrateEnableModeNew, hwWlanGlobalCalibrateScheduleTimeNew, hwWlanGlobalCalibrateManualStartUpNew, hwWlanGlobalRssiRoamSwitchNew, hwWlanGlobalStaLoadBalanceSwitchNew}
 			STATUS current
 			DESCRIPTION 
 				"Description."
@@ -27229,7 +27855,8 @@ The default value is disconnect(1)."
 				hwVapTimeRange, hwVapPermitVlanList, hwVapSfnRoamSwitch, hwVapStaNetworkDetectSwitch, hwVapLearnIpv4AddressIpconflictuncheck, 
 				hwVapLearnIpv6AddressIpconflictuncheck, hwVapRadiusTemplate, hwVapBackUpState, hwVapBackUpMode, hwVapRadiusState, hwVapKeepServiceSwitch,
 				hwVapNaviACID, hwVapNaviACWlanId, hwVapMdnsPolicyLocalACSwitch,hwVapProfileMdnsSnooping, hwVapSplitTunnelAcl, hwVapSplitTunnelAclIPv6,
-				hwVapCPETunnelProfile, hwVapProfileDnsSnooping, hwVapNaviSeviceVlanCheckSwitch, hwVapLearnAddressDhcpv6Slaac, hwVapSIpFpmClearColorFlag, hwVapUserFlowSyslogSwitch }
+				hwVapCPETunnelProfile, hwVapProfileDnsSnooping, hwVapNaviSeviceVlanCheckSwitch, hwVapLearnAddressDhcpv6Slaac, hwVapSIpFpmClearColorFlag, hwVapUserFlowSyslogSwitch, hwVapStaNetworkDetectAssocSwitch,
+				hwVapUserbridging }
 			STATUS current
 			DESCRIPTION 
 				"Description."
@@ -27246,7 +27873,7 @@ The default value is disconnect(1)."
 				hwSsidInboundCarPbs, hwSsidOutboundCarCir, hwSsidOutboundCarPir, hwSsidOutboundCarCbs, hwSsidOutboundCarPbs, 
 				hwSsidProfileRowStatus, hwSsidHideWhileReachMaxSta, hwSsidBeacon2gRate, hwSsidBeacon5gRate, hwSsidDenyBroadcastProbe, 
 				hwSsidProbeResponseRetry, hwSsidUapsd, hwSsidActiveDullClient, hwSsidMuMIMOSwitch, hwSsidProfile80211rEnable, hwSsidProfile80211rMode, 
-				hwSsidProfile80211rReassociateTimeout, hwSsidQbssLoadSwitch, hwSsidMuMIMOOptimizeSwitch, hwSsidProfile80211rPrivateSwitch, hwSsidBeacon6gRate, hwSsidErSuSwitch }
+				hwSsidProfile80211rReassociateTimeout, hwSsidQbssLoadSwitch, hwSsidMuMIMOOptimizeSwitch, hwSsidProfile80211rPrivate, hwSsidBeacon6gRate, hwSsidErSuSwitch }
 			STATUS current
 			DESCRIPTION 
 				"Description."
@@ -27262,7 +27889,7 @@ The default value is disconnect(1)."
 				hwSecurityWapiIssuerPfxPassword, hwSecurityWapiAsuPfxPassword, hwSecurityWapiAcPfxPassword, hwSecurityWapiAcPrvKeyPassword, hwSecurityWapiCertRetransCount, 
 				hwSecurityWapiBkThreshold, hwSecurityWapiBkLifetime, hwSecurityWapiUskUpdateMethod, hwSecurityWapiMskUpdateMethod, hwSecurityWapiUskUpdateInterval, 
 				hwSecurityWapiUskUpdatePackets, hwSecurityWapiUskRetansCount, hwSecurityWapiMskUpdateInterval, hwSecurityWapiMskUpdatePackets, hwSecurityWapiMskRetansCount, 
-				hwSecurityWapiSATimeout, hwSecurityProfileRowStatus, hwSecurityWepDot1xMode, hwSecurityOpenSsid }
+				hwSecurityWapiSATimeout, hwSecurityProfileRowStatus, hwSecurityWepDot1xMode, hwSecurityOpenSsid,hwSecurityDot1xServerIp,hwSecurityDot1xServerPort,hwSecurityWapiLocalKeyPair}
 			STATUS current
 			DESCRIPTION 
 				"Description."
@@ -27350,7 +27977,8 @@ The default value is disconnect(1)."
 				hwWlanMeshClientEdcaVideoECWmin, hwWlanMeshClientEdcaVideoAIFSN, hwWlanMeshClientEdcaVideoTXOPLimit, hwWlanMeshClientEdcaBeECWmax, hwWlanMeshClientEdcaBeECWmin, 
 				hwWlanMeshClientEdcaBeAIFSN, hwWlanMeshClientEdcaBeTXOPLimit, hwWlanMeshClientEdcaBkECWmax, hwWlanMeshClientEdcaBkECWmin, hwWlanMeshClientEdcaBkAIFSN, 
 				hwWlanMeshClientEdcaBkTXOPLimit, hwWlanMeshNdTrustPort, hwWlanMeshLinkAgingTime, hwWlanMeshProfilePriorityMapTrustMode, hwWlanMeshProfilePriorityDscpMap80211e,
-				hwWlanMeshProfileClientModeSwitch, hwWlanMeshProfileBeacon2gRate, hwWlanMeshProfileBeacon5gRate, hwWlanMeshProfileSwitchProbeInterval, hwWlanMeshProfileBeacon6gRate}
+				hwWlanMeshProfileClientModeSwitch, hwWlanMeshProfileBeacon2gRate, hwWlanMeshProfileBeacon5gRate, hwWlanMeshProfileSwitchProbeInterval, hwWlanMeshProfileBeacon6gRate,
+				hwWlanMeshProfileVlanTagged}
 			STATUS current
 			DESCRIPTION 
 				"Description."
@@ -27541,7 +28169,8 @@ The default value is disconnect(1)."
 				hwWlanRadioCalibrateSensitivity, hwWlanRadioCalibrateAutoStartTime, hwWlanRadioCalibrateManualApGroup, hwWlanRadioCalibrateManualApList, hwWlanRadioCalibrateManualProcess, 
 				hwWlanRadioCalibrateFlexibleRadio, hwWlanRadioCalibrateFlexRadioManualRecognize, hwWlanRadioCalibrateFlexibleRadioProcess, hwWlanRadioCalibrateFlexibleRadioRecognizeTime,
 				hwWlanRadioCalibrateSensitivityCustomValue, hwWlanRadioCalibrateScheduleTimeRange, hwWlanRadioCalibrateReferenceDataAnalysis, hwWlanRadioCalibrateEnvironmentDeteriorateValue,
-				hwWlanRadioCalibrateReferenceRogueInter}
+				hwWlanRadioCalibrateReferenceRogueInter, hwWlanRadioCalibrate2gSensitivity, hwWlanRadioCalibrate2gSensitivityCustomValue, hwWlanRadioCalibrate5gSensitivity,
+				hwWlanRadioCalibrate5gSensitivityCustomValue, hwWlanRadioCalibrate6gSensitivity, hwWlanRadioCalibrate6gSensitivityCustomValue}
 			STATUS current
 			DESCRIPTION 
 				"Description."
@@ -27745,11 +28374,131 @@ The default value is disconnect(1)."
 			DESCRIPTION 
 				"Description."
 			::= { hwWlanConfigObjectGroups 96 }
-			
+
+		--1.3.6.1.4.1.2011.6.139.11.3
+		hwWceConfigObjects OBJECT IDENTIFIER ::= { hwWlanConfig 3 }
+
+		--1.3.6.1.4.1.2011.6.139.11.3.1
+		hwWceAPGroupTable OBJECT-TYPE
+			SYNTAX SEQUENCE OF HwWceAPGroupEntry 
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION 
+				"This table is used to create or delete AP groups and bind or unbind the AP system profile, 2G radio profile, and domain profile."
+			::= { hwWceConfigObjects 1 }
+
+		--1.3.6.1.4.1.2011.6.139.11.3.1.1
+		hwWceAPGroupEntry OBJECT-TYPE
+			SYNTAX HwWceAPGroupEntry 
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION 
+				"The index of this table is hwWceAPGroupName."
+			INDEX { hwWceAPGroupName }
+			::= { hwWceAPGroupTable 1 }
+
+
+		HwWceAPGroupEntry ::=
+			SEQUENCE { 
+				hwWceAPGroupName
+					OCTET STRING,
+				hwWceAPGrpAutoTxPwrSelectSwitch
+					INTEGER
+			 }
+
+		 --1.3.6.1.4.1.2011.6.139.11.3.1.1.1
+		hwWceAPGroupName OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (1..35))
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION 
+				"This object indicates the AP group name. It is the index of the table."
+			::= { hwWceAPGroupEntry 1 }
+
+		--1.3.6.1.4.1.2011.6.139.11.3.1.1.2
+		hwWceAPGrpAutoTxPwrSelectSwitch OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				disable(1),
+				enable(2)
+				}
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"This object indicates the status of the automatic power selection function. The default value is 2."
+			DEFVAL { enable }
+			::= { hwWceAPGroupEntry 2 }
+
+		--1.3.6.1.4.1.2011.6.139.11.3.2
+		hwWceRrmProfileTable OBJECT-TYPE
+			SYNTAX SEQUENCE OF HwWceRrmProfileEntry 
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION 
+				"This table is used to configure radio resource management parameters, including parameters related to band steering, dynamic load balancing, smart roaming, and UAC."
+			::= { hwWceConfigObjects 2 }
+
+		--1.3.6.1.4.1.2011.6.139.11.3.2.1
+		hwWceRrmProfileEntry OBJECT-TYPE
+			SYNTAX HwWceRrmProfileEntry 
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION 
+				"The index of this table is hwWceRrmProfileName."
+			INDEX { hwWceRrmProfileName }
+			::= { hwWceRrmProfileTable 1 }
+
+
+		HwWceRrmProfileEntry ::=
+			SEQUENCE {				
+				hwWceRrmProfileName
+					OCTET STRING,
+				hwWceRrmStaLoadBalanceMode
+				    INTEGER
+			 }
+
+		--1.3.6.1.4.1.2011.6.139.11.3.2.1.1
+		hwWceRrmProfileName OBJECT-TYPE
+			SYNTAX OCTET STRING (SIZE (1..35))
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION 
+				"This object indicates the name of the RRM profile. It is the index of the table."
+			::= { hwWceRrmProfileEntry 1 }
+
+ 		--1.3.6.1.4.1.2011.6.139.11.3.2.1.2	
+ 		hwWceRrmStaLoadBalanceMode OBJECT-TYPE
+ 			SYNTAX INTEGER
+ 				{
+				disable(0),
+				accessbalance(1),
+				roambalance(2),
+				all(3)
+ 				}
+ 			MAX-ACCESS read-write
+ 			STATUS current
+ 			DESCRIPTION
+ 				"This object indicates load balance mode to hide ssid-broadcast when radio is in high load state."
+ 			::= { hwWceRrmProfileEntry 2 }
+
         	END
 --
 -- HUAWEI-WLAN-CONFIGURATION-MIB.mib
 --
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

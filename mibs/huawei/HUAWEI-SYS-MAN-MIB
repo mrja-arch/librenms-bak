@@ -1,10 +1,29 @@
 -- =====================================================================
--- Copyright (C) 2023 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 --
 -- Description: Huawei Configuration management MIB
 -- Reference:   HUAWEI Enterprise MIB
--- Version:     V2.55
+-- Version: V6.03
 -- History:
+--  2025-07-21  v6.03  liheyang add node hwTimerResThresholdExceed and hwTimerResThresholdExceedResume 
+--  2025-03-08  v6.01  chenkexing modify hwSysFileName max length
+--  2025-01-15  v6.00  zhangdeheng modify hwFaultProcessId type
+--  2025-01-15  v4.03  lianghuiyi add node hwBoardRoleAbnormal and hwBoardRoleAbnormalResume
+--  2024-11-28  v4.02  linxinwei edit node hwPackageType and notification hwPackageOperationFail
+--  2024-11-22  v4.01  linxinwei add node hwFailReason type and notification hwPackageOperationFail
+--  2024-11-20  v4.00  zhangdeheng add hwProcFaultTraps, move hwProcessFaultAlarm and hwProcessFaultAlarmResume from hwHATraps to hwProcFaultTraps
+--  2024-10-26  v3.00  zhangdeheng add hwFaultSlotId
+--  2024-04-10  v2.66  linbing add hwProcessFaultAlarm and hwProcessFaultAlarmResume
+--  2024-04-10  v2.65  zhangdongming add hwHipsObjects and hwHipsNotifications
+--  2024-02-27  v2.64  lushimeng add hwOncardFirmwareDamagedResume for pkgm 
+--  2024-02-05  v2.63  wangyang add hwEulaRemainingDays for notification hwEulaNotSignedResume
+--  2023-12-14  v2.62  shanhualiang modify hwPluginSlotId type from uint32 to string
+--  2023-12-04  v2.61  fanshuxue add hwPluginSlotId for notification hw3rdPluginUpdateFailed
+--  2023-11-29  v2.60  fanshuxue add notification hw3rdPluginUpdateFailed
+--  2023-11-04  v2.59  wangyang add node hwEulaRemainingDays and notification hwEulaNotSigned, hwEulaNotSignedResume
+--  2023-09-26  v2.58  liangqiyuan add hwCurPatchVersion for patch
+--  2023-07-18  v2.57  liujunjie add hwOncardFirmwareDamaged for pkgm
+--  2023-06-15  v2.56  xujingyan add hwBIMTraps for BIM
 --  2023-01-18  v2.55  zhanglele add hwOnboardFirmwareDamaged for pkgm
 --  2022-10-26  v2.54  heyaner add hwHATraps for HA
 --  2022-04-02  v2.53  liujunjie modify description of node hwSmartUpgradeUserDataRetentionPeriodHasExpired, hwSmartUpgradeUserDataRetentionPeriodHasExpiredResume, hwTpmChipFault and hwTpmChipFaultClear.
@@ -89,7 +108,7 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
             FROM SNMP-FRAMEWORK-MIB;
 
     huaweiSystemManMIB MODULE-IDENTITY 
-        LAST-UPDATED "202301181446Z"        -- Jan. 18, 2023  GMT
+        LAST-UPDATED "202507212230Z"        -- Jul. 21, 2025  GMT
         ORGANIZATION 
             "Huawei Technologies Co.,Ltd."
         CONTACT-INFO 
@@ -107,6 +126,98 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
             reload actions, and notifications. By querying the system time,
             configuration files and system image files, NMS can reboot the device
             in the specified time and the specified configuration and system image."
+       REVISION
+            "202507212230Z"
+       DESCRIPTION 
+            "Add node hwTimerResThresholdExceed and hwTimerResThresholdExceedResume "
+       REVISION
+            "202505152230Z"
+       DESCRIPTION 
+            "Add hwPatchFailReason fail reason"
+       REVISION
+            "202503082325Z"
+       DESCRIPTION 
+            "Modify hwSysFileName max length"
+       REVISION
+            "202502241819Z"
+       DESCRIPTION 
+            "Modify hwFaultProcessId type"
+       REVISION
+            "202502221819Z"
+       DESCRIPTION 
+            "Add node hwPatchFailReason type and edit node hwPatchInstallFailReason type"
+       REVISION
+            "202502191819Z"
+       DESCRIPTION 
+            "Add node hwPatchInstallFailReason type"
+       REVISION
+            "202501151819Z"
+       DESCRIPTION 
+            "Add notification hwBoardRoleAbnormal and notification hwBoardRoleAbnormalResume"
+       REVISION
+            "202411282224Z"
+       DESCRIPTION 
+            "Edit node hwPackageType type and notification hwPackageOperationFail"
+       REVISION
+            "202411221604Z"
+       DESCRIPTION 
+            "Add node hwFailReason type and notification hwPackageOperationFail"
+       REVISION
+            "202411201458Z"
+       DESCRIPTION 
+            "Add hwProcessFaultAlarm to hwProcFaultTraps"
+       REVISION
+            "202411011932Z"
+       DESCRIPTION 
+            "Add hwSysImageDamagedResume to huaweiSystemManNotificationGroup"
+       REVISION
+            "202410261800Z"
+       DESCRIPTION 
+            "add hwFaultSlotId for hwProcessFaultAlarm and hwProcessFaultAlarmResume"
+       REVISION
+            "202406061508Z"
+       DESCRIPTION 
+           "add hwProcessFaultAlarm and hwProcessFaultAlarmResume."
+       REVISION
+            "202404101442Z"
+       DESCRIPTION 
+           "add hwHipsObjects and hwHipsNotifications."
+       REVISION
+            "202402271607Z"
+       DESCRIPTION 
+           "add node hwOncardFirmwareDamagedResume."
+       REVISION
+            "202402051020Z"
+       DESCRIPTION 
+           "add hwEulaRemainingDays for notification hwEulaNotSignedResume."
+       REVISION
+            "202312141542Z"
+       DESCRIPTION 
+           "modify hwPluginSlotId type from uint32 to string."
+       REVISION
+            "202312041112Z"
+       DESCRIPTION 
+           "add hwPluginSlotId  for notification hw3rdPluginUpdateFailed."
+       REVISION
+            "202311291730Z"
+       DESCRIPTION 
+           "add notification hw3rdPluginUpdateFailed."
+       REVISION
+            "202311041536Z"
+       DESCRIPTION 
+           "add node hwEulaRemainingDays and notification hwEulaNotSigned, hwEulaNotSignedResume."
+       REVISION
+            "202309261433Z"
+       DESCRIPTION 
+           "add node hwCurPatchVersion."
+       REVISION
+            "202307181734Z"
+       DESCRIPTION 
+           "add node hwOncardFirmwareDamaged."
+       REVISION
+            "202306151024Z"
+       DESCRIPTION 
+           "add node hwBIMTraps."
        REVISION
             "202301181446Z"
        DESCRIPTION 
@@ -1442,7 +1553,9 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
                 patchConflict(4),
                 versionErr(5),
                 synchronizePatchPackageError(8),
-                patchConfigInconsistError(9)
+                patchConfigInconsistError(9),
+                patchBootRollBack(10),
+                patchNotSupportMainBoard(11)
                 }
         MAX-ACCESS read-only
         STATUS current
@@ -1469,6 +1582,14 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
         DESCRIPTION
         "This object is an index that specifies cold patch alarm reason."
             ::= { hwPatchBase 10 }
+
+    hwCurPatchVersion OBJECT-TYPE
+        SYNTAX DisplayString
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "Indicates the current patch version."
+        ::= { hwPatchBase 11 }
 
     hwPatchFileTable OBJECT-TYPE
         SYNTAX SEQUENCE OF HwPatchFileEntry
@@ -2527,7 +2648,7 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
         ::= { hwSysSourceIndexEntry 1 }      
         
     hwSysFileName OBJECT-TYPE
-        SYNTAX OCTET STRING (SIZE (1..110))
+        SYNTAX OCTET STRING (SIZE (1..127))
         MAX-ACCESS not-accessible
         STATUS current
         DESCRIPTION
@@ -3619,7 +3740,8 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
                 patchConflict(4),
                 versionErr(5),
                 synchronizePatchPackageError(8),
-                patchConfigInconsistError(9)
+                patchConfigInconsistError(9),
+                patchBootRollBack(10)
                 }
         MAX-ACCESS accessible-for-notify
         STATUS current
@@ -3697,6 +3819,284 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
         DESCRIPTION
             "Risk type."
         ::= { huaweiSystemManMIBObjects 31}
+
+    hwEulaObjects OBJECT IDENTIFIER ::= { huaweiSystemManMIBObjects 32 }
+
+    hwEulaRemainingDays OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Remaining days before the system automatically signs the EULA."
+        ::= { hwEulaObjects 1 }
+
+    hwPluginUpdate OBJECT IDENTIFIER ::= { huaweiSystemManMIBObjects 33 }
+
+    hwPluginSlotId OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The value of the object identifies the slot number."
+        ::= { hwPluginUpdate 1 }
+
+    hwPluginName OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+             "This object indicates the name of the plug-in package."
+        ::= { hwPluginUpdate 2 }
+  
+    hwPluginFailReason OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+             "This object indicates the plug-in update fail reason."
+        ::= { hwPluginUpdate 3 }
+
+    hwHipsObjects OBJECT IDENTIFIER ::= { huaweiSystemManMIBObjects 34 }
+
+    hwHipsEventCategory OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..31))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the category of an event."
+        ::= { hwHipsObjects 1 }
+
+    hwHipsEventType OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..63))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+             "Indicates the type of an event."
+        ::= { hwHipsObjects 2 }
+
+    hwHipsEventLevel OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..15))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the level of an event."
+        ::= { hwHipsObjects 3 }
+
+    hwHipsOccurTime OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..31))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+             "Indicates the time when an event occurs."
+        ::= { hwHipsObjects 4 }
+
+    hwHipsOperationResult OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..15))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the operation result of an event."
+        ::= { hwHipsObjects 5 }
+
+    hwHipsUserName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..255))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the name of the visitor."
+        ::= { hwHipsObjects 6 }
+
+    hwHipsVisitorIp OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..63))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the IP address of a visitor."
+        ::= { hwHipsObjects 7 }
+
+    hwHipsEvidence OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..255))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the evidence of an event."
+        ::= { hwHipsObjects 8 }
+
+    hwHipsSlotId OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..63))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the slot ID."
+        ::= { hwHipsObjects 9 }
+
+    hwHipsCardId OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..63))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the card ID."
+        ::= { hwHipsObjects 10 }
+
+    hwHipsCpuId OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..63))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the cpu ID."
+        ::= { hwHipsObjects 11 }
+
+    hwHipsBarcode OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..63))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the board barcode."
+        ::= { hwHipsObjects 12 }
+
+    hwHipsShellPath OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..255))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the path of the shell file."
+        ::= { hwHipsObjects 13 }
+
+    hwHipsOperationType OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..31))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the operation type of the shell file."
+        ::= { hwHipsObjects 14 }
+
+    hwHipsCmdLine OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..255))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the command executed by the shell."
+        ::= { hwHipsObjects 15 }
+
+    hwHipsAttributeType OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..15))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the type of the changed attribute of the shell file."
+        ::= { hwHipsObjects 16 }
+
+    hwHipsOldAttribute OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..63))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Attribute before the change."
+        ::= { hwHipsObjects 17 }
+
+    hwHipsNewAttribute OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..63))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Attribute after the change."
+        ::= { hwHipsObjects 18 }
+
+    hwHipsFilePath OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..255))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the file path of an event."
+        ::= { hwHipsObjects 19 }
+
+    hwHipsMethod OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..31))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "File privilege escalation method."
+        ::= { hwHipsObjects 20 }
+
+    hwHipsLoginTime OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..31))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the login time of a visitor."
+        ::= { hwHipsObjects 21 }
+
+    hwHipsProcessPath OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..255))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the process path of an event."
+        ::= { hwHipsObjects 22 }
+
+    hwHipsRootkitName OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..255))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the name of the rootkit file."
+        ::= { hwHipsObjects 23 }
+
+    hwHipsDetectionType OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..63))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the detection type of the rootkit file."
+        ::= { hwHipsObjects 24 }
+
+    hwHipsDetectedThreat OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..255))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the detection threat of the rootkit file."
+        ::= { hwHipsObjects 25 }
+
+    hwHipsDetectionSource OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..255))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the detection source of the rootkit file."
+        ::= { hwHipsObjects 26 }
+
+    hwHipsUnauthorizedUser OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..255))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the name of a user."
+        ::= { hwHipsObjects 27 }
+
+    hwHipsGroupId OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..31))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the group ID of a user."
+        ::= { hwHipsObjects 28 }
+
+    hwHipsHomePath OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..255))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the home path of a user."
+        ::= { hwHipsObjects 29 }
+
+    hwHipsUserId OBJECT-TYPE
+        SYNTAX OCTET STRING (SIZE (1..31))
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the user ID."
+        ::= { hwHipsObjects 30 }
 
 --    ====================================
 -- HUAWEI-SYS-MAN-MIB MIB - Notification Information
@@ -4271,7 +4671,8 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
         SYNTAX INTEGER
         {
         featureSoftware(1),
-        extendedSystemSoftware(2)
+        extendedSystemSoftware(2),
+        systemSoftware(3)
         }
         MAX-ACCESS accessible-for-notify
         STATUS current
@@ -4311,6 +4712,29 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
             "The version of the current software package."
         ::= { hwPackageOperationTrapsObject 6 }
  
+    hwFailReason OBJECT-TYPE
+        SYNTAX INTEGER
+        {
+        paraInvalid(0),
+        systemBusy(1),
+        integrityCheckFailed(2),
+        compatibilityCheckFailed(3),
+        dependencyCheckFailed(4),
+        versionRevoked(5),
+        startupError(6),
+        installError(7),
+        uninstallError(8),
+        upgradeError(9),
+        resetError(10),
+        diskInsufficient(11),
+        memoryOverload(12),
+        cpuOverload(13)
+        }
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "The reason of the package opeartion failure."
+        ::= { hwPackageOperationTrapsObject 7 }
 
     hwPackageOperationNotifications OBJECT IDENTIFIER ::= { hwPackageOperationTraps 2 }
         hwPackageOperationSuccess NOTIFICATION-TYPE
@@ -4326,6 +4750,13 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
 	DESCRIPTION
 		"Notification about a software package version downgrade. This trap is reported when the software package version is downgraded. The trap content includes hwPreviousPackage, hwPreviousVersion, hwPackageName and hwCurrentVersion."
 	::= { hwPackageOperationNotifications 2 }
+
+        hwPackageOperationFail NOTIFICATION-TYPE
+	OBJECTS { hwPackageOperationType, hwPackageType, hwPackageName, hwPackageVersion, hwFailReason }
+	STATUS current
+	DESCRIPTION
+		"Notification about a software package operation fail. This trap is reported when startup system software, install feature software, uninstall feature software, upgrade feature software, startup feature software, reset feature software, install extended-system-software, uninstall extended-system-software, upgrade extended-system software, startup extended-system-software, reset next-startup-extended-system-software failed. The trap content includes hwOperationType, hwPackageName and hwFailReason."
+	::= { hwPackageOperationNotifications 3 }
 
     hwHATraps OBJECT IDENTIFIER ::= { huaweiSystemManMIBNotifications 44 }
 
@@ -4370,12 +4801,278 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
 		"This alarm is cleared when the data of the active and standby components is successfully backed up."
 	::= { hwHANotifications 2 }
 	
+    hwProcFaultTraps OBJECT IDENTIFIER ::= { huaweiSystemManMIBNotifications 52 }
+
+    hwProcFaultTrapssObject OBJECT IDENTIFIER ::= { hwProcFaultTraps 1 }
+
+    hwFaultSlotId OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS  accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "ID of the slot where the faulty process resides."
+        ::= { hwProcFaultTrapssObject 1 }
+    
+    hwFaultProcessId OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS  accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "ID of the faulty process."
+        ::= { hwProcFaultTrapssObject 2 }
+
+    hwFaultProcessName OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS  accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Name of the faulty process."
+        ::= { hwProcFaultTrapssObject 3 }
+
+    hwProcessFaultReason OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS  accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Reason for the process fault."
+        ::= { hwProcFaultTrapssObject 4 }
+	
+    hwProcFaultNotifications OBJECT IDENTIFIER ::= { hwProcFaultTraps 2 }
+    hwProcessFaultAlarm NOTIFICATION-TYPE
+	OBJECTS { hwFaultSlotId, hwFaultProcessName, hwFaultProcessId, hwProcessFaultReason } 
+	STATUS current
+	DESCRIPTION 
+		"The process is faulty."
+	::= { hwProcFaultNotifications 1 }
+
+    hwProcessFaultAlarmResume NOTIFICATION-TYPE
+	OBJECTS { hwFaultSlotId, hwFaultProcessName, hwFaultProcessId, hwProcessFaultReason }  
+	STATUS current
+	DESCRIPTION 
+		"The process fault is rectified."
+	::= { hwProcFaultNotifications 2 }
+
     hwOnboardFirmwareDamaged NOTIFICATION-TYPE
     OBJECTS { entPhysicalIndex, entPhysicalName }
     STATUS current
     DESCRIPTION
         "The onboard firmware is damaged."
     ::= { huaweiSystemManMIBNotifications 45 }
+
+    hwOncardFirmwareDamaged NOTIFICATION-TYPE
+    OBJECTS { entPhysicalIndex, entPhysicalName }
+    STATUS current
+    DESCRIPTION
+        "The on-card firmware is damaged."
+    ::= { huaweiSystemManMIBNotifications 47 }
+
+    hwOncardFirmwareDamagedResume NOTIFICATION-TYPE
+    OBJECTS { entPhysicalIndex, entPhysicalName }
+    STATUS current
+    DESCRIPTION
+        "The damaged firmware on the card was rectified."
+    ::= { huaweiSystemManMIBNotifications 51 }
+ 
+    hwBIMTraps OBJECT IDENTIFIER ::= { huaweiSystemManMIBNotifications 46 }
+ 
+    hwBIMTrapsObject OBJECT IDENTIFIER ::= { hwBIMTraps 1 }
+ 
+    hwBIMChassisId OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the chassis ID."
+        ::= { hwBIMTrapsObject 1 }
+	
+    hwBIMSlotId OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the slot ID."
+        ::= { hwBIMTrapsObject 2 }
+ 
+    hwBIMLocationId OBJECT-TYPE
+        SYNTAX Unsigned32
+        MAX-ACCESS  accessible-for-notify
+        STATUS      current
+        DESCRIPTION
+            "Indicates a process ID."
+        ::= { hwBIMTrapsObject 3 }
+ 
+    hwBIMErrorCode OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "Indicates the error message."
+        ::= { hwBIMTrapsObject 4 }
+	
+    hwBIMNotifications OBJECT IDENTIFIER ::= { hwBIMTraps 2 }
+ 
+    hwBIMMemoryFull NOTIFICATION-TYPE
+	OBJECTS { hwBIMChassisId, hwBIMSlotId, hwBIMLocationId, hwBIMErrorCode } 
+	STATUS current
+	DESCRIPTION 
+		"The database that records resource allocation information is full."
+	::= { hwBIMNotifications 1 }
+ 
+    hwBIMMemoryFullResume NOTIFICATION-TYPE
+	OBJECTS { hwBIMChassisId, hwBIMSlotId, hwBIMLocationId, hwBIMErrorCode }  
+	STATUS current
+	DESCRIPTION 
+		"The database that records resource allocation information can be used. "
+	::= { hwBIMNotifications 2 }
+
+    hwEulaNotifications OBJECT IDENTIFIER ::= { huaweiSystemManMIBNotifications 48 }
+
+    hwEulaNotSigned NOTIFICATION-TYPE
+        OBJECTS { hwEulaRemainingDays }
+        STATUS current
+        DESCRIPTION
+            "This alarm is generated when the End User License Agreement (EULA) has not been accepted."
+        ::= { hwEulaNotifications 1 }
+
+    hwEulaNotSignedResume NOTIFICATION-TYPE
+        OBJECTS { hwEulaRemainingDays }
+        STATUS current
+        DESCRIPTION
+            "Notification that the End User License Agreement (EULA) has been manually signed."
+        ::= { hwEulaNotifications 2 }
+
+    hw3rdPluginUpdateFailed NOTIFICATION-TYPE
+        OBJECTS { hwPluginSlotId, hwPluginName, hwPluginFailReason }
+        STATUS current
+        DESCRIPTION
+              "The 3rd-party plug-in package update failed."
+        ::= { huaweiSystemManMIBNotifications 49 }
+
+    hwHipsNotifications OBJECT IDENTIFIER ::= { huaweiSystemManMIBNotifications 50 }
+
+    hwBoardRoleAbnormalTraps OBJECT IDENTIFIER ::= { huaweiSystemManMIBNotifications 53 }
+    hwBoardRoleAbnormal NOTIFICATION-TYPE
+           OBJECTS { entPhysicalIndex, entPhysicalName} 
+           STATUS current
+           DESCRIPTION
+                   "The alarm is generated when the active/standby role of the board is abnormal."
+           ::= { hwBoardRoleAbnormalTraps 1 }
+
+    hwBoardRoleAbnormalResume NOTIFICATION-TYPE
+           OBJECTS { entPhysicalIndex, entPhysicalName} 
+           STATUS current
+           DESCRIPTION
+                   "The alarm is cleared when the active/standby role of the board becomes normal."
+           ::= { hwBoardRoleAbnormalTraps 2 }
+
+    hwHipsAbnormalBehaviorDetected NOTIFICATION-TYPE
+        OBJECTS { hwHipsEventCategory, hwHipsEventType, hwHipsEventLevel, hwHipsOccurTime, hwHipsOperationResult, hwHipsUserName, hwHipsVisitorIp, hwHipsEvidence, hwHipsSlotId, hwHipsCardId, hwHipsCpuId, hwHipsBarcode }
+        STATUS current
+        DESCRIPTION
+            "This event is generated when the abnormal behavior has been detected."
+        ::= { hwHipsNotifications 1 }
+
+    hwHipsAbnormalBehaviorResolved NOTIFICATION-TYPE
+        OBJECTS { hwHipsEventCategory, hwHipsEventType, hwHipsOperationResult, hwHipsEvidence, hwHipsSlotId, hwHipsCardId, hwHipsCpuId, hwHipsBarcode }
+        STATUS current
+        DESCRIPTION
+            "Notification that the the abnormal behavior has been resolved."
+        ::= { hwHipsNotifications 2 }
+
+    hwHipsAbnormalShellDetected NOTIFICATION-TYPE
+        OBJECTS { hwHipsEventCategory, hwHipsEventType, hwHipsEventLevel, hwHipsOccurTime, hwHipsOperationResult, hwHipsShellPath, hwHipsOperationType, hwHipsCmdLine, hwHipsAttributeType, hwHipsOldAttribute, hwHipsNewAttribute, hwHipsSlotId, hwHipsCardId, hwHipsCpuId, hwHipsBarcode }
+        STATUS current
+        DESCRIPTION
+            "This event is generated when the abnormal shell behavior has been detected."
+        ::= { hwHipsNotifications 3 }
+
+    hwHipsFilePrivilegeEscalated NOTIFICATION-TYPE
+        OBJECTS { hwHipsEventCategory, hwHipsEventType, hwHipsEventLevel, hwHipsOccurTime, hwHipsOperationResult, hwHipsFilePath, hwHipsMethod, hwHipsSlotId, hwHipsCardId, hwHipsCpuId, hwHipsBarcode }
+        STATUS current
+        DESCRIPTION
+            "This event is generated when the file privilege has been escalated."
+        ::= { hwHipsNotifications 4 }
+
+    hwHipsKeyfileTampered NOTIFICATION-TYPE
+        OBJECTS { hwHipsEventCategory, hwHipsEventType, hwHipsEventLevel, hwHipsOccurTime, hwHipsOperationResult, hwHipsUserName, hwHipsLoginTime, hwHipsVisitorIp, hwHipsFilePath, hwHipsOperationType, hwHipsProcessPath, hwHipsAttributeType, hwHipsOldAttribute, hwHipsNewAttribute, hwHipsSlotId, hwHipsCardId, hwHipsCpuId, hwHipsBarcode }
+        STATUS current
+        DESCRIPTION
+            "The file is created or modified."
+        ::= { hwHipsNotifications 5 }
+
+    hwHipsRootkitAttack NOTIFICATION-TYPE
+        OBJECTS { hwHipsEventCategory, hwHipsOccurTime, hwHipsOperationResult, hwHipsRootkitName, hwHipsDetectionType, hwHipsDetectedThreat, hwHipsDetectionSource, hwHipsSlotId, hwHipsCardId, hwHipsCpuId, hwHipsBarcode }
+        STATUS current
+        DESCRIPTION
+            "Rootkit is detected."
+        ::= { hwHipsNotifications 6 }
+
+    hwHipsUnauthorizedRootUser NOTIFICATION-TYPE
+        OBJECTS { hwHipsEventCategory, hwHipsOccurTime, hwHipsOperationResult, hwHipsUnauthorizedUser, hwHipsGroupId, hwHipsHomePath, hwHipsShellPath, hwHipsUserId, hwHipsSlotId, hwHipsCardId, hwHipsCpuId, hwHipsBarcode }
+        STATUS current
+        DESCRIPTION
+            "An unauthorized root user is detected."
+        ::= { hwHipsNotifications 7 }
+
+    hwTimerResThresholdTraps OBJECT IDENTIFIER ::= { huaweiSystemManMIBNotifications 54 }
+ 
+    hwTimerObjects OBJECT IDENTIFIER ::= { hwTimerResThresholdTraps 1 }
+
+    hwTimerProcessName OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+        "The process name string of traps."
+        ::= { hwTimerObjects 1 }
+    
+    hwTimerSlotId OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+        "The slot id of traps."
+        ::= { hwTimerObjects 2 }
+    
+    hwTimerCpuId OBJECT-TYPE
+        SYNTAX Integer32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+        "The cpu id of traps"
+        ::= { hwTimerObjects 3 }
+
+    hwTimerCurrentUsage OBJECT-TYPE
+        SYNTAX Integer32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+        "The alarm current value of traps"
+        ::= { hwTimerObjects 4 }
+    
+    hwTimerThresholdUsage OBJECT-TYPE
+        SYNTAX Integer32
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+        "This alarm threshold of traps"
+        ::= { hwTimerObjects 5 }
+	
+    hwTimerResThresholdNotifications OBJECT IDENTIFIER ::= { hwTimerResThresholdTraps 2 }
+ 
+    hwTimerResThresholdExceed NOTIFICATION-TYPE
+        OBJECTS { hwTimerProcessName, hwTimerSlotId, hwTimerCpuId, hwTimerCurrentUsage, hwTimerThresholdUsage } 
+        STATUS current
+        DESCRIPTION 
+            "The usage of timer resources exceeds the alarm threshold."
+        ::= { hwTimerResThresholdNotifications 1 }
+ 
+    hwTimerResThresholdExceedResume NOTIFICATION-TYPE
+        OBJECTS { hwTimerProcessName, hwTimerSlotId, hwTimerCpuId, hwTimerCurrentUsage, hwTimerThresholdUsage }  
+        STATUS current
+        DESCRIPTION 
+            "The usage of timer resources is less than the threshold."
+        ::= { hwTimerResThresholdNotifications 2 }
 
     huaweiSystemManMIBConformance OBJECT IDENTIFIER ::= { huaweiSystemManMIB 3 }
 
@@ -4440,7 +5137,7 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
             NOTIFICATIONS { hwSysClockChangedNotification, hwSysReloadNotification, hwSysSlaveSwitchSuccessNotification,
             hwSysSlaveSwitchFailNotification, hwSysIssuNotification, hwPatchInstallFail, hwPatchInstallFailClear, hwSumUpgradeSuccess, hwSysCfgFileErrorNotification, hwSysImageErrorNotification, hwSysPafChangeNotification, 
             hwSysLicenseChangeNotification, hwSystemBoardExclude, hwSystemBoardExcludeClear, hwEvmVmAbnormalRunNotification, hwEvmVmNotRunningNotification, hwEvmVmAbnormalRestartNotification, hwEvmDownloadFailedNotification, hwEvmInstallFailedNotification,
-            hwSysImageDamagedNotification, hwComponentBackupFail, hwComponentBackupFailResume, hwOnboardFirmwareDamaged }
+            hwSysImageDamagedNotification, hwComponentBackupFail, hwComponentBackupFailResume, hwProcessFaultAlarm, hwProcessFaultAlarmResume, hwOnboardFirmwareDamaged, hwBIMMemoryFull, hwBIMMemoryFullResume, hwOncardFirmwareDamaged, hwOncardFirmwareDamagedResume, hwSysImageDamagedResume }
         STATUS current
         DESCRIPTION 
             "A collection of notification."
@@ -4592,4 +5289,19 @@ HUAWEI-SYS-MAN-MIB DEFINITIONS ::= BEGIN
         DESCRIPTION 
             "A collection of objects providing EVM system trap objects."
         ::= { huaweiSystemManMIBGroups 26 }
+
+    hwEulaObjectGroup OBJECT-GROUP
+        OBJECTS { hwEulaRemainingDays }
+        STATUS current
+        DESCRIPTION 
+            "A collection of objects that provide EULA notification parameters."
+        ::= { huaweiSystemManMIBGroups 27 }
+
+    hwEulaNotificationGroup NOTIFICATION-GROUP
+        NOTIFICATIONS { hwEulaNotSigned, hwEulaNotSignedResume }
+        STATUS current
+        DESCRIPTION 
+            "A collection of objects that provide EULA notifications."
+        ::= { huaweiSystemManMIBGroups 28 }
+
     END

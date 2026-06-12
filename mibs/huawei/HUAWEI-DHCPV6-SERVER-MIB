@@ -1,9 +1,9 @@
 -- =================================================================
--- Copyright (C) 2017 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 --
 -- Description: Huawei Ethernet ARP MIB
 -- Reference: HUAWEI Enterprise MIB
--- Version: V1.01
+-- Version: V2.00
 -- History: 
 -- =================================================================
 
@@ -20,7 +20,7 @@
                 FROM SNMPv2-CONF;        
             
         hwDHCPv6Server MODULE-IDENTITY 
-            LAST-UPDATED "201708171600Z"        
+            LAST-UPDATED "202503041600Z"        
             ORGANIZATION 
                   "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -33,6 +33,16 @@
                   "
             DESCRIPTION 
                 "The MIB is used for defining Huawei's DHCPv6 server attribute."
+            REVISION    "202503041600Z"
+            DESCRIPTION "Modified hwAllocatedIpUsersLimitValue and hwAllocatedIpUsersThresholdValue."
+
+            REVISION    "202410261600Z"
+            DESCRIPTION "Add hwAllocatedIpUsersLimitReachAlarm,hwAllocatedIpUsersLimitResumeAlarm,hwAllocatedIpUsersThresholdReachAlarm and hwAllocatedIpThresholdResumeAlarm."
+
+            REVISION    "202205201600Z"   
+            DESCRIPTION "Modify the description of hwAllocatedIpLimitResumeAlarm,hwAllocatedIpThresholdReachAlarm and hwAllocatedIpThresholdResumeAlarm. Add    hwGlobalAllocatedIpLimitReachAlarm, hwGlobalAllocatedIpLimitResumeAlarm, hwGlobalAllocatedIpThresholdReachAlarm, hwGlobalAllocatedIpThresholdResumeAlarm, 
+            hwGlobalAllocatedPrefixLimitReachAlarm, hwGlobalAllocatedPrefixLimitResumeAlarm, hwGlobalAllocatedPrefixThresholdReachAlarm and hwGlobalAllocatedPrefixThresholdResumeAlarm."
+
             REVISION    "201708171600Z"   
             DESCRIPTION "Modify the description of hwAllocatedIpLimitResumeAlarm."
 
@@ -62,7 +72,55 @@
 	   DESCRIPTION
 		"This object indicates the threshold for the number of assignable IPv6 addresses."
 	::= { hwDHCPv6ServerObjects 2 }  
-                                                                                          
+
+    hwGlobalAllocatedIpLimitValue  OBJECT-TYPE
+        SYNTAX Unsigned32(0..4294967294)
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "This object indicates the maximum number of globally assignable IPv6 addresses."
+    ::= { hwDHCPv6ServerObjects 3 }  
+
+    hwGlobalAllocatedIpThresholdValue  OBJECT-TYPE
+        SYNTAX Unsigned32(0..4294967294)
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "This object indicates the threshold for the number of globally assignable IPv6 addresses."
+    ::= { hwDHCPv6ServerObjects 4 }  
+
+    hwGlobalAllocatedPrefixLimitValue  OBJECT-TYPE
+        SYNTAX Unsigned32(0..4294967294)
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "This object indicates the maximum number of globally assignable IPv6 prefixes."
+    ::= { hwDHCPv6ServerObjects 5 } 
+
+    hwGlobalAllocatedPreifxThresholdValue  OBJECT-TYPE
+        SYNTAX Unsigned32(0..4294967294)
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "This object indicates the threshold for the number of globally assignable IPv6 prefixes."
+    ::= { hwDHCPv6ServerObjects 6 }
+
+    hwAllocatedIpUsersLimitValue  OBJECT-TYPE
+        SYNTAX Unsigned32(0..4294967294)
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "This object indicates the maximum number of users who have been assigned IPv6 addresses."
+    ::= { hwDHCPv6ServerObjects 7 }   
+	
+    hwAllocatedIpUsersThresholdValue  OBJECT-TYPE
+        SYNTAX Unsigned32(0..4294967294)
+        MAX-ACCESS accessible-for-notify
+        STATUS current
+        DESCRIPTION
+            "This object indicates the threshold for the number of users who have been assigned IPv6 addresses."
+    ::= { hwDHCPv6ServerObjects 8 }  
+
 --  Notifications(trap) Definitions
 
     hwDHCPv6ServerNotifications OBJECT IDENTIFIER ::= { hwDHCPv6Server 2 } 	
@@ -78,23 +136,107 @@
             OBJECTS { hwAllocatedIpLimitValue } 
             STATUS current     
             DESCRIPTION 
-                "This object indicates that an alarm is generated when the number of assigned IPv6 addresses reaches the specified threshold."
+                "This object indicates that a clear alarm is generated when the number of assigned IPv6 addresses falls below 90% of the allowed maximum number."
             ::= { hwDHCPv6ServerNotifications 2 }    
 			
     hwAllocatedIpThresholdReachAlarm NOTIFICATION-TYPE
             OBJECTS { hwAllocatedIpThresholdValue } 
             STATUS current     
             DESCRIPTION 
-                "This object indicates that a clear alarm is generated when the number of assigned IPv6 addresses reaches the allowed maximum number."
+                "This object indicates that an alarm is generated when the number of assigned IPv6 addresses reaches 80% of the allowed maximum number."
             ::= { hwDHCPv6ServerNotifications 3 }    
             
     hwAllocatedIpThresholdResumeAlarm NOTIFICATION-TYPE
             OBJECTS { hwAllocatedIpThresholdValue } 
             STATUS current     
             DESCRIPTION 
-                "This object indicates that a clear alarm is generated when the number of assigned IPv6 addresses reaches the specified threshold."
+                "This object indicates that a clear alarm is generated when the number of assigned IPv6 addresses falls below 70% of the allowed maximum number."
             ::= { hwDHCPv6ServerNotifications 4 } 
  
+    hwGlobalAllocatedIpLimitReachAlarm NOTIFICATION-TYPE
+            OBJECTS { hwGlobalAllocatedIpLimitValue } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that an alarm is generated when the number of assigned IPv6 addresses reaches the globally allowed maximum number."
+            ::= { hwDHCPv6ServerNotifications 5 }    
+
+    hwGlobalAllocatedIpLimitResumeAlarm NOTIFICATION-TYPE
+            OBJECTS { hwGlobalAllocatedIpLimitValue } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that a clear alarm is generated when the number of assigned IPv6 addresses falls below 90% of the globally allowed maximum number." 
+            ::= { hwDHCPv6ServerNotifications 6 } 
+
+    hwGlobalAllocatedIpThresholdReachAlarm NOTIFICATION-TYPE
+            OBJECTS { hwGlobalAllocatedIpThresholdValue, hwGlobalAllocatedIpLimitValue } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that an alarm is generated when the number of assigned IPv6 addresses reaches 80% of the globally allowed maximum number."
+            ::= { hwDHCPv6ServerNotifications 7 }    
+            
+    hwGlobalAllocatedIpThresholdResumeAlarm NOTIFICATION-TYPE
+            OBJECTS { hwGlobalAllocatedIpThresholdValue, hwGlobalAllocatedIpLimitValue } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that a clear alarm is generated when the number of assigned IPv6 addresses falls below 70% of the globally allowed maximum number."
+            ::= { hwDHCPv6ServerNotifications 8 } 
+
+    hwGlobalAllocatedPrefixLimitReachAlarm NOTIFICATION-TYPE
+            OBJECTS { hwGlobalAllocatedPrefixLimitValue } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that an alarm is generated when the number of assigned IPv6 prefixes reaches the globally allowed maximum number."
+            ::= { hwDHCPv6ServerNotifications 9 }    
+
+    hwGlobalAllocatedPrefixLimitResumeAlarm NOTIFICATION-TYPE
+            OBJECTS { hwGlobalAllocatedPrefixLimitValue } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that a clear alarm is generated when the number of assigned IPv6 prefixes falls below 90% of the globally allowed maximum number." 
+            ::= { hwDHCPv6ServerNotifications 10 } 
+
+    hwGlobalAllocatedPrefixThresholdReachAlarm NOTIFICATION-TYPE
+            OBJECTS { hwGlobalAllocatedPreifxThresholdValue, hwGlobalAllocatedPrefixLimitValue } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that an alarm is generated when the number of assigned IPv6 prefixes reaches 80% of the globally allowed maximum number."
+            ::= { hwDHCPv6ServerNotifications 11 }    
+            
+    hwGlobalAllocatedPrefixThresholdResumeAlarm NOTIFICATION-TYPE
+            OBJECTS { hwGlobalAllocatedPreifxThresholdValue, hwGlobalAllocatedPrefixLimitValue } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that a clear alarm is generated when the number of assigned IPv6 prefixes falls below 70% of the globally allowed maximum number."
+            ::= { hwDHCPv6ServerNotifications 12 } 
+
+    hwAllocatedIpUsersLimitReachAlarm NOTIFICATION-TYPE
+            OBJECTS { hwAllocatedIpUsersLimitValue } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that an alarm is generated when the number of users who have been assigned IPv6 addresses reaches the allowed maximum number."
+            ::= { hwDHCPv6ServerNotifications 13 }    
+
+    hwAllocatedIpUsersLimitResumeAlarm NOTIFICATION-TYPE
+            OBJECTS { hwAllocatedIpUsersLimitValue } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that a clear alarm is generated when the number of users who have been assigned IPv6 addresses falls below 90% of the allowed maximum number."
+            ::= { hwDHCPv6ServerNotifications 14 }    
+
+    hwAllocatedIpUsersThresholdReachAlarm NOTIFICATION-TYPE
+            OBJECTS { hwAllocatedIpUsersThresholdValue } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that an alarm is generated when the number of users who have been assigned IPv6 addresses reaches 80% of the allowed maximum number."
+            ::= { hwDHCPv6ServerNotifications 15 }    
+            
+    hwAllocatedIpUsersThresholdResumeAlarm NOTIFICATION-TYPE
+            OBJECTS { hwAllocatedIpUsersThresholdValue } 
+            STATUS current     
+            DESCRIPTION 
+                "This object indicates that a clear alarm is generated when the number of users who have been assigned IPv6 addresses falls below 70% of the allowed maximum number."
+            ::= { hwDHCPv6ServerNotifications 16 } 
+
 -- Conformance information
 
   hwDHCPv6ServerConformance OBJECT IDENTIFIER ::= { hwDHCPv6Server 3 }
@@ -106,18 +248,25 @@
    hwDHCPv6ServerAllocatedIpGroup OBJECT-GROUP
     OBJECTS {
 		hwAllocatedIpLimitValue,
-		hwAllocatedIpThresholdValue	
+		hwAllocatedIpThresholdValue,
+		hwGlobalAllocatedIpLimitValue,
+		hwGlobalAllocatedIpThresholdValue,
+		hwGlobalAllocatedPrefixLimitValue,
+		hwGlobalAllocatedPreifxThresholdValue,
+		hwAllocatedIpUsersLimitValue,
+		hwAllocatedIpUsersThresholdValue
     }
     STATUS      current
     DESCRIPTION
-        "A collection of objects for DHCPv6 server allocated IP alarm."
+        "A collection of objects for DHCPv6 server allocated IP and prefix alarm."
     ::= { hwDHCPv6ServerGroups 1 }		    		
 
     hwDHCPv6ServerNotificationsGroup NOTIFICATION-GROUP   
-        NOTIFICATIONS{ hwAllocatedIpLimitReachAlarm, hwAllocatedIpLimitResumeAlarm, hwAllocatedIpThresholdReachAlarm, hwAllocatedIpThresholdResumeAlarm}
+        NOTIFICATIONS{ hwAllocatedIpLimitReachAlarm, hwAllocatedIpLimitResumeAlarm, hwAllocatedIpThresholdReachAlarm, hwAllocatedIpThresholdResumeAlarm, hwGlobalAllocatedIpLimitReachAlarm, hwGlobalAllocatedIpLimitResumeAlarm, hwGlobalAllocatedIpThresholdReachAlarm, hwGlobalAllocatedIpThresholdResumeAlarm, 
+        hwGlobalAllocatedPrefixLimitReachAlarm, hwGlobalAllocatedPrefixLimitResumeAlarm, hwGlobalAllocatedPrefixThresholdReachAlarm, hwGlobalAllocatedPrefixThresholdResumeAlarm, hwAllocatedIpUsersLimitReachAlarm, hwAllocatedIpUsersLimitResumeAlarm, hwAllocatedIpUsersThresholdReachAlarm, hwAllocatedIpUsersThresholdResumeAlarm }
         STATUS current
         DESCRIPTION
-            "A collection of notification for DHCPv6 server allocated IP alarm."   
+            "A collection of notification for DHCPv6 server allocated IP and prefix alarm."   
      ::= { hwDHCPv6ServerGroups 2 }	
 		
     hwDHCPv6ServerCompliance MODULE-COMPLIANCE

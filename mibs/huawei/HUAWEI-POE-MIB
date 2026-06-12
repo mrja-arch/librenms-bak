@@ -1,10 +1,10 @@
 
 --  ===========================================================
--- Copyright (C)  2021 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C)  2023 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description:    HUAWEI POE MIB Definition 
 -- Reference:      This mib was extracted from IEEE 802.3af
--- Version:        V1.17
+-- Version:        V1.18
 -- History:        Liuhui ,2009-08-24, Create
 -- ===========================================================
 
@@ -26,7 +26,7 @@
 	
 	
 		hwPoeMIB MODULE-IDENTITY 
-			LAST-UPDATED "202108120000Z"		-- Aug 12, 2021 at 00:00 GMT
+			LAST-UPDATED "202303250000Z"		-- Mar 25, 2023 at 00:00 GMT
 			ORGANIZATION 
 				 "Huawei Technologies Co.,Ltd."
 			CONTACT-INFO 
@@ -38,6 +38,9 @@
           Email: support@huawei.com
          "		DESCRIPTION 
 				"The HUAWEI-POE-MIB contains objects to manage POE."
+                                                               REVISION     "202303250000Z"
+                                                               DESCRIPTION  "V1.18,  Add hwPoePowerUnvailable and hwPoePowerUnvailableResume "
+
                                                                REVISION     "202108120000Z"
                                                                DESCRIPTION  "V1.17,  Add hwPoeCommunicateFail and hwPoeCardAbsent "
 
@@ -1226,7 +1229,21 @@
 			DESCRIPTION 
 				"This object indicates that the poe communication has resumed."
 			::= { hwPoeNotification 50 }
-        
+
+		hwPoePowerUnvailable  NOTIFICATION-TYPE
+		  OBJECTS {hwPoeDeviceID}
+			STATUS current
+			DESCRIPTION 
+				"This object indicates that the poe power is not available."
+			::= { hwPoeNotification 51 }
+
+		hwPoePowerUnvailableResume  NOTIFICATION-TYPE
+		  OBJECTS {hwPoeDeviceID}
+			STATUS current
+			DESCRIPTION 
+				"This object indicates that the poe power is available."
+			::= { hwPoeNotification 52 }
+
 		hwPoeConformance OBJECT IDENTIFIER ::= { hwPoeMIB 100 }
     hwPoeCompliances OBJECT IDENTIFIER ::= { hwPoeConformance 1 }
     hwPoeCompliance MODULE-COMPLIANCE
@@ -1288,7 +1305,8 @@
                                 hwPoeNotAvailable,hwPoeNotAvailableResume,hwPoeCardAbsent,hwPoePortFail,hwPoePortFailResume,
                                 hwPdPowerCut,hwPdPowerCutResume,hwPoeChipFail,hwPoeChipFailResume,hwPdVltLow,hwPdVltLowResume,
                                 hwPdVltHigh,hwPdVltHighResume,hwPseVltLow,hwPseVltLowResume,hwPoePdOvercurrentPoweroff,hwPoePdOverloadPoweroff,
-                                hwPoeSubCardAbsent,hwPoeSubCardAbsentResume,hwPoeCommunicateFail,hwPoeCommunicateFailResume}
+                                hwPoeSubCardAbsent,hwPoeSubCardAbsentResume,hwPoeCommunicateFail,hwPoeCommunicateFailResume,
+                                hwPoePowerUnvailable,hwPoePowerUnvailableResume}
 			STATUS current
 			DESCRIPTION 
 				"This object indicates the POE's notification table group."

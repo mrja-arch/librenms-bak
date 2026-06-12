@@ -1,9 +1,9 @@
 --  ==================================================================
--- Copyright (C) 2017 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright(C) 2024 by HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI-EVC-MIB provides information about EVC
 -- Reference:
--- Version: V1.02
+-- Version: V1.05
 -- History:
 -- <author>,   <date>,  <contents>
 --  HUAWEI   2014-09-011  EVC private MIB
@@ -21,12 +21,18 @@
 				FROM HUAWEI-MIB			
 			OBJECT-GROUP, MODULE-COMPLIANCE, NOTIFICATION-GROUP			
 				FROM SNMPv2-CONF			
-			Unsigned32, Counter64, OBJECT-TYPE, MODULE-IDENTITY, NOTIFICATION-TYPE			
-				FROM SNMPv2-SMI;
+			Unsigned32, Counter64, OBJECT-TYPE, MODULE-IDENTITY, NOTIFICATION-TYPE,  Integer32			
+				FROM SNMPv2-SMI
+			RowStatus
+				FROM SNMPv2-TC
+			VlanId, VlanIdOrNone
+				FROM Q-BRIDGE-MIB
+			InterfaceIndex
+				FROM IF-MIB;
 
 -- September 11, 2014 at 16:55 GMT
 		hwEVC MODULE-IDENTITY 
-			LAST-UPDATED "201711100000Z"		
+			LAST-UPDATED "202405110000Z"		
 			ORGANIZATION 
 				"Huawei Technologies Co.,Ltd."
 			CONTACT-INFO 
@@ -38,13 +44,24 @@
 				 Email: support@huawei.com
 				"
 			DESCRIPTION 
-				"Modify hwBDStatBDID."
-			REVISION "201711100000Z"		
-			DESCRIPTION 
 				"The EVC MIB module is defined to manage the EVC configuration under system or bride-domain view."
+
+			REVISION "202405110000Z"
+			DESCRIPTION 
+				"Add hwL2subifVlanRangeExceed and hwL2subifVlanRangeExceedResume."
+
+			REVISION "202312140000Z"
+			DESCRIPTION 
+				"Add hwEvcQinQMatchTable, hwEvcRewriteMapTable, hwEvcPortBindBdTable."
+	
+			REVISION "201711100000Z"
+			DESCRIPTION 
+				"Modify hwBDStatBDID."
+
 			REVISION "201606170918Z"		-- September 11, 2014 at 16:55 GMT
 			DESCRIPTION
 				"modify the range of Bridge-domain  ."
+
 			REVISION "201409111655Z"		-- September 11, 2014 at 16:55 GMT
 			DESCRIPTION
 				"The initial revision of this MIB module."
@@ -124,6 +141,222 @@
 			DESCRIPTION
 				"Outbound bytes."
 			::= { hwBDStatEntry 5 }
+
+		hwEvcQinQMatchTable OBJECT-TYPE
+			SYNTAX SEQUENCE OF HwEvcQinQMatchEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"The table is to configure encapsulation qinq function in a Layer 2 sub-interface."
+			::= { hwEVCMngObjects 2 }	
+
+			hwEvcQinQMatchEntry OBJECT-TYPE
+					SYNTAX HwEvcQinQMatchEntry
+					MAX-ACCESS not-accessible
+					STATUS current
+					DESCRIPTION
+						"The entry of a Layer 2 sub-interface enabled the encapsulation qinq function."
+					INDEX { hwEvcQinQSubIfIndex, hwEvcQinQSubIfPeVlan, hwEvcQinQSubIfCeVlanStart}
+					::= { hwEvcQinQMatchTable 1 }
+
+			HwEvcQinQMatchEntry ::=
+					SEQUENCE { 
+						hwEvcQinQSubIfIndex
+							InterfaceIndex,
+						hwEvcQinQSubIfPeVlan
+							VlanId,
+						hwEvcQinQSubIfCeVlanStart
+							VlanId,
+						hwEvcQinQSubIfCeVlanEnd
+							VlanId,
+						hwEvcQinQSubIfRowStatus
+							RowStatus					
+						}
+
+			hwEvcQinQSubIfIndex OBJECT-TYPE
+					SYNTAX InterfaceIndex
+					MAX-ACCESS not-accessible
+					STATUS current
+					DESCRIPTION
+						"Index number of the encapsulation qinq Layer 2 sub-interface."
+					::= { hwEvcQinQMatchEntry 1 }
+
+			hwEvcQinQSubIfPeVlan OBJECT-TYPE
+				SYNTAX VlanId
+				MAX-ACCESS not-accessible
+				STATUS current
+				DESCRIPTION
+					"Outer VLAN ID of the packets which have two tags."
+				::= { hwEvcQinQMatchEntry 2 }
+
+			hwEvcQinQSubIfCeVlanStart OBJECT-TYPE
+				SYNTAX VlanId
+				MAX-ACCESS not-accessible
+				STATUS current
+				DESCRIPTION
+					"When configure CE VLAN as a range, hwEvcQinQSubIfCeVlanStart
+					is the start VLAN ID and hwEvcQinQSubIfCeVlanEnd is the end VLAN ID."
+				::= { hwEvcQinQMatchEntry 3 }
+
+			hwEvcQinQSubIfCeVlanEnd OBJECT-TYPE
+				SYNTAX VlanId
+				MAX-ACCESS read-create
+				STATUS current
+				DESCRIPTION
+					"When configure CE VLAN as a range, hwEvcQinQSubIfCeVlanStart is 
+					the start VLAN ID and hwEvcQinQSubIfCeVlanEnd is the end VLAN ID."
+				::= { hwEvcQinQMatchEntry 4 }
+
+			hwEvcQinQSubIfRowStatus OBJECT-TYPE
+				SYNTAX RowStatus
+				MAX-ACCESS read-create
+				STATUS current
+				DESCRIPTION
+					"Used for controlling the creation and deletion of this
+					row. All writeable objects in this row may be modified at any time.
+					If a Network Management Application  attempts to delete a conceptual
+					row by setting this  object to 'destroy' and there are one or more entries
+					in hwEvcQinQMatchTable pointing to the row, the agent must also
+					destroy the corresponding entries in hwEvcQinQMatchTable."
+				::= { hwEvcQinQMatchEntry 50 }
+
+        hwEvcRewriteMapTable OBJECT-TYPE
+			SYNTAX SEQUENCE OF HwEvcRewriteMapEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"The table is to configure a traffic behavior to map for packets that an EVC Layer 2 sub-interface receives."
+			::= { hwEVCMngObjects 3 }	
+
+			hwEvcRewriteMapEntry OBJECT-TYPE
+					SYNTAX HwEvcRewriteMapEntry
+					MAX-ACCESS not-accessible
+					STATUS current
+					DESCRIPTION
+						"The entry of a Layer 2 sub-interface enabled the traffic behavior function."
+					INDEX { hwEvcRewriteMapIfIndex }
+					::= { hwEvcRewriteMapTable 1 }
+
+			HwEvcRewriteMapEntry ::=
+					SEQUENCE { 
+						hwEvcRewriteMapIfIndex
+							InterfaceIndex,
+						hwEvcRewriteMapActionType
+							INTEGER,
+						hwEvcRewriteMapPeVlan
+							VlanId,
+						hwEvcRewriteMapCeVlan
+							VlanIdOrNone,
+						hwEvcRewriteMapRowStatus
+							RowStatus					
+						}
+
+			hwEvcRewriteMapIfIndex OBJECT-TYPE
+					SYNTAX InterfaceIndex
+					MAX-ACCESS not-accessible
+					STATUS current
+					DESCRIPTION
+						"Index number of the Layer 2 sub-interface."
+					::= { hwEvcRewriteMapEntry 1 }
+
+			hwEvcRewriteMapActionType OBJECT-TYPE
+				SYNTAX INTEGER
+				{
+					map1to1(1),
+					map2to1(2),
+					map1to2(3),
+					map2to2(4)
+				} 
+				MAX-ACCESS read-create
+				STATUS current
+				DESCRIPTION
+					"Traffic action type."
+				::= { hwEvcRewriteMapEntry 2 }
+
+			hwEvcRewriteMapPeVlan OBJECT-TYPE
+				SYNTAX VlanId
+				MAX-ACCESS read-create
+				STATUS current
+				DESCRIPTION
+					"The VLAN ID in the single tag to which a single tag or double tags in each received packet are mapped when 1 to 1 or 2 to 1 VLAN tag mapping is used."
+				::= { hwEvcRewriteMapEntry 3 }
+
+			hwEvcRewriteMapCeVlan OBJECT-TYPE
+				SYNTAX VlanIdOrNone
+				MAX-ACCESS read-create
+				STATUS current
+				DESCRIPTION
+					"The VLAN ID in the inner tag after a single tag or double tags in each received packet are mapped to two tags when 1 to 2 or 2 to 2 VLAN tag mapping is used."
+				::= { hwEvcRewriteMapEntry 4 }
+
+			hwEvcRewriteMapRowStatus OBJECT-TYPE
+				SYNTAX RowStatus
+				MAX-ACCESS read-create
+				STATUS current
+				DESCRIPTION
+					"Used for controlling the creation and deletion of this
+					row. All writeable objects in this row may be modified at any time.
+					If a Network Management Application  attempts to delete a conceptual
+					row by setting this  object to 'destroy' and there are one or more entries
+					in hwEvcRewriteMapTable pointing to the row, the agent must also
+					destroy the corresponding entries in hwEvcRewriteMapTable."
+				::= { hwEvcRewriteMapEntry 50 }
+
+        hwEvcPortBindBdTable OBJECT-TYPE
+			SYNTAX SEQUENCE OF HwEvcPortBindBdEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"The table is to configure a sub-interface to a bridge domain."
+			::= { hwEVCMngObjects 4 }	
+
+			hwEvcPortBindBdEntry OBJECT-TYPE
+					SYNTAX HwEvcPortBindBdEntry
+					MAX-ACCESS not-accessible
+					STATUS current
+					DESCRIPTION
+						"The entry of a sub-interface adds to a bridge domain."
+					INDEX { hwEvcSubIfBindBdIfIndex}
+					::= { hwEvcPortBindBdTable 1 }
+
+			HwEvcPortBindBdEntry ::=
+					SEQUENCE { 
+						hwEvcSubIfBindBdIfIndex
+							InterfaceIndex,
+						hwEvcPortBindBdBdId
+							Unsigned32,
+						hwEvcPortBindBdRowStatus
+							RowStatus
+						}
+
+			hwEvcSubIfBindBdIfIndex OBJECT-TYPE
+					SYNTAX InterfaceIndex
+					MAX-ACCESS not-accessible
+					STATUS current
+					DESCRIPTION
+						"Index number of the sub-interface."
+					::= { hwEvcPortBindBdEntry 1 }
+
+			hwEvcPortBindBdBdId OBJECT-TYPE
+				SYNTAX Unsigned32 (1..16777215)
+				MAX-ACCESS read-create
+				STATUS current
+				DESCRIPTION
+					"Index number of the bride domain."
+				::= { hwEvcPortBindBdEntry 2 }
+
+			hwEvcPortBindBdRowStatus OBJECT-TYPE
+				SYNTAX RowStatus
+				MAX-ACCESS read-create
+				STATUS current
+				DESCRIPTION
+					"Used for controlling the creation and deletion of this
+					row. All writeable objects in this row may be modified at any time.
+					If a Network Management Application  attempts to delete a conceptual
+					row by setting this  object to 'destroy' and there are one or more entries
+					in hwEvcPortBindBdTable pointing to the row, the agent must also
+					destroy the corresponding entries in hwEvcPortBindBdTable."
+				::= { hwEvcPortBindBdEntry 50 }
 			
 		hwEVCConformance OBJECT IDENTIFIER ::= { hwEVC 2 }
 		
@@ -134,7 +367,7 @@
         DESCRIPTION
             "This is the EVC compliance."
         MODULE -- this module
-            MANDATORY-GROUPS { hwBDStatGroup }
+            MANDATORY-GROUPS { hwBDStatGroup, hwEVCTrapsGroup  }
         ::= { hwEVCCompliances 1 }
 		
 		hwEVCGroups OBJECT IDENTIFIER ::= { hwEVCConformance 2 }
@@ -144,6 +377,115 @@
 			STATUS current
 			DESCRIPTION 
 				"This is the bridge-domain statistics group."
-			::= { hwEVCGroups 1 }	
-					
-	END
+			::= { hwEVCGroups 1 }
+
+		hwEvcQinQMatchGroup OBJECT-GROUP
+			OBJECTS { hwEvcQinQSubIfCeVlanEnd, hwEvcQinQSubIfRowStatus}
+			STATUS current
+			DESCRIPTION 
+				"A collection of items of EVC qinq subif table."
+			::= { hwEVCGroups 2 }
+
+		hwEvcRewriteMapGroup OBJECT-GROUP
+			OBJECTS { hwEvcRewriteMapActionType, hwEvcRewriteMapPeVlan, hwEvcRewriteMapCeVlan, hwEvcRewriteMapRowStatus }
+			STATUS current
+			DESCRIPTION 
+				"A collection of items of EVC rewrite map table."
+			::= { hwEVCGroups 3 }
+
+		hwEvcPortBindBdGroup OBJECT-GROUP
+			OBJECTS { hwEvcPortBindBdBdId, hwEvcPortBindBdRowStatus }
+			STATUS current
+			DESCRIPTION 
+				"A collection of items of port bind bridge domain table."
+			::= { hwEVCGroups 4 }
+
+
+		hwL2subifVlanRange OBJECT IDENTIFIER ::= { hwEVC 3 }
+
+			hwL2subifVlanRangeExceed NOTIFICATION-TYPE
+			OBJECTS { hwL2subifVlanRangeIfName, hwL2subifVlanRangeType, hwL2subifVlanRangePeVlanBegin, hwL2subifVlanRangePeVlanEnd, hwL2subifVlanRangeCeVlanBegin, hwL2subifVlanRangeCeVlanEnd, hwL2subifVlanRangeSlot }
+			STATUS current
+			DESCRIPTION 
+			   "The VLAN range resources for the Layer 2 sub-interface are insufficient."
+			::= { hwL2subifVlanRange 1 }
+
+			hwL2subifVlanRangeExceedResume NOTIFICATION-TYPE
+			OBJECTS { hwL2subifVlanRangeIfName, hwL2subifVlanRangeType, hwL2subifVlanRangePeVlanBegin, hwL2subifVlanRangePeVlanEnd, hwL2subifVlanRangeCeVlanBegin, hwL2subifVlanRangeCeVlanEnd, hwL2subifVlanRangeSlot }
+			STATUS current
+			DESCRIPTION 
+			   "The VLAN range resources for the Layer 2 sub-interface are sufficient, or the Layer 2 sub-interface is deleted."
+			::= { hwL2subifVlanRange 2 }
+
+		hwL2subifVlanRangeIfName OBJECT-TYPE
+			SYNTAX OCTET STRING
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"Layer 2 sub-interface name."
+			::= { hwEVCMngObjects 5 }			
+			
+		 hwL2subifVlanRangeType OBJECT-TYPE
+			SYNTAX OCTET STRING
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"Encapsulation type configurations on the interface."
+			::= { hwEVCMngObjects 6 }			
+
+		 hwL2subifVlanRangePeVlanBegin OBJECT-TYPE
+			SYNTAX Integer32 (1..4094)
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"Start outer VLAN configurations on the interface."
+			::= { hwEVCMngObjects 7 }
+
+		 hwL2subifVlanRangePeVlanEnd OBJECT-TYPE
+			SYNTAX Integer32 (1..4094)
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"End outer VLAN configurations on the interface."
+			::= { hwEVCMngObjects 8 }
+
+		 hwL2subifVlanRangeCeVlanBegin OBJECT-TYPE
+			SYNTAX Integer32 (0..4094)
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"Start inner VLAN configurations on the interface."
+			::= { hwEVCMngObjects 9 }
+
+		 hwL2subifVlanRangeCeVlanEnd OBJECT-TYPE
+			SYNTAX  Integer32 (0..4094)
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"End inner VLAN configurations on the interface."
+			::= { hwEVCMngObjects 10 }
+
+		 hwL2subifVlanRangeSlot OBJECT-TYPE
+			SYNTAX OCTET STRING
+			MAX-ACCESS accessible-for-notify
+			STATUS current
+			DESCRIPTION
+				"The information for the slot."
+			::= { hwEVCMngObjects 11 }
+
+		 hwL2subifVlanRangeGroup OBJECT-GROUP
+			OBJECTS { hwL2subifVlanRangeIfName, hwL2subifVlanRangeType, hwL2subifVlanRangePeVlanBegin, hwL2subifVlanRangePeVlanEnd, hwL2subifVlanRangeCeVlanBegin, hwL2subifVlanRangeCeVlanEnd, hwL2subifVlanRangeSlot }
+			STATUS current
+			DESCRIPTION 
+				"A collection of items of EVC VlanRange alarm."
+			::= { hwEVCGroups 5 }
+  
+		hwEVCTrapsGroups OBJECT IDENTIFIER ::= { hwEVCConformance 3 }
+
+		hwEVCTrapsGroup NOTIFICATION-GROUP
+			NOTIFICATIONS { hwL2subifVlanRangeExceed, hwL2subifVlanRangeExceedResume}
+			STATUS current
+			DESCRIPTION
+				"The Group of EVC Trap."
+			::= { hwEVCTrapsGroups 1 }
+END

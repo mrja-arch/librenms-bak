@@ -1,11 +1,13 @@
 -- =================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2021 by  HUAWEI TECHNOLOGIES. All rights reserved.
 --
 -- Description:HUAWEI-BRAS-RADIUS-MIB
 -- Reference:
--- Version: V2.53
+-- Version: V2.48
 -- History:
 --         v1.1
+--         modified by huangjun 2009-12-08
+--         modified by z00586255 2021-04-14
 -- =================================================================
     HUAWEI-BRAS-RADIUS-MIB DEFINITIONS ::= BEGIN
 
@@ -24,7 +26,7 @@
             FROM IPV6-TC;
 
     hwBRASRadius MODULE-IDENTITY
-        LAST-UPDATED "202212011000Z"
+        LAST-UPDATED "202104141537Z"
         ORGANIZATION
              "Huawei Technologies Co.,Ltd."
         CONTACT-INFO
@@ -34,26 +36,6 @@
         People's Republic of China
         Website: http://www.huawei.com
         Email: support@huawei.com "
-
-        DESCRIPTION
-            "Modify hwRadiusServerTimeout."
-        REVISION    "202212011000Z"
-
-        DESCRIPTION
-            "Add hwRadiusStatAuthenIpv6VpnTable, hwRadiusStatAcctIpv6VpnTable."
-        REVISION    "202211241400Z"
-
-        DESCRIPTION 
-            "Modify hwRadiusServerTestuserName, hwRadiusServerTestuserPassword; add hwRadiusAuthServerForceUp, hwRadiusAcctServerForceUp."
-        REVISION     "202209192244Z"
-
-        DESCRIPTION
-            "Modify comments."
-        REVISION    "202111291100Z"
-
-        DESCRIPTION 
-        "Rollback the modification of enum node."
-        REVISION     "202104191550Z"
 
        DESCRIPTION
             "Modify value of enum node."
@@ -356,7 +338,7 @@
             ::= { hwRadiusGroupEntry 4 }
 
         hwRadiusServerTimeout OBJECT-TYPE
-            SYNTAX Integer32 (1..100)
+            SYNTAX Integer32 (3..25)
             MAX-ACCESS read-write
             STATUS current
             DESCRIPTION
@@ -505,8 +487,8 @@
         hwRadiusServerKeyType  OBJECT-TYPE
             SYNTAX INTEGER
             {
-                simple(0),
-                cipher(1)
+                simple(1),
+                cipher(2)
             }
             MAX-ACCESS read-write
             STATUS current
@@ -558,8 +540,8 @@
         hwRadiusServerNasPortIdFmt OBJECT-TYPE
             SYNTAX INTEGER
             {
-                new(0),
-                old(1),
+                new(1),
+                old(2),
                 vendor9(5)
             }
             MAX-ACCESS read-write
@@ -570,7 +552,7 @@
             ::= { hwRadiusGroupEntry 23 }
 
         hwRadiusServerTestuserName  OBJECT-TYPE
-            SYNTAX OCTET STRING (SIZE (1..253))
+            SYNTAX OCTET STRING (SIZE (1..64))
             MAX-ACCESS read-write
             STATUS current
             DESCRIPTION
@@ -579,7 +561,7 @@
             ::= { hwRadiusGroupEntry 24 }
 
         hwRadiusServerTestuserPassword  OBJECT-TYPE
-            SYNTAX OCTET STRING (SIZE (0..128))
+            SYNTAX OCTET STRING (SIZE (0..32))
             MAX-ACCESS read-write
             STATUS current
             DESCRIPTION
@@ -879,8 +861,8 @@
         hwRadiusServerSecretKeyType OBJECT-TYPE
             SYNTAX INTEGER
             {
-                simple(0),
-                cipher(1)
+                simple(1),
+                cipher(2)
             }
             MAX-ACCESS read-write
             STATUS current
@@ -1065,8 +1047,8 @@
         hwRadiusClientKeyType OBJECT-TYPE
             SYNTAX INTEGER
             {
-                simple(0),
-                cipher(1)
+                simple(1),
+                cipher(2)
             }
             MAX-ACCESS read-write
             STATUS current
@@ -1159,8 +1141,8 @@
         hwRadiusAuthorServerKeyType OBJECT-TYPE
             SYNTAX INTEGER
             {
-                simple(0),
-                cipher(1)
+                simple(1),
+                cipher(2)
             }
             MAX-ACCESS read-write
             STATUS current
@@ -2618,7 +2600,7 @@
             ::= { hwRadiusAttrTranslateEntry 3 }
 
         hwRadiusAttrTranslateDirection OBJECT-TYPE
-            SYNTAX      INTEGER{invalid(0),send(1),receive(2),sendreceive(3)}
+            SYNTAX      INTEGER{invalid(1),send(2),receive(3),sendreceive(4)}
             MAX-ACCESS  read-create
             STATUS      current
             DESCRIPTION
@@ -2628,22 +2610,22 @@
         hwRadiusAttrTranslatePacketType OBJECT-TYPE
             SYNTAX      INTEGER
             {
-                invalid(0),
-                authrequest(1),
-                authaccept(2),
-                authrequestauthaccept(3),
-                acctrequst(4),
-                authrequestacctrequst(5),
-                authacceptacctrequst(6),
-                authrequestauthacceptacctrequst(7),
-                acctresponse(8),
-                authrequestacctresponse(9),
-                authacceptacctresponse(10),
-                authrequestauthacceptacctresponse(11),
-                acctrequstacctresponse(12),
-                authrequestacctrequstacctresponse(13),
-                authacceptacctrequstacctresponse(14),
-                authrequestauthacceptacctrequstacctresponse(15)
+                invalid(1),
+                authrequest(2),
+                authaccept(3),
+                authrequestauthaccept(4),
+                acctrequst(5),
+                authrequestacctrequst(6),
+                authacceptacctrequst(7),
+                authrequestauthacceptacctrequst(8),
+                acctresponse(9),
+                authrequestacctresponse(10),
+                authacceptacctresponse(11),
+                authrequestauthacceptacctresponse(12),
+                acctrequstacctresponse(13),
+                authrequestacctrequstacctresponse(14),
+                authacceptacctrequstacctresponse(15),
+                authrequestauthacceptacctrequstacctresponse(16)
             }
             MAX-ACCESS  read-create
             STATUS      current
@@ -2761,14 +2743,14 @@
         hwRadiusAccountTestResult OBJECT-TYPE
             SYNTAX INTEGER
             {
-                busy(0),
-                fail(1),
-                success(2),
-                wrongnameorpassword(3),
-                timeout(4),
-                servernotexist(5),
-                sharedkeyerror(6),
-                invalid(7)
+                busy(1),
+                fail(2),
+                success(3),
+                wrongnameorpassword(4),
+                timeout(5),
+                servernotexist(6),
+                sharedkeyerror(7),
+                invalid(8)
             }
             MAX-ACCESS read-only
             STATUS current
@@ -2811,424 +2793,6 @@
             DESCRIPTION
                 "Global nas IPv6 address of radius attribute."
             ::= { hwRadiusGlobalSettingEntry 4 }
-
-        hwRadiusStatAuthenIpv6VpnTable OBJECT-TYPE
-            SYNTAX SEQUENCE OF HwRadiusStatAuthenIpv6VpnEntry
-            MAX-ACCESS not-accessible
-            STATUS current
-            DESCRIPTION
-                "Authentication packet statistics information for IPv6 radius server.
-                "
-            ::= { hwRadiusGroupObject 19 }
-
-        hwRadiusStatAuthenIpv6VpnEntry OBJECT-TYPE
-            SYNTAX HwRadiusStatAuthenIpv6VpnEntry
-            MAX-ACCESS not-accessible
-            STATUS current
-            DESCRIPTION
-                "Description."
-            INDEX { hwRadiusStatAuthenIpv6VpnServerIP, hwRadiusStatAuthenIpv6VpnVrf }
-            ::= { hwRadiusStatAuthenIpv6VpnTable 1 }
-
-        HwRadiusStatAuthenIpv6VpnEntry ::=
-            SEQUENCE {
-                hwRadiusStatAuthenIpv6VpnServerIP
-                    Ipv6Address,
-                hwRadiusStatAuthenIpv6VpnVrf
-                    OCTET STRING,
-                hwRadiusStatAuthenIpv6VpnRequests
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnAccepts
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnRejects
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnRetransmissions
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnChallenges
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnMalformedResponses
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnBadAuthenticators
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnPendingRequests
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnTimeouts
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnUnknownTypes
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnDroppedPackets
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnSpeedLimitBlock
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnPendingLimitBlock
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnServerDownBlock
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnNoSourceIPBlock
-                    Unsigned32,
-                hwRadiusStatAuthenIpv6VpnServerNotReply
-                    Unsigned32
-         }
-
-        hwRadiusStatAuthenIpv6VpnServerIP OBJECT-TYPE
-            SYNTAX Ipv6Address
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the IPv6 address of the RADIUS server.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 1 }
-
-        hwRadiusStatAuthenIpv6VpnVrf OBJECT-TYPE
-            SYNTAX OCTET STRING(SIZE (1..31))
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the name of the VPN where the RADIUS server resides.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 2 }
-
-        hwRadiusStatAuthenIpv6VpnRequests OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of authentication request packets.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 3 }
-
-        hwRadiusStatAuthenIpv6VpnAccepts OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of authentication accept packets.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 4 }
-
-        hwRadiusStatAuthenIpv6VpnRejects OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of authentication reject packets.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 5 }
-
-        hwRadiusStatAuthenIpv6VpnRetransmissions OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of retransmitted authentication packets.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 6 }
-
-        hwRadiusStatAuthenIpv6VpnChallenges OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of authentication challenge packets.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 7 }
-
-        hwRadiusStatAuthenIpv6VpnMalformedResponses OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of error authentication response packets.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 8 }
-
-        hwRadiusStatAuthenIpv6VpnBadAuthenticators OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of authentication packets with incorrect authenticators.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 9 }
-
-        hwRadiusStatAuthenIpv6VpnPendingRequests OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of pending authentication request packets.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 10 }
-
-        hwRadiusStatAuthenIpv6VpnTimeouts OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of timeout authentication packets.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 11 }
-
-        hwRadiusStatAuthenIpv6VpnUnknownTypes OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of unknown authentication packets.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 12 }
-
-        hwRadiusStatAuthenIpv6VpnDroppedPackets OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of discarded authentication packets.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 13 }
-
-        hwRadiusStatAuthenIpv6VpnSpeedLimitBlock OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of packets that are retransmitted to the RADIUS server due to the speed limit.  The value is an integer ranging from 0 to 4294967295.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 14 }
-
-        hwRadiusStatAuthenIpv6VpnPendingLimitBlock OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of packets that are retransmitted to the RADIUS server due to the pending limit.  The value is an integer ranging from 0 to 4294967295.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 15 }
-
-        hwRadiusStatAuthenIpv6VpnServerDownBlock OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of packets that are retransmitted to the RADIUS server because the server was Down. The value is an integer ranging from 0 to 4294967295.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 16 }
-
-        hwRadiusStatAuthenIpv6VpnNoSourceIPBlock OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of packets that are retransmitted to the RADIUS server because no source interface IP address is available. The value is an integer ranging from 0 to 4294967295.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 17 }
-
-        hwRadiusStatAuthenIpv6VpnServerNotReply OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of packets to which the RADIUS server does not give a response. The value is an integer ranging from 0 to 4294967295.
-                "
-            ::= { hwRadiusStatAuthenIpv6VpnEntry 18 }
-
-        hwRadiusStatAcctIpv6VpnTable OBJECT-TYPE
-            SYNTAX SEQUENCE OF HwRadiusStatAcctIpv6VpnEntry
-            MAX-ACCESS not-accessible
-            STATUS current
-            DESCRIPTION
-                "Account packet statistics information for IPv6 radius server.
-                "
-            ::= { hwRadiusGroupObject 20 }
-
-        hwRadiusStatAcctIpv6VpnEntry OBJECT-TYPE
-            SYNTAX HwRadiusStatAcctIpv6VpnEntry
-            MAX-ACCESS not-accessible
-            STATUS current
-            DESCRIPTION
-                "Description."
-            INDEX { hwRadiusStatAcctIpv6VpnServerIP, hwRadiusStatAcctIpv6VpnVrf }
-            ::= { hwRadiusStatAcctIpv6VpnTable 1 }
-
-        HwRadiusStatAcctIpv6VpnEntry ::=
-            SEQUENCE {
-                hwRadiusStatAcctIpv6VpnServerIP
-                    Ipv6Address,
-                hwRadiusStatAcctIpv6VpnVrf
-                    OCTET STRING,
-                hwRadiusStatAcctIpv6VpnRequests
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnResponses
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnRetransmissions
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnMalformedResponses
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnBadAuthenticators
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnPendingRequests
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnTimeouts
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnUnknownTypes
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnDroppedPackets
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnSpeedLimitBlock
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnPendingLimitBlock
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnServerDownBlock
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnNoSourceIPBlock
-                    Unsigned32,
-                hwRadiusStatAcctIpv6VpnServerNotReply
-                    Unsigned32
-            }
-
-        hwRadiusStatAcctIpv6VpnServerIP OBJECT-TYPE
-            SYNTAX Ipv6Address
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the IPv6 address of the RADIUS server.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 1 }
-
-        hwRadiusStatAcctIpv6VpnVrf OBJECT-TYPE
-            SYNTAX OCTET STRING(SIZE (1..31))
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the name of the VPN where the RADIUS server resides.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 2 }
-
-        hwRadiusStatAcctIpv6VpnRequests OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of accounting request packets.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 3 }
-
-        hwRadiusStatAcctIpv6VpnResponses OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of accounting response packets.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 4 }
-
-        hwRadiusStatAcctIpv6VpnRetransmissions OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of retransmitted accounting packets.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 5 }
-
-        hwRadiusStatAcctIpv6VpnMalformedResponses OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of error authentication response packets.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 6 }
-
-        hwRadiusStatAcctIpv6VpnBadAuthenticators OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of authentication packets with incorrect authenticators.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 7 }
-
-        hwRadiusStatAcctIpv6VpnPendingRequests OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of pending accounting request packets.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 8 }
-
-        hwRadiusStatAcctIpv6VpnTimeouts OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of timeout accounting packets.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 9 }
-
-        hwRadiusStatAcctIpv6VpnUnknownTypes OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of unknown authentication packets.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 10 }
-
-        hwRadiusStatAcctIpv6VpnDroppedPackets OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of discarded accounting packets.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 11 }
-
-        hwRadiusStatAcctIpv6VpnSpeedLimitBlock OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of packets that are retransmitted to the RADIUS server due to the speed limit.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 12 }
-
-        hwRadiusStatAcctIpv6VpnPendingLimitBlock OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of packets that are retransmitted to the RADIUS server due to the pending limit.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 13 }
-
-        hwRadiusStatAcctIpv6VpnServerDownBlock OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of packets that are retransmitted to the RADIUS server because the server was Down.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 14 }
-
-        hwRadiusStatAcctIpv6VpnNoSourceIPBlock OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of packets that are retransmitted to the RADIUS server because no source interface IP address is available.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 15 }
-
-        hwRadiusStatAcctIpv6VpnServerNotReply OBJECT-TYPE
-            SYNTAX Unsigned32 (0..4294967295)
-            MAX-ACCESS read-only
-            STATUS current
-            DESCRIPTION
-                "This object indicates the number of packets to which the RADIUS server does not give a response.
-                "
-            ::= { hwRadiusStatAcctIpv6VpnEntry 16 }
 
      ---Radius server up/down trap
 
@@ -3499,20 +3063,6 @@
             DESCRIPTION
                 "This object indicates that one of the configured servers in the RADIUS server group is up in cp."
             ::= { hwRadiusServerTraps 17 }
-
-        hwRadiusAuthServerForceUp NOTIFICATION-TYPE
-            OBJECTS {hwStateChangeServerIp,hwStateChangeServerVrf,hwStateChangeServerPort}
-            STATUS current
-            DESCRIPTION
-                "This object indicates that the RADIUS authentication server is Force-Up."
-            ::= { hwRadiusServerTraps 18 }
-            
-        hwRadiusAcctServerForceUp NOTIFICATION-TYPE
-            OBJECTS {hwStateChangeServerIp,hwStateChangeServerVrf,hwStateChangeServerPort}
-            STATUS current
-            DESCRIPTION
-                "This object indicates that the RADIUS accounting server is Force-Up."
-            ::= { hwRadiusServerTraps 19 }
 
     --  ============== conformance information ==============
         hwRadiusConformance OBJECT IDENTIFIER ::= { hwBRASRadius 3 }

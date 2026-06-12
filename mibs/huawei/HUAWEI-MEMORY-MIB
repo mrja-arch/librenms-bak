@@ -1,9 +1,9 @@
 -- =================================================================
--- Copyright (C) 2019 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2024 by  HUAWEI TECHNOLOGIES. All rights reserved.
 --
 -- Description: the huawei memory mib from huawei-device-mib
 -- Reference:
--- Version:     V1.02
+-- Version:     V1.03
 -- History:
 --    
 -- =================================================================
@@ -23,7 +23,7 @@ HUAWEI-MEMORY-MIB DEFINITIONS ::= BEGIN
             FROM HCNUM-TC;
 
     hwMemoryDev MODULE-IDENTITY
-        LAST-UPDATED "201909180000Z"
+        LAST-UPDATED "202403130000Z"
         ORGANIZATION
             "Huawei Technologies Co.,Ltd."
         CONTACT-INFO
@@ -39,6 +39,11 @@ HUAWEI-MEMORY-MIB DEFINITIONS ::= BEGIN
             This mib module defines the memory information. NMS can query memory
             utilization statistics from device by the mib.
             " 
+        REVISION "202403130000Z"
+        DESCRIPTION "V1.03,
+	                1.Added the following node to hwMemoryDevEntry:hwPhyMemorySize.
+	                2.Added the following node to hwMemoryDevEntry:hwPhyMemoryFree.
+	                 "
          REVISION "201909180000Z"
         DESCRIPTION "V1.02,
 	                1.Modify the hwMemoryDevSize type, from Unsigned32 to Counter64.
@@ -101,6 +106,10 @@ HUAWEI-MEMORY-MIB DEFINITIONS ::= BEGIN
             hwMemoryDevSize64
                 CounterBasedGauge64,
             hwMemoryDevFree64
+                CounterBasedGauge64,
+            hwPhyMemorySize
+                CounterBasedGauge64,
+            hwPhyMemoryFree
                 CounterBasedGauge64
          }
 
@@ -201,6 +210,25 @@ HUAWEI-MEMORY-MIB DEFINITIONS ::= BEGIN
             The value is always less than hwMemoryDevSize64.
             "
         ::= { hwMemoryDevEntry 9 }
+    hwPhyMemorySize OBJECT-TYPE
+        SYNTAX CounterBasedGauge64
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "
+            The object indicates the total size of the physical memory, in bytes.
+            "
+        ::= { hwMemoryDevEntry 10 }
+    hwPhyMemoryFree OBJECT-TYPE
+        SYNTAX CounterBasedGauge64
+        MAX-ACCESS read-only
+        STATUS current
+        DESCRIPTION
+            "
+            The object indicates the free size of the physical memory, in bytes. 
+            The value is always less than hwPhyMemorySize.
+            "
+        ::= { hwMemoryDevEntry 11 }
     hwBufferTable OBJECT-TYPE
         SYNTAX SEQUENCE OF HwBufferEntry
         MAX-ACCESS not-accessible

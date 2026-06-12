@@ -3,7 +3,7 @@
 --
 -- Description:HUAWEI-BRAS-SRVCFG-EAP-MIB
 -- Reference:
--- Version: V2.17
+-- Version: V2.16
 -- History:
 --         modified by z00586255 2021-04-14
 -- =================================================================
@@ -27,7 +27,7 @@
                         FROM P-BRIDGE-MIB;
         
                 hwBRASSrvcfgEap MODULE-IDENTITY 
-                        LAST-UPDATED "202104191550Z"
+                        LAST-UPDATED "202104141504Z"
                         ORGANIZATION 
                             "Huawei Technologies Co.,Ltd."
                       CONTACT-INFO 
@@ -41,10 +41,6 @@
             
                 DESCRIPTION 
                         "The MIB contains objects of module SRVCFG."
-                REVISION     "202104191550Z"
-                DESCRIPTION 
-                "Rollback the modification of enum node."
-
                 REVISION     "202104141504Z"
                 DESCRIPTION 
                 "Modify value of enum node."
@@ -199,8 +195,8 @@
         hwDot1xEAPEndPapChap OBJECT-TYPE
             SYNTAX INTEGER
                 {
-                pap(0),
-                chap(1)
+                pap(1),
+                chap(2)
                 }
             MAX-ACCESS read-write
             STATUS current

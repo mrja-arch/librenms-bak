@@ -1,11 +1,11 @@
 -- =================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved
+-- Copyright (C) 2017 by  HUAWEI TECHNOLOGIES. All rights reserved
 -- 
 -- Description: The HUAWEI-TCP-MIB provides information about TCP. 
 --              Now only trap for MD5 authentication failures is provided 
 --              
 -- Reference:
--- Version:     V1.04
+-- Version:     V1.01
 -- History:
 --              xujin,2004.6.26,publish 
 -- =================================================================
@@ -27,7 +27,7 @@
     
 
         hwTCP MODULE-IDENTITY 
-            LAST-UPDATED "202209051548Z"        -- Sep 5, 2022 at 15:48 GMT
+            LAST-UPDATED "201708170908Z"        -- Aug 18, 2017 at 00:00 GMT
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -42,25 +42,8 @@
                 Now only trap for MD5 authentication failures is provided,
                 which include local address, local port, remote address, remote 
                 port. When MD5 authentication fails, the trap will send."
-             
-             REVISION     "202209051548Z"
-                            DESCRIPTION  
-                            "
-                            Delete null OBJECTS table of hwTCPBindPort.
-                            "
-
-             REVISION     "202102010908Z"
-                            DESCRIPTION  
-                            "
-                            Add hwTCPBindPort.
-                            "
                 
-              REVISION     "201711100908Z"
-                            DESCRIPTION  
-                            "
-                            Modify the description.
-                            "  
-			  REVISION     "201708170908Z"
+              REVISION     "201708170908Z"
                             DESCRIPTION  
                             "
                             Modify the description.
@@ -113,20 +96,10 @@
                 hwTCPVrfName }
             STATUS current
             DESCRIPTION 
-                "This trap indicates that the MD5 authentication fails.
-                the information include local address, port, 
-                remote address, port, protocol and VRF name.
-                When MD5 authentication fails, this trap will be sent."
+                "This trap indicates that MD5 authentication failed.
+The trap information includes the local address, local port number, remote address, remote port number, and protocol type.
+When MD5 authentication fails, this trap will be sent to the information center and displayed on the screen."
             ::= { hwTCPTraps 1 }
-
-
-        hwTCPBindPort NOTIFICATION-TYPE
-            STATUS current
-            DESCRIPTION 
-                "This trap indicates that the TCP port was bound to socket.
-                the information include task name, socket id and port.
-                When the TCP port was bound to socket, this trap will be sent."
-            ::= { hwTCPTraps 2 }
 
         
         hwTCPConformance OBJECT IDENTIFIER ::= { hwTCP 3 }
@@ -150,7 +123,7 @@
 
         
         hwTCPTrapGroup NOTIFICATION-GROUP
-            NOTIFICATIONS { hwTCPMD5AuthenFail, hwTCPBindPort }
+            NOTIFICATIONS { hwTCPMD5AuthenFail }
             STATUS current
             DESCRIPTION 
                 "A collection of objects providing mandatory TCP trap information."

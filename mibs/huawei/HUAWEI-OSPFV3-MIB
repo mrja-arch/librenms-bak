@@ -1,9 +1,9 @@
 -- ==================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2024 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI-OSPFV3-MIB.mib, The HUAWEI-OSPFV3-MIB provides information about OSPFv3
 -- Reference: draft-ietf-ospf-ospfv3-mib-11
--- Version:    V2.28
+-- Version: V2.38
 -- History:
 -- ==================================================================
 
@@ -29,7 +29,7 @@
                     FROM OSPF-MIB; 
     
     hwOspfv3 MODULE-IDENTITY 
-            LAST-UPDATED "202208151236Z" 
+            LAST-UPDATED "202411091105Z" 
         ORGANIZATION 
                  "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -47,6 +47,36 @@
                   RFC draft-ietf-ospf-ospfv3-mib-11;  
                   see the RFC itself for full legal 
                   notices." 
+
+            REVISION "202411091105Z"
+            DESCRIPTION "Modify hwOspfv3IfCount."
+
+            REVISION "202411061200Z"
+            DESCRIPTION "Added hwOspfv3Srv6PortLcsInactive, hwOspfv3Srv6PortLcsInactiveClear, hwOspfv3IfCount."
+
+            REVISION "202310271500Z"
+            DESCRIPTION "Modify hwOspfv3NetSliceSrcPrefixConflict, hwOspfv3NetSliceSrcPrefixConflictClear, add hwOspfv3CommonRouterId."
+
+            REVISION "202310081022Z"
+            DESCRIPTION "Added hwOspfv3NetSliceSrcPrefixConflict, hwOspfv3NetSliceSrcPrefixConflictClear, hwOspfv3Ipv6Prefix, hwOspfv3Ipv6PrefixMask, hwOspfv3ConflictRouterId ."
+
+            REVISION "202306251628Z"
+            DESCRIPTION "Deleted hwOspfv3RecvLsaUpper from OBJECT-GROUP"
+
+            REVISION "202306201453Z"
+            DESCRIPTION "Added hwOspfv3RecvLsaUpper to OBJECT-GROUP"
+
+            REVISION "202306161503Z"
+            DESCRIPTION "Added object hwOspfv3RecvLsaUpper, hwOspfv3RecvLsaExceedThreshold, hwOspfv3RecvLsaExceedThresholdClear"
+
+            REVISION "202306141117Z"
+            DESCRIPTION "Deleted hwOspfv3RecvLsaUpper, hwOspfv3RecvLsaExceedThreshold, hwOspfv3RecvLsaExceedThresholdClear"
+
+            REVISION "202304251658Z"
+            DESCRIPTION "Added object hwOspfv3RecvLsaUpper, hwOspfv3RecvLsaExceedThreshold, hwOspfv3RecvLsaExceedThresholdClear"
+
+            REVISION "202304111449Z"
+            DESCRIPTION "Added object hwOspfv3LsaRetranExceedLimit, hwOspfv3LsaRetranExceedLimitClear"
 
             REVISION "202208151236Z"
             DESCRIPTION "Added object hwOspfv3NbrThresholdUpper, hwOspfv3NbrExceedThreshold, hwOspfv3NbrExceedThresholdClear"
@@ -489,6 +519,38 @@
                storage."
            DEFVAL { 100000 }    
            ::= { hwOspfv3GeneralGroup 18 }
+
+    hwOspfv3Ipv6Prefix OBJECT-TYPE
+            SYNTAX InetAddress
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "IPv6 prefix address."
+            ::= { hwOspfv3GeneralGroup 19 }
+
+    hwOspfv3Ipv6PrefixMask OBJECT-TYPE
+            SYNTAX Unsigned32 (1..128)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "IPv6 prefix address mask."
+            ::= { hwOspfv3GeneralGroup 20 }
+
+    hwOspfv3ConflictRouterId OBJECT-TYPE 
+            SYNTAX          InetAddress
+            MAX-ACCESS      read-write
+            STATUS          current 
+            DESCRIPTION 
+                "32-bit number that uniquely identifies the conflicting originating router in the AS." 
+            ::= { hwOspfv3GeneralGroup 21 }
+
+    hwOspfv3CommonRouterId OBJECT-TYPE 
+            SYNTAX          InetAddress
+            MAX-ACCESS      read-write
+            STATUS          current 
+            DESCRIPTION 
+                "32-bit number that uniquely identifies the router in the AS." 
+            ::= { hwOspfv3GeneralGroup 22 }
 
     -- The OSPFv3 Area Data Structure contains information 
     -- regarding the various areas. The interfaces and 
@@ -2805,6 +2867,22 @@ holdmaxcost(3): OSPFv3 neighbor relationship flapping suppression works in Hold-
                   "This object indicates the upper alarm threshold for the number of neighbors. "
             ::= { hwOspfv3NotificationEntry 38 }
 
+     hwOspfv3RecvLsaUpper OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                  "This object indicates the upper alarm threshold for the number of received AS-external and NSSA LSAs."
+            ::= { hwOspfv3NotificationEntry 39 }
+
+     hwOspfv3IfCount OBJECT-TYPE
+            SYNTAX Unsigned32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                  "Interface count."
+            ::= { hwOspfv3NotificationEntry 40 }
+
     -- Notification definitions  
  
    hwOspfv3VirtIfStateChange NOTIFICATION-TYPE 
@@ -3280,7 +3358,63 @@ holdmaxcost(3): OSPFv3 neighbor relationship flapping suppression works in Hold-
             DESCRIPTION
                 "This object indicates that the number of ospfv3 has been less than the the configed threshold."
             ::= { hwOspfv3Notifications 47}
-                        
+
+    hwOspfv3LsaRetranExceedLimit NOTIFICATION-TYPE
+            OBJECTS { hwOspfv3ProcessId, hwOspfv3AreaIdIndex, hwOspfv3IfName }
+            STATUS current
+            DESCRIPTION
+                "This object indicates that the number of OSPFv3 LSA retransmissions on an interface is exceeds than the limit."
+            ::= { hwOspfv3Notifications 48}
+
+    hwOspfv3LsaRetranExceedLimitClear NOTIFICATION-TYPE
+            OBJECTS { hwOspfv3ProcessId, hwOspfv3AreaIdIndex, hwOspfv3IfName }
+            STATUS current
+            DESCRIPTION
+                "This object indicates that the number of OSPFv3 LSA retransmissions on an interface is lower than the limit."
+            ::= { hwOspfv3Notifications 49}
+
+    hwOspfv3RecvLsaExceedThreshold NOTIFICATION-TYPE
+            OBJECTS { hwOspfv3ProcessId, hwOspfv3RecvLsaUpper }
+            STATUS current
+            DESCRIPTION
+                "This object indicates that the number of received AS-external and NSSA LSAs exceeds the configed threshold."
+            ::= { hwOspfv3Notifications  50}
+ 
+    hwOspfv3RecvLsaExceedThresholdClear NOTIFICATION-TYPE
+            OBJECTS { hwOspfv3ProcessId, hwOspfv3RecvLsaUpper }
+            STATUS current
+            DESCRIPTION
+                "This object indicates that the number of received AS-external and NSSA LSAs has been less than the the configed threshold."
+            ::= { hwOspfv3Notifications  51}
+
+    hwOspfv3NetSliceSrcPrefixConflict NOTIFICATION-TYPE
+            OBJECTS { hwOspfv3ProcessId, hwOspfv3CommonRouterId, hwOspfv3Ipv6Prefix, hwOspfv3Ipv6PrefixMask, hwOspfv3ConflictRouterId}
+            STATUS current
+            DESCRIPTION 
+                "A conflict between the network slice source prefix of the local device and the IPv6 prefix of another device is detected."
+            ::= { hwOspfv3Notifications 52}
+
+    hwOspfv3NetSliceSrcPrefixConflictClear NOTIFICATION-TYPE
+            OBJECTS { hwOspfv3ProcessId, hwOspfv3CommonRouterId, hwOspfv3Ipv6Prefix, hwOspfv3Ipv6PrefixMask, hwOspfv3ConflictRouterId}
+            STATUS current
+            DESCRIPTION 
+                "The conflict between the network slice source prefix and the IPv6 prefix is cleared."
+            ::= { hwOspfv3Notifications 53}
+
+    hwOspfv3Srv6PortLcsInactive NOTIFICATION-TYPE
+            OBJECTS { hwOspfv3ProcessId, hwOspfv3IfName, hwOspfv3IfCount}
+            STATUS current
+            DESCRIPTION 
+                "No SRv6 license authorization was available."
+            ::= { hwOspfv3Notifications 54}
+
+    hwOspfv3Srv6PortLcsInactiveClear NOTIFICATION-TYPE
+            OBJECTS { hwOspfv3ProcessId, hwOspfv3IfName, hwOspfv3IfCount}
+            STATUS current
+            DESCRIPTION 
+                "The alarm indicating that no SRv6 license authorization was available was cleared."
+            ::= { hwOspfv3Notifications 55}
+
     -- conformance information 
  
     hwOspfv3Groups      OBJECT IDENTIFIER ::= { hwOspfv3Conformance 1 } 
@@ -3816,7 +3950,8 @@ holdmaxcost(3): OSPFv3 neighbor relationship flapping suppression works in Hold-
                             hwOspfv3CostAdjustReason,
                             hwOspfv3OriginalCost,
                             hwOspfv3AdjustedCost,
-                            hwOspfv3NbrThresholdUpper
+                            hwOspfv3NbrThresholdUpper,
+                            hwOspfv3IfCount
                             } 
             STATUS          current 
             DESCRIPTION 
@@ -3872,7 +4007,15 @@ holdmaxcost(3): OSPFv3 neighbor relationship flapping suppression works in Hold-
                             hwOspfv3IntraAreaRouterIdConflict,
                             hwOspfv3IntraAreaRouterIdConflictClear,
                             hwOspfv3NbrExceedThreshold,
-                            hwOspfv3NbrExceedThresholdClear 
+                            hwOspfv3NbrExceedThresholdClear,
+                            hwOspfv3LsaRetranExceedLimit,
+                            hwOspfv3LsaRetranExceedLimitClear,
+                            hwOspfv3RecvLsaExceedThreshold,
+                            hwOspfv3RecvLsaExceedThresholdClear,
+                            hwOspfv3NetSliceSrcPrefixConflict,
+                            hwOspfv3NetSliceSrcPrefixConflictClear,
+                            hwOspfv3Srv6PortLcsInactive,
+                            hwOspfv3Srv6PortLcsInactiveClear
                             } 
             STATUS          current 
             DESCRIPTION 

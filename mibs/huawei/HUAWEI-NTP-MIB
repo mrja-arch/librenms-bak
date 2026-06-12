@@ -1,13 +1,13 @@
 
 --   ============================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- Description: This MIB module defines mib objects that provide NTP service
 --              management.
 --              The Network Time Protocol (NTP) is used in networks of all types
 --              and sizes for time synchronization of servers, workstations and
 --              other networked equipment.
 -- Reference:
--- Version: V2.17
+-- Version: V2.22
 -- ============================================================================
 
 	HUAWEI-NTP-MIB DEFINITIONS ::= BEGIN
@@ -24,7 +24,7 @@
         OBJECT-GROUP, MODULE-COMPLIANCE                             FROM SNMPv2-CONF;
 
         hwNtp MODULE-IDENTITY
-            LAST-UPDATED "202203170000Z"
+            LAST-UPDATED "202503100000Z"
             ORGANIZATION
                "Huawei Technologies Co.,Ltd."
             CONTACT-INFO
@@ -43,6 +43,25 @@
                   other networked equipment."
 
             --  Revision history
+			REVISION    "202503100000Z"
+            DESCRIPTION "V2.22, modified the description of hwNtpInInterfaceTable, hwNtpInInterfaceEntry, hwNtpInInterfaceGenTable, hwNtpInInterfaceGenEntry."
+
+            REVISION    "202402230000Z"
+            DESCRIPTION "V2.21, modified the description of hwNtpUnicastServerSourceIfType, hwNtpUnicastPeerSourceIfType, hwNtpInInterfaceTable, hwNtpInInterfaceEntry,
+			hwNtpUniPeerSourceIfType, hwNtpInInterfaceGenTable and hwNtpInInterfaceGenEntry."
+
+            REVISION    "202402220000Z"
+            DESCRIPTION "V2.20, modified the range and description of hwNtpServiceSourceInterfaceIfNumber, hwNtpUnicastServerSourceIfType, hwNtpUnicastServerSourceIfType,
+            hwNtpUnicastServerSourceIfNumber, hwNtpUnicastPeerSourceIfType, hwNtpUnicastPeerSourceIfNumber, hwNtpMulticastClientIfNumber, hwNtpMulticastServerIfNumber,
+            hwNtpBroadcastClientIfNumber, hwNtpBroadcastServerIfNumber, hwNtpInInterfaceIfNumber, hwNtpUniServerSourceIfType, hwNtpUniServerSourceIfNumber, hwNtpUniPeerSourceIfType,
+            and hwNtpUniPeerSourceIfNumber."
+
+            REVISION    "202402020000Z"
+            DESCRIPTION "V2.19, modified the range of the interface VLAN."
+
+            REVISION    "202402010000Z"
+            DESCRIPTION "V2.18, modified the range of hwNtpUniServerSourceIfNumber when the interface type is  VLAN."
+
             REVISION    "202203170000Z"
             DESCRIPTION "V2.17, modified description of hwNtpUniPeerMinpoll, hwNtpManycastClientIfName, hwNtpManycastServerIfName, hwNtpMulticastServerGenIfName, hwNtpMulticastClientGenIfName, hwNtpBroadcastClientGenIfName, hwNtpBroadcastServerGenIfName"
 
@@ -299,18 +318,12 @@
 
 		-- 1.3.6.1.4.1.2011.6.4.2.4.2
 		hwNtpServiceSourceInterfaceIfNumber OBJECT-TYPE
-			SYNTAX Integer32 (0..4093)
+			SYNTAX Integer32 (0..2147483647)
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"Indicates the interface ID.
-				Range: 0-4093
-				Range for the tunnel interface: 1-64
-				Range for the NULL interface: 0
-				Range for the MEth interface: 0
-				Range for the VLAN interface: 1-4093
-				Range for the loopback interface: 0-31
-				The interface ID and interface type (hwNtpServiceSourceInterfaceIfType) together identify an interface.
+				"Indicates the interface ID. The interface ID and interface type (hwNtpServiceSourceInterfaceIfType) together identify an interface.
+				When the interface type (hwNtpServiceSourceInterfaceIfType) value is notConfigured(6), this leaf value is 0.
 				"
 			::= { hwNtpServiceSourceInterfaceObject 2 }
 
@@ -682,7 +695,8 @@
 				meth(3),
 				vlanif(4),
 				loopback(5),
-				notConfigured(6)
+				notConfigured(6),
+				other(7)
 				}
 			MAX-ACCESS read-write
 			STATUS current
@@ -695,29 +709,25 @@
 				4. vlanif(4)      -indicates the VLAN interface
 				5. loopback(5)    -indicates the loopback interface
 				6. notConfigured(6) -indicates that no source interface is configured
+				7. other(7)       -indicates other interface which is not in the interface type and
+				                   interface number format or is not the type above
 
 				When this leaf is set to notConfigured(6), it indicates that no source interface is
 				configured in the case of the create operation and that the source interface
-				is deleted in the case of the modify operation.
+				is deleted in the case of the modify operation. When this leaf value is other(7), leaf hwNtpUnicastServerSourceIfName can be used
+				to indicates the source interface.
 				"
 			::= { hwNtpUnicastServerEntry 4 }
 
 		-- 1.3.6.1.4.1.2011.6.4.2.6.1.5
 		hwNtpUnicastServerSourceIfNumber OBJECT-TYPE
-			SYNTAX Integer32 (0..4093)
+			SYNTAX Integer32 (0..2147483647)
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"Indicates the interface ID.
-				Range: 0-4093
-				Range for the tunnel interface: 1-64
-				Range for the NULL interface: 0
-				Range for the MEth interface: 0
-				Range for the VLAN interface: 1-4093
-				Range for the loopback interface: 0-31
-
-				The interface ID and interface type (hwNtpUnicastServerSourceIfType) together
-				identify the source interface for sending NTP unicast packets.
+				"Indicates the interface ID. The interface ID and interface type (hwNtpUnicastServerSourceIfType) together
+				identify the source interface for sending NTP unicast packets. When the interface type (hwNtpUnicastServerSourceIfType)
+				value is notConfigured(6) or other(7), this leaf value is 0.
 				"
 			::= { hwNtpUnicastServerEntry 5 }
 
@@ -863,7 +873,8 @@
 				meth(3),
 				vlanif(4),
 				loopback(5),
-				notConfigured(6)
+				notConfigured(6),
+				other(7)
 				}
 			MAX-ACCESS read-write
 			STATUS current
@@ -876,26 +887,23 @@
 				4. vlanif(4)      -indicates the VLAN interface
 				5. loopback(5)    -indicates the loopback interface
 				6. notConfigured(6) -indicates that no source interface is configured
+				7. other(7)       -indicates other interface which is not in the interface type and
+				                   interface number format or is not the type above
 				When this leaf is set to notConfigured(6), it indicates that no source interface is configured in
 				the case of the create operation and that the source interface is deleted in the case of the
-				modify operation.
+				modify operation. When this leaf value is other(7), leaf hwNtpUnicastPeerSourceIfName can be used
+				to indicates the source interface.
 				"
 			::= { hwNtpUnicastPeerEntry 4 }
 
 		-- 1.3.6.1.4.1.2011.6.4.2.7.1.5
 		hwNtpUnicastPeerSourceIfNumber OBJECT-TYPE
-			SYNTAX Integer32 (0..4093)
+			SYNTAX Integer32 (0..2147483647)
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"Indicates the interface ID.
-				Range: 0-4093
-				Range for the tunnel interface: 1-64
-				Range for the NULL interface: 0
-				Range for the MEth interface: 0
-				Range for the VLAN interface: 1-4093
-				Range for the loopback interface: 0-31
-				The interface ID and interface type (hwNtpUnicastPeerSourceIfType) together identify an interface.
+				"Indicates the interface ID. The interface ID and interface type (hwNtpUnicastPeerSourceIfType) together identify an interface.
+				When the interface type (hwNtpUnicastPeerSourceIfType) value is notConfigured(6) or other(7), this leaf value is 0.
 				"
 			::= { hwNtpUnicastPeerEntry 5 }
 
@@ -1002,15 +1010,11 @@
 
 		-- 1.3.6.1.4.1.2011.6.4.2.8.1.2
 		hwNtpMulticastClientIfNumber OBJECT-TYPE
-			SYNTAX Integer32 (0..4093)
+			SYNTAX Integer32 (0..2147483647)
 			MAX-ACCESS not-accessible
 			STATUS current
 			DESCRIPTION
-				"Indicates the interface ID to configure NTP multicast client.
-				Range: 0-4093
-				Range for the VLAN interface: 1-4093
-				Range for the loopback interface: 0-31
-				The interface ID and interface type (hwNtpMulticastClientIfType) together identify
+				"Indicates the interface ID to configure NTP multicast client. The interface ID and interface type (hwNtpMulticastClientIfType) together identify
 				the interface for receiving NTP multicast packets.
 				"
 			::= { hwNtpMulticastClientEntry 2 }
@@ -1103,15 +1107,11 @@
 
 		-- 1.3.6.1.4.1.2011.6.4.2.9.1.2
 		hwNtpMulticastServerIfNumber OBJECT-TYPE
-			SYNTAX Integer32 (0..4093)
+			SYNTAX Integer32 (0..2147483647)
 			MAX-ACCESS not-accessible
 			STATUS current
 			DESCRIPTION
-				"Indicates the interface ID to configure NTP multicast server.
-				Range: 0-4093
-				Range for the VLAN interface: 1-4093
-				Range for the loopback interface: 0-31
-				The interface ID and interface type (hwNtpMulticastServerIfType) together identify
+				"Indicates the interface ID to configure NTP multicast server. The interface ID and interface type (hwNtpMulticastServerIfType) together identify
 				the interface for sending NTP multicast packets.
 				"
 			::= { hwNtpMulticastServerEntry 2 }
@@ -1239,15 +1239,11 @@
 
 		-- 1.3.6.1.4.1.2011.6.4.2.10.1.2
 		hwNtpBroadcastClientIfNumber OBJECT-TYPE
-			SYNTAX Integer32 (0..4093)
+			SYNTAX Integer32 (0..2147483647)
 			MAX-ACCESS not-accessible
 			STATUS current
 			DESCRIPTION
-				"Indicates the interface ID to configure NTP broadcast client.
-				Range: 0-4093
-				Range for the VLAN interface: 1-4093
-				Range for the loopback interface: 0-31
-				The interface ID and interface type (hwNtpBroadcastClientIfType) together
+				"Indicates the interface ID to configure NTP broadcast client. The interface ID and interface type (hwNtpBroadcastClientIfType) together
 				identify the interface for receiving broadcast packets.
 				"
 			::= { hwNtpBroadcastClientEntry 2 }
@@ -1326,15 +1322,11 @@
 
 		-- 1.3.6.1.4.1.2011.6.4.2.11.1.2
 		hwNtpBroadcastServerIfNumber OBJECT-TYPE
-			SYNTAX Integer32 (0..4093)
+			SYNTAX Integer32 (0..2147483647)
 			MAX-ACCESS not-accessible
 			STATUS current
 			DESCRIPTION
-				"Indicates the interface ID to configure NTP broadcast server.
-				Range: 0-4093
-				Range for the VLAN interface: 1-4093
-				Range for the loopback interface: 0-31
-				The interface ID and interface type (hwNtpBroadcastServerIfType) together identify
+				"Indicates the interface ID to configure NTP broadcast server. The interface ID and interface type (hwNtpBroadcastServerIfType) together identify
 				the interface for sending broadcast packets.
 				"
 			::= { hwNtpBroadcastServerEntry 2 }
@@ -1389,8 +1381,7 @@
 			MAX-ACCESS not-accessible
 			STATUS current
 			DESCRIPTION
-				"It is used for enabling or disabling the NTP packet reception capability of a VLAN
-				interface or loopback interface.
+				"It is used for enabling or disabling the NTP packet reception capability of an interface.
 				"
 			::= { hwNtpObject 12 }
 
@@ -1400,8 +1391,7 @@
 			MAX-ACCESS not-accessible
 			STATUS current
 			DESCRIPTION
-				"It is used for enabling or disabling the NTP packet reception capability of a VLAN
-				interface or loopback interface.
+				"It is used for enabling or disabling the NTP packet reception capability of an interface.
 				The indexes of this entry are hwNtpInInterfaceType and hwNtpInInterfaceIfNumber.
 				"
 			INDEX { hwNtpInInterfaceType, hwNtpInInterfaceIfNumber }
@@ -1440,15 +1430,11 @@
 
 		-- 1.3.6.1.4.1.2011.6.4.2.12.1.2
 		hwNtpInInterfaceIfNumber OBJECT-TYPE
-			SYNTAX Integer32 (0..4093)
+			SYNTAX Integer32 (0..2147483647)
 			MAX-ACCESS not-accessible
 			STATUS current
 			DESCRIPTION
-				"Indicates the interface number of the ingress interface.
-				Range: 0-4093
-				Range for the VLAN interface: 1-4093
-				Range for the loopback interface: 0-31
-				The interface ID and interface type (hwNtpInInterfaceType) together identify the
+				"Indicates the interface number of the ingress interface. The interface ID and interface type (hwNtpInInterfaceType) together identify the
 				interface for enabling or disabling NTP packets reception.
 				"
 			::= { hwNtpInInterfaceEntry 2 }
@@ -2023,12 +2009,13 @@
 				meth(3),
 				vlanif(4),
 				loopback(5),
-				notConfigured(6)
+				notConfigured(6),
+				other(7)
 				}
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"Indicates the interface type.
+				"Indicates the interface type. It is recommended to set the source interface by leaf hwNtpUniServerSourceIfName.
 				Options:
 				1. tunnel(1)      -indicates the tunnel interface
 				2. null(2)        -indicates the NULL interface
@@ -2036,27 +2023,24 @@
 				4. vlanif(4)      -indicates the VLAN interface
 				5. loopback(5)    -indicates the loopback interface
 				6. notConfigured(6) -indicates that no source interface is configured
+				7. other(7)       -indicates other interface which is not in the interface type and
+				                   interface number format or is not the type above
 				When this leaf is set to notConfigured(6), it indicates that no source interface is
 				configured in the case of the create operation, and that the source interface
-				is deleted in the case of the modify operation.
+				is deleted in the case of the modify operation. When this leaf value is other(7), leaf hwNtpUniServerSourceIfName can be used
+				to indicates the source interface.
 				"
 			::= { hwNtpUniServerEntry 6 }
 
 		-- 1.3.6.1.4.1.2011.6.4.2.15.1.7
 		hwNtpUniServerSourceIfNumber OBJECT-TYPE
-			SYNTAX Integer32 (0..4093)
+			SYNTAX Integer32 (0..2147483647)
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"Indicates the interface ID.
-				Range: 0-4093
-				Range for the tunnel interface: 1-64
-				Range for the NULL interface: 0
-				Range for the MEth interface: 0
-				Range for the VLAN interface: 1-4093
-				Range for the loopback interface: 0-31
-				The interface ID and interface type (hwNtpUniServerSourceIfType) together
+				"Indicates the interface ID. The interface ID and interface type (hwNtpUniServerSourceIfType) together
 				identify the source interface for sending NTP unicast packets.
+				When the interface type (hwNtpUniServerSourceIfType) value is notConfigured(6) or other(7), this leaf value is 0.
 				"
 			::= { hwNtpUniServerEntry 7 }
 
@@ -2304,12 +2288,13 @@
 				meth(3),
 				vlanif(4),
 				loopback(5),
-				notConfigured(6)
+				notConfigured(6),
+				other(7)
 				}
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"Indicates the interface type.
+				"Indicates the interface type. It is recommended to set the source interface by leaf hwNtpUniPeerSourceIfName.
 				Options:
 				1. tunnel(1)      -indicates the tunnel interface
 				2. null(2)        -indicates the NULL interface
@@ -2317,27 +2302,24 @@
 				4. vlanif(4)      -indicates the VLAN interface
 				5. loopback(5)    -indicates the loopback interface
 				6. notConfigured(6) -indicates that no source interface is configured
+				7. other(7)       -indicates other interface which is not in the interface type and
+				                   interface number format or is not the type above
 
 				When this leaf is set to notConfigured(6), it indicates that no source interface is
 				configured in the case of the create operation and that the source interface
-				is deleted in the case of the modify operation.
+				is deleted in the case of the modify operation. When this leaf value is other(7), leaf hwNtpUniPeerSourceIfName can be used
+				to indicates the source interface.
 				"
 			::= { hwNtpUniPeerEntry 6 }
 
 		-- 1.3.6.1.4.1.2011.6.4.2.16.1.7
 		hwNtpUniPeerSourceIfNumber OBJECT-TYPE
-			SYNTAX Integer32 (0..4093)
+			SYNTAX Integer32 (0..2147483647)
 			MAX-ACCESS read-write
 			STATUS current
 			DESCRIPTION
-				"Indicates the interface ID.
-				Range: 0-4093
-				Range for the tunnel interface: 1-64
-				Range for the NULL interface: 0
-				Range for the MEth interface: 0
-				Range for the VLAN interface: 1-4093
-				Range for the loopback interface: 0-31
-				The interface ID and interface type (hwNtpUniPeerSourceIfType) together identify an interface.
+				"Indicates the interface ID. The interface ID and interface type (hwNtpUniPeerSourceIfType) together identify an interface.
+				When the interface type (hwNtpUniPeerSourceIfType) value is notConfigured(6) or other(7), this leaf value is 0.
 				"
 			::= { hwNtpUniPeerEntry 7 }
 
@@ -3123,8 +3105,7 @@
 			MAX-ACCESS not-accessible
 			STATUS current
 			DESCRIPTION
-				"It is used for enabling or disabling the NTP packet reception capability of a VLAN
-				interface or loopback interface.
+				"It is used for enabling or disabling the NTP packet reception capability of an interface.
 				"
 			::= { hwNtpObject 25 }
 
@@ -3134,8 +3115,7 @@
 			MAX-ACCESS not-accessible
 			STATUS current
 			DESCRIPTION
-				"It is used for enabling or disabling the NTP packet reception capability of a VLAN
-				interface or loopback interface.
+				"It is used for enabling or disabling the NTP packet reception capability of an interface.
 				The index of this entry is hwNtpInInterfaceGenIfName.
 				"
 			INDEX { hwNtpInInterfaceGenIfName }

@@ -1,5 +1,5 @@
 -- ============================================================================
--- Copyright (C) 2022 by HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by HUAWEI TECHNOLOGIES. All rights reserved.
 -- 
 -- Description: HUAWEI-MGMD-STD-MIB.my, this MIB module for MGMD Management.
 --            A New version of MGMD combining RFC 2933 and RFC 3019.
@@ -8,7 +8,7 @@
 --            of this MIB module is part of RFC 3376; see the RFC
 --            itself for full legal notices. 
 -- Reference:  
--- Version: V2.22
+-- Version: V2.23
 -- History:
 --    
 -- ============================================================================
@@ -27,7 +27,7 @@ hwMcast      OBJECT IDENTIFIER      ::= { hwDatacomm 149 }
                                      
                                      
 hwMgmdStdMib MODULE-IDENTITY
-    LAST-UPDATED "202202110000Z" -- 11 Feb 2022
+    LAST-UPDATED "202508010000Z" -- 01 Aug 2025
     ORGANIZATION 
             "Huawei Technologies Co.,Ltd."
     CONTACT-INFO 
@@ -44,6 +44,18 @@ hwMgmdStdMib MODULE-IDENTITY
             be available at:
             http://www.huawei.com"
 
+    REVISION "202508010000Z" -- 01 Aug 2025
+    DESCRIPTION
+            "1.Add hwMgmdGmpJoinGrpAddrType.
+             2.Add hwMgmdGmpJoinGrpAddress.
+             3.Add hwMgmdGmpJoinSrcAddrType.
+             4.Add hwMgmdGmpJoinSrcAddress.
+             5.Add hwMgmdGmpJoinSenderAddrType.
+             6.Add hwMgmdGmpJoinSenderAddr.
+             7.Add hwMgmdGmpJoinRecv.
+             8.Add hwMgmdGmpGrpLeave.
+            "
+    
     REVISION "202202110000Z" -- 11 Feb 2022
     DESCRIPTION
             "Modify the History."
@@ -1420,6 +1432,54 @@ hwMgmdGmpBoardThreshold  OBJECT-TYPE
              "The threshold value of IGMP or MLD entries uppper/lower limit(%) on the board." 
     ::= { hwMgmdMibGeneralObjects 37 }
 
+hwMgmdGmpJoinGrpAddrType OBJECT-TYPE
+    SYNTAX     InetAddressType
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The address type of the IGMP or MLD group address to join."
+    ::= { hwMgmdMibGeneralObjects 38 }
+
+hwMgmdGmpJoinGrpAddress OBJECT-TYPE
+    SYNTAX     InetAddress (SIZE (0|4|8|16|20))
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The IGMP or MLD group address to join."
+    ::= { hwMgmdMibGeneralObjects 39 }
+
+hwMgmdGmpJoinSrcAddrType OBJECT-TYPE
+    SYNTAX     InetAddressType
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The address type of the IGMP or MLD source address to join."
+    ::= { hwMgmdMibGeneralObjects 40 }
+
+hwMgmdGmpJoinSrcAddress OBJECT-TYPE
+    SYNTAX     InetAddress (SIZE (0|4|8|16|20))
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The IGMP or MLD source address to join."
+    ::= { hwMgmdMibGeneralObjects 41 }
+
+hwMgmdGmpJoinSenderAddrType OBJECT-TYPE
+    SYNTAX     InetAddressType
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The address type of the host IP address for sending membership report."
+    ::= { hwMgmdMibGeneralObjects 42 }
+
+hwMgmdGmpJoinSenderAddr OBJECT-TYPE
+    SYNTAX     InetAddress (SIZE (0|4|8|16|20))
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The host IP address for sending membership report."
+    ::= { hwMgmdMibGeneralObjects 43 }
+
 hwMgmdGlobalLimit  NOTIFICATION-TYPE
     OBJECTS   { hwMgmdSource,
                 hwMgmdGroup,
@@ -1756,6 +1816,37 @@ hwMgmdGMPBoardLimitClear NOTIFICATION-TYPE
             This trap message is generated when IGMP or MLD delete an entry resulting in the number of IGMP or MLD entries on the board falls below the upper limit."  
     ::= { hwMgmdMibNotifications 27 }
 
+hwMgmdGmpJoinRecv NOTIFICATION-TYPE
+    OBJECTS { hwMgmdGmpInterfaceName,
+              hwMgmdGmpInterfaceIfIndex,
+              hwMgmdGmpJoinVersion,
+              hwMgmdGmpJoinSrcAddrType,
+              hwMgmdGmpJoinSrcAddress,
+              hwMgmdGmpJoinGrpAddrType,
+              hwMgmdGmpJoinGrpAddress,
+              hwMgmdGmpJoinSenderAddrType,
+              hwMgmdGmpJoinSenderAddr,
+              hwMgmdInstanceName
+            }
+    STATUS     current
+    DESCRIPTION
+            "A hwMgmdGmpJoinRecv notification signifies the IGMP or MLD join message was received."
+    ::= { hwMgmdMibNotifications 28 }
+
+hwMgmdGmpGrpLeave NOTIFICATION-TYPE
+    OBJECTS { hwMgmdGmpInterfaceName,
+              hwMgmdGmpInterfaceIfIndex,
+              hwMgmdGmpJoinSrcAddrType,
+              hwMgmdGmpJoinSrcAddress,
+              hwMgmdGmpJoinGrpAddrType,
+              hwMgmdGmpJoinGrpAddress,
+              hwMgmdInstanceName
+            }
+    STATUS     current
+    DESCRIPTION
+            "A hwMgmdGmpGrpLeave notification signifies the IGMP or MLD group leave."
+    ::= { hwMgmdMibNotifications 29 }
+
 hwMgmdMibConformance              OBJECT IDENTIFIER ::= { hwMgmdStdMib 4 }
 hwMgmdMibCompliance               OBJECT IDENTIFIER ::= { hwMgmdMibConformance 3 }
 hwMgmdMibGroups                   OBJECT IDENTIFIER ::= { hwMgmdMibConformance 4 }
@@ -2083,7 +2174,13 @@ hwMgmdMibNotificationObjects OBJECT-GROUP
               hwMgmdNotificationSlot,
               hwMgmdGmpBoardCurrentCount,
               hwMgmdGmpBoardLimitCount,
-              hwMgmdGmpBoardThreshold
+              hwMgmdGmpBoardThreshold,
+              hwMgmdGmpJoinGrpAddrType,
+              hwMgmdGmpJoinGrpAddress,
+              hwMgmdGmpJoinSrcAddrType,
+              hwMgmdGmpJoinSrcAddress,
+              hwMgmdGmpJoinSenderAddrType,
+              hwMgmdGmpJoinSenderAddr
             }
     STATUS  current
     DESCRIPTION
@@ -2118,7 +2215,9 @@ hwMgmdMibNotificationGroup NOTIFICATION-GROUP
                     hwMgmdBoardLimitThresholdExceed,
                     hwMgmdBoardLimitThresholdExceedClear,
                     hwMgmdGMPBoardLimit,
-                    hwMgmdGMPBoardLimitClear
+                    hwMgmdGMPBoardLimitClear,
+                    hwMgmdGmpJoinRecv,
+                    hwMgmdGmpGrpLeave
                   }
     STATUS  current
     DESCRIPTION

@@ -1,9 +1,9 @@
 -- =================================================================
--- Copyright (C) 2022 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2023 by  HUAWEI TECHNOLOGIES. All rights reserved.
 --
 -- Description:The HUAWEI-PORTAL-MIB  provides information about portal server
 -- Reference:
--- Version: V2.35
+-- Version: V2.37
 -- History:
 --     
 -- =================================================================
@@ -28,7 +28,7 @@
     
     
         hwPortal MODULE-IDENTITY 
-            LAST-UPDATED"202210130947Z" 
+            LAST-UPDATED"202305171403Z" 
             ORGANIZATION 
                 "Huawei Technologies Co.,Ltd."
             CONTACT-INFO 
@@ -41,6 +41,14 @@
                     "
 			DESCRIPTION
                 "Add hwPortalUrlTemplateCfgTable hwUrlTemplateUrlCfgTable."
+
+            REVISION "202305171403Z"              -- May 17, 2023 at 14:03 GMT
+            DESCRIPTION
+                "Add hwPortalQuietMaxUser hwPortalQuietUserClear."
+
+            REVISION "202304062013Z"              -- Apr 06, 2023 at 20:15 GMT
+            DESCRIPTION
+                "Modify hwCUPortalServerDown."
 
             REVISION "202210130947Z"              -- Oct 30, 2022 at 09:47 GMT
             DESCRIPTION
@@ -2465,6 +2473,62 @@
                 "The file name of the oversize certificate."
             ::= { hwPortalTrapObject 9 }
 
+       hwPortalUpmngInstance OBJECT-TYPE
+            SYNTAX DisplayString (SIZE (1..15))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The name of UPMNG instance."
+            ::= { hwPortalTrapObject 10 }
+		
+        hwPortalLoadBalanceInstance OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "Load-balance instance of portal server which state is changed."
+            ::= { hwPortalTrapObject 11 }
+
+       hwPortalUserNumSpec OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The specification of Portal authentication users in quiet state."
+            ::= { hwPortalTrapObject 12 }
+
+       hwPortalCurrentThreshold OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The current threshold."
+            ::= { hwPortalTrapObject 13 }
+
+       hwPortalLowerThreshold OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The lower alarm threshold for the percentage of users in quiet state."
+            ::= { hwPortalTrapObject 14 }
+
+       hwPortalUpperThreshold OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The upper alarm threshold for the percentage of users in quiet state."
+            ::= { hwPortalTrapObject 15 }
+
+       hwPortalProcessName OBJECT-TYPE
+            SYNTAX DisplayString (SIZE(0..64))
+            MAX-ACCESS accessible-for-notify
+            STATUS current
+            DESCRIPTION
+                "The process name."
+            ::= { hwPortalTrapObject 16 }
+
         hwPortalTrapsDefine OBJECT IDENTIFIER ::= { hwPortalMIBTrap 2 }
                 
         hwPortalServerTraps OBJECT IDENTIFIER ::= { hwPortalTrapsDefine 1 }
@@ -2552,6 +2616,34 @@
             DESCRIPTION
               "This object indicates that the alarm generated when the certificate required for HTTPS redirection imported from PKI is too large is cleared."  
            ::= { hwPortalServerTraps 11 }
+
+        hwCUPortalServerUp NOTIFICATION-TYPE
+            OBJECTS { hwPortalUpmngInstance, hwPortalLoadBalanceInstance, hwStateChangePortalServerIp, hwStateChangePortalServerVrf }
+            STATUS current
+            DESCRIPTION
+                "This object indicates that the portal server is Up."
+            ::= { hwPortalServerTraps 12 }
+
+		hwCUPortalServerDown NOTIFICATION-TYPE
+            OBJECTS { hwPortalUpmngInstance, hwPortalLoadBalanceInstance, hwStateChangePortalServerIp, hwStateChangePortalServerVrf }
+            STATUS current
+            DESCRIPTION
+                "This object indicates that the portal server is Down."
+            ::= { hwPortalServerTraps 13 }
+
+        hwPortalQuietMaxUser NOTIFICATION-TYPE
+            OBJECTS { hwPortalUserNumSpec, hwPortalCurrentThreshold, hwPortalLowerThreshold, hwPortalUpperThreshold, hwPortalProcessName}
+            STATUS current
+            DESCRIPTION
+              "This object indicates that the percentage of current Portal authentication users in quiet state to the total Portal authentication users in quiet state exceeded the upper alarm threshold."
+           ::= { hwPortalServerTraps 14 }
+
+        hwPortalQuietUserClear NOTIFICATION-TYPE
+            OBJECTS { hwPortalUserNumSpec, hwPortalCurrentThreshold, hwPortalLowerThreshold, hwPortalUpperThreshold, hwPortalProcessName}
+            STATUS current
+            DESCRIPTION
+              "This object indicates that the percentage of current Portal authentication users in quiet state to the total Portal authentication users in quiet state fell equal to or below the lower alarm threshold. "
+           ::= { hwPortalServerTraps 15 }
 
     --  ============== conformance information ==============
         hwPortalConformance OBJECT IDENTIFIER ::= { hwPortal 3 }
@@ -2685,7 +2777,7 @@
             ::= { hwPortalObjectGroups 7 } 
             
         hwPortalServerUpDownGroup NOTIFICATION-GROUP
-            NOTIFICATIONS { hwPortalServerUp, hwPortalServerDown, hwPortalMaxUserAlarm, hwPortalUserClearAlarm}
+            NOTIFICATIONS { hwPortalServerUp, hwPortalServerDown, hwPortalMaxUserAlarm, hwPortalUserClearAlarm, hwCUPortalServerUp, hwCUPortalServerDown, hwPortalQuietMaxUser, hwPortalQuietUserClear}
             STATUS current
             DESCRIPTION 
                 "The PORTAL server status."

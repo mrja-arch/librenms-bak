@@ -1,8 +1,8 @@
 -- ============================================================================
--- Copyright (C) 2021 by  HUAWEI TECHNOLOGIES. All rights reserved.
+-- Copyright (C) 2025 by  HUAWEI TECHNOLOGIES. All rights reserved.
 -- Description:  The mib is used for config the ac in global view.
 -- Reference: 
--- Version: V1.21
+-- Version: V1.26
 -- ============================================================================
 -- Module definition
 
@@ -20,7 +20,7 @@
 				FROM SNMPv2-TC;
 		--1.3.6.1.4.1.2011.6.139.12
 		hwWlanGlobalManagement MODULE-IDENTITY
-			LAST-UPDATED "202112101000Z"		-- Dec 10, 2021 at 10:00 GMT
+			LAST-UPDATED "202509121830Z"		-- September 12, 2024 at 18:30 GMT
 			ORGANIZATION 
 				"Huawei Technologies Co.,Ltd."
 			CONTACT-INFO 
@@ -32,6 +32,21 @@
 				   Email: support@huawei.com
 
 				  "
+				  		DESCRIPTION
+                             "V1.26 change node hwApNumOverLoadTrap,hwApNumOverLoadRestoreTrap."
+                        REVISION "202509121830Z"		-- September 12, 2024 at 18:30 GMT
+                        DESCRIPTION
+                             "V1.25 change node hwWlanCapacitiesInconsistentTrapRestore to hwWlanCapacitiesInconsistentRestoreTrap."
+                        REVISION "202401121430Z"		-- January 12, 2024 at 14:30 GMT
+                        DESCRIPTION
+                             "V1.24 Add the node hwWlanCapacitiesInconsistentTrap, hwWlanCapacitiesInconsistentTrapRestore."
+                        REVISION "202401111630Z"		-- January 11, 2024 at 16:30 GMT
+                        DESCRIPTION
+                             "V1.23 Modify the description of node hwWlanStaRateComplianceRate,hwStaRateNoncompliance2gCnt,hwStaRateNoncompliance5gCnt,hwStaRateNoncompliance6gCnt"
+                        REVISION "202306281500Z"		-- Jun 28, 2023 at 15:00 GMT
+                        DESCRIPTION
+                             "V1.22 Modify the description of node hwWlanApStaOnlineCntComplianceRate."
+                        REVISION "202305311000Z"		-- May 31, 2023 at 10:00 GMT				  
                         DESCRIPTION
                              "V1.21 Add the node hwWlanRfNoiseNoncompliance6gCnt, hwWlanRfChannelUtilRateNoncompliance6gCnt, hwWlanRfLoadNoncompliance6gCnt, hwWlanRfChannelJamRateNoncompliance6gCnt."
                         REVISION "202112101000Z"		-- Dec 10, 2021 at 10:00 GMT				  
@@ -314,7 +329,7 @@
 			STATUS current
 			DESCRIPTION 
 				"This object indicates compliance ratio of the STA rate.
-Unit: 0.01 Compliance standard: Rate > x (x = proportion of 12 Mbps STAs to the total number of STAs)."
+Unit: 0.01 Compliance standard: Rate > x (x = proportion of 24 Mbps STAs to the total number of STAs)."
 			::= { hwWlanGlobalStaStatistics 1 }
 
 
@@ -379,7 +394,7 @@ Compliance standard: SNR > x (x = 20 dB)."
 			STATUS current
 			DESCRIPTION 
 				"This object indicates the number of STAs whose 2.4G rate fails to meet the compliance standard.
-Compliance standard: Rate > x (x = 12 Mbps)."
+Compliance standard: Rate > x (x = 24 Mbps)."
 			::= { hwWlanGlobalStaStatistics 7 }
 
 
@@ -434,7 +449,7 @@ Compliance standard: SNR > x (x = 20 dB)."
 			STATUS current
 			DESCRIPTION 
 				"This object indicates the number of STAs whose 5G rate fails to meet the compliance standard.
-Compliance standard: Rate > x (x = 12 Mbps)."
+Compliance standard: Rate > x (x = 24 Mbps)."
 			::= { hwWlanGlobalStaStatistics 12 }
 
 
@@ -564,7 +579,7 @@ Compliance standard: SNR > x (x = 20 dB)."
 			STATUS current
 			DESCRIPTION 
 				"This object indicates the number of STAs whose 6G rate fails to meet the compliance standard.
-Compliance standard: Rate > x (x = 12 Mbps)."
+Compliance standard: Rate > x (x = 24 Mbps)."
 			::= { hwWlanGlobalStaStatistics 25 }
 
 
@@ -845,7 +860,7 @@ Unit: 0.01 Compliance standard: STA offline rate x (x = 20%) Offline rate = hwSt
 			STATUS current
 			DESCRIPTION 
 				"This object indicates compliance ratio of the number of access STAs on an AP.
-Unit: 0.01 Compliance standard: Access STAs < x (x = 40). Access STAs refer to online STAs. Abnormal APs are those in fault, version mismatch, and type mismatch."
+Unit: 0.01 Compliance standard: Access STAs < x (x = 60). Access STAs refer to online STAs. Abnormal APs are those in fault, version mismatch, and type mismatch."
 			::= { hwWlanGlobalApStatistics 4 }
 
 
@@ -1457,6 +1472,30 @@ Unit: 0.01 Compliance standard: Access STAs < x (x = 40). Access STAs refer to o
 			DESCRIPTION 
 				"The alarm indicating no WLAN security parameter setting is cleared."
 			::= { hwWlanGlobalTrap 19 } 
+                -- 1.3.6.1.4.1.2011.6.139.12.3.1.20
+		hwWlanCapacitiesInconsistentTrap NOTIFICATION-TYPE
+			STATUS current
+			DESCRIPTION 
+				"Management capacities between the active and standby devices are inconsistent."
+			::= { hwWlanGlobalTrap 20 } 
+                -- 1.3.6.1.4.1.2011.6.139.12.3.1.21
+		hwWlanCapacitiesInconsistentRestoreTrap NOTIFICATION-TYPE
+			STATUS current
+			DESCRIPTION 
+				"Management capacities between the active and standby devices are consistent."
+			::= { hwWlanGlobalTrap 21 } 
+		-- 1.3.6.1.4.1.2011.6.139.12.3.1.22
+		hwApNumOverLoadTrap NOTIFICATION-TYPE
+			STATUS current
+			DESCRIPTION 
+				"The container occupies CPU cores and causes AP overload."
+			::= { hwWlanGlobalTrap 22 } 
+        -- 1.3.6.1.4.1.2011.6.139.12.3.1.23
+		hwApNumOverLoadRestoreTrap NOTIFICATION-TYPE
+			STATUS current
+			DESCRIPTION 
+				"The container occupies CPU cores and causes AP overload restore."
+			::= { hwWlanGlobalTrap 23 } 
             
             -- 1.3.6.1.4.1.2011.6.139.12.3.2
 		hwWlanGlobalTrapObjects OBJECT IDENTIFIER ::= { hwWlanGlobalTrapInfo 2 }

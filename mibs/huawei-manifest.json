@@ -1,0 +1,2399 @@
+{
+    "schema": "librenms-huawei-mib-manifest-v2",
+    "baseline_version": "V600R025C00SPC600",
+    "future_router_version": "V800R025C00SPC600",
+    "active_dir": "mibs/huawei",
+    "archive_dir": "mib-archives/huawei",
+    "docs_dir": "docs-custom",
+    "generated_at": "2026-06-12T16:32:41+00:00",
+    "modules": {
+        "HUAWEI-AAA-MIB": {
+            "file": "mibs/huawei/HUAWEI-AAA-MIB",
+            "mib_name": "HUAWEI-AAA-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "50402af03debe5f8694679bab505871998ff299add935694c74e0c9faeb0a843",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ACL-MIB": {
+            "file": "mibs/huawei/HUAWEI-ACL-MIB",
+            "mib_name": "HUAWEI-ACL-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "d3c605d4a6b937289b73e9d56fba5e00ed17b0c569dd4768bc77c10aafb915af",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ALARM-MIB": {
+            "file": "mibs/huawei/HUAWEI-ALARM-MIB",
+            "mib_name": "HUAWEI-ALARM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "2fb59773ee5ccfa689dc63e8fcb0812545f1524b758d0150f0e5a85021895c8a",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ALARM-RELIABILITY-MIB": {
+            "file": "mibs/huawei/HUAWEI-ALARM-RELIABILITY-MIB",
+            "mib_name": "HUAWEI-ALARM-RELIABILITY-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "08f2baa3004d8dcc74e786423e2177e2dbd06830fc98067778e45dde2ed97540",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-APS-MIB": {
+            "file": "mibs/huawei/HUAWEI-APS-MIB",
+            "mib_name": "HUAWEI-APS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "b1a4c83327bc25fcbf1c89def4a6bff1da52916ae3cf5e16d9529638ecd62504",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ASPF-EUDM-MIB": {
+            "file": "mibs/huawei/HUAWEI-ASPF-EUDM-MIB",
+            "mib_name": "HUAWEI-ASPF-EUDM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "93f5e7d9e94223e50aef3cf4578694ad401d8bdf9883ca72701e5d0a54e03cb6",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ATK-EUDM-MIB": {
+            "file": "mibs/huawei/HUAWEI-ATK-EUDM-MIB",
+            "mib_name": "HUAWEI-ATK-EUDM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "c4b31fd0607a5c0b86587430df6ecd97278c3c97ff4c6a6385ef5f349078a3d3",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ATK-MIB": {
+            "file": "mibs/huawei/HUAWEI-ATK-MIB",
+            "mib_name": "HUAWEI-ATK-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "175fb7e7be2e67eee846e59edc4a313ae10d3812a2142902586ad93c264eb184",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ATM-MIB": {
+            "file": "mibs/huawei/HUAWEI-ATM-MIB",
+            "mib_name": "HUAWEI-ATM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "c093d5015ed0fa682797dd7354dbf37bc8f5eb7facafb092b421f72ce71f86a2",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BASE-TRAP-MIB": {
+            "file": "mibs/huawei/HUAWEI-BASE-TRAP-MIB",
+            "mib_name": "HUAWEI-BASE-TRAP-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "a8e63d4567df2afc21394af5067076b2d13500a29e84bb02ebb3b75d55ca1796",
+            "device_families": [
+                "trap"
+            ],
+            "references": [
+                "config/snmptraps.php",
+                "tests/Feature/SnmpTraps/HuaweiAlarmTrapTest.php"
+            ]
+        },
+        "HUAWEI-BFD-MIB": {
+            "file": "mibs/huawei/HUAWEI-BFD-MIB",
+            "mib_name": "HUAWEI-BFD-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "6e1ef0f9d28696dacf15684fc26a02f7562158365d33059c8b4b20fac88a4037",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BGP-ACCOUNTING-MIB": {
+            "file": "mibs/huawei/HUAWEI-BGP-ACCOUNTING-MIB",
+            "mib_name": "HUAWEI-BGP-ACCOUNTING-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "1a9ce2b1e3f06f3b84bd1be104dddf986419434acbb9938ac27e31f32a71f9be",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BGP-GR-MIB": {
+            "file": "mibs/huawei/HUAWEI-BGP-GR-MIB",
+            "mib_name": "HUAWEI-BGP-GR-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "8baa489435c7d7834fc6d50a6953103c1f48635cb87ee02ce3a8497bc163ebdb",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BGP-VPN-MIB": {
+            "file": "mibs/huawei/HUAWEI-BGP-VPN-MIB",
+            "mib_name": "HUAWEI-BGP-VPN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "e74b831fc0c044f659d2608395d8450fa45dbbb28d2698fe1289b4e18a872d68",
+            "device_families": [],
+            "references": [
+                "includes/discovery/functions.inc.php"
+            ]
+        },
+        "HUAWEI-BLS-MIB": {
+            "file": "mibs/huawei/HUAWEI-BLS-MIB",
+            "mib_name": "HUAWEI-BLS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "96525b2ad3eb6b616dd39e74e1404b565d824ff51d6e8a9c3d7587d788fcc958",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-COPS-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-COPS-MIB",
+            "mib_name": "HUAWEI-BRAS-COPS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "ce63c2dc3ed3a24f8a0016c2d51b742c0b1d7e6a549c1841e5a1251602d6310a",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-DPI-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-DPI-MIB",
+            "mib_name": "HUAWEI-BRAS-DPI-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "1232759ccd61e9c77579bbfbeb2a239929499113b5e5d36c04e794d0e9202b3c",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-GRE-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-GRE-MIB",
+            "mib_name": "HUAWEI-BRAS-GRE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "09517bc9dd40edae6574aede1cb39297dba65cfe97b1e5a7247a5809c9d644aa",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-IFNET-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-IFNET-MIB",
+            "mib_name": "HUAWEI-BRAS-IFNET-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "6a89d900ab44e7484815cc02bbd1bce78e632dbe95b6ec141d260139fac3871e",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-IPTN-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-IPTN-MIB",
+            "mib_name": "HUAWEI-BRAS-IPTN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "2b405e19224d4e6017000da264f47e5ad0484bce127edf5191caad0adb3d045b",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-L2TP-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-L2TP-MIB",
+            "mib_name": "HUAWEI-BRAS-L2TP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "081d57e6450626283d314e72860ffe41147cdeda74b6f4acb30b253e39f2756f",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-MULTICAST-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-MULTICAST-MIB",
+            "mib_name": "HUAWEI-BRAS-MULTICAST-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "0d4cac14cadca965789454f10943297b81a7ad91aa189a432f2af043990ff748",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-MVLAN-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-MVLAN-MIB",
+            "mib_name": "HUAWEI-BRAS-MVLAN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "07a6d46d4ecb2fbd2c65f274035f0176852a5258817facdaed16c91d693eb79d",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-PPPoX-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-PPPoX-MIB",
+            "mib_name": "HUAWEI-BRAS-PPPoX-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "2f42bdf8dc4fe376abc9a85ac29d15ddcc62e998f0c62dc6de6a9a991e58db28",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-QOS-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-QOS-MIB",
+            "mib_name": "HUAWEI-BRAS-QOS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "2a0b590d08dc2cf6d6b37c104550620afb53ee1d01ad99bcc0d69ec71aa3cedc",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-RADIUS-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-RADIUS-MIB",
+            "mib_name": "HUAWEI-BRAS-RADIUS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "07366a91636820386b1a1674e9c39bc0418323e1e9f9006938f2809dc8c0b10e",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-RUI-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-RUI-MIB",
+            "mib_name": "HUAWEI-BRAS-RUI-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "ed0d45b158120e5af60f8eea24d6ff92fd1e76e9b246af91ee99146b24d96eed",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-SBC-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-SBC-MIB",
+            "mib_name": "HUAWEI-BRAS-SBC-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "844bec91497a0967e258ac7ef9676523e4d4a5365e9d880929dc9d5517fc4696",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-SRVCFG-DEVICE-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-SRVCFG-DEVICE-MIB",
+            "mib_name": "HUAWEI-BRAS-SRVCFG-DEVICE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "b81aa4bb73118d1627faa70f5b4e8dd8a3af307356614b2564113b6962b91df7",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-SRVCFG-EAP-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-SRVCFG-EAP-MIB",
+            "mib_name": "HUAWEI-BRAS-SRVCFG-EAP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "a16bbc104a5e9675f5a2ad9bad494e9d1808ffe8e75f25f7f0bdb51306a21833",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-SRVCFG-STATICUSER-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-SRVCFG-STATICUSER-MIB",
+            "mib_name": "HUAWEI-BRAS-SRVCFG-STATICUSER-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "9718316195b5376297373cd5ef986bb63791b7c6efa25470932fb221ed667b2b",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-SRVCFGINTERFACE-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-SRVCFGINTERFACE-MIB",
+            "mib_name": "HUAWEI-BRAS-SRVCFGINTERFACE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "a773c9a4d931dc543ab8e391e13780580112ce47e0ae96062ee51a9ebf7d67fd",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-USERVLAN-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-USERVLAN-MIB",
+            "mib_name": "HUAWEI-BRAS-USERVLAN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "7a9449f7abbb4280a8622a542f1c17b2ca0bd60d6c05b33e902b73747a9f5f5f",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-VSM-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-VSM-MIB",
+            "mib_name": "HUAWEI-BRAS-VSM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "29289216796a71fb89c3906f73fc6a5ef6b81893729e644a35a3f4e4ace41d49",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BRAS-VT-MIB": {
+            "file": "mibs/huawei/HUAWEI-BRAS-VT-MIB",
+            "mib_name": "HUAWEI-BRAS-VT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "f0e1393792483ad96addc3dc4194433ab74b0ef0f956f0ab4811c46f7df3df7c",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-BULKSTAT-MIB": {
+            "file": "mibs/huawei/HUAWEI-BULKSTAT-MIB",
+            "mib_name": "HUAWEI-BULKSTAT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "57fee9fbf982987b186d9fd085f4e4af045590b7247d7e98c7658ef15ed75e47",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-CBQOS-MIB": {
+            "file": "mibs/huawei/HUAWEI-CBQOS-MIB",
+            "mib_name": "HUAWEI-CBQOS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "91a848ecba8e790533ea7d3c87abe957809d1c63bd9dc3a70cc66cec5475da81",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-CCC-MIB": {
+            "file": "mibs/huawei/HUAWEI-CCC-MIB",
+            "mib_name": "HUAWEI-CCC-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "1aa678bced6d1b446b40f0c809954547cfcde47bea5106cb8145c12387dc41b5",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-CDP-COMPLIANCE-MIB": {
+            "file": "mibs/huawei/HUAWEI-CDP-COMPLIANCE-MIB",
+            "mib_name": "HUAWEI-CDP-COMPLIANCE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "b7de70eae5d53f774d7806e0cb6d005262e39bdad97cdfe6268b56434bbdef0e",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-CE-PING-MIB": {
+            "file": "mibs/huawei/HUAWEI-CE-PING-MIB",
+            "mib_name": "HUAWEI-CE-PING-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "04a183912db69a8235ffc35b84198d3afcc2e64f2c523b7a1e94cc00301eee12",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-CLOCK-MIB": {
+            "file": "mibs/huawei/HUAWEI-CLOCK-MIB",
+            "mib_name": "HUAWEI-CLOCK-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "2b58095d7e62609b259f656b27df86fc1fc9226a976f7fbb30122e808ad6a158",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-CONFIG-MAN-MIB": {
+            "file": "mibs/huawei/HUAWEI-CONFIG-MAN-MIB",
+            "mib_name": "HUAWEI-CONFIG-MAN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "1363751f4d2234622955a9e011bd9545f2ada16d4fea5c14492f2c62aff04eb8",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-CPU-MIB": {
+            "file": "mibs/huawei/HUAWEI-CPU-MIB",
+            "mib_name": "HUAWEI-CPU-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "8965879b60c5724f8027c755e90bcc346a6c511dad43ee594d619706d5874e67",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-DAD-MIB": {
+            "file": "mibs/huawei/HUAWEI-DAD-MIB",
+            "mib_name": "HUAWEI-DAD-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "d07771be631cfbfa42c76e92633f5a34d3152b9f294667215b52d9be3646c0ae",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-DATASYNC-MIB": {
+            "file": "mibs/huawei/HUAWEI-DATASYNC-MIB",
+            "mib_name": "HUAWEI-DATASYNC-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "0ef8458c5da4585039619476fb38d1412d8210f812878e59ffdc68bf6e2fc323",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-DC-TRAP-MIB": {
+            "file": "mibs/huawei/HUAWEI-DC-TRAP-MIB",
+            "mib_name": "HUAWEI-DC-TRAP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "458ebd3c2253d0125927efc6d73e5c472417d7f48d0176f77bf68847ce1bb09f",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-DEVICE-EXT-MIB": {
+            "file": "mibs/huawei/HUAWEI-DEVICE-EXT-MIB",
+            "mib_name": "HUAWEI-DEVICE-EXT-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "d1e20a21359eab94702af7c16ff97c9fa1d793df17c702aa180c98d6d3afd9e5",
+            "device_families": [],
+            "references": [
+                "resources/definitions/os_discovery/vrp.yaml",
+                "resources/definitions/os_discovery/yunshan.yaml"
+            ]
+        },
+        "HUAWEI-DEVICE-MIB": {
+            "file": "mibs/huawei/HUAWEI-DEVICE-MIB",
+            "mib_name": "HUAWEI-DEVICE-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "dc0e2dbccc305381c9521adf4a7262c8268ee81461ebdfb30ac78ca66b88aeeb",
+            "device_families": [
+                "smartax",
+                "smartax-mdu"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/smartax.yaml"
+            ]
+        },
+        "HUAWEI-DHCP-SNOOPING-MIB": {
+            "file": "mibs/huawei/HUAWEI-DHCP-SNOOPING-MIB",
+            "mib_name": "HUAWEI-DHCP-SNOOPING-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "aebc777d5f1dcc7c395a8b2503c34ef0099839ba9b58a507cc0fdcef8d4d0129",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-DHCPR-MIB": {
+            "file": "mibs/huawei/HUAWEI-DHCPR-MIB",
+            "mib_name": "HUAWEI-DHCPR-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "d21a0505cdbd2458b6a6c91af9dda790378fc58d0be0123404bcd39d0032a4fb",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-DHCPS-MIB": {
+            "file": "mibs/huawei/HUAWEI-DHCPS-MIB",
+            "mib_name": "HUAWEI-DHCPS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "8ad15e9efddd02e3594833a1b52cebec6baedcc90ceaf3baba4c88d357d5864f",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-DHCPV6-SERVER-MIB": {
+            "file": "mibs/huawei/HUAWEI-DHCPV6-SERVER-MIB",
+            "mib_name": "HUAWEI-DHCPV6-SERVER-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "335b82a4408c1217e13b0378734d89d7c6676a939e6177efcd197fbc5d08ca21",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-DISMAN-PING-MIB": {
+            "file": "mibs/huawei/HUAWEI-DISMAN-PING-MIB",
+            "mib_name": "HUAWEI-DISMAN-PING-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "98cef38b72423aa9f88fa6c35e147326784af84aa231242563929ea84e9c5fa0",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-DLDP-MIB": {
+            "file": "mibs/huawei/HUAWEI-DLDP-MIB",
+            "mib_name": "HUAWEI-DLDP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "cb31416ebdaa203dcf99e3bca60ac8e618cd16e7981843b3466ccd4353a6dcff",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-E-TRUNK-MIB": {
+            "file": "mibs/huawei/HUAWEI-E-TRUNK-MIB",
+            "mib_name": "HUAWEI-E-TRUNK-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "3a9168f654b0ada66af4ca284a24b81834234e0fc34116e830a04dfed0e11338",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ENERGYMNGT-MIB": {
+            "file": "mibs/huawei/HUAWEI-ENERGYMNGT-MIB",
+            "mib_name": "HUAWEI-ENERGYMNGT-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "25149b7275e0a11d57827f720e5471e3913aecb3f0dcd47ca34f19a9112550eb",
+            "device_families": [
+                "vrp",
+                "yunshan"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/vrp.yaml",
+                "resources/definitions/os_discovery/yunshan.yaml"
+            ]
+        },
+        "HUAWEI-ENTITY-COMPONENT-MIB": {
+            "file": "mibs/huawei/HUAWEI-ENTITY-COMPONENT-MIB",
+            "mib_name": "HUAWEI-ENTITY-COMPONENT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "642ff17cb0299289482bbc9bf447ccfecd139da61ffc2e7f5f9a621176d57564",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ENTITY-EXTENT-MIB": {
+            "file": "mibs/huawei/HUAWEI-ENTITY-EXTENT-MIB",
+            "mib_name": "HUAWEI-ENTITY-EXTENT-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "559255dfbbfe3c65701aea8aba47e6e052c6c5f426982872cd8b6c4fd9589d92",
+            "device_families": [
+                "vrp",
+                "yunshan"
+            ],
+            "references": [
+                "LibreNMS/OS/Vrp.php",
+                "resources/definitions/os_discovery/vrp.yaml",
+                "resources/definitions/os_discovery/yunshan.yaml"
+            ]
+        },
+        "HUAWEI-ENTITY-TRAP-MIB": {
+            "file": "mibs/huawei/HUAWEI-ENTITY-TRAP-MIB",
+            "mib_name": "HUAWEI-ENTITY-TRAP-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "06918d77c2ce8c119b48b939d5ec6b0f4d456d6b24eab61578cbc15bc103f9a2",
+            "device_families": [
+                "trap"
+            ],
+            "references": [
+                "LibreNMS/Snmptrap/Handlers",
+                "config/snmptraps.php"
+            ]
+        },
+        "HUAWEI-ENVIRONMENT-MIB": {
+            "file": "mibs/huawei/HUAWEI-ENVIRONMENT-MIB",
+            "mib_name": "HUAWEI-ENVIRONMENT-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "12e40b21d112e1d5a8b26d5fa3cd0b77c7e4bd331db384434130a62a6f83a3b1",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-EPON-MIB": {
+            "file": "mibs/huawei/HUAWEI-EPON-MIB",
+            "mib_name": "HUAWEI-EPON-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "75e586b7de8495939875f59eab729400ddbcebd5fd83f8453bc3e3f4c2245965",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ERPS-MIB": {
+            "file": "mibs/huawei/HUAWEI-ERPS-MIB",
+            "mib_name": "HUAWEI-ERPS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "e98d99655f480fd04520c6d9beae62b2aaa9774dad02c70b9ca70124f7d76c9d",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ERRORDOWN-MIB": {
+            "file": "mibs/huawei/HUAWEI-ERRORDOWN-MIB",
+            "mib_name": "HUAWEI-ERRORDOWN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "7c7243b83a6e2f139ef684c163468a409505b893891d50223d20b6fd77276925",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ETHARP-MIB": {
+            "file": "mibs/huawei/HUAWEI-ETHARP-MIB",
+            "mib_name": "HUAWEI-ETHARP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "aa2b703e176b5fe276b9e96e3b3fc4c5a01509ad89e0e207e1feb9ef8c139da8",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ETHOAM-MIB": {
+            "file": "mibs/huawei/HUAWEI-ETHOAM-MIB",
+            "mib_name": "HUAWEI-ETHOAM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "abe8dafde5e67d14e19b5c703f187819d3a29f4e88686746f30a967a2fb326d7",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-EVC-MIB": {
+            "file": "mibs/huawei/HUAWEI-EVC-MIB",
+            "mib_name": "HUAWEI-EVC-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "c9578ef3ba1df56bd91a3e0ca6dfd37fcd049df9c1f7aa462f2395700fa22b4b",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-EVPN-MIB": {
+            "file": "mibs/huawei/HUAWEI-EVPN-MIB",
+            "mib_name": "HUAWEI-EVPN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "9761722a6d442788e1060e257098397c982b5ef69428df677746bffa9efe34e6",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-FCOE-MIB": {
+            "file": "mibs/huawei/HUAWEI-FCOE-MIB",
+            "mib_name": "HUAWEI-FCOE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "dbf79d5f2725aeb3b6642b7265d80367417db6b2f839a2c59cf88c8320847db6",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-FLASH-MAN-MIB": {
+            "file": "mibs/huawei/HUAWEI-FLASH-MAN-MIB",
+            "mib_name": "HUAWEI-FLASH-MAN-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "95b52364bdd9f02daf92553ed61fc7039604245288d7083b2fa78f0e88d1b125",
+            "device_families": [],
+            "references": [
+                "resources/definitions/os_discovery/vrp.yaml"
+            ]
+        },
+        "HUAWEI-FR-QOS-MIB": {
+            "file": "mibs/huawei/HUAWEI-FR-QOS-MIB",
+            "mib_name": "HUAWEI-FR-QOS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "42af9da051ad30cfc7087c0e861477538430b7b14293553683665d390e8a7221",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-FTP-MIB": {
+            "file": "mibs/huawei/HUAWEI-FTP-MIB",
+            "mib_name": "HUAWEI-FTP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "9cc28f275a012dce6030423b9f758038c3bf6bd658c77c940a9f54d8e58a56f8",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-FWD-PAF-TRAP-MIB": {
+            "file": "mibs/huawei/HUAWEI-FWD-PAF-TRAP-MIB",
+            "mib_name": "HUAWEI-FWD-PAF-TRAP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "ca761dae9c09e7c5eb13133c2d582efb5fbf4b0c0f10fdfc2a5e06bb9ddead6c",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-FWD-RES-TRAP-MIB": {
+            "file": "mibs/huawei/HUAWEI-FWD-RES-TRAP-MIB",
+            "mib_name": "HUAWEI-FWD-RES-TRAP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "d9f3fc81c84bac98636da0fc58cc215b129dece51552d3578beb74236f9b0a88",
+            "device_families": [
+                "trap"
+            ],
+            "references": [
+                "LibreNMS/Snmptrap/Handlers",
+                "config/snmptraps.php"
+            ]
+        },
+        "HUAWEI-GTL-MIB": {
+            "file": "mibs/huawei/HUAWEI-GTL-MIB",
+            "mib_name": "HUAWEI-GTL-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "45ac01574201ad1c7fb017974e6fd8fc7badadbda464640a1ee6f8844fbdf556",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-GTSM-MIB": {
+            "file": "mibs/huawei/HUAWEI-GTSM-MIB",
+            "mib_name": "HUAWEI-GTSM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "80ab8d6beef73645e6497a3f84fa2a2a2d10ed0a6df81a7ecb11988088f15e70",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-HGMP-MIB": {
+            "file": "mibs/huawei/HUAWEI-HGMP-MIB",
+            "mib_name": "HUAWEI-HGMP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "b90467987dcdf298f41c514b1be4cb9f227a3c80dcbf99c4821cea2f22406c2e",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-HQOS-MIB": {
+            "file": "mibs/huawei/HUAWEI-HQOS-MIB",
+            "mib_name": "HUAWEI-HQOS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "59da7cdcad2f7963dab97645ecc89b9f5301da5ca6288db1f5f534e42e458ead",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-HSR-MIB": {
+            "file": "mibs/huawei/HUAWEI-HSR-MIB",
+            "mib_name": "HUAWEI-HSR-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "7e16df06d92e0a08f71a83aa192b6cea2918055593ab613c68dffb3a924c6427",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-HTTP-MIB": {
+            "file": "mibs/huawei/HUAWEI-HTTP-MIB",
+            "mib_name": "HUAWEI-HTTP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "8946535293597dd22a2befab7036a7692a4420814109dfa0d7e6bbc00ec0c42f",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-HWTACACS-MIB": {
+            "file": "mibs/huawei/HUAWEI-HWTACACS-MIB",
+            "mib_name": "HUAWEI-HWTACACS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "005c46fda1a90834b1584b4e851540a69bba861eb2b19d7518b6b1e16447ec13",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-IF-EXT-MIB": {
+            "file": "mibs/huawei/HUAWEI-IF-EXT-MIB",
+            "mib_name": "HUAWEI-IF-EXT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "233d7911b349b54cccaf9f8718dccda598d19007074194aaba42afc96fc3dcad",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-IF-QOS-MIB": {
+            "file": "mibs/huawei/HUAWEI-IF-QOS-MIB",
+            "mib_name": "HUAWEI-IF-QOS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "08f2a31926ac183ee00efa7c960a9cacb4db1b4ec1ee7dce8d2c7c352c8465b1",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-IFIT-MIB": {
+            "file": "mibs/huawei/HUAWEI-IFIT-MIB",
+            "mib_name": "HUAWEI-IFIT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "2ffeec10c941d929f305df33434b1386aea4cf5ed2ebd23f36cad3dfaee1ecc3",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-IMA-MIB": {
+            "file": "mibs/huawei/HUAWEI-IMA-MIB",
+            "mib_name": "HUAWEI-IMA-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "1573a1b1e4c58dc5a181d3d396c2643a03ee321aeae796924efebf553c3f947b",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-INFOCENTER-MIB": {
+            "file": "mibs/huawei/HUAWEI-INFOCENTER-MIB",
+            "mib_name": "HUAWEI-INFOCENTER-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "087824991ad6209f7b69667ab1568f0c0bf734e30f73aa97a16999bfc485dd1b",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-INNER-LINK-MIB": {
+            "file": "mibs/huawei/HUAWEI-INNER-LINK-MIB",
+            "mib_name": "HUAWEI-INNER-LINK-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "dabb4d61a1985567d2d48646d0bb23744a6c0c18bc239f519794c4bb0aaadb55",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-IPFPM-MIB": {
+            "file": "mibs/huawei/HUAWEI-IPFPM-MIB",
+            "mib_name": "HUAWEI-IPFPM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "7a3546d9d8bd67c012f67f9c669ae47c89eec179569a65559249e691d11b2fef",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-IPHC-MIB": {
+            "file": "mibs/huawei/HUAWEI-IPHC-MIB",
+            "mib_name": "HUAWEI-IPHC-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "e5e09afb1f03f710665632f744af7ec4d51f9747eadd58b2906011783b36d2b1",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-IPMCAST-MIB": {
+            "file": "mibs/huawei/HUAWEI-IPMCAST-MIB",
+            "mib_name": "HUAWEI-IPMCAST-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "5bf0ca1661b69ff2eaf0b404f834907de2e644cabcee4ceac5b6c6fbf94910dd",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-IPPOOL-MIB": {
+            "file": "mibs/huawei/HUAWEI-IPPOOL-MIB",
+            "mib_name": "HUAWEI-IPPOOL-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "8e1da9b3a63a22a707dc9c30756e4de27baf71072213fbf0a0f5a2659d7750c1",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-IPSESSION-MIB": {
+            "file": "mibs/huawei/HUAWEI-IPSESSION-MIB",
+            "mib_name": "HUAWEI-IPSESSION-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "0c8b8c7c849a4d3233896f49aae261b7bee2e5109cf4235ecaa4705c6892d81e",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-IPV6-MIB": {
+            "file": "mibs/huawei/HUAWEI-IPV6-MIB",
+            "mib_name": "HUAWEI-IPV6-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "a7495607ce8c4a32743f4a658f61e6609bf02542fc7a02cd3e7b89eb12bbf503",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ISIS-CONF-MIB": {
+            "file": "mibs/huawei/HUAWEI-ISIS-CONF-MIB",
+            "mib_name": "HUAWEI-ISIS-CONF-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "3142c198429b8ef69f5e3a4fde49f082510320039a832847a223d373dc1cb086",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-KEYCHAIN-MIB": {
+            "file": "mibs/huawei/HUAWEI-KEYCHAIN-MIB",
+            "mib_name": "HUAWEI-KEYCHAIN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "83c507671da6880924859caf4945a18f3442d7b9536cd2417b53714d2deff918",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-KOMPELLA-MIB": {
+            "file": "mibs/huawei/HUAWEI-KOMPELLA-MIB",
+            "mib_name": "HUAWEI-KOMPELLA-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "8cf3ecf00c0b953dcae3a5e4a6b359a9e7ba48e0cd37207938a4186573393a7f",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-L2IF-MIB": {
+            "file": "mibs/huawei/HUAWEI-L2IF-MIB",
+            "mib_name": "HUAWEI-L2IF-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "01495d1116c265384c5630fcacbb19f9db1cebf8536a6cf96e5426831b25cc51",
+            "device_families": [],
+            "references": [
+                "LibreNMS/OS/Vrp.php"
+            ]
+        },
+        "HUAWEI-L2MAM-MIB": {
+            "file": "mibs/huawei/HUAWEI-L2MAM-MIB",
+            "mib_name": "HUAWEI-L2MAM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "d9bda049961c9540682625c962cf1b16732965f426d9dcd6aae0c422aa8569e6",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-L2MULTICAST-MIB": {
+            "file": "mibs/huawei/HUAWEI-L2MULTICAST-MIB",
+            "mib_name": "HUAWEI-L2MULTICAST-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "5a8164f23b1f2c4fa2845386a5e7e071fcd88b546cf19e42e8297b727f35d9c0",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-L2TP-EXT-MIB": {
+            "file": "mibs/huawei/HUAWEI-L2TP-EXT-MIB",
+            "mib_name": "HUAWEI-L2TP-EXT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "42e7e4e4fac8a04307e9c4ac8186df1b2a993a29130a30fd5ab07ffaaf781c84",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-L2VLAN-MIB": {
+            "file": "mibs/huawei/HUAWEI-L2VLAN-MIB",
+            "mib_name": "HUAWEI-L2VLAN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "56bb79f1e8bbd7dd0499bf371425dc940474ffc28e0906de2984f9d411d0b766",
+            "device_families": [],
+            "references": [
+                "LibreNMS/OS/Vrp.php"
+            ]
+        },
+        "HUAWEI-L2VPN-MIB": {
+            "file": "mibs/huawei/HUAWEI-L2VPN-MIB",
+            "mib_name": "HUAWEI-L2VPN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "fa611ab3f8010748c38227beced08e38951aabe94d07da72f1aee64fc93dd0f7",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-L3VLAN-MIB": {
+            "file": "mibs/huawei/HUAWEI-L3VLAN-MIB",
+            "mib_name": "HUAWEI-L3VLAN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "fa4ea5cc8457545c1286d4560509fedca8ab082fdd5deba647c5bbcbbaec1f90",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-L3VPN-EXT-MIB": {
+            "file": "mibs/huawei/HUAWEI-L3VPN-EXT-MIB",
+            "mib_name": "HUAWEI-L3VPN-EXT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "3f116f96ce520fe909edf87b0303aa558394b00508d50e09cac478478fb3feca",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-LDT-MIB": {
+            "file": "mibs/huawei/HUAWEI-LDT-MIB",
+            "mib_name": "HUAWEI-LDT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "8b28d8375f4cd0f5a5fb24c55db4fa220047b4f62a7d4e70e42b09e2f4468d08",
+            "device_families": [
+                "trap"
+            ],
+            "references": [
+                "LibreNMS/Snmptrap/Handlers/HuaweiLdtPortLoopDetect.php",
+                "LibreNMS/Snmptrap/Handlers/HuaweiLdtPortLoopDetectRecovery.php",
+                "config/snmptraps.php",
+                "tests/Feature/SnmpTraps/HuaweiLdtPortLoopDetectRecoveryTest.php",
+                "tests/Feature/SnmpTraps/HuaweiLdtPortLoopDetectTest.php"
+            ]
+        },
+        "HUAWEI-LI-MIB": {
+            "file": "mibs/huawei/HUAWEI-LI-MIB",
+            "mib_name": "HUAWEI-LI-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "8896bb2ba38656ef6645c5b0b8499ddab01149b7036bf0596637dff0da2706b7",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-LINE-MIB": {
+            "file": "mibs/huawei/HUAWEI-LINE-MIB",
+            "mib_name": "HUAWEI-LINE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "38a7c325876de52287e35e1fedfb5c61ae6a9f3f6f5589c7e36785eba92364a3",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-LLDP-MIB": {
+            "file": "mibs/huawei/HUAWEI-LLDP-MIB",
+            "mib_name": "HUAWEI-LLDP-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "2e8dad0382fc61df843c1fe5eb4cbc13795b47584c53ca1234f140bcb5545a51",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-LOAD-BACKUP-MIB": {
+            "file": "mibs/huawei/HUAWEI-LOAD-BACKUP-MIB",
+            "mib_name": "HUAWEI-LOAD-BACKUP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "b0f42ccc227bff7d7fff801936aa77cac318defeea442faf6eafbc6ef8582173",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-LOOPDETECT-MIB": {
+            "file": "mibs/huawei/HUAWEI-LOOPDETECT-MIB",
+            "mib_name": "HUAWEI-LOOPDETECT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "aac8546789638e4ced12688fc88bdcc97d3c88521fceb24946e983d037d990d8",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-M-LAG-MIB": {
+            "file": "mibs/huawei/HUAWEI-M-LAG-MIB",
+            "mib_name": "HUAWEI-M-LAG-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "c679500572b92e230df252d6427a1f1ba35272809478ae1691a98d82aef4304b",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MA5200-DEVICE-MIB": {
+            "file": "mibs/huawei/HUAWEI-MA5200-DEVICE-MIB",
+            "mib_name": "HUAWEI-MA5200-DEVICE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "f35659f5da2a3dd7b478f08d9001b74153b3c4e79041a6f9130c01f952bdb461",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MA5200-MIB": {
+            "file": "mibs/huawei/HUAWEI-MA5200-MIB",
+            "mib_name": "HUAWEI-MA5200-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "d2969b64884e6a7ac7e572ce7d722a77c16c7d7682360034587f4a6d4956f192",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MAC-AUTHEN-MIB": {
+            "file": "mibs/huawei/HUAWEI-MAC-AUTHEN-MIB",
+            "mib_name": "HUAWEI-MAC-AUTHEN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "e3e8c7ad84f6eeb17104a21711068d5940947125913562cef24a7579a57c4d19",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MACBIND-MIB": {
+            "file": "mibs/huawei/HUAWEI-MACBIND-MIB",
+            "mib_name": "HUAWEI-MACBIND-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "9adf7a58378f72b6098511f9bc7d16a126bb4bf86abd8734ed4837d81b06fbeb",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MACSEC-MIB": {
+            "file": "mibs/huawei/HUAWEI-MACSEC-MIB",
+            "mib_name": "HUAWEI-MACSEC-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "bb32e1836021550e7eb78325c62c498ac290d719fc31b4bc5c551db32d3a6c00",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MASTERKEY-MIB": {
+            "file": "mibs/huawei/HUAWEI-MASTERKEY-MIB",
+            "mib_name": "HUAWEI-MASTERKEY-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "edb668d1cd445cb9e93b51435e191050f99fc919ddfbc15dfa582d234a679a7f",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MC-TRUNK-MIB": {
+            "file": "mibs/huawei/HUAWEI-MC-TRUNK-MIB",
+            "mib_name": "HUAWEI-MC-TRUNK-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "c1f460477c40ea6b565d2c28e7eb42dc58a7a2c05b076b77a32670af6f59ed11",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MEMORY-MIB": {
+            "file": "mibs/huawei/HUAWEI-MEMORY-MIB",
+            "mib_name": "HUAWEI-MEMORY-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "63ef3fbe1daa5e6845800fe57a06dc1d99fd80b1b43bb9ce1618c024a9399aa7",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MFF-MIB": {
+            "file": "mibs/huawei/HUAWEI-MFF-MIB",
+            "mib_name": "HUAWEI-MFF-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "6b5f6c497fd4d946630ed31d95a330b5dafc2a18c4d7a45eea674ce55d453fe2",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MFLP-MIB": {
+            "file": "mibs/huawei/HUAWEI-MFLP-MIB",
+            "mib_name": "HUAWEI-MFLP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "961f016740fda4cc76b2351a0d7c5c0a3b947ee879394dead50ed0a1726584bf",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MGMD-STD-MIB": {
+            "file": "mibs/huawei/HUAWEI-MGMD-STD-MIB",
+            "mib_name": "HUAWEI-MGMD-STD-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "5a1aa0e5584149791b65c72349b7e55101beb4a376fe4fa25d861ca0c17da44c",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MIB": {
+            "file": "mibs/huawei/HUAWEI-MIB",
+            "mib_name": "HUAWEI-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "fec9cdf83f9a7381c29fbc8689de4ee5e742b30e64b97ed0501187b67eeb13d4",
+            "device_families": [],
+            "references": [
+                "resources/definitions/os_discovery/huawei-smu.yaml",
+                "resources/definitions/os_discovery/vrp.yaml",
+                "resources/definitions/os_discovery/yunshan.yaml"
+            ]
+        },
+        "HUAWEI-MINM-MIB": {
+            "file": "mibs/huawei/HUAWEI-MINM-MIB",
+            "mib_name": "HUAWEI-MINM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "cdb9151024aa56cb42ff3b7431fd0646db9143131b132b07f3e3339bc05f1044",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MIRROR-MIB": {
+            "file": "mibs/huawei/HUAWEI-MIRROR-MIB",
+            "mib_name": "HUAWEI-MIRROR-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "1e89c3b243d3f6e9261693b7da7eb0d40bf1b109c73612bd544e616936ba5e09",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MODULE-INFO-MIB": {
+            "file": "mibs/huawei/HUAWEI-MODULE-INFO-MIB",
+            "mib_name": "HUAWEI-MODULE-INFO-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "d35971d602c749c40ece5bb1b8d0e241902498dc04aa1a35704bf5fc347fa974",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MP-MIB": {
+            "file": "mibs/huawei/HUAWEI-MP-MIB",
+            "mib_name": "HUAWEI-MP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "74ae85714528609493d4d7b07a5591ed37a88d412e3034711940f8526ba90d13",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MPLS-EXTEND-MIB": {
+            "file": "mibs/huawei/HUAWEI-MPLS-EXTEND-MIB",
+            "mib_name": "HUAWEI-MPLS-EXTEND-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "ca26dcc9cb7b892be7f4a8a7e385916129eb318ddaea71a188d52754b89b17e0",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MPLSLDP-MIB": {
+            "file": "mibs/huawei/HUAWEI-MPLSLDP-MIB",
+            "mib_name": "HUAWEI-MPLSLDP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "37698d2b3fe4dc974971be203ba17d6761bbad101196117695e50f67257fa05b",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MPLSLSR-EXT-MIB": {
+            "file": "mibs/huawei/HUAWEI-MPLSLSR-EXT-MIB",
+            "mib_name": "HUAWEI-MPLSLSR-EXT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "8048c1fd137db20d692bd13e907aa48d62d372a94a85db11a56e0e3227db7f57",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MPLSOAM-MIB": {
+            "file": "mibs/huawei/HUAWEI-MPLSOAM-MIB",
+            "mib_name": "HUAWEI-MPLSOAM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "15c2d487c484ff539418bba9209c0d1a559dc4b5d1fe60aae7e5b84ee41e9898",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MPLSOAM-PS-MIB": {
+            "file": "mibs/huawei/HUAWEI-MPLSOAM-PS-MIB",
+            "mib_name": "HUAWEI-MPLSOAM-PS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "5c1b5821c466a5622b0e2fe32788f3c8aa33bd0170211e5d27ea40b02b0bc375",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MSDP-MIB": {
+            "file": "mibs/huawei/HUAWEI-MSDP-MIB",
+            "mib_name": "HUAWEI-MSDP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "2059af6669a47fb0450ea7c00f5e1ad26860652fb721b669b7de1f5305986312",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MSTP-MIB": {
+            "file": "mibs/huawei/HUAWEI-MSTP-MIB",
+            "mib_name": "HUAWEI-MSTP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "f61a39265f9075497405b137ac6b16ca63c3e5f848e1c72fcfe6bd5d2ddf9b5d",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-MULTICAST-MIB": {
+            "file": "mibs/huawei/HUAWEI-MULTICAST-MIB",
+            "mib_name": "HUAWEI-MULTICAST-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "3fc6b66517e8a58b1a54ab41192d7cff1e943fc3d4fa4146ff541a4360725cb4",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-NAT-EUDM-MIB": {
+            "file": "mibs/huawei/HUAWEI-NAT-EUDM-MIB",
+            "mib_name": "HUAWEI-NAT-EUDM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "df6bfe923e2b84ee8c8e079aab54694a6d476b65569db97bdd817a3e6c9ad399",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-NAT-MIB": {
+            "file": "mibs/huawei/HUAWEI-NAT-MIB",
+            "mib_name": "HUAWEI-NAT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "240164842cea769a899ac2e0b92d87bb83ea94cee2ed853ae3a57ffa1ab64981",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-ND-MIB": {
+            "file": "mibs/huawei/HUAWEI-ND-MIB",
+            "mib_name": "HUAWEI-ND-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "a56439af5580c9652b55bc9bbc8d628378be681e343e45f7008e0cb2b45b279e",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-NDB-MIB": {
+            "file": "mibs/huawei/HUAWEI-NDB-MIB",
+            "mib_name": "HUAWEI-NDB-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "8753a7db8637ada226bbf810edb527d4a784c18b54f9c539ef4e895a12c35a32",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-NETCONF-MIB": {
+            "file": "mibs/huawei/HUAWEI-NETCONF-MIB",
+            "mib_name": "HUAWEI-NETCONF-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "7cc34629d70a6f3fd406ac2d0b6b4d96766bef14163daf699ec41373a0809e91",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-NETSTREAM-MIB": {
+            "file": "mibs/huawei/HUAWEI-NETSTREAM-MIB",
+            "mib_name": "HUAWEI-NETSTREAM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "f37c2426117c47089ff3485fdeb994100fe6e26673cd4f71af83f84d175ee16d",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-NTP-MIB": {
+            "file": "mibs/huawei/HUAWEI-NTP-MIB",
+            "mib_name": "HUAWEI-NTP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "e403e771929431bea2e3a03f8523d386eea1fa479c932428074ebc7f3ab1140c",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-NTP-TRAP-MIB": {
+            "file": "mibs/huawei/HUAWEI-NTP-TRAP-MIB",
+            "mib_name": "HUAWEI-NTP-TRAP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "c79223f5327e46aa85de303ca9338ed6458ffa4dcd6c8a43b0614b6e1f27fc3b",
+            "device_families": [
+                "trap"
+            ],
+            "references": [
+                "LibreNMS/Snmptrap/Handlers",
+                "config/snmptraps.php"
+            ]
+        },
+        "HUAWEI-NVO3-MIB": {
+            "file": "mibs/huawei/HUAWEI-NVO3-MIB",
+            "mib_name": "HUAWEI-NVO3-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "b40791eb3a87e8e83e6e3bea3f78a2f7142dc94efc1c2dbd5caa3466282f7bcc",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-OPENFLOW-MIB": {
+            "file": "mibs/huawei/HUAWEI-OPENFLOW-MIB",
+            "mib_name": "HUAWEI-OPENFLOW-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "10a3001e7593f5a56a7b71a7c39b95359ab4d3377f3b2259a8b69bfed7cd6e4d",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-OSPFV2-MIB": {
+            "file": "mibs/huawei/HUAWEI-OSPFV2-MIB",
+            "mib_name": "HUAWEI-OSPFV2-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "5492c8d26ec65c01364dc72a0fbfe2bb1bfde987226c6a9831a9b5434f837802",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-OSPFV3-MIB": {
+            "file": "mibs/huawei/HUAWEI-OSPFV3-MIB",
+            "mib_name": "HUAWEI-OSPFV3-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "5871efd7404ffb2a5740519c49d254b993061c2c81b897189dc5e5d6f452b8d2",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-PERFMGMT-MIB": {
+            "file": "mibs/huawei/HUAWEI-PERFMGMT-MIB",
+            "mib_name": "HUAWEI-PERFMGMT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "4accdf8777acdb360ba355b048ff156fe24b1f77e0b774120f0e0eb8af239319",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-PERFORMANCE-MIB": {
+            "file": "mibs/huawei/HUAWEI-PERFORMANCE-MIB",
+            "mib_name": "HUAWEI-PERFORMANCE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "bcc4ea4f4adf819f652fc11b29e8565558f3917b13a65ca34d25e05d272bcda1",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-PFLT-EUDM-MIB": {
+            "file": "mibs/huawei/HUAWEI-PFLT-EUDM-MIB",
+            "mib_name": "HUAWEI-PFLT-EUDM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "d6a6726854a4790c3144f6cdd3f18d09395c333915395c2684b540040aa9029f",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-PGI-MIB": {
+            "file": "mibs/huawei/HUAWEI-PGI-MIB",
+            "mib_name": "HUAWEI-PGI-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "96528cd70fab0d73e99ca8adecc5f812e2b56f5ab5565ae8deb0d41d0572c73b",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-PIM-BSR-MIB": {
+            "file": "mibs/huawei/HUAWEI-PIM-BSR-MIB",
+            "mib_name": "HUAWEI-PIM-BSR-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "aebcb5692023ebfd45cc94120cc0f5c461eab07f5e2c7838c9d420309404a0c8",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-PIM-STD-MIB": {
+            "file": "mibs/huawei/HUAWEI-PIM-STD-MIB",
+            "mib_name": "HUAWEI-PIM-STD-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "e19384d4db5cb96ec398725a7e7f27ce52a7b06f0a8f92a313ecc66b1763f4d6",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-POE-MIB": {
+            "file": "mibs/huawei/HUAWEI-POE-MIB",
+            "mib_name": "HUAWEI-POE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "8cdcdc23ab766cb4a1ebd21225063ee7f80f02f3da5c81faa4e58419b93f3c9e",
+            "device_families": [
+                "vrp",
+                "yunshan"
+            ],
+            "references": [
+                "LibreNMS/OS/Vrp.php",
+                "LibreNMS/OS/Yunshan.php",
+                "resources/definitions/os_detection/vrp.yaml",
+                "resources/definitions/os_detection/yunshan.yaml",
+                "resources/definitions/os_discovery/vrp.yaml",
+                "resources/definitions/os_discovery/yunshan.yaml"
+            ]
+        },
+        "HUAWEI-PORT-MIB": {
+            "file": "mibs/huawei/HUAWEI-PORT-MIB",
+            "mib_name": "HUAWEI-PORT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "dc813748edc0ae799c7e67396ac401c9a42a3cb3b8f0e6b2569816d209392b58",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-PORTAL-MIB": {
+            "file": "mibs/huawei/HUAWEI-PORTAL-MIB",
+            "mib_name": "HUAWEI-PORTAL-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "a1497df2eb538c18fbf64df74e0342d94b68d839b3c761cf767ad5724bbf7ef4",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-POWER-MIB": {
+            "file": "mibs/huawei/HUAWEI-POWER-MIB",
+            "mib_name": "HUAWEI-POWER-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "bfd98bc181b7239bd804e431ed207dce38973e0538f8c3cd283e0bd58ccc0757",
+            "device_families": [
+                "smartax"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/smartax.yaml"
+            ]
+        },
+        "HUAWEI-PPP-MIB": {
+            "file": "mibs/huawei/HUAWEI-PPP-MIB",
+            "mib_name": "HUAWEI-PPP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "6ceb51bd77f808c4aea79bfec8e41a330c772cc95bd1e99e1827f1798f04acbc",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-PTP-MIB": {
+            "file": "mibs/huawei/HUAWEI-PTP-MIB",
+            "mib_name": "HUAWEI-PTP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "f31e60748d8841ed021d0bd646a232ed5a2b5374e77256a56a6c4bc9338dbc0b",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-PWE3-MIB": {
+            "file": "mibs/huawei/HUAWEI-PWE3-MIB",
+            "mib_name": "HUAWEI-PWE3-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "655d8fe3acf0a7c8e3da8741564e2907f92146d6b34a7f7233f65d10db6fd577",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-PWE3-TNL-MIB": {
+            "file": "mibs/huawei/HUAWEI-PWE3-TNL-MIB",
+            "mib_name": "HUAWEI-PWE3-TNL-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "cbc7763839de860c37486abd8bc76f919f2a414b4a18d434c937bc60f50d3277",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-QINQ-MIB": {
+            "file": "mibs/huawei/HUAWEI-QINQ-MIB",
+            "mib_name": "HUAWEI-QINQ-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "9c00f25dc078d557593474b23ca0e77899df8aea4491e185774d1674212184e0",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-RBRP-MIB": {
+            "file": "mibs/huawei/HUAWEI-RBRP-MIB",
+            "mib_name": "HUAWEI-RBRP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "1f8d22d472d5d527686c3e663ab27dca36d843a95438d105100f0a9d323135ab",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-RIPV2-EXT-MIB": {
+            "file": "mibs/huawei/HUAWEI-RIPV2-EXT-MIB",
+            "mib_name": "HUAWEI-RIPV2-EXT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "b1ec7bfa6afea647e39408fb4e21997a31f884756fe83a8ef0a2cfd97cdb5c62",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-RM-EXT-MIB": {
+            "file": "mibs/huawei/HUAWEI-RM-EXT-MIB",
+            "mib_name": "HUAWEI-RM-EXT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "6ef019e0a01670691924d115085ae94d8aea1569f5014ca9ff827398e09a02eb",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-RMON-EXT-MIB": {
+            "file": "mibs/huawei/HUAWEI-RMON-EXT-MIB",
+            "mib_name": "HUAWEI-RMON-EXT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "355085d15206e8079d860328e54d784190c079060b24cd6539c9c72709301128",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-RPR-MIB": {
+            "file": "mibs/huawei/HUAWEI-RPR-MIB",
+            "mib_name": "HUAWEI-RPR-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "148d10190a1e628b87626bb9bddbcf384af2779b1201c8ff4d4677bf8a9363fa",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-RRPP-MIB": {
+            "file": "mibs/huawei/HUAWEI-RRPP-MIB",
+            "mib_name": "HUAWEI-RRPP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "381bd88cc8aeac2e823465509409223e2af0bd7a737bbeaebf39e3746d5ace39",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-RSVPTE-MIB": {
+            "file": "mibs/huawei/HUAWEI-RSVPTE-MIB",
+            "mib_name": "HUAWEI-RSVPTE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "dd13d7bcdbe64b56c3adda5ef33be602535d5d1d8e9e7726f6905d1bdd432408",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-RUMNG-MIB": {
+            "file": "mibs/huawei/HUAWEI-RUMNG-MIB",
+            "mib_name": "HUAWEI-RUMNG-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "b126b3e4a122c1515f1f07976c340d936397e71017cc90052f5601a60d55fe00",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SECSTAT-EUDM-MIB": {
+            "file": "mibs/huawei/HUAWEI-SECSTAT-EUDM-MIB",
+            "mib_name": "HUAWEI-SECSTAT-EUDM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "f7266229f2ac92f543a76430b99408b18c7380a5204d4dd87512c0d40d654d22",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SECSTAT-IP-MONITOR-MIB": {
+            "file": "mibs/huawei/HUAWEI-SECSTAT-IP-MONITOR-MIB",
+            "mib_name": "HUAWEI-SECSTAT-IP-MONITOR-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "8f62ee594997535aa2a241f21cb3e532f467843e1480540101e056586c88f7d7",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SECSTAT-MIB": {
+            "file": "mibs/huawei/HUAWEI-SECSTAT-MIB",
+            "mib_name": "HUAWEI-SECSTAT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "cdb540bcbd888d11bef6cc8288d6cd8ef3410580f80188287e4d084701b4137e",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SECURITY-MIB": {
+            "file": "mibs/huawei/HUAWEI-SECURITY-MIB",
+            "mib_name": "HUAWEI-SECURITY-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "07f62f6e20865d33d8e220c8c74fd33a8de29a310667736bee17b15f75eea8fd",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SECURITY-PKI-MIB": {
+            "file": "mibs/huawei/HUAWEI-SECURITY-PKI-MIB",
+            "mib_name": "HUAWEI-SECURITY-PKI-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "eafb4de7779889c3b1181ba01065663f900c91573b8a7ab560538fc546897b44",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SECURITY-STAT-MIB": {
+            "file": "mibs/huawei/HUAWEI-SECURITY-STAT-MIB",
+            "mib_name": "HUAWEI-SECURITY-STAT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "680e5773c8eb54188815a5ebf1fac055fee7454a999655d123cb82365d2fb34f",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SERVER-IBMC-MIB": {
+            "file": "mibs/huawei/HUAWEI-SERVER-IBMC-MIB",
+            "mib_name": "HUAWEI-SERVER-IBMC-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "1f7aab30c333387e42f08d143c62730ac3e67561c8988c30a5a37eda8030b079",
+            "device_families": [
+                "ibmc"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/ibmc.yaml"
+            ]
+        },
+        "HUAWEI-SITE-MONITOR-MIB": {
+            "file": "mibs/huawei/HUAWEI-SITE-MONITOR-MIB",
+            "mib_name": "HUAWEI-SITE-MONITOR-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "9d997646d71abcc34fe7706aace242732ce15bfad8b63ac79681961b4e084e8b",
+            "device_families": [
+                "huawei-smu"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/huawei-smu.yaml"
+            ]
+        },
+        "HUAWEI-SLOG-EUDM-MIB": {
+            "file": "mibs/huawei/HUAWEI-SLOG-EUDM-MIB",
+            "mib_name": "HUAWEI-SLOG-EUDM-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "7636d14e16dd3c236d04cdd7e9c01eddb296cbe10bdfee46282aed8a949984da",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SMAP-MIB": {
+            "file": "mibs/huawei/HUAWEI-SMAP-MIB",
+            "mib_name": "HUAWEI-SMAP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "e5444ff2b9c8336027e93540ddc0fa54f38403e7790084c7364714f66ce973d3",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SMARTLINK-MIB": {
+            "file": "mibs/huawei/HUAWEI-SMARTLINK-MIB",
+            "mib_name": "HUAWEI-SMARTLINK-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "41b70e585ebebc64c1a9e98f544cc7133654ede7e69a4a3928976ea547a0ca2e",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SNMP-EXT-MIB": {
+            "file": "mibs/huawei/HUAWEI-SNMP-EXT-MIB",
+            "mib_name": "HUAWEI-SNMP-EXT-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "b718fab8fdb9beab51652f75d8d25101c8c4f9bc0b6a8047b9e835a97bb0d714",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SNMP-NOTIFICATION-MIB": {
+            "file": "mibs/huawei/HUAWEI-SNMP-NOTIFICATION-MIB",
+            "mib_name": "HUAWEI-SNMP-NOTIFICATION-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "94e4548ff9638872943802bb1070a806933d32ff2309ce49a69cc31add64e4ec",
+            "device_families": [
+                "trap"
+            ],
+            "references": [
+                "LibreNMS/Snmptrap/Handlers",
+                "config/snmptraps.php"
+            ]
+        },
+        "HUAWEI-SRV6-MIB": {
+            "file": "mibs/huawei/HUAWEI-SRV6-MIB",
+            "mib_name": "HUAWEI-SRV6-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "3dd37085486807c2b97b21d37dc882d496e692fcb6bdc2f32370ad290675eccf",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SSH-MIB": {
+            "file": "mibs/huawei/HUAWEI-SSH-MIB",
+            "mib_name": "HUAWEI-SSH-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "65fd964c17c92ffb45ab0f1014448f56a31a17880816ee921eb84d125b9d73af",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SSL-MIB": {
+            "file": "mibs/huawei/HUAWEI-SSL-MIB",
+            "mib_name": "HUAWEI-SSL-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "25751b9eb48e92a253f47637381354907d8437aa21ac1c33c9a4ea347466df88",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-STACK-MIB": {
+            "file": "mibs/huawei/HUAWEI-STACK-MIB",
+            "mib_name": "HUAWEI-STACK-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "7187eb39ecb063244a30f156c0f06705d187fd2d3420449f30572f3f1c73ba0e",
+            "device_families": [
+                "vrp",
+                "yunshan"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/vrp.yaml",
+                "resources/definitions/os_discovery/yunshan.yaml"
+            ]
+        },
+        "HUAWEI-STORAGE-HARDWARE-MIB": {
+            "file": "mibs/huawei/HUAWEI-STORAGE-HARDWARE-MIB",
+            "mib_name": "HUAWEI-STORAGE-HARDWARE-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "e098481ab1eac067556f2d6502818bb11029c636bf0a2784b742176491880709",
+            "device_families": [
+                "oceanstor"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/oceanstor.yaml"
+            ]
+        },
+        "HUAWEI-STORAGE-NAS-MIB": {
+            "file": "mibs/huawei/HUAWEI-STORAGE-NAS-MIB",
+            "mib_name": "HUAWEI-STORAGE-NAS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "b2dc40a9b269bd062f85701d7d057541ca4bccc7aefbc95e2bf0b5f70f8775dd",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-STORAGE-SPACE-MIB": {
+            "file": "mibs/huawei/HUAWEI-STORAGE-SPACE-MIB",
+            "mib_name": "HUAWEI-STORAGE-SPACE-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "6ccbd7464143b7cc9e03328335a85ac44223774991be292ad9c7c595e77cbf72",
+            "device_families": [
+                "oceanstor"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/oceanstor.yaml"
+            ]
+        },
+        "HUAWEI-SUPERLAG-MIB": {
+            "file": "mibs/huawei/HUAWEI-SUPERLAG-MIB",
+            "mib_name": "HUAWEI-SUPERLAG-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "dd3f93453d58234566122ba45551a9dad2d94dd74f374255e158bd58aaaa84c2",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SWITCH-L2MAM-EXT-MIB": {
+            "file": "mibs/huawei/HUAWEI-SWITCH-L2MAM-EXT-MIB",
+            "mib_name": "HUAWEI-SWITCH-L2MAM-EXT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "179f1156bd65e2029e054d8c7b969925452e00202dd01af8455224ae27eca670",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SYS-CLOCK-MIB": {
+            "file": "mibs/huawei/HUAWEI-SYS-CLOCK-MIB",
+            "mib_name": "HUAWEI-SYS-CLOCK-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "edf349521b75cce7fa063bbd3288ba98e17052a7cd2f0be8555dcfee0d7fa4cf",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SYS-MAN-MIB": {
+            "file": "mibs/huawei/HUAWEI-SYS-MAN-MIB",
+            "mib_name": "HUAWEI-SYS-MAN-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "1e33caeb7ee0a8653f8257ca7cd3c300d4311e83bbbae78302bf0ad8838b1846",
+            "device_families": [],
+            "references": [
+                "LibreNMS/OS/Vrp.php"
+            ]
+        },
+        "HUAWEI-SYSLOG-MIB": {
+            "file": "mibs/huawei/HUAWEI-SYSLOG-MIB",
+            "mib_name": "HUAWEI-SYSLOG-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "5361e484a804755d9f964d3e4bafd9e45a5f8925fa80ae9b8a6deb19d85ff18b",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-SZONE-MIB": {
+            "file": "mibs/huawei/HUAWEI-SZONE-MIB",
+            "mib_name": "HUAWEI-SZONE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "c4a7b81145ee55ff4bf9383aeade0da81c33a32e3c83ef092c9caf730be0a831",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-TAD-MIB": {
+            "file": "mibs/huawei/HUAWEI-TAD-MIB",
+            "mib_name": "HUAWEI-TAD-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "2075bcc90f069df4149606cdcafbe04b6a52b8adfee39e9cdb8f6c3d1f807729",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-TASK-MIB": {
+            "file": "mibs/huawei/HUAWEI-TASK-MIB",
+            "mib_name": "HUAWEI-TASK-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "c970cf717841ac97ebb043af7d34c0e43941eeaa0c2d7ca2c9bef9b76ade289f",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-TC-MIB": {
+            "file": "mibs/huawei/HUAWEI-TC-MIB",
+            "mib_name": "HUAWEI-TC-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "4a7912981100753b34ae0a7432d34053093efde1a4ceefe86d317b5c9dece2f7",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-TCP-MIB": {
+            "file": "mibs/huawei/HUAWEI-TCP-MIB",
+            "mib_name": "HUAWEI-TCP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "e061727eb95f709b628358fd60adec9fc07b42f463b3fc3ff2bdbdd01eefc591",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-TDM-PSN-MIB": {
+            "file": "mibs/huawei/HUAWEI-TDM-PSN-MIB",
+            "mib_name": "HUAWEI-TDM-PSN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "cef965e6adc8a046da48e314dd73877b42bf246ad42aab04b170cd62cbe9279f",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-TRILL-CONF-MIB": {
+            "file": "mibs/huawei/HUAWEI-TRILL-CONF-MIB",
+            "mib_name": "HUAWEI-TRILL-CONF-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "6837152ce750d5783162451fe20a6b820ae734dabb73bea6b5b73e0abbdc760e",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-TRNG-MIB": {
+            "file": "mibs/huawei/HUAWEI-TRNG-MIB",
+            "mib_name": "HUAWEI-TRNG-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "0db441fabc57127e4688924527bda35325f8d7aaab3b659047bc6650239e9165",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-TUNNEL-TE-MIB": {
+            "file": "mibs/huawei/HUAWEI-TUNNEL-TE-MIB",
+            "mib_name": "HUAWEI-TUNNEL-TE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "6e225b7e68b21a8b13fbff1455c59e13b69fcf7f2a1205d99fe135f0cbfe4f36",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-UNIMNG-MIB": {
+            "file": "mibs/huawei/HUAWEI-UNIMNG-MIB",
+            "mib_name": "HUAWEI-UNIMNG-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "100f377bc0ca4b6f6fc085655dfb4b6ed3ccf0f099ee30f07d5061bce24022a2",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-USA-MIB": {
+            "file": "mibs/huawei/HUAWEI-USA-MIB",
+            "mib_name": "HUAWEI-USA-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "44d7c4267a15c6fea33838d8e54b4c432534c48ca3e4681e4cdd05df2c2b9c77",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-USERLOG-MIB": {
+            "file": "mibs/huawei/HUAWEI-USERLOG-MIB",
+            "mib_name": "HUAWEI-USERLOG-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "9ee2ca3cec6270718dda4812366f39619db4f0ca597daaee3307d5125795b463",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-VBST-MIB": {
+            "file": "mibs/huawei/HUAWEI-VBST-MIB",
+            "mib_name": "HUAWEI-VBST-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "f89aec8d9feba6bba883eab76f238638e2a8977b670fbba3e22a509433b5fe13",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-VE-MIB": {
+            "file": "mibs/huawei/HUAWEI-VE-MIB",
+            "mib_name": "HUAWEI-VE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "3e920966630d7a9a8cadc26352e694a4aae40e3b924570dc85471fd258ddbead",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-VGMP-MIB": {
+            "file": "mibs/huawei/HUAWEI-VGMP-MIB",
+            "mib_name": "HUAWEI-VGMP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "e72c57fc75c1c841a665504726d6188334b4596224aac17860400288973ba8ce",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-VLAN-MIB": {
+            "file": "mibs/huawei/HUAWEI-VLAN-MIB",
+            "mib_name": "HUAWEI-VLAN-MIB",
+            "status": "dependency",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "2a3511896f2851f11551bcd0859868e9c0e72ab02aff18ea1ed0fe045adcaf0e",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-VLL-STATISTIC-MIB": {
+            "file": "mibs/huawei/HUAWEI-VLL-STATISTIC-MIB",
+            "mib_name": "HUAWEI-VLL-STATISTIC-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "3f5c00e5ea9cc9dc5c21e4d184bd198c0f15fbda88c83b75a5f65991213b0063",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-VP-MIB": {
+            "file": "mibs/huawei/HUAWEI-VP-MIB",
+            "mib_name": "HUAWEI-VP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "530ff822e708e32242b497ec89c8708de599471663dd1f854ff1f716fcc906dd",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-VPLS-EXT-MIB": {
+            "file": "mibs/huawei/HUAWEI-VPLS-EXT-MIB",
+            "mib_name": "HUAWEI-VPLS-EXT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "05d780e983f12a5ad97d2004b24d44fec1dcc2f3407185bd658600da4a1f21f6",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-VPLS-MIB": {
+            "file": "mibs/huawei/HUAWEI-VPLS-MIB",
+            "mib_name": "HUAWEI-VPLS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "f857fd2cd5ee1d633acab6cf9646ba9f5894c9a10976f4e7bf6556bacbba0e5f",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-VPLS-TNL-MIB": {
+            "file": "mibs/huawei/HUAWEI-VPLS-TNL-MIB",
+            "mib_name": "HUAWEI-VPLS-TNL-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "13f7ff0e8c637679bb73faa391138232c79118c45f77f26c49a833024e4f1ceb",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-VPN-DIAGNOSTICS-MIB": {
+            "file": "mibs/huawei/HUAWEI-VPN-DIAGNOSTICS-MIB",
+            "mib_name": "HUAWEI-VPN-DIAGNOSTICS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "62b61083101bac15a0c38788061a702446b3c4add2493da6bd263dedb027536e",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-VRRP-EXT-MIB": {
+            "file": "mibs/huawei/HUAWEI-VRRP-EXT-MIB",
+            "mib_name": "HUAWEI-VRRP-EXT-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "648e408ef9c72ca67b7a5fe15e38ba64e467a9a90935529df218c1cd203ed733",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-VS-MIB": {
+            "file": "mibs/huawei/HUAWEI-VS-MIB",
+            "mib_name": "HUAWEI-VS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "0df44c5b642cb8d46768142ebb68521c1b341ed80ee3c514b86825d69b66d5dc",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WAN-MIB": {
+            "file": "mibs/huawei/HUAWEI-WAN-MIB",
+            "mib_name": "HUAWEI-WAN-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "02a297746b962733376aadff77ed998d6a80b8912ed65a04bce3d0a626bbdd21",
+            "device_families": [
+                "vrp",
+                "yunshan"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/vrp.yaml",
+                "resources/definitions/os_discovery/yunshan.yaml"
+            ]
+        },
+        "HUAWEI-WARRANTY-MIB": {
+            "file": "mibs/huawei/HUAWEI-WARRANTY-MIB",
+            "mib_name": "HUAWEI-WARRANTY-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "34ec3d63d7c859333b2d7adca529050b9ab509a021723199dc113daed2b90e92",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WLAN-AP-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-AP-MIB",
+            "mib_name": "HUAWEI-WLAN-AP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "42ba472672b9561832157adf5fc6b0784a4f5db3f635c2415ab5b90f500b95fd",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WLAN-AP-RADIO-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-AP-RADIO-MIB",
+            "mib_name": "HUAWEI-WLAN-AP-RADIO-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "ea25b1b46c5f37b3e31c8d70a03214472b204ba86b18d2be8617d79db4c911f8",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WLAN-AP-SERVICE-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-AP-SERVICE-MIB",
+            "mib_name": "HUAWEI-WLAN-AP-SERVICE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "6576b1f59721597a58e06525e35e541ee066e543908827f3a2ae760602e55a4e",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WLAN-AP-UPDATE-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-AP-UPDATE-MIB",
+            "mib_name": "HUAWEI-WLAN-AP-UPDATE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "e02cd05d5909ac69fb3d3d6d997a3c1466f8f0412d8f585ff8eaaf7c475bfed6",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WLAN-CAPWAP-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-CAPWAP-MIB",
+            "mib_name": "HUAWEI-WLAN-CAPWAP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "d19826d31dcfab912d4014e2d525f31fad2d71b78c754d29b4aa83acb0690f52",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WLAN-CONFIGURATION-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-CONFIGURATION-MIB",
+            "mib_name": "HUAWEI-WLAN-CONFIGURATION-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "28ec9acae419d4989db8865ca023fca66d54e7a8c2f8963282d7a6ff2a3501a3",
+            "device_families": [
+                "vrp",
+                "yunshan"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/vrp.yaml",
+                "resources/definitions/os_discovery/yunshan.yaml"
+            ]
+        },
+        "HUAWEI-WLAN-GLOBAL-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-GLOBAL-MIB",
+            "mib_name": "HUAWEI-WLAN-GLOBAL-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "0c09e3f47d77f376f99b14f546502e1d492d69a340501fa3c3aa585693d14ce8",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WLAN-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-MIB",
+            "mib_name": "HUAWEI-WLAN-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "5a66cae5b644536a77ab6fd225ac55bc08db64ba400a563ece1156675e6abd1a",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WLAN-NPE-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-NPE-MIB",
+            "mib_name": "HUAWEI-WLAN-NPE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "2d80388cd228bb8cb48748c07aa39fb90dbfbd2f20135fa070a9cd8b4a315b53",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WLAN-SAC-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-SAC-MIB",
+            "mib_name": "HUAWEI-WLAN-SAC-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "9490ce93a80e93941c4510505dd80d9d60f5a8f7a8a2f6608da5eb2cecb226b2",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WLAN-STATION-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-STATION-MIB",
+            "mib_name": "HUAWEI-WLAN-STATION-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "0dbde470722bb98bf7634aea1600b3f6567de76ab40859994c45a3c50297bdc7",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WLAN-VAP-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-VAP-MIB",
+            "mib_name": "HUAWEI-WLAN-VAP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "79701fa3d985aefbaf20c135e2ceb13badac7f5328337708fabbde58b28c9b93",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-WLAN-WIDS-SERVICE-MIB": {
+            "file": "mibs/huawei/HUAWEI-WLAN-WIDS-SERVICE-MIB",
+            "mib_name": "HUAWEI-WLAN-WIDS-SERVICE-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "632626fe5bba81089dbfc2040c797e9191edda1acd19bed35f3dec095ec5a89b",
+            "device_families": [],
+            "references": []
+        },
+        "HUAWEI-XPON-COMMON-MIB": {
+            "file": "mibs/huawei/HUAWEI-XPON-COMMON-MIB",
+            "mib_name": "HUAWEI-XPON-COMMON-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "46d9c9b598cd3e71d088da7de59b41424c61b2f348af0a3d49557e4accf9b5d7",
+            "device_families": [
+                "smartax"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/smartax.yaml"
+            ]
+        },
+        "HUAWEI-XPON-MIB": {
+            "file": "mibs/huawei/HUAWEI-XPON-MIB",
+            "mib_name": "HUAWEI-XPON-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "563f678d0437927489be25d09924579236bedbe01ed57c177642f3d064f62507",
+            "device_families": [
+                "smartax"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/smartax.yaml"
+            ]
+        },
+        "HUAWEI-XQoS-MIB": {
+            "file": "mibs/huawei/HUAWEI-XQoS-MIB",
+            "mib_name": "HUAWEI-XQoS-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "9f5fb2a37f8cbcd79fd9746ee902b67f75b7fd9ed1b6690dcb7d068fef1fcac6",
+            "device_families": [],
+            "references": []
+        },
+        "HWMUSA-DEV-MIB": {
+            "file": "mibs/huawei/HWMUSA-DEV-MIB",
+            "mib_name": "HWMUSA-DEV-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "94997fa04fb3b133a89dccc99ae2c79634c8465e308f9b2621d3c84c8f94c229",
+            "device_families": [
+                "smartax"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/smartax.yaml"
+            ]
+        },
+        "ISM-HUAWEI-MIB": {
+            "file": "mibs/huawei/ISM-HUAWEI-MIB",
+            "mib_name": "ISM-HUAWEI-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "bd73bae298df4b8b86179ed995601460a520b20aae8b8ff785e48e359b89b195",
+            "device_families": [
+                "oceanstor",
+                "trap"
+            ],
+            "references": [
+                "config/snmptraps.php",
+                "resources/definitions/os_discovery/oceanstor.yaml",
+                "tests/Feature/SnmpTraps/HuaweiAlarmTrapTest.php"
+            ]
+        },
+        "ISM-PERFORMANCE-MIB": {
+            "file": "mibs/huawei/ISM-PERFORMANCE-MIB",
+            "mib_name": "ISM-PERFORMANCE-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "4c67c9cb57bbe3fb73b105fc4baf4a5eb06d86152be3a1d0fbe716a87cfeae12",
+            "device_families": [
+                "oceanstor"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/oceanstor.yaml"
+            ]
+        },
+        "ISM-STORAGE-SVC-MIB": {
+            "file": "mibs/huawei/ISM-STORAGE-SVC-MIB",
+            "mib_name": "ISM-STORAGE-SVC-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "b3ce0cea7f71cb0ac09d125ec2e8b58ddd3aca85a9da48b243be1c599f7ba03e",
+            "device_families": [
+                "oceanstor"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/oceanstor.yaml"
+            ]
+        },
+        "ISM-TRAP-MIB": {
+            "file": "mibs/huawei/ISM-TRAP-MIB",
+            "mib_name": "ISM-TRAP-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "5b61b19dd82959287a325668146d1663ec6745a09a5afc30530ee4264cef8808",
+            "device_families": [],
+            "references": []
+        },
+        "NQA-MIB": {
+            "file": "mibs/huawei/NQA-MIB",
+            "mib_name": "NQA-MIB",
+            "status": "current",
+            "source_version": "V600R025C00SPC600",
+            "sha256": "f0c2341dda69a4d7ec2cefb354eb8d7578ad7902f0727496391a12c4f96ce5de",
+            "device_families": [],
+            "references": [
+                "LibreNMS/OS/Vrp.php"
+            ]
+        },
+        "OPTIX-BOARD-MANAGE-MIB": {
+            "file": "mibs/huawei/OPTIX-BOARD-MANAGE-MIB",
+            "mib_name": "OPTIX-BOARD-MANAGE-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "092e3dfe1d44721928a9b4c1399d491a2b88c24326896f3190cec74efd5d41e1",
+            "device_families": [
+                "huawei-optixrtn"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/huawei-optixrtn.yaml"
+            ]
+        },
+        "OPTIX-MISC-MIB": {
+            "file": "mibs/huawei/OPTIX-MISC-MIB",
+            "mib_name": "OPTIX-MISC-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "c4d2a76abea8add66528acf8ee85fd894da983cacfd5c59261b164575bb069d5",
+            "device_families": [
+                "huawei-optixrtn"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/huawei-optixrtn.yaml"
+            ]
+        },
+        "OPTIX-NE-MIB": {
+            "file": "mibs/huawei/OPTIX-NE-MIB",
+            "mib_name": "OPTIX-NE-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "31d4592ced74a08c8d3fb7157f3091a43635adcc1070ab74667ead53f0f864f4",
+            "device_families": [
+                "huawei-optixrtn"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/huawei-optixrtn.yaml"
+            ]
+        },
+        "OPTIX-OID-MIB": {
+            "file": "mibs/huawei/OPTIX-OID-MIB",
+            "mib_name": "OPTIX-OID-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "3c95c7d113c0ff3c98c459d71c4818aa93251c66a8468ac18cfd19f6c6d12360",
+            "device_families": [
+                "huawei-optixrtn"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/huawei-optixrtn.yaml"
+            ]
+        },
+        "OPTIX-RTN-ODU-MGR-MIB": {
+            "file": "mibs/huawei/OPTIX-RTN-ODU-MGR-MIB",
+            "mib_name": "OPTIX-RTN-ODU-MGR-MIB",
+            "status": "compatibility",
+            "source_version": "repo-compat",
+            "sha256": "171769c722936853a13a29b996f140deda78ceaba8ad9b38b1f32c87a750ed93",
+            "device_families": [
+                "huawei-optixrtn"
+            ],
+            "references": [
+                "resources/definitions/os_discovery/huawei-optixrtn.yaml"
+            ]
+        }
+    }
+}

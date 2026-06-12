@@ -1,0 +1,9 @@
+{
+  "source_file": "V600R025C00SPC600_MIB.zip",
+  "source_version": "V600R025C00SPC600",
+  "sha256": "45e88df40f1fb0238bb585bd388451a0fbada6f932de5290bf090ed25fce200f",
+  "archive_entry_count": 201,
+  "huawei_private_module_count": 123,
+  "standard_dependency_count": 78,
+  "import_policy": "Import HUAWEI-*.mib into mibs/huawei without the .mib suffix. Preserve LibreNMS 26.5.1 modules not supplied by the vendor archive and do not overwrite standard dependency MIBs."
+}

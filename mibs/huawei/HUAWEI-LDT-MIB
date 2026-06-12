@@ -1,10 +1,10 @@
 --  =================================================================
--- Copyright (C) 2021 by  HUAWEI TECHNOLOGIES. All rights reserved
+-- Copyright (C) 2023 by  HUAWEI TECHNOLOGIES. All rights reserved
 -- 
 -- Description: HUAWEI LDT MIB, this mib will maintain infomation of LDT 
 --              for datacomm product.  
 -- Reference:
--- Version:     V1.07
+-- Version:     V1.08
 -- History:
 --  V1.03 2018-01-09 Add new node hwPortLoopDetectL2vpnTable,hwPortL2vpnLoopDetect,hwPortL2vpnLoopDetectRecovery.
 --  V1.00 2008-07-15 initial version
@@ -35,7 +35,7 @@ HUAWEI-LDT-MIB DEFINITIONS ::= BEGIN
         FROM P-BRIDGE-MIB;
          
     hwLdtMIB MODULE-IDENTITY
-			LAST-UPDATED "202108211000Z"	    -- August 21, 2021 at 19:00 GMT
+			LAST-UPDATED "202312071000Z"	    -- Dec 07, 2023 at 19:00 GMT
 			ORGANIZATION 
 				 "Huawei Technologies Co.,Ltd."
 			CONTACT-INFO 
@@ -48,6 +48,9 @@ HUAWEI-LDT-MIB DEFINITIONS ::= BEGIN
          "
 		 DESCRIPTION
             "V1.07, Modify node hwLdtPortMode."
+            REVISION "202312071000Z"	    -- Dec 07, 2023 at 19:00 GMT
+            DESCRIPTION "Update node hwLdtPortLoopDetect, hwLdtPortLoopDetectRecovery."
+
             REVISION "202108211000Z"	    -- August 21, 2021 at 19:00 GMT
             DESCRIPTION "Roll back modification"
 
@@ -571,16 +574,17 @@ HUAWEI-LDT-MIB DEFINITIONS ::= BEGIN
       OBJECTS {hwLPortLoopDetectIfName,hwLdtPortLoopDetectVlanList,hwPortLoopDetectStatus,hwLdtPortLoopAutoTrapVlanList}
      STATUS current    
     DESCRIPTION 
-          "Notify the NMS that Loopback does exist on this port,
-		  hwLdtPortLoopDetectVlanList node indicates that which VLAN exits loopback,
-		  hwPortLoopDetectStatus node is the status of this port."
+          "Notify the NMS that a loop occurs on a port.
+		  hwLdtPortLoopDetectVlanList indicates the VLANs where a loop is detected.
+		  hwPortLoopDetectStatus indicates the port status.
+                  hwLdtPortLoopAutoTrapVlanList indicates the VLANs for which only an alarm is reported after a loop is detected."
     ::= { hwLdtTraps 3}  
 	
       hwLdtPortLoopDetectRecovery  NOTIFICATION-TYPE
       OBJECTS {hwLPortLoopDetectIfName,hwPortLoopDetectStatus}
      STATUS current    
     DESCRIPTION 
-          "Notify the NMS that Loopback disappeared on this port."
+          "Notify the NMS that the loop on a port was eliminated."
     ::= { hwLdtTraps 4}  
 
     

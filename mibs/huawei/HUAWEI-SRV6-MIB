@@ -1,0 +1,141 @@
+-- ===========================================================================
+-- Copyright(C) 2021 by HUAWEI TECHNOLOGIES. All rights reserved.
+-- Description: HUAWEI-SRV6-MIB
+-- Version: V1.02
+-- History:
+-- Reference:   Module(HUAWEI-SRV6-MIB) Extracted from RFCXXXX.TXT,from XXXX to XXXXX.Obsoletes: 1850
+-- =====================================================================================================
+
+   HUAWEI-SRV6-MIB DEFINITIONS ::= BEGIN
+
+   IMPORTS
+       MODULE-IDENTITY, OBJECT-TYPE, NOTIFICATION-TYPE
+                    FROM SNMPv2-SMI
+       MODULE-COMPLIANCE, OBJECT-GROUP, NOTIFICATION-GROUP
+                    FROM SNMPv2-CONF
+	   hwDatacomm            
+					FROM HUAWEI-MIB
+	   InetAddressIPv6, InetAddressPrefixLength
+                    FROM INET-ADDRESS-MIB;
+					
+     hwSrv6 MODULE-IDENTITY
+
+          LAST-UPDATED "202104161630Z" -- Apr 16, 2021 16:30:00 EST
+		  ORGANIZATION 
+			"Huawei Technologies Co.,Ltd."
+		  CONTACT-INFO 
+			"Huawei Industrial Base
+			Bantian, Longgang
+			Shenzhen 518129
+			People's Republic of China
+			Website: http://www.huawei.com
+			Email: support@huawei.com"
+
+          DESCRIPTION
+             "The MIB module for SRv6."
+
+          REVISION "202104161630Z"
+            DESCRIPTION "V1.02,
+                          1. Modify history record."
+
+          REVISION "202002261757Z"            
+             DESCRIPTION "V1.01, 
+                          1. Added hwSrv6SidPrefixLength."
+
+			REVISION "202002191800Z"            
+             DESCRIPTION "V1.00, 
+                          1. Added the hwSrv6 MIB."
+          ::= { hwDatacomm 363 }
+
+   --  Trap Support Objects
+
+   --  The following are support objects for the SRv6 traps.
+
+     hwSrv6TrapsObjects OBJECT IDENTIFIER ::= { hwSrv6 1 }
+     hwSrv6Traps OBJECT IDENTIFIER ::= { hwSrv6 2 }
+		  
+	 hwSrv6Sid OBJECT-TYPE
+	     SYNTAX       InetAddressIPv6
+         MAX-ACCESS   accessible-for-notify
+         STATUS       current
+         DESCRIPTION
+			"SRv6 SID index." 
+         ::= { hwSrv6TrapsObjects 1 }	
+
+  	 hwSrv6SidPrefixLength OBJECT-TYPE 
+         SYNTAX          InetAddressPrefixLength (1..128) 
+         UNITS           "bits" 
+         MAX-ACCESS      accessible-for-notify 
+         STATUS          current 
+         DESCRIPTION 
+            "The length of SRv6 SID prefix (in bits). " 
+         ::= { hwSrv6TrapsObjects 2 } 
+		
+   --  Traps     
+	 hwSrv6SidRouteConflict NOTIFICATION-TYPE
+          OBJECTS { 
+                   hwSrv6Sid,
+                   hwSrv6SidPrefixLength
+             }
+          STATUS       current
+          DESCRIPTION
+             "An hwSrv6SidRouteConflict trap signifies that a SID 
+			 is conflict with a route."
+          ::= { hwSrv6Traps 1 }
+
+     hwSrv6SidRouteConflictClear NOTIFICATION-TYPE
+          OBJECTS { 
+	hwSrv6Sid,
+	hwSrv6SidPrefixLength
+             }
+          STATUS       current
+          DESCRIPTION
+             "Clear hwSrv6SidRouteConflict trap."
+          ::= { hwSrv6Traps 2 }		  
+
+   hwSrv6Conformance OBJECT IDENTIFIER ::= { hwSrv6 3 }
+   hwSrv6Groups      OBJECT IDENTIFIER ::= { hwSrv6Conformance 1 }
+   hwSrv6Compliances OBJECT IDENTIFIER ::= { hwSrv6Conformance 2 }
+
+   --  compliance statements
+
+   hwSrv6Compliance MODULE-COMPLIANCE
+        STATUS       current
+        DESCRIPTION
+           "The compliance statement."
+        MODULE       -- this module
+        MANDATORY-GROUPS { hwSrv6TrapsObjectsGroup, hwSrv6TrapEventGroup }        
+		OBJECT       hwSrv6Sid
+        MIN-ACCESS   accessible-for-notify
+        DESCRIPTION
+           "This object is only required to be supplied within
+           notifications."
+		OBJECT       hwSrv6SidPrefixLength
+        MIN-ACCESS   accessible-for-notify
+        DESCRIPTION
+           "This object is only required to be supplied within
+           notifications."
+        ::= { hwSrv6Compliances 1 }
+
+   --  units of conformance
+
+     hwSrv6TrapsObjectsGroup    OBJECT-GROUP
+          OBJECTS { hwSrv6Sid,
+	           hwSrv6SidPrefixLength}
+          STATUS       current
+          DESCRIPTION
+             "These objects are required to control traps from HUAWEI SRv6 systems."
+          ::= { hwSrv6Groups 1 }
+
+     hwSrv6TrapEventGroup       NOTIFICATION-GROUP
+          NOTIFICATIONS {             
+			 hwSrv6SidRouteConflict,
+			 hwSrv6SidRouteConflictClear
+             }
+          STATUS        current
+          DESCRIPTION
+             "A grouping of SRv6 trap events, as specified
+             in NOTIFICATION-TYPE constructs."
+          ::= { hwSrv6Groups 2 }
+
+   END
