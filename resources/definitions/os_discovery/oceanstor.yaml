@@ -1,5 +1,7 @@
+mib: ISM-HUAWEI-MIB:ISM-STORAGE-SVC-MIB:HUAWEI-STORAGE-HARDWARE-MIB:HUAWEI-STORAGE-SPACE-MIB:ISM-PERFORMANCE-MIB
 modules:
     os:
+        hardware: ISM-STORAGE-SVC-MIB::deviceName.0
         version: ISM-STORAGE-SVC-MIB::version.0
         serial: ISM-STORAGE-SVC-MIB::deviceId.0
     storage:

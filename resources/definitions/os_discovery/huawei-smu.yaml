@@ -1,6 +1,11 @@
+mib: HUAWEI-MIB:HUAWEI-SITE-MONITOR-MIB
 modules:
     os:
+        hardware: HUAWEI-SITE-MONITOR-MIB::hwMonEquipName.1
         version: HUAWEI-SITE-MONITOR-MIB::hwMonEquipSoftwareVersion.1
+        features: HUAWEI-SITE-MONITOR-MIB::hwMonEquipPcbVersion.1
+        features_template: 'PCB {{ HUAWEI-SITE-MONITOR-MIB::hwMonEquipPcbVersion.1 }}'
+        serial: HUAWEI-SITE-MONITOR-MIB::hwMonEquipSerialNo.1
     additional_oids:
         data:
             -

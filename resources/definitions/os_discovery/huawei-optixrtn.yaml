@@ -1,3 +1,4 @@
+mib: OPTIX-BOARD-MANAGE-MIB:OPTIX-MISC-MIB:OPTIX-NE-MIB:OPTIX-OID-MIB:OPTIX-RTN-ODU-MGR-MIB
 modules:
     os:
         hardware:
