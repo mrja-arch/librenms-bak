@@ -1,0 +1,155 @@
+name: ${COMPOSE_PROJECT_NAME:-librenms}
+
+x-librenms-env: &librenms-env
+  TZ: ${TZ:-Asia/Shanghai}
+  PUID: ${PUID:-1000}
+  PGID: ${PGID:-1000}
+  DB_HOST: db
+  DB_NAME: ${DB_DATABASE:-librenms}
+  DB_USER: ${DB_USERNAME:-librenms}
+  DB_PASSWORD: ${DB_PASSWORD:-librenms}
+  DB_TIMEOUT: ${DB_TIMEOUT:-60}
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
+  BASE_URL: ${APP_URL:-http://localhost:8000}
+  APP_URL: ${APP_URL:-http://localhost:8000}
+  SNMP_TRAP_COMMUNITY: ${SNMP_TRAP_COMMUNITY:-public}
+  SNMP_EXTRA_MIB_DIRS: ${SNMP_EXTRA_MIB_DIRS:-/opt/librenms/mibs/huawei}
+  HUAWEI_TRAP_MODULES: ${HUAWEI_TRAP_MODULES:-HUAWEI-BASE-TRAP-MIB:HUAWEI-ENTITY-TRAP-MIB:HUAWEI-FWD-RES-TRAP-MIB:HUAWEI-LDT-MIB:HUAWEI-NTP-TRAP-MIB:HUAWEI-SNMP-NOTIFICATION-MIB:ISM-HUAWEI-MIB}
+
+services:
+  db:
+    image: mariadb:11.4
+    command:
+      - --innodb-file-per-table=1
+      - --lower-case-table-names=0
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      TZ: ${TZ:-Asia/Shanghai}
+      MARIADB_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: ${DB_DATABASE:-librenms}
+      MYSQL_USER: ${DB_USERNAME:-librenms}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-librenms}
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD --silent"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.2-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  librenms:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.huawei
+      args:
+        LIBRENMS_IMAGE: ${LIBRENMS_IMAGE:-librenms/librenms:26.5.1}
+        SOURCE_COMMIT: ${SOURCE_COMMIT:-local}
+        CUSTOM_VERSION: ${CUSTOM_VERSION:-26.5.1-custom}
+    image: ${LIBRENMS_CUSTOM_IMAGE:-mrja/librenms:26.5.1-custom}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    ports:
+      - "${WEB_PORT:-8000}:8000"
+    environment:
+      <<: *librenms-env
+    volumes:
+      - librenms-data:/data
+    restart: unless-stopped
+
+  dispatcher:
+    image: ${LIBRENMS_CUSTOM_IMAGE:-mrja/librenms:26.5.1-custom}
+    depends_on:
+      librenms:
+        condition: service_started
+      redis:
+        condition: service_started
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      <<: *librenms-env
+      DISPATCHER_NODE_ID: ${DISPATCHER_NODE_ID:-dispatcher-1}
+      SIDECAR_DISPATCHER: "1"
+    volumes:
+      - librenms-data:/data
+    restart: unless-stopped
+
+  snmptrapd:
+    image: ${LIBRENMS_CUSTOM_IMAGE:-mrja/librenms:26.5.1-custom}
+    depends_on:
+      librenms:
+        condition: service_started
+      redis:
+        condition: service_started
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    ports:
+      - "${SNMPTRAP_PORT:-162}:162/tcp"
+      - "${SNMPTRAP_PORT:-162}:162/udp"
+    environment:
+      <<: *librenms-env
+      SIDECAR_SNMPTRAPD: "1"
+    volumes:
+      - librenms-data:/data
+    restart: unless-stopped
+
+  syslogng:
+    image: ${LIBRENMS_CUSTOM_IMAGE:-mrja/librenms:26.5.1-custom}
+    profiles: ["syslog"]
+    depends_on:
+      librenms:
+        condition: service_started
+      redis:
+        condition: service_started
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    ports:
+      - "${SYSLOG_PORT:-514}:514/tcp"
+      - "${SYSLOG_PORT:-514}:514/udp"
+    environment:
+      <<: *librenms-env
+      SIDECAR_SYSLOGNG: "1"
+    volumes:
+      - librenms-data:/data
+    restart: unless-stopped
+
+  oxidized:
+    image: ${OXIDIZED_IMAGE:-oxidized/oxidized:0.29.1}
+    profiles: ["oxidized"]
+    ports:
+      - "${OXIDIZED_PORT:-8888}:8888"
+    environment:
+      CONFIG_RELOAD_INTERVAL: ${OXIDIZED_CONFIG_RELOAD_INTERVAL:-600}
+    volumes:
+      - ./oxidized:/root/.config/oxidized
+      - oxidized-output:/root/.config/oxidized/output
+    restart: unless-stopped
+
+volumes:
+  db-data:
+  redis-data:
+  librenms-data:
+  oxidized-output:

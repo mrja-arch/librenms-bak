@@ -1,0 +1,47 @@
+ARG LIBRENMS_IMAGE=librenms/librenms:26.5.1
+FROM ${LIBRENMS_IMAGE}
+
+ARG LIBRENMS_IMAGE
+ARG SOURCE_COMMIT=local
+ARG CUSTOM_VERSION=26.5.1-custom
+
+USER root
+WORKDIR /opt/librenms
+
+# Keep Docker-runtime configuration outside the Git source replacement.
+RUN cp /opt/librenms/.env /tmp/librenms-runtime.env \
+    && cp /opt/librenms/config.php /tmp/librenms-runtime-config.php \
+    && rm -rf /opt/librenms
+COPY --chown=librenms:librenms . /opt/librenms
+
+RUN mkdir -p \
+        bootstrap/cache \
+        config.d \
+        storage/framework/cache/data \
+        storage/framework/sessions \
+        storage/framework/views \
+        storage/logs \
+    && cp /tmp/librenms-runtime.env /opt/librenms/.env \
+    && cp /tmp/librenms-runtime-config.php /opt/librenms/config.php \
+    && chown -R librenms:librenms /opt/librenms
+
+USER librenms
+
+RUN composer install \
+        --no-dev \
+        --prefer-dist \
+        --no-interaction \
+        --no-progress \
+        --optimize-autoloader
+
+USER root
+
+RUN chmod +x scripts/huawei-mib-workflow.php \
+    && printf '{"version":"%s","source_commit":"%s","source_tree":"/opt/librenms"}\n' \
+        "${CUSTOM_VERSION}" "${SOURCE_COMMIT}" > /opt/librenms/.custom-build.json \
+    && chown librenms:librenms /opt/librenms/.custom-build.json
+
+LABEL org.opencontainers.image.title="LibreNMS Huawei Custom"
+LABEL org.opencontainers.image.version="${CUSTOM_VERSION}"
+LABEL org.opencontainers.image.revision="${SOURCE_COMMIT}"
+LABEL org.opencontainers.image.base.name="${LIBRENMS_IMAGE}"

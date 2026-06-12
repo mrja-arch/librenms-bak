@@ -1,5 +1,11 @@
 # Docker 部署与调试说明
 
+当前镜像以 `librenms/librenms:26.5.1` 作为运行环境，并用当前 Git 分支的完整源码替换 `/opt/librenms`。官方镜像不再作为应用源码来源，也不再通过零散文件补丁进行汉化。
+
+默认自有镜像名称为 `mrja/librenms:26.5.1-custom`，可通过 `LIBRENMS_CUSTOM_IMAGE` 覆盖。
+
+镜像只保留官方运行环境生成的 `.env`、`config.php` 和空的 `config.d` 目录；这些是 Docker `/init` 的运行支撑文件，不属于应用源码。
+
 ## 1. 目标
 
 本仓库的 Docker 结构服务于：
