@@ -1,0 +1,69 @@
+services:
+  db:
+    volumes:
+      - ./mariadb/production-200.cnf:/etc/mysql/conf.d/90-production-200.cnf:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 5G
+    logging:
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  redis:
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "768mb", "--maxmemory-policy", "allkeys-lru"]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  librenms:
+    deploy:
+      resources:
+        limits:
+          cpus: "1.5"
+          memory: 2G
+    logging:
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  dispatcher:
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"
+          memory: 5G
+    logging:
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+  operations-worker:
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+    logging:
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  snmptrapd:
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+    logging:
+      options:
+        max-size: "20m"
+        max-file: "5"

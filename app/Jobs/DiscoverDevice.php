@@ -11,6 +11,7 @@ use App\Models\Device;
 use App\Models\Eventlog;
 use App\Polling\Measure\Measurement;
 use App\Polling\Measure\MeasurementManager;
+use App\Services\DeviceOperationLock;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -46,6 +47,11 @@ class DiscoverDevice implements ShouldQueue
      */
     public function handle(): void
     {
+        app(DeviceOperationLock::class)->run($this->device_id, fn () => $this->discover());
+    }
+
+    private function discover(): void
+    {
         $this->initDevice();
         App::forgetInstance('sensor-discovery');
         DiscoveringDevice::dispatch($this->device);
@@ -67,7 +73,7 @@ class DiscoverDevice implements ShouldQueue
             $measurement->getDuration()));
 
         $this->device->last_discovered = Carbon::now();
-        $this->device->last_discovered_timetaken = $measurement->getDuration();
+        $this->device->last_discovered_timetaken = max(0, $measurement->getDuration());
         $this->device->save();
 
         DeviceDiscovered::dispatch($this->device);

@@ -233,6 +233,10 @@
                         @if($links)
                         <li><a href="{{ url('map') }}"><i class="fa fa-sitemap fa-fw fa-lg"
                                                           aria-hidden="true"></i> {{ __('Network') }}</a></li>
+                        @can('admin')
+                        <li><a href="{{ route('topology-links.index') }}"><i class="fa fa-link fa-fw fa-lg"
+                                                          aria-hidden="true"></i> {{ __('Discovered Links') }}</a></li>
+                        @endcan
                         @endif
                         <li><a href="{{ url('fullscreenmap') }}"><i class="fa fa-expand fa-fw fa-lg"
                                                                     aria-hidden="true"></i> {{ __('Geographical') }}

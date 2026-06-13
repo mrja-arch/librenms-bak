@@ -129,6 +129,7 @@ return [
         'JUNIPER-VPN-MIB::jnxVpnPwDown' => LibreNMS\Snmptrap\Handlers\JnxVpnPwDown::class,
         'JUNIPER-VPN-MIB::jnxVpnPwUp' => LibreNMS\Snmptrap\Handlers\JnxVpnPwUp::class,
         'LOG-MIB::logTrap' => LibreNMS\Snmptrap\Handlers\LogTrap::class,
+        'LLDP-MIB::lldpRemTablesChange' => LibreNMS\Snmptrap\Handlers\LldpTopologyChanged::class,
         'MG-SNMP-UPS-MIB::upsmgUtilityFailure' => LibreNMS\Snmptrap\Handlers\UpsmgUtilityFailure::class,
         'MG-SNMP-UPS-MIB::upsmgUtilityRestored' => LibreNMS\Snmptrap\Handlers\UpsmgUtilityRestored::class,
         'NETGEAR-SMART-SWITCHING-MIB::failedUserLoginTrap' => LibreNMS\Snmptrap\Handlers\FailedUserLogin::class,

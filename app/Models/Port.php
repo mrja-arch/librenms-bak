@@ -509,7 +509,8 @@ class Port extends DeviceRelatedModel
      */
     public function xdpLinkedPorts(): BelongsToMany
     {
-        return $this->belongsToMany(Port::class, 'links', 'local_port_id', 'remote_port_id');
+        return $this->belongsToMany(Port::class, 'links', 'local_port_id', 'remote_port_id')
+            ->wherePivot('status', 'active');
     }
 
     /**

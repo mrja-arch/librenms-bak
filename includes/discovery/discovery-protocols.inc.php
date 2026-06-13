@@ -563,9 +563,19 @@ foreach (dbFetchRows($sql, [$device['device_id']]) as $test) {
     d_echo("$local_port_id -> $remote_hostname -> $remote_port \n");
 
     if (! isset($link_exists[$local_port_id][$remote_hostname][$remote_port])) {
-        echo '-';
-        $rows = Link::where('id', $test['id'])->delete();
-        d_echo("$rows deleted ");
+        $link = Link::find($test['id']);
+        if ($link) {
+            $link->missed_discoveries++;
+            if ($link->missed_discoveries >= 2) {
+                $link->status = 'stale';
+                $link->stale_at ??= now();
+                echo 's';
+            } else {
+                echo '?';
+            }
+            $link->save();
+            d_echo("link miss count: {$link->missed_discoveries} ");
+        }
     }
 }
 

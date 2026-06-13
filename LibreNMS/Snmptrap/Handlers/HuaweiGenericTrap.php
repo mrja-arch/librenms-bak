@@ -3,6 +3,7 @@
 namespace LibreNMS\Snmptrap\Handlers;
 
 use App\Models\Device;
+use App\Services\TopologyRefreshScheduler;
 use Illuminate\Support\Str;
 use LibreNMS\Enum\Severity;
 use LibreNMS\Interfaces\SnmptrapHandler;
@@ -10,6 +11,10 @@ use LibreNMS\Snmptrap\Trap;
 
 class HuaweiGenericTrap implements SnmptrapHandler
 {
+    public function __construct(private readonly TopologyRefreshScheduler $topologyRefresh)
+    {
+    }
+
     public function handle(Device $device, Trap $trap): void
     {
         $trapOid = $trap->getTrapOid();
@@ -28,6 +33,10 @@ class HuaweiGenericTrap implements SnmptrapHandler
             'trap',
             $reference !== '' ? $reference : null
         );
+
+        if (Str::contains($trapOid, ['Lldp', 'LLDP']) && Str::contains($trapOid, ['Change', 'Changed'])) {
+            $this->topologyRefresh->schedule($device, $trapOid);
+        }
     }
 
     private function mapSeverity(string $trapOid): Severity

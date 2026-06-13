@@ -10,6 +10,7 @@ use App\Models\Device;
 use App\Models\Eventlog;
 use App\Polling\Measure\Measurement;
 use App\Polling\Measure\MeasurementManager;
+use App\Services\DeviceOperationLock;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -52,6 +53,11 @@ class PollDevice implements ShouldQueue
      * Execute the job.
      */
     public function handle(): void
+    {
+        app(DeviceOperationLock::class)->run($this->device_id, fn () => $this->poll());
+    }
+
+    private function poll(): void
     {
         $this->initDevice();
         $this->initRrdDirectory();
@@ -200,7 +206,7 @@ EOH, $this->device->hostname, $os_group ? " ($os_group)" : '', $this->device->de
     {
         $measurement->manager()->record('device', $measurement);
         $this->device->last_polled = Carbon::now();
-        $this->device->last_polled_timetaken = $measurement->getDuration();
+        $this->device->last_polled_timetaken = max(0, $measurement->getDuration());
 
         app('Datastore')->put($this->deviceArray, 'poller-perf', [
             'rrd_def' => RrdDefinition::make()->addDataset('poller', 'GAUGE', 0),

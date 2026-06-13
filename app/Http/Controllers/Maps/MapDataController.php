@@ -654,6 +654,12 @@ class MapDataController extends Controller
                         continue;
                     }
 
+                    // MAC learning and malformed discovery data can point a port back
+                    // to itself. These associations are not physical topology links.
+                    if ($port->port_id === $remote_port->port_id || $port->device_id === $remote_port->device_id) {
+                        continue;
+                    }
+
                     if ($port->port_id < $remote_port->port_id) {
                         $port_ids = $port->port_id . '.' . $remote_port->port_id;
                     } else {

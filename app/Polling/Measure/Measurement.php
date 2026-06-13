@@ -28,12 +28,12 @@ namespace App\Polling\Measure;
 
 class Measurement
 {
-    private $start;
+    private int $start;
     private $duration;
 
     private function __construct(private readonly string $type, ?float $duration = null)
     {
-        $this->start = microtime(true);
+        $this->start = hrtime(true);
         if ($duration !== null) {
             $this->duration = $duration;
         }
@@ -63,7 +63,7 @@ class Measurement
      */
     public function end(): Measurement
     {
-        $this->duration = microtime(true) - $this->start;
+        $this->duration = max(0, (hrtime(true) - $this->start) / 1_000_000_000);
 
         return $this;
     }

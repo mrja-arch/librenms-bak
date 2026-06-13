@@ -9,6 +9,7 @@
 !/.mention-bot
 !/.env.example
 !/docker/.env.example
+!/docker/.env.production-200.example
 
 # Others #
 ##########

@@ -13,6 +13,34 @@ class Link extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'local_port_id',
+        'local_device_id',
+        'remote_port_id',
+        'active',
+        'protocol',
+        'remote_hostname',
+        'remote_device_id',
+        'remote_port',
+        'remote_platform',
+        'remote_version',
+        'status',
+        'missed_discoveries',
+        'first_seen_at',
+        'last_seen_at',
+        'stale_at',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'active' => 'boolean',
+            'first_seen_at' => 'datetime',
+            'last_seen_at' => 'datetime',
+            'stale_at' => 'datetime',
+        ];
+    }
+
     // ---- Define Relationships ----
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Device, $this>

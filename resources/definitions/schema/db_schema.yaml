@@ -715,6 +715,59 @@ devices_perms:
   Indexes:
     PRIMARY: { Name: PRIMARY, Columns: [id], Unique: true, Type: BTREE }
     devices_perms_user_id_index: { Name: devices_perms_user_id_index, Columns: [user_id], Unique: false, Type: BTREE }
+device_discovery_candidates:
+  Columns:
+    - { Field: id, Type: 'bigint unsigned', 'Null': false, Extra: auto_increment }
+    - { Field: identity_key, Type: varchar(191), 'Null': false, Extra: '' }
+    - { Field: ip, Type: varchar(45), 'Null': true, Extra: '' }
+    - { Field: hostname, Type: varchar(255), 'Null': true, Extra: '' }
+    - { Field: sys_name, Type: varchar(255), 'Null': true, Extra: '' }
+    - { Field: sys_descr, Type: text, 'Null': true, Extra: '' }
+    - { Field: sys_object_id, Type: varchar(255), 'Null': true, Extra: '' }
+    - { Field: os, Type: varchar(64), 'Null': true, Extra: '' }
+    - { Field: device_type, Type: varchar(64), 'Null': true, Extra: '' }
+    - { Field: ping_status, Type: tinyint, 'Null': true, Extra: '' }
+    - { Field: snmp_status, Type: tinyint, 'Null': true, Extra: '' }
+    - { Field: source_methods, Type: longtext, 'Null': false, Extra: '' }
+    - { Field: source_device_id, Type: 'int unsigned', 'Null': true, Extra: '' }
+    - { Field: source_port_id, Type: 'int unsigned', 'Null': true, Extra: '' }
+    - { Field: status, Type: varchar(24), 'Null': false, Extra: '', Default: pending }
+    - { Field: metadata, Type: longtext, 'Null': true, Extra: '' }
+    - { Field: first_seen_at, Type: timestamp, 'Null': false, Extra: '' }
+    - { Field: last_seen_at, Type: timestamp, 'Null': false, Extra: '' }
+    - { Field: approved_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: ignored_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: approved_by, Type: 'int unsigned', 'Null': true, Extra: '' }
+    - { Field: ignored_by, Type: 'int unsigned', 'Null': true, Extra: '' }
+    - { Field: managed_device_id, Type: 'int unsigned', 'Null': true, Extra: '' }
+    - { Field: last_error, Type: text, 'Null': true, Extra: '' }
+    - { Field: created_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: updated_at, Type: timestamp, 'Null': true, Extra: '' }
+  Indexes:
+    PRIMARY: { Name: PRIMARY, Columns: [id], Unique: true, Type: BTREE }
+    device_discovery_candidates_identity_key_unique: { Name: device_discovery_candidates_identity_key_unique, Columns: [identity_key], Unique: true, Type: BTREE }
+    device_discovery_candidates_ip_index: { Name: device_discovery_candidates_ip_index, Columns: [ip], Unique: false, Type: BTREE }
+    device_discovery_candidates_managed_device_id_index: { Name: device_discovery_candidates_managed_device_id_index, Columns: [managed_device_id], Unique: false, Type: BTREE }
+    device_discovery_candidates_source_device_id_index: { Name: device_discovery_candidates_source_device_id_index, Columns: [source_device_id], Unique: false, Type: BTREE }
+    device_discovery_candidates_source_port_id_index: { Name: device_discovery_candidates_source_port_id_index, Columns: [source_port_id], Unique: false, Type: BTREE }
+    device_discovery_candidates_status_index: { Name: device_discovery_candidates_status_index, Columns: [status], Unique: false, Type: BTREE }
+device_discovery_scans:
+  Columns:
+    - { Field: id, Type: 'bigint unsigned', 'Null': false, Extra: auto_increment }
+    - { Field: status, Type: varchar(24), 'Null': false, Extra: '', Default: queued }
+    - { Field: networks, Type: longtext, 'Null': false, Extra: '' }
+    - { Field: total_hosts, Type: 'int unsigned', 'Null': false, Extra: '', Default: '0' }
+    - { Field: processed_hosts, Type: 'int unsigned', 'Null': false, Extra: '', Default: '0' }
+    - { Field: candidates_found, Type: 'int unsigned', 'Null': false, Extra: '', Default: '0' }
+    - { Field: requested_by, Type: 'int unsigned', 'Null': true, Extra: '' }
+    - { Field: started_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: completed_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: error, Type: text, 'Null': true, Extra: '' }
+    - { Field: created_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: updated_at, Type: timestamp, 'Null': true, Extra: '' }
+  Indexes:
+    PRIMARY: { Name: PRIMARY, Columns: [id], Unique: true, Type: BTREE }
+    device_discovery_scans_status_index: { Name: device_discovery_scans_status_index, Columns: [status], Unique: false, Type: BTREE }
 device_graphs:
   Columns:
     - { Field: id, Type: 'bigint unsigned', 'Null': false, Extra: auto_increment }
@@ -787,6 +840,30 @@ device_stats:
     device_stats_device_id_unique: { Name: device_stats_device_id_unique, Columns: [device_id], Unique: true, Type: BTREE }
   Constraints:
     device_stats_device_id_foreign: { name: device_stats_device_id_foreign, foreign_key: device_id, table: devices, key: device_id, extra: 'ON DELETE CASCADE' }
+diagnostic_bundles:
+  Columns:
+    - { Field: id, Type: 'bigint unsigned', 'Null': false, Extra: auto_increment }
+    - { Field: operation_task_id, Type: 'bigint unsigned', 'Null': true, Extra: '' }
+    - { Field: device_id, Type: 'int unsigned', 'Null': true, Extra: '' }
+    - { Field: requested_by, Type: 'int unsigned', 'Null': false, Extra: '' }
+    - { Field: status, Type: varchar(24), 'Null': false, Extra: '', Default: queued }
+    - { Field: path, Type: varchar(255), 'Null': true, Extra: '' }
+    - { Field: filename, Type: varchar(255), 'Null': true, Extra: '' }
+    - { Field: size, Type: 'bigint unsigned', 'Null': true, Extra: '' }
+    - { Field: sha256, Type: char(64), 'Null': true, Extra: '' }
+    - { Field: error, Type: text, 'Null': true, Extra: '' }
+    - { Field: started_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: completed_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: expires_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: created_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: updated_at, Type: timestamp, 'Null': true, Extra: '' }
+  Indexes:
+    PRIMARY: { Name: PRIMARY, Columns: [id], Unique: true, Type: BTREE }
+    diagnostic_bundles_device_id_index: { Name: diagnostic_bundles_device_id_index, Columns: [device_id], Unique: false, Type: BTREE }
+    diagnostic_bundles_expires_at_index: { Name: diagnostic_bundles_expires_at_index, Columns: [expires_at], Unique: false, Type: BTREE }
+    diagnostic_bundles_operation_task_id_index: { Name: diagnostic_bundles_operation_task_id_index, Columns: [operation_task_id], Unique: false, Type: BTREE }
+    diagnostic_bundles_requested_by_index: { Name: diagnostic_bundles_requested_by_index, Columns: [requested_by], Unique: false, Type: BTREE }
+    diagnostic_bundles_status_index: { Name: diagnostic_bundles_status_index, Columns: [status], Unique: false, Type: BTREE }
 entityState:
   Columns:
     - { Field: entity_state_id, Type: 'int unsigned', 'Null': false, Extra: auto_increment }
@@ -1010,11 +1087,37 @@ links:
     - { Field: remote_port, Type: varchar(128), 'Null': false, Extra: '' }
     - { Field: remote_platform, Type: varchar(256), 'Null': true, Extra: '' }
     - { Field: remote_version, Type: varchar(256), 'Null': false, Extra: '' }
+    - { Field: status, Type: varchar(16), 'Null': false, Extra: '', Default: active }
+    - { Field: missed_discoveries, Type: 'smallint unsigned', 'Null': false, Extra: '', Default: '0' }
+    - { Field: first_seen_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: last_seen_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: stale_at, Type: timestamp, 'Null': true, Extra: '' }
   Indexes:
     PRIMARY: { Name: PRIMARY, Columns: [id], Unique: true, Type: BTREE }
+    links_first_seen_at_index: { Name: links_first_seen_at_index, Columns: [first_seen_at], Unique: false, Type: BTREE }
+    links_last_seen_at_index: { Name: links_last_seen_at_index, Columns: [last_seen_at], Unique: false, Type: BTREE }
     links_local_port_id_index: { Name: links_local_port_id_index, Columns: [local_port_id], Unique: false, Type: BTREE }
     links_remote_port_id_index: { Name: links_remote_port_id_index, Columns: [remote_port_id], Unique: false, Type: BTREE }
+    links_stale_at_index: { Name: links_stale_at_index, Columns: [stale_at], Unique: false, Type: BTREE }
+    links_status_index: { Name: links_status_index, Columns: [status], Unique: false, Type: BTREE }
     local_device_id: { Name: local_device_id, Columns: [local_device_id, remote_device_id], Unique: false, Type: BTREE }
+link_ignores:
+  Columns:
+    - { Field: id, Type: 'bigint unsigned', 'Null': false, Extra: auto_increment }
+    - { Field: local_device_id, Type: 'int unsigned', 'Null': false, Extra: '' }
+    - { Field: local_port_id, Type: 'int unsigned', 'Null': true, Extra: '' }
+    - { Field: protocol, Type: varchar(11), 'Null': false, Extra: '' }
+    - { Field: remote_hostname, Type: varchar(128), 'Null': false, Extra: '' }
+    - { Field: remote_port, Type: varchar(128), 'Null': false, Extra: '' }
+    - { Field: created_by, Type: 'int unsigned', 'Null': true, Extra: '' }
+    - { Field: reason, Type: text, 'Null': true, Extra: '' }
+    - { Field: created_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: updated_at, Type: timestamp, 'Null': true, Extra: '' }
+  Indexes:
+    PRIMARY: { Name: PRIMARY, Columns: [id], Unique: true, Type: BTREE }
+    link_ignores_fingerprint_unique: { Name: link_ignores_fingerprint_unique, Columns: [local_device_id, local_port_id, protocol, remote_hostname, remote_port], Unique: true, Type: BTREE }
+    link_ignores_local_device_id_index: { Name: link_ignores_local_device_id_index, Columns: [local_device_id], Unique: false, Type: BTREE }
+    link_ignores_local_port_id_index: { Name: link_ignores_local_port_id_index, Columns: [local_port_id], Unique: false, Type: BTREE }
 loadbalancer_rservers:
   Columns:
     - { Field: rserver_id, Type: 'int unsigned', 'Null': false, Extra: auto_increment }
@@ -1360,6 +1463,22 @@ netscaler_vservers:
     - { Field: vsvr_bps_out, Type: int, 'Null': false, Extra: '' }
   Indexes:
     PRIMARY: { Name: PRIMARY, Columns: [vsvr_id], Unique: true, Type: BTREE }
+network_map_positions:
+  Columns:
+    - { Field: id, Type: 'bigint unsigned', 'Null': false, Extra: auto_increment }
+    - { Field: user_id, Type: 'int unsigned', 'Null': false, Extra: '' }
+    - { Field: device_id, Type: 'int unsigned', 'Null': false, Extra: '' }
+    - { Field: device_group_id, Type: 'int unsigned', 'Null': false, Extra: '', Default: '0' }
+    - { Field: x, Type: double, 'Null': false, Extra: '' }
+    - { Field: 'y', Type: double, 'Null': false, Extra: '' }
+    - { Field: created_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: updated_at, Type: timestamp, 'Null': true, Extra: '' }
+  Indexes:
+    PRIMARY: { Name: PRIMARY, Columns: [id], Unique: true, Type: BTREE }
+    network_map_positions_device_group_id_index: { Name: network_map_positions_device_group_id_index, Columns: [device_group_id], Unique: false, Type: BTREE }
+    network_map_positions_device_id_index: { Name: network_map_positions_device_id_index, Columns: [device_id], Unique: false, Type: BTREE }
+    network_map_positions_unique: { Name: network_map_positions_unique, Columns: [user_id, device_id, device_group_id], Unique: true, Type: BTREE }
+    network_map_positions_user_id_index: { Name: network_map_positions_user_id_index, Columns: [user_id], Unique: false, Type: BTREE }
 notifications:
   Columns:
     - { Field: notifications_id, Type: 'int unsigned', 'Null': false, Extra: auto_increment }
@@ -1383,6 +1502,29 @@ notifications_attribs:
   Indexes:
     PRIMARY: { Name: PRIMARY, Columns: [attrib_id], Unique: true, Type: BTREE }
     notifications_attribs_notifications_id_user_id_index: { Name: notifications_attribs_notifications_id_user_id_index, Columns: [notifications_id, user_id], Unique: false, Type: BTREE }
+operation_tasks:
+  Columns:
+    - { Field: id, Type: 'bigint unsigned', 'Null': false, Extra: auto_increment }
+    - { Field: type, Type: varchar(24), 'Null': false, Extra: '' }
+    - { Field: status, Type: varchar(24), 'Null': false, Extra: '', Default: queued }
+    - { Field: device_id, Type: 'int unsigned', 'Null': true, Extra: '' }
+    - { Field: candidate_id, Type: 'bigint unsigned', 'Null': true, Extra: '' }
+    - { Field: scan_id, Type: 'bigint unsigned', 'Null': true, Extra: '' }
+    - { Field: requested_by, Type: 'int unsigned', 'Null': true, Extra: '' }
+    - { Field: input, Type: longtext, 'Null': true, Extra: '' }
+    - { Field: output, Type: text, 'Null': true, Extra: '' }
+    - { Field: error, Type: text, 'Null': true, Extra: '' }
+    - { Field: started_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: completed_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: created_at, Type: timestamp, 'Null': true, Extra: '' }
+    - { Field: updated_at, Type: timestamp, 'Null': true, Extra: '' }
+  Indexes:
+    PRIMARY: { Name: PRIMARY, Columns: [id], Unique: true, Type: BTREE }
+    operation_tasks_candidate_id_index: { Name: operation_tasks_candidate_id_index, Columns: [candidate_id], Unique: false, Type: BTREE }
+    operation_tasks_device_id_index: { Name: operation_tasks_device_id_index, Columns: [device_id], Unique: false, Type: BTREE }
+    operation_tasks_scan_id_index: { Name: operation_tasks_scan_id_index, Columns: [scan_id], Unique: false, Type: BTREE }
+    operation_tasks_status_index: { Name: operation_tasks_status_index, Columns: [status], Unique: false, Type: BTREE }
+    operation_tasks_type_index: { Name: operation_tasks_type_index, Columns: [type], Unique: false, Type: BTREE }
 ospfv3_areas:
   Columns:
     - { Field: id, Type: 'int unsigned', 'Null': false, Extra: auto_increment }

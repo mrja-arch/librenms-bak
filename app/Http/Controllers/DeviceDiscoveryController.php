@@ -8,12 +8,12 @@ use App\Enums\OperationTaskStatus;
 use App\Enums\OperationTaskType;
 use App\Facades\LibrenmsConfig;
 use App\Jobs\RunDiscoveryScan;
-use App\Jobs\RunOperationTask;
 use App\Models\Device;
 use App\Models\DeviceDiscoveryCandidate;
 use App\Models\DeviceDiscoveryScan;
 use App\Models\OperationTask;
 use App\Models\PollerGroup;
+use App\Services\OperationTaskService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -23,6 +23,10 @@ use Throwable;
 
 class DeviceDiscoveryController extends Controller
 {
+    public function __construct(private readonly OperationTaskService $operationTasks)
+    {
+    }
+
     public function index(): View
     {
         Gate::authorize('create', Device::class);
@@ -151,14 +155,13 @@ class DeviceDiscoveryController extends Controller
             ]);
 
             foreach ([OperationTaskType::Discover, OperationTaskType::Poll] as $type) {
-                $task = OperationTask::create([
-                    'type' => $type,
-                    'status' => OperationTaskStatus::Queued,
-                    'device_id' => $device->device_id,
-                    'candidate_id' => $candidate->id,
-                    'requested_by' => $userId,
-                ]);
-                RunOperationTask::dispatch($task->id);
+                $this->operationTasks->queue(
+                    $device,
+                    $type,
+                    $userId,
+                    ['source' => 'candidate-approval'],
+                    $candidate->id,
+                );
             }
 
             return back()->with('status', __('Device approved and initial discovery was queued.'));

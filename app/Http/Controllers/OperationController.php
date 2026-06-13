@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\OperationTaskStatus;
 use App\Enums\OperationTaskType;
-use App\Jobs\RunOperationTask;
 use App\Models\Device;
+use App\Models\DiagnosticBundle;
 use App\Models\OperationTask;
+use App\Services\OperationTaskService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -22,10 +22,11 @@ class OperationController extends Controller
         return view('operations.index', [
             'tasks' => OperationTask::with(['device', 'requester'])->latest()->paginate(50),
             'devices' => Device::orderBy('hostname')->get(['device_id', 'hostname', 'sysName']),
+            'diagnosticBundles' => DiagnosticBundle::with(['device', 'requester'])->latest()->limit(50)->get(),
         ]);
     }
 
-    public function store(Request $request, Device $device, string $operation): RedirectResponse
+    public function store(Request $request, Device $device, string $operation, OperationTaskService $tasks): RedirectResponse
     {
         Gate::authorize('create', Device::class);
         $validated = validator(
@@ -33,14 +34,15 @@ class OperationController extends Controller
             ['operation' => [Rule::in(['discover', 'poll', 'ping'])]]
         )->validate();
 
-        $task = OperationTask::create([
-            'type' => OperationTaskType::from($validated['operation']),
-            'status' => OperationTaskStatus::Queued,
-            'device_id' => $device->device_id,
-            'requested_by' => $request->user()->user_id,
-        ]);
-        RunOperationTask::dispatch($task->id);
+        [, $created] = $tasks->queue(
+            $device,
+            OperationTaskType::from($validated['operation']),
+            $request->user()->user_id,
+            ['source' => 'operations-center'],
+        );
 
-        return back()->with('status', __('Operation queued.'));
+        return back()->with('status', $created
+            ? __('Operation queued.')
+            : __('An operation of this type is already queued or running for this device.'));
     }
 }

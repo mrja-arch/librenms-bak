@@ -10,7 +10,7 @@
             <tr>
                 <td>{{ $task->id }}</td>
                 <td>{{ __($task->type->value) }}</td>
-                <td>{{ $task->device?->displayName() ?: '-' }}</td>
+                <td>{{ $task->device?->displayName() ?: data_get($task->input, 'device_name', data_get($task->input, 'hostname', '-')) }}</td>
                 <td>{{ __($task->status->value) }}</td>
                 <td>{{ $task->requester?->username ?: '-' }}</td>
                 <td>{{ $task->completed_at ?: '-' }}</td>

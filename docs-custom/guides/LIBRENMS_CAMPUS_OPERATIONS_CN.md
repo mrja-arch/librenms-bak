@@ -514,3 +514,353 @@ lnms config:set alert_log_purge 730
 修改保留期限只影响下一次清理，不会恢复已经删除的数据。修改 `rrd.step` 或 RRD 归档定义
 不会自动转换已有 RRD 文件，必须先评估存储容量，并使用 LibreNMS 的 RRD step 迁移工具。
 执行任何清理前应先备份 `db-data`、`librenms-data` 和 `oxidized-output` 命名卷。
+
+## 17. 拓扑位置与链路生命周期
+
+网络拓扑现在按“登录用户 + 设备组”保存节点位置。拖动节点并释放后自动保存，刷新页面仍使用该坐标；
+“重置布局”只清除当前用户、当前设备组的坐标。其他管理员和其他设备组的布局互不影响。
+
+拓扑只绘制状态为 `active` 的 LLDP/CDP 等发现链路，并过滤以下伪链路：
+
+- 本地端口与远端端口是同一个 `port_id`；
+- 两端端口属于同一台设备；
+- MAC 学习把管理口或本机地址反向关联到本机端口。
+
+设备 CLI 已能看到 LLDP 邻居但拓扑暂时没有链路，通常表示邻居是在上一次 discovery 结束后才恢复。
+Trap 负责记录变化，周期性 discovery 才负责完整刷新端口和链路对象。进入“地图 > 已发现链路”，选择设备并执行
+“发现链路”，完成后刷新拓扑。
+
+“已发现链路”页面提供查看、发现、删除、忽略和恢复：
+
+- `active`：本轮 discovery 已确认存在；
+- 第一次未发现：累计一次缺失，仍保留当前活动链路，避免瞬时 SNMP/LLDP 抖动；
+- 连续第二次未发现：标记为 `stale`，不再绘制；
+- `stale` 超过 30 天：每日维护任务自动删除；
+- 删除：立即删除记录，但以后 discovery 可以重新创建；
+- 忽略：写入链路指纹抑制规则并删除链路，后续 discovery 不再创建；
+- 恢复：删除忽略规则，再执行一次 discovery 即可重新创建。
+
+手工维护命令：
+
+```powershell
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml exec -T librenms `
+  s6-setuidgid librenms php artisan maintenance:cleanup-topology-diagnostics
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml exec -T librenms `
+  s6-setuidgid librenms php artisan schedule:list
+```
+
+## 18. 一键诊断包
+
+“设备 > 运维任务中心 > 诊断收集”可以创建系统诊断或指定设备诊断。任务由独立 `operations`
+队列执行，完成后可下载 ZIP。压缩包默认保留 3 天，过期后由每日维护任务删除。
+
+系统诊断包含：
+
+- LibreNMS `validate.php`、调度任务列表和操作队列状态；
+- PHP、CPU、内存、磁盘信息；
+- Huawei 关键 Trap 的 `snmptranslate` 校验；
+- `/data/logs` 下每个日志文件的末尾 2000 行；
+- 清单、执行时间、目标设备、ZIP SHA-256。
+
+指定 Huawei 设备时还会通过 SSH 执行固定只读白名单：
+
+```text
+display version
+display current-configuration configuration snmp
+display snmp-agent trap feature-name ifnet all
+display lldp neighbor brief
+display interface brief
+```
+
+Web 请求不能传入任意命令。数据库密码、Trap community、SSH 密码和 Oxidized API Token 会在写入压缩包前
+替换为 `[REDACTED]`。诊断账号应为设备只读账号，并与日常管理员账号分离。
+
+在 `docker/.env` 设置凭据；未单独设置时应与 Oxidized 的只读账号保持一致：
+
+```dotenv
+DIAGNOSTIC_SSH_USERNAME=librenms-ro
+DIAGNOSTIC_SSH_PASSWORD=change-me
+```
+
+诊断失败时依次检查 `operations-worker`、Redis 队列、设备 TCP/22、AAA 权限和
+`override_device_ssh_port`。查看后台错误：
+
+```powershell
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml logs --tail 300 operations-worker
+```
+
+## 19. 200 台设备生产参数包
+
+仓库提供显式的 `production-200` 配置，目标基线为 8 vCPU、16 GB RAM、SSD，管理约 200 台设备。
+该配置不会自动应用到当前实验环境。
+
+文件用途：
+
+| 文件 | 用途 |
+| --- | --- |
+| `docker/compose.production-200.yml` | 容器 CPU/内存限制和 Docker 日志轮转 |
+| `docker/mariadb/production-200.cnf` | 4 GB InnoDB Buffer Pool、连接数和慢查询参数 |
+| `docker/.env.production-200.example` | 生产变量模板 |
+| `docker/scripts/init-production-200.ps1` | 启动、迁移、写入 LibreNMS 参数并校验 |
+
+初始化：
+
+```powershell
+Copy-Item docker/.env.production-200.example docker/.env.production-200
+# 编辑所有 replace-with-* 值后执行
+powershell -ExecutionPolicy Bypass -File docker/scripts/init-production-200.ps1
+```
+
+主要初始参数：
+
+| 参数 | 值 | 说明 |
+| --- | ---: | --- |
+| `service_poller_workers` | 24 | 5 分钟内完成约 200 台设备轮询 |
+| `service_discovery_workers` | 8 | 6 小时发现周期 |
+| `service_alerting_workers` | 4 | 60 秒告警评估 |
+| `service_services_workers` | 4 | 服务检查 |
+| `service_ping_workers` | 8 | Ping 并发 |
+| `eventlog_purge` / `syslog_purge` | 90 天 | 生产排障审计窗口 |
+| `alert_log_purge` | 365 天 | 告警历史 |
+
+上线后以“全局设置 > 轮询器 > 性能”的实际 Worker seconds 为准调优。轮询消耗长期接近 300 秒时，
+先检查慢设备和 SNMP 超时，再逐步增加 worker；不要只增加并发而忽略 CPU、数据库 IOPS 和设备控制面负载。
+
+标准启动命令：
+
+```powershell
+docker compose --env-file docker/.env.production-200 `
+  -f docker/compose.yml `
+  -f docker/compose.production-200.yml up -d
+```
+
+至少连续观察 24 小时的轮询完成率、队列积压、MariaDB 慢查询、磁盘增长、Trap 丢包和告警延迟，
+确认稳定后再批量导入剩余设备。
+
+## 20. 数据库校验与运维任务冲突排查
+
+自定义功能使用的 `device_discovery_scans`、`device_discovery_candidates` 和 `operation_tasks`
+已经纳入 `resources/definitions/schema/db_schema.yaml`。这些表不是异常残留表，不应在“配置检验”中显示为
+`extra table`。JSON 列必须使用 `utf8mb4_unicode_ci`；迁移
+`2026_06_13_000003_normalize_custom_json_collations.php` 会修正已有数据库。
+
+升级镜像后执行：
+
+```powershell
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml exec -T librenms s6-setuidgid librenms php validate.php
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml exec -T librenms s6-setuidgid librenms php artisan optimize:clear
+```
+
+如果 Web 页面仍显示旧结果，强制刷新“配置检验”页面。以当前容器内 `validate.php` 的实时结果为准，
+不要按照旧页面提示删除上述自定义表。
+
+运维中心、自动纳管、链路发现和周期调度最终都会调用相同的设备发现/轮询 Job。系统使用 Redis
+`device-operation:<device_id>` 锁串行化同一设备的发现、轮询和独立 Ping，避免以下并发问题：
+
+- 首次写入 `device_stats` 时触发唯一键冲突；
+- 同一设备被重复发现或轮询；
+- 设备状态、RRD 和端口数据被两个任务交叉覆盖。
+
+`device_stats` 的初始化使用原子 upsert，并在事务中锁定统计行。任务提交时，同一设备、同一类型在
+最近一小时内已经处于 `queued` 或 `running` 状态时不会重复入队。不同设备仍可并发执行。
+
+任务使用单调时钟计算耗时，系统时间被 NTP 校正时不会再产生负数并写入
+`last_polled_timetaken`。完成时间也不会早于开始时间。
+
+每日维护任务执行以下生命周期规则：
+
+- 排队或运行超过 1 小时的任务标记为失败，说明 worker 可能中断；
+- 成功或失败且完成超过 30 天的运维任务自动删除；
+- 设备删除后，历史任务仍显示提交时保存的设备名称，不再只显示 `-`。
+
+排查顺序：
+
+```powershell
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml ps
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml logs --tail 300 operations-worker dispatcher
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml exec -T redis redis-cli --scan --pattern "*device-operation*"
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml exec -T librenms s6-setuidgid librenms php artisan maintenance:cleanup-topology-diagnostics
+```
+
+不要同时反复点击同一设备的发现或轮询。页面提示“已有同类型任务”表示去重生效，不是执行失败。
+
+## 21. 自动发现、手动触发与任务终止
+
+### 21.1 周期与预期等待时间
+
+当前实验环境和 200 台设备参数包使用以下周期。实际值应以“全局设置 > 轮询器”和
+`artisan schedule:list` 为准：
+
+| 数据或任务 | 默认周期 | 数据出现时间 | 手动触发 |
+| --- | ---: | --- | --- |
+| 设备可达性、接口 Up/Down、流量和错误计数 | 300 秒 | 通常在下一次轮询后，最长约 5 分钟加设备响应时间 | 运维任务中心“设备轮询”，或 `device:poll` |
+| 接口清单、名称、类型、速率和新接口 | 21600 秒 | 完整 discovery 后，最长约 6 小时 | 运维任务中心“设备发现”，或 `device:discover` |
+| LLDP/CDP 邻居和拓扑链路 | 21600 秒 | 完整 discovery 后，最长约 6 小时 | “地图 > 已发现链路 > 发现链路” |
+| LLDP 拓扑 Trap 触发刷新 | Trap 到达后入队 | 同一设备 5 分钟内只入队一次；完成时间取决于 operations 队列 | 手工设备发现可绕过等待下一个周期 |
+| 候选设备网络扫描 | 每 6 小时 | 所有地址探测完成后结束 | “设备 > 自动发现 > 开始扫描” |
+| 调度器健康心跳 | 每 5 分钟 | 容器刚启动后最多等待约 5 分钟 | `schedule:test --name='schedule operational check'` |
+| 链路失效判定 | 连续两次 discovery 未发现 | 通常约 6 至 12 小时 | 连续执行两次设备发现用于验证 |
+| stale 链路删除 | 每日维护，stale 超过 30 天 | 每日维护窗口 | `maintenance:cleanup-topology-diagnostics` |
+
+普通轮询只更新已知接口的状态和计数，不负责创建新接口，也不负责完整刷新 LLDP
+链路。设备上新增接口、修改接口标识或 LLDP 邻居已经存在但拓扑没有显示时，应执行
+discovery，不要只反复执行 poll。
+
+手工任务的超时上限为 900 秒。主动网络扫描会先展开 CIDR，再为每个地址创建探测任务；
+每个地址的探测超时上限为 120 秒。当前 `operations-worker` 为单进程串行消费，因此扫描
+耗时约等于“排队时间 + 所有地址的实际探测时间”。扫描 `/24` 时最多探测 254 个主机，
+不能按单台设备发现的耗时估算。
+
+### 21.2 查看当前周期和任务进度
+
+```powershell
+$dc = "docker compose -f docker/compose.yml -f containerlab/compose.override.yml"
+
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan schedule:list"
+Invoke-Expression "$dc ps"
+Invoke-Expression "$dc logs --tail 300 operations-worker dispatcher"
+Invoke-Expression "$dc exec -T redis redis-cli LLEN queues:operations"
+```
+
+Web 页面对应关系：
+
+- “设备 > 运维任务中心”：设备发现、轮询、Ping 和诊断任务；
+- “设备 > 自动发现 > 扫描记录”：网络扫描总数、已处理数、候选设备数和错误；
+- “地图 > 已发现链路”：链路当前状态、最后发现时间、缺失次数和忽略规则；
+- 设备详情的端口页：确认接口清单和运行状态是否已经刷新。
+
+判断任务是否卡住时，不要只看状态文字：
+
+1. `operations-worker` 必须为 `Up`，日志应继续出现新任务。
+2. Redis 的 `queues:operations` 长度应逐步下降。
+3. 网络扫描的 `processed_hosts` 应持续接近 `total_hosts`。
+4. 设备任务的开始时间超过 15 分钟仍未结束时，检查设备 SNMP、DNS 和 Redis 锁。
+5. 排队或运行超过 1 小时的任务会在下一次每日维护时被标记为失败，也可手工立即运行维护命令。
+
+### 21.3 手动触发单台设备
+
+优先使用 Web 运维任务中心，它会保存审计记录、执行任务去重，并使用设备级 Redis 锁。
+CLI 适合管理员排障。以下示例中的 `4` 是 `device_id`，也可以替换为设备管理地址或主机名：
+
+```powershell
+$dc = "docker compose -f docker/compose.yml -f containerlab/compose.override.yml"
+
+# 完整设备发现：刷新接口清单、传感器、VLAN、LLDP 和链路。
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan device:discover 4 -vv"
+
+# 只刷新接口清单。
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan device:discover 4 -m ports -vv"
+
+# 只刷新 LLDP/CDP 等发现协议和链路。
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan device:discover 4 -m discovery-protocols -vv"
+
+# 完整轮询：更新接口状态、流量、CPU、内存和传感器数值。
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan device:poll 4 -vv"
+
+# 只轮询接口状态和计数。
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan device:poll 4 -m ports -vv"
+```
+
+一次刷新多台设备时可以使用 `all`，但会直接产生较大 SNMP 和数据库负载。生产环境应先对
+一台设备验证，再通过 dispatcher 的正常周期完成剩余设备。
+
+### 21.4 手动触发候选设备网络扫描
+
+推荐在“设备 > 自动发现”输入明确 CIDR 后点击“开始扫描”。扫描网络必须同时满足：
+
+- 使用 IPv4 CIDR，前缀范围为 `/20` 至 `/32`；
+- 完全包含在全局 `nets` 设置中；
+- 不在 `autodiscovery.nets-exclude` 排除网段中；
+- 单次展开后不超过 4096 个地址。
+
+要立即执行计划中的全局网络扫描，可运行：
+
+```powershell
+$dc = "docker compose -f docker/compose.yml -f containerlab/compose.override.yml"
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan schedule:test --name='candidate discovery scan'"
+```
+
+该命令扫描全局 `nets`，不是只扫描当前页面输入的网段。执行前先用
+`lnms config:get nets` 核对范围，避免误扫生产网络。
+
+常见失败及修复：
+
+| 错误或现象 | 原因 | 修复 |
+| --- | --- | --- |
+| `Scan networks must be fully contained...` | 扫描 CIDR 不属于全局 `nets` | 先将允许网段加入 `nets`，或缩小扫描范围 |
+| `between /20 and /32` | CIDR 过大或格式错误 | 拆分为 `/20` 至 `/32` |
+| `at most 4096 addresses` | 单次地址数过多 | 拆成多个扫描任务 |
+| 一直是 `queued` | worker 停止、队列暂停或 Redis 异常 | 检查容器、队列长度和 worker 日志 |
+| `running` 但进度不变 | 地址探测任务被清除、worker 重启或探测阻塞 | 重启 worker，清理残留状态后重新扫描 |
+| 扫出很多候选但 SNMP 灰色 | Ping 可达但 SNMP 凭据不匹配 | 配置全局 SNMP community/v3 凭据后重新扫描 |
+| 扫描完成但没有候选设备 | SNMP 无响应的纯扫描候选会被删除 | 从 LibreNMS 容器执行 `snmpget` 验证 UDP/161 和凭据 |
+
+### 21.5 暂停、终止和恢复 operations 任务
+
+当前版本没有按单个网络扫描任务取消的 Web 按钮。下面操作针对整个 `operations` 队列，
+会同时影响发现、轮询、Ping、诊断和候选扫描，执行前必须查看队列和任务列表。
+
+优雅暂停接收下一项任务，当前正在执行的任务继续完成：
+
+```powershell
+$dc = "docker compose -f docker/compose.yml -f containerlab/compose.override.yml"
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan queue:pause operations"
+```
+
+恢复消费：
+
+```powershell
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan queue:resume operations"
+```
+
+让 worker 完成当前任务后重新加载代码：
+
+```powershell
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan queue:restart"
+```
+
+紧急终止当前任务：
+
+```powershell
+Invoke-Expression "$dc stop operations-worker"
+```
+
+`stop` 会中断当前任务，但 Redis 中尚未取出的任务仍然保留。确认需要放弃整个队列时，再执行：
+
+```powershell
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan queue:clear redis --queue=operations --force"
+```
+
+`queue:clear` 不会自动修改 `operation_tasks` 和 `device_discovery_scans` 的状态。清空队列后应立即
+标记残留任务失败，避免页面永久显示排队或运行：
+
+```powershell
+$sql = "UPDATE operation_tasks SET status='failed', error='Cancelled by administrator', completed_at=NOW() WHERE status IN ('queued','running'); UPDATE device_discovery_scans SET status='failed', error='Cancelled by administrator', completed_at=NOW() WHERE status IN ('queued','running');"
+Invoke-Expression "$dc exec -T db mariadb -ulibrenms -plibrenms librenms -e `"$sql`""
+Invoke-Expression "$dc up -d operations-worker"
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan queue:resume operations"
+```
+
+如果只想终止一个正在运行的任务，不应使用 `queue:clear`，因为 Redis 队列无法按
+`operation_tasks.id` 安全删除序列化 Job。先停止 worker、记录其他排队任务，再决定是恢复等待，
+还是清空整个队列并重新提交需要保留的任务。
+
+### 21.6 发现失败后的标准恢复流程
+
+1. 在任务历史或扫描记录中记录任务 ID、设备、网段和完整错误。
+2. 检查 `librenms`、`dispatcher`、`operations-worker`、Redis 和数据库容器状态。
+3. 运行 `validate.php`，确认数据库 Schema、Redis、锁和 dispatcher 均为 `OK`。
+4. 从 LibreNMS 容器验证目标设备 Ping、UDP/161、SNMP community/v3 和 MIB 返回。
+5. 对单台设备先执行完整 `device:discover`，再执行 `device:poll`。
+6. LLDP 问题执行 `device:discover <device> -m discovery-protocols`，然后查看“已发现链路”。
+7. 修复后重新提交失败任务；不要直接把旧数据库记录改成 `succeeded`。
+8. 最后检查 `last_discovered`、`last_polled`、端口 RRD、链路 `last_seen_at` 和 worker 日志。
+
+完整校验命令：
+
+```powershell
+$dc = "docker compose -f docker/compose.yml -f containerlab/compose.override.yml"
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php validate.php"
+Invoke-Expression "$dc logs --tail 300 operations-worker dispatcher snmptrapd"
+Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan maintenance:cleanup-topology-diagnostics"
+```

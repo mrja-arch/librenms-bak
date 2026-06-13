@@ -7,6 +7,8 @@ use App\Enums\OperationTaskStatus;
 use App\Enums\OperationTaskType;
 use App\Models\Device;
 use App\Models\OperationTask;
+use App\Services\DeviceOperationLock;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -28,7 +30,7 @@ class RunOperationTask implements ShouldQueue
         $this->onQueue('operations');
     }
 
-    public function handle(DeviceIsPingable $ping): void
+    public function handle(DeviceIsPingable $ping, DeviceOperationLock $lock): void
     {
         $task = OperationTask::with('device')->findOrFail($this->taskId);
         $task->update(['status' => OperationTaskStatus::Running, 'started_at' => DB::scalar('SELECT CURRENT_TIMESTAMP')]);
@@ -38,21 +40,24 @@ class RunOperationTask implements ShouldQueue
             $output = match ($type) {
                 OperationTaskType::Discover => $this->discover($task),
                 OperationTaskType::Poll => $this->poll($task),
-                OperationTaskType::Ping => $ping->execute($this->device($task))->success()
-                    ? __('Ping succeeded.')
-                    : __('Ping failed.'),
+                OperationTaskType::Ping => $lock->run(
+                    $task->device_id,
+                    fn () => $ping->execute($this->device($task))->success()
+                        ? __('Ping succeeded.')
+                        : __('Ping failed.')
+                ),
                 default => throw new RuntimeException(__('Unsupported operation type.')),
             };
             $task->update([
                 'status' => OperationTaskStatus::Succeeded,
                 'output' => $output,
-                'completed_at' => DB::scalar('SELECT CURRENT_TIMESTAMP'),
+                'completed_at' => $this->completedAt($task),
             ]);
         } catch (Throwable $e) {
             $task->update([
                 'status' => OperationTaskStatus::Failed,
                 'error' => $e->getMessage(),
-                'completed_at' => DB::scalar('SELECT CURRENT_TIMESTAMP'),
+                'completed_at' => $this->completedAt($task),
             ]);
         }
     }
@@ -79,5 +84,14 @@ class RunOperationTask implements ShouldQueue
         }
 
         return $device;
+    }
+
+    private function completedAt(OperationTask $task): Carbon
+    {
+        $databaseNow = Carbon::parse(DB::scalar('SELECT CURRENT_TIMESTAMP'));
+
+        return $task->started_at && $databaseNow->lessThan($task->started_at)
+            ? $task->started_at
+            : $databaseNow;
     }
 }

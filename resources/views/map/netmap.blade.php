@@ -11,9 +11,17 @@
 &nbsp;<big><b>{{ $group_name }}</b></big>
 @endif
 <div class="pull-right">
-    Highlight Node
+    @can('admin')
+    <a href="{{ route('topology-links.index') }}" class="btn btn-default btn-sm">
+        <i class="fa fa-link"></i> {{ __('Manage Links') }}
+    </a>
+    @endcan
+    <button id="reset-layout" type="button" class="btn btn-default btn-sm">
+        <i class="fa fa-refresh"></i> {{ __('Reset Layout') }}
+    </button>
+    {{ __('Highlight Node') }}
     <select name="highlight_node" id="highlight_node" class="input-sm" onChange="highlightSelectedNode()";>
-        <option value="0">None</option>
+        <option value="0">{{ __('None') }}</option>
     </select>
 </div>
 </div>
@@ -48,6 +56,73 @@
     var network_edges = new vis.DataSet({queue: {delay: 100}});
     var network;
     var node_highlight_style = @json($highlight_style);
+    var saved_positions = {};
+    var map_group = @json((int) ($group_id ?: 0));
+    var edge_smooth_option = false;
+
+    function normalizeEdgeSmoothOption(options) {
+        if (!options.edges) {
+            options.edges = {};
+        }
+
+        const smooth = options.edges.smooth;
+        if (smooth === true) {
+            options.edges.smooth = {enabled: true, type: 'continuous'};
+        } else if (smooth && typeof smooth === 'object' && smooth.enabled !== false) {
+            options.edges.smooth = Object.assign({}, smooth);
+            if (!options.edges.smooth.type || options.edges.smooth.type === 'dynamic') {
+                options.edges.smooth.type = 'continuous';
+            }
+        }
+
+        edge_smooth_option = options.edges.smooth ?? false;
+    }
+
+    function refreshConnectedEdges(nodeIds) {
+        if (!network || !nodeIds.length) {
+            return;
+        }
+
+        const edgeIds = new Set();
+        nodeIds.forEach((nodeId) => {
+            network.getConnectedEdges(nodeId).forEach((edgeId) => edgeIds.add(edgeId));
+        });
+
+        edgeIds.forEach((edgeId) => {
+            const edge = network_edges.get(edgeId);
+            if (edge) {
+                network_edges.update(Object.assign({}, edge, {smooth: edge_smooth_option}));
+            }
+        });
+        network_edges.flush();
+        network.redraw();
+    }
+
+    async function loadPositions() {
+        saved_positions = await $.ajax({
+            type: 'GET',
+            url: '{{ route('maps.positions.index') }}',
+            data: {group: map_group},
+            dataType: 'json'
+        });
+    }
+
+    function savePositions(nodeIds) {
+        if (!network || !nodeIds.length) {
+            return;
+        }
+        const positions = network.getPositions(nodeIds);
+        const payload = nodeIds.map((deviceId) => ({
+            device_id: parseInt(deviceId),
+            x: positions[deviceId].x,
+            y: positions[deviceId].y
+        }));
+        $.ajax({
+            type: 'PUT',
+            url: '{{ route('maps.positions.store') }}',
+            data: {group: map_group, positions: payload}
+        });
+    }
 
     var highlightSavedId = null;
     function highlightSelectedNode() {
@@ -122,6 +197,11 @@
                     title.innerHTML = device["url"];
 
                     var this_dev = {id: device_id, label: device["sname"], title: title, shape: "box"}
+                    if (saved_positions[device_id]) {
+                        this_dev.x = saved_positions[device_id].x;
+                        this_dev.y = saved_positions[device_id].y;
+                        this_dev.fixed = {x: true, y: true};
+                    }
                     if (device["style"]) {
                         // Merge the style if it has been defined
                         this_dev = Object.assign(this_dev, device["style"]);
@@ -183,7 +263,9 @@
                     this_edge['title'] = document.createElement("div");
                     this_edge['title'].innerHTML = link['url'];
 
-                    if (!network_edges.get(link_id)) {
+                    if (network_edges.get(link_id)) {
+                        network_edges.update(this_edge);
+                    } else {
                         network_edges.add([this_edge]);
                     }
                     // Unhide any devices we find
@@ -217,7 +299,23 @@
         if (! network) {
             var container = document.getElementById('visualization');
             var options = {{ Js::from($options) }};
+            normalizeEdgeSmoothOption(options);
             network = new vis.Network(container, {nodes: network_nodes, edges: network_edges, stabilize: true}, options);
+            network.once('stabilized', function () {
+                Object.keys(saved_positions).forEach(function (deviceId) {
+                    if (network_nodes.get(deviceId)) {
+                        network_nodes.update({id: deviceId, fixed: {x: false, y: false}});
+                    }
+                });
+                network.setOptions({physics: {enabled: false}});
+            });
+            network.on('dragEnd', function (properties) {
+                refreshConnectedEdges(properties.nodes);
+                savePositions(properties.nodes);
+            });
+            network.on('dragging', function (properties) {
+                refreshConnectedEdges(properties.nodes);
+            });
 
             network.on('click', function (properties) {
                 let cur_highlighted = $('#highlight_node').val();
@@ -263,10 +361,20 @@
     $(document).ready(async function () {
         // pause during initial load
         Countdown.Pause();
+        await loadPositions();
         await refreshMap();
         Countdown.Resume();
         $("#alert").text("");
         $("#alert-row").hide();
+    });
+
+    $('#reset-layout').on('click', async function () {
+        await $.ajax({
+            type: 'DELETE',
+            url: '{{ route('maps.positions.destroy') }}',
+            data: {group: map_group}
+        });
+        window.location.reload();
     });
 </script>
 <x-refresh-timer :refresh="$page_refresh" callback="refreshMap"></x-refresh-timer>

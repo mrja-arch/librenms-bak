@@ -15,6 +15,7 @@ use App\Http\Controllers\DashboardWidgetController;
 use App\Http\Controllers\Device;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DeviceDiscoveryController;
+use App\Http\Controllers\DiagnosticBundleController;
 use App\Http\Controllers\DeviceGroupController;
 use App\Http\Controllers\GraphController;
 use App\Http\Controllers\Install;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Maps\CustomMapDataController;
 use App\Http\Controllers\Maps\CustomMapListController;
 use App\Http\Controllers\Maps\CustomMapNodeImageController;
 use App\Http\Controllers\Maps\DeviceDependencyController;
+use App\Http\Controllers\Maps\NetworkMapPositionController;
 use App\Http\Controllers\NacController;
 use App\Http\Controllers\OuiLookupController;
 use App\Http\Controllers\OperationController;
@@ -52,6 +54,7 @@ use App\Http\Controllers\ServiceTemplateController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SslCertificateController;
 use App\Http\Controllers\Table;
+use App\Http\Controllers\TopologyLinkController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPermissionsController;
 use App\Http\Controllers\UserPreferencesController;
@@ -158,6 +161,17 @@ Route::middleware(['auth'])->group(function (): void {
     Route::get('operations', [OperationController::class, 'index'])->name('operations.index');
     Route::post('operations/devices/{device}/{operation}', [OperationController::class, 'store'])
         ->whereIn('operation', ['discover', 'poll', 'ping'])->name('operations.devices.store');
+    Route::middleware('can:admin')->group(function (): void {
+        Route::post('operations/diagnostics', [DiagnosticBundleController::class, 'store'])->name('diagnostics.store');
+        Route::get('operations/diagnostics/{bundle}/download', [DiagnosticBundleController::class, 'download'])->name('diagnostics.download');
+    });
+    Route::middleware('can:admin')->prefix('topology-links')->name('topology-links.')->group(function (): void {
+        Route::get('', [TopologyLinkController::class, 'index'])->name('index');
+        Route::post('discover', [TopologyLinkController::class, 'discover'])->name('discover');
+        Route::delete('ignores/{ignore}', [TopologyLinkController::class, 'restore'])->name('restore');
+        Route::delete('{link}', [TopologyLinkController::class, 'destroy'])->name('destroy');
+        Route::post('{link}/ignore', [TopologyLinkController::class, 'ignore'])->name('ignore');
+    });
 
     // Device Tabs
     Route::middleware('can:admin')->group(function (): void {
@@ -209,6 +223,9 @@ Route::middleware(['auth'])->group(function (): void {
         Route::get('devicedependency', [DeviceDependencyController::class, 'dependencyMap']);
         Route::post('getdevices', [Maps\MapDataController::class, 'getDevices'])->name('maps.getdevices');
         Route::post('getdevicelinks', [Maps\MapDataController::class, 'getDeviceLinks'])->name('maps.getdevicelinks');
+        Route::get('positions', [NetworkMapPositionController::class, 'index'])->name('maps.positions.index');
+        Route::put('positions', [NetworkMapPositionController::class, 'store'])->name('maps.positions.store');
+        Route::delete('positions', [NetworkMapPositionController::class, 'destroy'])->name('maps.positions.destroy');
         Route::post('getgeolinks', [Maps\MapDataController::class, 'getGeographicLinks'])->name('maps.getgeolinks');
         Route::post('getservices', [Maps\MapDataController::class, 'getServices'])->name('maps.getservices');
         Route::get('nodeimage', [CustomMapNodeImageController::class, 'index'])->name('maps.nodeimage.index');

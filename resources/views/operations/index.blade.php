@@ -39,6 +39,51 @@
         </div>
     </div>
 
+    @can('admin')
+    <div class="panel panel-default tw:mt-4">
+        <div class="panel-heading"><strong>{{ __('Diagnostic Collection') }}</strong></div>
+        <div class="panel-body">
+            <form method="post" action="{{ route('diagnostics.store') }}" class="form-inline">
+                @csrf
+                <label for="diagnostic-device">{{ __('Target') }}</label>
+                <select id="diagnostic-device" name="device_id" class="form-control">
+                    <option value="">{{ __('System only') }}</option>
+                    @foreach($devices as $device)
+                        <option value="{{ $device->device_id }}">{{ $device->displayName() }}</option>
+                    @endforeach
+                </select>
+                <button class="btn btn-warning"><i class="fa fa-medkit"></i> {{ __('Collect Diagnostic Bundle') }}</button>
+            </form>
+            <p class="help-block">{{ __('Device collection uses read-only SSH commands. Archives are redacted and retained for 3 days.') }}</p>
+
+            <table class="table table-condensed table-hover">
+                <thead><tr><th>ID</th><th>{{ __('Target') }}</th><th>{{ __('Status') }}</th><th>{{ __('Requested By') }}</th><th>{{ __('Completed') }}</th><th>SHA-256</th><th>{{ __('Actions') }}</th></tr></thead>
+                <tbody>
+                @forelse($diagnosticBundles as $bundle)
+                    <tr>
+                        <td>{{ $bundle->id }}</td>
+                        <td>{{ $bundle->device?->displayName() ?: __('System only') }}</td>
+                        <td>{{ __($bundle->status) }}</td>
+                        <td>{{ $bundle->requester?->username ?: '-' }}</td>
+                        <td>{{ $bundle->completed_at ?: '-' }}</td>
+                        <td><code>{{ $bundle->sha256 ? substr($bundle->sha256, 0, 16) . '...' : '-' }}</code></td>
+                        <td>
+                            @if($bundle->status === 'ready')
+                                <a class="btn btn-xs btn-success" href="{{ route('diagnostics.download', $bundle) }}"><i class="fa fa-download"></i> {{ __('Download') }}</a>
+                            @elseif($bundle->error)
+                                <span class="text-danger">{{ $bundle->error }}</span>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="7" class="text-center">{{ __('No diagnostic bundles.') }}</td></tr>
+                @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endcan
+
     @include('operations.task-table')
     {{ $tasks->links() }}
 </div>

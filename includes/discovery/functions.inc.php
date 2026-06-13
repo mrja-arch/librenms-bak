@@ -16,6 +16,7 @@ use App\Actions\Device\ValidateDeviceAndCreate;
 use App\Facades\LibrenmsConfig;
 use App\Models\Device;
 use App\Models\Eventlog;
+use App\Models\LinkIgnore;
 use App\Models\Port;
 use App\Services\DeviceDiscoveryCandidateService;
 use Illuminate\Support\Facades\DB;
@@ -204,6 +205,23 @@ function discover_link($local_port_id, $protocol, $remote_port_id, $remote_hostn
 
     Log::debug("Discover link: $local_port_id, $protocol, $remote_port_id, $remote_hostname, $remote_port, $remote_platform, $remote_version, $remote_device_id\n");
 
+    $ignored = LinkIgnore::query()
+        ->where('local_device_id', $local_device_id)
+        ->where(function ($query) use ($local_port_id): void {
+            $query->whereNull('local_port_id')
+                ->orWhere('local_port_id', $local_port_id);
+        })
+        ->where('protocol', $protocol)
+        ->where('remote_hostname', $remote_hostname)
+        ->where('remote_port', $remote_port)
+        ->exists();
+
+    if ($ignored) {
+        Log::info("Ignored discovered link: $local_port_id, $protocol, $remote_hostname, $remote_port");
+
+        return;
+    }
+
     if (dbFetchCell(
         'SELECT COUNT(*) FROM `links` WHERE `remote_hostname` = ? AND `local_port_id` = ? AND `protocol` = ? AND `remote_port` = ?',
         [
@@ -222,6 +240,11 @@ function discover_link($local_port_id, $protocol, $remote_port_id, $remote_hostn
             'remote_port' => $remote_port,
             'remote_platform' => $remote_platform,
             'remote_version' => $remote_version,
+            'status' => 'active',
+            'missed_discoveries' => 0,
+            'first_seen_at' => now(),
+            'last_seen_at' => now(),
+            'stale_at' => null,
         ];
 
         if (! empty($remote_port_id)) {
@@ -233,7 +256,7 @@ function discover_link($local_port_id, $protocol, $remote_port_id, $remote_hostn
         echo '+';
         Log::debug("( $inserted inserted )");
     } else {
-        $sql = 'SELECT `id`,`local_device_id`,`remote_platform`,`remote_version`,`remote_device_id`,`remote_port_id` FROM `links`';
+        $sql = 'SELECT `id`,`local_device_id`,`remote_platform`,`remote_version`,`remote_device_id`,`remote_port_id`,`status`,`missed_discoveries`,`stale_at` FROM `links`';
         $sql .= ' WHERE `remote_hostname` = ? AND `local_port_id` = ? AND `protocol` = ? AND `remote_port` = ?';
         $data = dbFetchRow($sql, [$remote_hostname, $local_port_id, $protocol, $remote_port]);
 
@@ -243,11 +266,18 @@ function discover_link($local_port_id, $protocol, $remote_port_id, $remote_hostn
             'remote_version' => $remote_version,
             'remote_device_id' => (int) $remote_device_id,
             'remote_port_id' => (int) $remote_port_id,
+            'status' => 'active',
+            'missed_discoveries' => 0,
+            'stale_at' => null,
+            'last_seen_at' => now(),
         ];
 
         $id = $data['id'];
         unset($data['id']);
-        if ($data == $update_data) {
+        $comparison_data = $update_data;
+        unset($comparison_data['last_seen_at']);
+        if ($data == $comparison_data) {
+            dbUpdate(['last_seen_at' => now()], 'links', '`id` = ?', [$id]);
             echo '.';
         } else {
             $updated = dbUpdate($update_data, 'links', '`id` = ?', [$id]);
