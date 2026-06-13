@@ -21,7 +21,7 @@
             <tr class="{{ $poller['row_class'] }}" id="row_{{ $poller['id'] }}">
                 <td>{{ $poller['poller_name'] }}</td>
                 <td>{{ $poller['devices'] }}</td>
-                <td>{{ $poller['time_taken'] }} Seconds</td>
+                <td>{{ $poller['time_taken'] }} {{ __('Seconds') }}</td>
                 <td>{{ \LibreNMS\Util\Time::format($poller['last_polled'], 'compact') }}</td>
                 <td>
                     @can('delete', $poller)
@@ -66,7 +66,7 @@
                     <td rowspan="{{ $poller->stats->count() }}">{{ \LibreNMS\Util\Time::format($poller->last_report, 'compact') }}</td>
                     <td rowspan="{{ $poller->stats->count() }}">{{ __($poller->master ? 'Yes' : 'No') }}</td>
                 @endif
-                    <td>{{ $stat->poller_type }}</td>
+                    <td>{{ __($stat->poller_type) }}</td>
                     <td>{{ $stat->workers }}</td>
                     <td>{{ $stat->devices }}</td>
                     <td>{{ $stat->depth }}</td>
@@ -79,8 +79,8 @@
             @endforeach
         </table>
         <small>
-          Worker seconds indicates the maximum polling throughput a node can achieve in perfect conditions. If the consumed is close to the maximum, consider adding more threads, or better tuning your groups.<br>
-          If there are devices pending but consumed worker seconds is low, your hardware is not sufficient for the number of devices and the poller cannot reach maximum throughput.
+          {{ __('Worker seconds indicates the maximum polling throughput a node can achieve in perfect conditions. If the consumed is close to the maximum, consider adding more threads, or better tuning your groups.') }}<br>
+          {{ __('If there are devices pending but consumed worker seconds is low, your hardware is not sufficient for the number of devices and the poller cannot reach maximum throughput.') }}
         </small>
     </div>
 </x-panel>

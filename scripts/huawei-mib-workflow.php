@@ -21,6 +21,9 @@ switch ($command) {
     case 'trap-modules':
         echo implode(PHP_EOL, trapModules($huaweiDir)) . PHP_EOL;
         break;
+    case 'trap-handler-map':
+        writeJson(trapHandlerMap($root, $huaweiDir));
+        break;
     case 'audit':
         writeJson(runAudit($root, $rootMibDir, $huaweiDir));
         break;
@@ -35,6 +38,7 @@ Usage:
   php scripts/huawei-mib-workflow.php import /path/to/V600R025C00SPC600_MIB.zip [expected-sha256]
   php scripts/huawei-mib-workflow.php manifest > mibs/huawei-manifest.json
   php scripts/huawei-mib-workflow.php trap-modules > mibs/huawei-trap-modules.list
+  php scripts/huawei-mib-workflow.php trap-handler-map > mibs/huawei-trap-handler-map.json
   php scripts/huawei-mib-workflow.php audit
   php scripts/huawei-mib-workflow.php diff-template V600R025C00SPC600 V800R025C00SPC600 > {$docsRoot}/reports/huawei/HUAWEI_MIB_DIFF_*.md
 
@@ -459,20 +463,99 @@ function moduleReferences(array $families, string $module): array
 
 function trapModules(string $huaweiDir): array
 {
-    $modules = [
-        'HUAWEI-BASE-TRAP-MIB',
-        'HUAWEI-ENTITY-TRAP-MIB',
-        'HUAWEI-FWD-RES-TRAP-MIB',
-        'HUAWEI-LDT-MIB',
-        'HUAWEI-NTP-TRAP-MIB',
-        'HUAWEI-SNMP-NOTIFICATION-MIB',
-        'ISM-HUAWEI-MIB',
-    ];
+    $modules = [];
+    foreach (sortedMibFiles($huaweiDir) as $file) {
+        $contents = (string) file_get_contents($file);
+        if (preg_match('/^\s*[A-Za-z][A-Za-z0-9_-]*\s+NOTIFICATION-TYPE\s*$/mi', $contents)) {
+            $modules[] = extractMibName($file);
+        }
+    }
 
-    $modules = array_values(array_filter($modules, static fn ($module) => is_file($huaweiDir . '/' . $module)));
+    $modules = array_values(array_unique($modules));
     sort($modules);
 
     return $modules;
+}
+
+function trapHandlerMap(string $root, string $huaweiDir): array
+{
+    $dedicatedHandlers = configuredTrapHandlers($root . '/config/snmptraps.php');
+    $entries = [];
+    $dedicatedCount = 0;
+    $definitionCount = 0;
+
+    foreach (sortedMibFiles($huaweiDir) as $file) {
+        $contents = (string) file_get_contents($file);
+        if (! preg_match_all('/^\s*([A-Za-z][A-Za-z0-9_-]*)\s+NOTIFICATION-TYPE\s*$/mi', $contents, $matches)) {
+            continue;
+        }
+
+        $module = extractMibName($file);
+        foreach ($matches[1] as $notification) {
+            $definitionCount++;
+            $oid = $module . '::' . $notification;
+            if (isset($entries[$oid])) {
+                $entries[$oid]['definition_count']++;
+
+                continue;
+            }
+
+            $handler = $dedicatedHandlers[$oid] ?? 'LibreNMS\\Snmptrap\\Handlers\\HuaweiGenericTrap';
+            $type = isset($dedicatedHandlers[$oid]) ? 'dedicated' : 'generic';
+            if ($type === 'dedicated') {
+                $dedicatedCount++;
+            }
+
+            $entries[$oid] = [
+                'module' => $module,
+                'notification' => $notification,
+                'handler_type' => $type,
+                'handler' => $handler,
+                'registration' => $type === 'dedicated'
+                    ? 'config/snmptraps.php'
+                    : 'app/Providers/SnmptrapProvider.php',
+                'definition_count' => 1,
+            ];
+        }
+    }
+
+    ksort($entries);
+
+    return [
+        'schema' => 'librenms-huawei-trap-handler-map-v1',
+        'source_version' => activeSourceVersion(dirname($huaweiDir)),
+        'generated_from' => [
+            'mib_dir' => 'mibs/huawei',
+            'dedicated_handler_config' => 'config/snmptraps.php',
+            'generic_handler_provider' => 'app/Providers/SnmptrapProvider.php',
+        ],
+        'summary' => [
+            'notification_definitions' => $definitionCount,
+            'unique_notifications' => count($entries),
+            'duplicate_definitions' => $definitionCount - count($entries),
+            'dedicated' => $dedicatedCount,
+            'generic' => count($entries) - $dedicatedCount,
+        ],
+        'notifications' => $entries,
+    ];
+}
+
+function configuredTrapHandlers(string $configFile): array
+{
+    $contents = (string) file_get_contents($configFile);
+    preg_match_all(
+        "/'([^']+)'\\s*=>\\s*([A-Za-z0-9_\\\\]+)::class/",
+        $contents,
+        $matches,
+        PREG_SET_ORDER
+    );
+
+    $handlers = [];
+    foreach ($matches as $match) {
+        $handlers[$match[1]] = $match[2];
+    }
+
+    return $handlers;
 }
 
 function moduleStatus(string $module): string

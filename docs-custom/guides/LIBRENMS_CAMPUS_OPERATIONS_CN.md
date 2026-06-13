@@ -345,6 +345,8 @@ docker compose -f docker/compose.yml logs --tail 200 librenms operations-worker
 | 图形无数据 | 检查 dispatcher、`last_polled`、`poll_time`、端口 RRD 和 SNMP 计数 |
 | `python3\r` | Windows CRLF 破坏 shebang；无缓存重建镜像并重建 poller 容器 |
 | Oxidized 无配置 | 检查 API 令牌、共享管理网、SSH、VRP model 和 Git 输出目录 |
+| Huawei Trap 只有 OID 或显示未处理 | 检查 snmptrapd 的 `-m ALL`、Huawei MIB 搜索路径、Trap 模块清单和 handler 映射 |
+| LLDP Trap 正常但接口 Trap 没有 | 检查 IFNET 的 `linkdown/linkup` 是否为 `on`，并确认测试接口的运行状态确实发生变化 |
 | CE12800 启动慢 | 检查 KVM、内存、CPU 虚拟化；首次启动可能需要较长时间 |
 
 关键页面截图存放在 `docs-custom/assets/`，用于版本发布前复核界面和手册描述。
@@ -361,12 +363,154 @@ docker compose -f docker/compose.yml logs --tail 200 librenms operations-worker
 1. 记录原始 ZIP 的版本和 SHA-256，并保留旧版用于回滚。
 2. 使用 `scripts/huawei-mib-workflow.php import` 导入 Huawei 私有模块。
 3. 审计新增、删除及变更的 OID、Trap 和 VarBind。
-4. 执行 `audit`，重新生成 manifest 与 Trap 模块清单。
+4. 执行 `audit`，重新生成 manifest、Trap 模块清单与 Handler 全量映射。
 5. 检查 discovery、polling、OS 定义和 Trap handler 是否需要同步适配。
 6. 重建 `librenms` 镜像，并强制重建 `librenms`、`dispatcher`、
    `operations-worker`、`snmptrapd`。
 7. 对比宿主和容器内文件数量、关键文件 SHA-256，运行 `snmptranslate`、
    discovery、poller 和 Trap 回归。
 
+Trap 支持分为三个层次：
+
+1. MIB 解析：snmptrapd 使用 Huawei 目录把数字 OID 翻译为模块和符号名称。
+2. 通用 Huawei 处理：没有专用映射的 Huawei Trap 仍会结构化写入 Eventlog，
+   并按 Alarm/Down/Failure、Warning、Resume/Recovery/Clear/Up 推断严重性。
+3. 专用状态处理：接口 Up/Down、环路检测等 Trap 由专用 handler 更新对应端口
+   或对象状态。新增 MIB 并不会自动获得这一层语义。
+
+普通 GE 业务接口的 Up/Down 使用标准 `IF-MIB::linkDown/linkUp`。Huawei VRP 默认可能
+关闭这两个 IFNET 通知，必须检查并启用：
+
+```text
+display snmp-agent trap feature-name ifnet all
+system-view
+snmp-agent trap enable feature-name ifnet trap-name linkdown
+snmp-agent trap enable feature-name ifnet trap-name linkup
+commit
+```
+
+实验环境的接收目标为：
+
+```text
+snmp-agent target-host trap address udp-domain 172.31.255.99 source MEth0/0/0 vpn-instance __MGMT_VPN__ params securityname librenms-lab v2c
+```
+
+`hwPhysicalAdminIfDown/Up` 的 MIB 描述针对物理管理接口语义，不能替代普通 GE 口的
+标准链路通知。另需注意，`linkDown/linkUp` 只在 `ifOperStatus` 变化时发送：没有接线的
+空闲口即使执行 `undo shutdown`，运行状态仍为 Down，也不会产生 `linkUp`。验证时应在
+有物理链路的接口上执行 `shutdown`、`commit`、`undo shutdown`、`commit`，并在事件记录
+中确认 `SNMP Trap: linkDown` 和 `SNMP Trap: linkUp`。
+
+`mibs/huawei-trap-modules.list` 不是手工白名单，而是从全部 Huawei MIB 的
+`NOTIFICATION-TYPE` 自动生成。更新 MIB 后必须重新生成并纳入差异审计。
+`mibs/huawei-trap-handler-map.json` 则穷举每个唯一通知最终命中的专用 Handler
+或 `HuaweiGenericTrap`，可直接用于检查新增 MIB 是否已经进入处理链。
+
+当前基线的 6676 条定义去重后为 6670 个通知：13 个命中专用 Handler，6657 个进入
+`HuaweiGenericTrap`。选择顺序是“精确映射 > Huawei 通用 Handler > 原有 fallback”。
+因此 `hwPhysicalAdminIfDown/Up` 可更新对应物理管理接口状态，普通业务接口由标准
+`linkDown/linkUp` Handler 更新；未专门适配的 Huawei LLDP、实体、资源等通知则保存
+完整 Trap 名称和 VarBind，但不会猜测并修改对象状态。完整的专用
+Handler 开发步骤、映射查询方式和 MIB 变化审计见 Huawei MIB 维护手册。
+
 完整 PowerShell 命令、差异报告和回滚步骤见
 `docs-custom/guides/HUAWEI_MIB_DEPLOYMENT_CN.md`。
+
+## 16. 采集周期与数据保留
+
+以下数值是当前环境的实际生效配置，时间均采用 `Asia/Shanghai`。LibreNMS 主容器每分钟
+执行 Laravel 调度器，并在每天 `00:15` 执行 `daily.sh` 数据库维护。Dispatcher 的
+`service_update_enabled=false`，用于避免再由 Dispatcher 重复执行每日维护。
+
+### 16.1 周期性采集
+
+| 数据或任务 | 当前周期 | 数据写入位置 | 说明 |
+| --- | ---: | --- | --- |
+| SNMP 轮询、端口流量、传感器、CPU、内存 | 300 秒 | MariaDB 当前状态、RRD 历史 | 主要性能指标每 5 分钟更新 |
+| 设备不可达重试 | 60 秒 | 设备状态、事件记录 | 只在设备 Down 等场景使用 |
+| 设备发现 | 21600 秒 | MariaDB 设备、端口、传感器等表 | 每 6 小时重新识别硬件和能力 |
+| 自动发现候选网段扫描 | 每 6 小时 | 自动发现任务和候选设备表 | 与单设备 discovery 不是同一任务 |
+| 告警规则评估 | 60 秒 | `alerts`、`alert_log` | 状态变化时生成告警历史 |
+| 服务检查 | 300 秒 | 服务状态及 RRD | 当前 Dispatcher 配置为每 5 分钟 |
+| Billing 采集 | 300 秒 | `bill_data` 等表 | 计费计算周期为 60 秒 |
+| Ping 采集 | 300 秒 | Ping 状态及 RRD | 当前 Dispatcher 中 Ping worker 未启用 |
+| Trap | 事件驱动 | `eventlog` | 收到后立即处理，不等待轮询周期 |
+| Syslog | 事件驱动 | `syslog` | 当前 `enable_syslog=false`，启用 syslog profile 后才接收 |
+| Oxidized 配置备份 | 3600 秒 | `oxidized-output` Git 仓库 | 每小时拉取一次；也可从 GUI 手工刷新 |
+| 运维任务队列状态检查 | 300 秒 | 队列及任务表 | Laravel 调度器每 5 分钟确认调度正常 |
+
+手工执行 discovery、poller、Oxidized 刷新或收到 Trap/Syslog 时，会在上述周期之外立即
+产生数据。
+
+### 16.2 RRD 性能历史
+
+当前 `rrd.step=300`，即一个原始点代表 5 分钟。RRD 是固定大小的环形归档，不会在某个
+时刻整表清空，而是在写入新点时自动覆盖最旧的同精度数据：
+
+| 归档精度 | 点数 | 可查询时间范围 | 聚合方式 |
+| --- | ---: | ---: | --- |
+| 5 分钟 | 2016 | 7 天 | Average、Min、Max、Last |
+| 30 分钟 | 1440 | 30 天 | Average、Min、Max |
+| 2 小时 | 1440 | 120 天 | Average、Min、Max |
+| 1 天 | 1440 | 1440 天，约 3.94 年 | Average、Min、Max |
+
+因此超过 7 天后仍有图形，但精度会逐级降低。当前 `rrd_purge=0`，表示不按文件最后修改
+时间自动删除整个 RRD 文件。端口被标记删除后，由每日端口清理删除端口记录及对应 RRD；
+其他遗留 RRD 需要手工清理或把 `rrd_purge` 设置为大于 0 的天数。
+
+### 16.3 数据库与日志保留
+
+| 数据类型 | 当前保留时间 | 清理执行时间 | 清理行为 |
+| --- | ---: | --- | --- |
+| 事件记录，包括已处理 Trap | 30 天 | 每天 `00:15` | 删除 `eventlog.datetime` 超过 30 天的记录 |
+| Syslog | 30 天 | 每小时第 17 分 | 启用后删除超过 30 天的记录；当前接收功能关闭 |
+| 告警历史 | 365 天 | 每天 `00:15` | 清理已恢复告警的旧历史；活动告警保留最新一条旧状态 |
+| 登录和认证日志 | 30 天 | 每天 `00:15` | 删除超过 30 天的 `authlog` |
+| FDB MAC 表历史 | 10 天未更新 | 每天 `00:15` | 删除 `updated_at` 超过 10 天的记录 |
+| NAC 端口记录 | 10 天未更新 | 每天 `00:15` | 删除超过 10 天未更新的记录 |
+| 路由记录 | 10 天未更新 | 每天 `00:15` | 删除超过 10 天未更新的记录 |
+| 已删除端口 | 不保留 | 每天 `00:15` | `ports_purge=true`，发现为已删除的端口在下次维护时清除 |
+| 网络自动发现历史对象 | 不自动清理 | 每周日 `02:00-02:59` 检查 | `networks_purge=false`，任务运行但跳过删除 |
+| Billing 历史 | 未设置自动期限 | 每天任务会检查，但跳过删除 | `bill_data_purge` 当前无有效值 |
+| Oxidized 配置版本 | 不自动清理 | 无 | Git 历史持续保留，需通过 Git 策略手工压缩或删除 |
+| Docker 容器标准输出日志 | 未配置项目级期限 | 无 | Compose 未设置日志大小及文件数上限，由 Docker 主机策略决定 |
+| MariaDB、Redis、RRD 命名卷 | 不自动删除 | 无 | `docker compose down` 不删除；使用 `down -v` 才会删除卷 |
+
+设备、端口、传感器、VLAN 和邻居等清单表主要保存“当前发现状态”，不是完整时间序列。
+属性变化会写入事件记录，但对象本身会在后续 discovery 中更新；需要长期审计配置变化时
+应使用 Oxidized Git 历史。
+
+### 16.4 查询和调整
+
+查看当前周期及保留值：
+
+```bash
+lnms config:get service_poller_frequency
+lnms config:get service_discovery_frequency
+lnms config:get service_alerting_frequency
+lnms config:get eventlog_purge
+lnms config:get syslog_purge
+lnms config:get alert_log_purge
+lnms config:get authlog_purge
+lnms config:get rrd.step
+lnms config:get rrd_purge
+```
+
+查看实际定时任务：
+
+```bash
+php artisan schedule:list
+crontab -l
+```
+
+修改示例：
+
+```bash
+lnms config:set eventlog_purge 90
+lnms config:set syslog_purge 90
+lnms config:set alert_log_purge 730
+```
+
+修改保留期限只影响下一次清理，不会恢复已经删除的数据。修改 `rrd.step` 或 RRD 归档定义
+不会自动转换已有 RRD 文件，必须先评估存储容量，并使用 LibreNMS 的 RRD step 迁移工具。
+执行任何清理前应先备份 `db-data`、`librenms-data` 和 `oxidized-output` 命名卷。

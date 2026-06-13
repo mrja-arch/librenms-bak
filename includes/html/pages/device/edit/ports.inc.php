@@ -10,16 +10,16 @@
     <table id='edit-ports' class='table table-striped'>
         <thead>
             <tr>
-                <th data-column-id='ifIndex'>Index</th>
-                <th data-column-id='ifName'>Name</th>
-                <th data-column-id='ifAdminStatus'>Admin</th>
-                <th data-column-id='ifOperStatus'>Operational</th>
-                <th data-column-id='disabled' data-sortable='false'>Disable polling</th>
-                <th data-column-id='ignore' data-sortable='false'>Ignore alert tag</th>
+                <th data-column-id='ifIndex'><?php echo __('Index') ?></th>
+                <th data-column-id='ifName'><?php echo __('Name') ?></th>
+                <th data-column-id='ifAdminStatus'><?php echo __('Admin') ?></th>
+                <th data-column-id='ifOperStatus'><?php echo __('Operational') ?></th>
+                <th data-column-id='disabled' data-sortable='false'><?php echo __('Disable polling') ?></th>
+                <th data-column-id='ignore' data-sortable='false'><?php echo __('Ignore alert tag') ?></th>
                 <th data-column-id='ifSpeed'>ifSpeed (bits/s)</th>
-                <th data-column-id='portGroup' data-sortable='false' data-searchable='false'>Port Group</th>
-                <th data-column-id='port_tune' data-sortable='false' data-searchable='false'>RRD Tune</th>
-                <th data-column-id='ifAlias'>Description</th>
+                <th data-column-id='portGroup' data-sortable='false' data-searchable='false'><?php echo __('Port Group') ?></th>
+                <th data-column-id='port_tune' data-sortable='false' data-searchable='false'><?php echo __('RRD Tune') ?></th>
+                <th data-column-id='ifAlias'><?php echo __('Description') ?></th>
             </tr>
         </thead>
     </table>
@@ -134,8 +134,8 @@
             event.preventDefault();
             $('[id^="operstatus_"]').each(function () {
                 var name = $(this).attr('id');
-                var text = $(this).text();
-                if (name && text === 'down') {
+                var status = $(this).data('status');
+                if (name && status === 'down') {
                     // get the interface number from the object name
                     var port_id = name.split('_')[1];
                     // find its corresponding checkbox and enable it
@@ -193,24 +193,32 @@
 var grid = $("#edit-ports").bootgrid({
         ajax: true,
         rowCount: [50, 100, 250, -1],
+        labels: <?php echo json_encode([
+            'all' => __('All'),
+            'infos' => __('Showing :from to :to of :total entries'),
+            'loading' => __('Loading...'),
+            'noResults' => __('No results found'),
+            'refresh' => __('Refresh'),
+            'search' => __('Search'),
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>,
         templates: {
             header: '<div id="{{ctx.id}}" class="{{css.header}}"><div class="row">\
                         <div class="col-sm-8 actionBar header_actions">\
                             <span class="pull-left">\
-                                <span class="action_group">Disable polling\
-                                <button type="button" value="Toggle" class="btn btn-default btn-sm" id="disable-toggle" title="Toggle polling for all ports">Toggle</button>\
-                                <button type="button" value="Select" class="btn btn-default btn-sm" id="disable-select" title="Disable polling on all ports">Disable All</button>\
+                                <span class="action_group"><?php echo addslashes(__('Disable polling')) ?>\
+                                <button type="button" value="Toggle" class="btn btn-default btn-sm" id="disable-toggle" title="<?php echo addslashes(__('Toggle polling for all ports')) ?>"><?php echo addslashes(__('Toggle')) ?></button>\
+                                <button type="button" value="Select" class="btn btn-default btn-sm" id="disable-select" title="<?php echo addslashes(__('Disable polling on all ports')) ?>"><?php echo addslashes(__('Disable All')) ?></button>\
                                 </span>\
-                                <span class="action_group">Ignore alerts\
-                                <button type="button" value="Alerted" class="btn btn-default btn-sm" id="alerted-toggle" title="Toggle alerting on all currently-alerted ports">Alerted</button>\
-                                <button type="button" value="Down" class="btn btn-default btn-sm" id="down-select" title="Disable alerting on all currently-down ports">Down</button>\
-                                <button type="button" value="Toggle" class="btn btn-default btn-sm" id="ignore-toggle" title="Toggle alert tag for all ports">Toggle</button>\
-                                <button type="button" value="Select" class="btn btn-default btn-sm" id="ignore-select" title="Disable alert tag on all ports">Ignore All</button></span>\
+                                <span class="action_group"><?php echo addslashes(__('Ignore alerts')) ?>\
+                                <button type="button" value="Alerted" class="btn btn-default btn-sm" id="alerted-toggle" title="<?php echo addslashes(__('Toggle alerting on all currently-alerted ports')) ?>"><?php echo addslashes(__('Alerted')) ?></button>\
+                                <button type="button" value="Down" class="btn btn-default btn-sm" id="down-select" title="<?php echo addslashes(__('Disable alerting on all currently-down ports')) ?>"><?php echo addslashes(__('Down')) ?></button>\
+                                <button type="button" value="Toggle" class="btn btn-default btn-sm" id="ignore-toggle" title="<?php echo addslashes(__('Toggle alert tag for all ports')) ?>"><?php echo addslashes(__('Toggle')) ?></button>\
+                                <button type="button" value="Select" class="btn btn-default btn-sm" id="ignore-select" title="<?php echo addslashes(__('Disable alert tag on all ports')) ?>"><?php echo addslashes(__('Ignore All')) ?></button></span>\
                                 </span>\
                                 <span class="action_group">\
-                                <button id="save-form" type="button" value="Save" class="btn btn-success btn-sm" title="Save current port disable/ignore settings">Save Toggles</button>\
-                                <button type="button" value="Reset" class="btn btn-danger btn-sm" id="form-reset" title="Reset form to previously-saved settings">Revert Changes</button>\
-                                <button type="button" id="reset_port_state" data-device_id="<?php echo $device['device_id']; ?>" class="btn btn-info btn-sm" name="reset_ports" title="Reset interface speed, admin up/down, and link up/down history, clearing associated alarms"><i class="fa fa-recycle"></i> Reset Ports State</button>\
+                                <button id="save-form" type="button" value="Save" class="btn btn-success btn-sm" title="<?php echo addslashes(__('Save current port disable/ignore settings')) ?>"><?php echo addslashes(__('Save Toggles')) ?></button>\
+                                <button type="button" value="Reset" class="btn btn-danger btn-sm" id="form-reset" title="<?php echo addslashes(__('Reset form to previously-saved settings')) ?>"><?php echo addslashes(__('Revert Changes')) ?></button>\
+                                <button type="button" id="reset_port_state" data-device_id="<?php echo $device['device_id']; ?>" class="btn btn-info btn-sm" name="reset_ports" title="<?php echo addslashes(__('Reset interface speed, admin up/down, and link up/down history, clearing associated alarms')) ?>"><i class="fa fa-recycle"></i> <?php echo addslashes(__('Reset Ports State')) ?></button>\
                                 </span>\
                             </span>\
                         </div>\
@@ -225,13 +233,16 @@ var grid = $("#edit-ports").bootgrid({
         },
         url: "<?php echo url('/ajax/table/edit-ports/'); ?>"
     }).on("loaded.rs.jquery.bootgrid", function() {
-        $("[type='checkbox']").bootstrapSwitch();
+        $("[type='checkbox']").bootstrapSwitch({
+            onText: <?php echo json_encode(__('ON'), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>,
+            offText: <?php echo json_encode(__('OFF'), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
+        });
         $("[name='override_config']").bootstrapSwitch('offColor','danger');
         $('input[name="override_config"]').on('switchChange.bootstrapSwitch',  function(event, state) {
             override_config(event,state,$(this));
         });
 
-        init_select2('.port_group_select', 'port-group', {}, null, 'No Group');
+        init_select2('.port_group_select', 'port-group', {}, null, <?php echo json_encode(__('No Group'), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>);
         var last_port_group_change;
         $('.port_group_select').on('change', function (e) {
             var $target = $(e.target);

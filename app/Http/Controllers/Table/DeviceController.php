@@ -259,13 +259,13 @@ class DeviceController extends TableController
         $actions = [
             [
                 [
-                    'title' => 'View Device',
+                    'title' => __('View Device'),
                     'href' => Url::deviceUrl($device),
                     'icon' => 'fa-id-card',
                     'external' => false,
                 ],
                 [
-                    'title' => 'View alerts',
+                    'title' => __('View alerts'),
                     'href' => Url::deviceUrl($device, ['tab' => 'alerts']),
                     'icon' => 'fa-exclamation-circle',
                     'external' => false,
@@ -275,7 +275,7 @@ class DeviceController extends TableController
 
         if (Gate::allows('update', Device::class)) {
             $actions[0][] = [
-                'title' => 'Edit device',
+                'title' => __('Edit device'),
                 'href' => Url::deviceUrl($device, ['tab' => 'edit']),
                 'icon' => 'fa-gear',
                 'external' => false,
@@ -284,7 +284,7 @@ class DeviceController extends TableController
         $row = $this->isDetailed() ? 1 : 0;
 
         $actions[$row][] = [
-            'title' => 'Telnet to ' . $device->hostname,
+            'title' => __('Telnet to :hostname', ['hostname' => $device->hostname]),
             'href' => 'telnet://' . $device->hostname,
             'icon' => 'fa-terminal',
             'external' => false,
@@ -298,14 +298,14 @@ class DeviceController extends TableController
         }
 
         $actions[$row][] = [
-            'title' => 'SSH to ' . $device->hostname,
+            'title' => __('SSH to :hostname', ['hostname' => $device->hostname]),
             'href' => $ssh_href,
             'icon' => 'fa-lock',
             'external' => false,
         ];
 
         $actions[$row][] = [
-            'title' => 'Launch browser to ' . $device->hostname,
+            'title' => __('Launch browser to :hostname', ['hostname' => $device->hostname]),
             'href' => 'https://' . $device->hostname,
             'onclick' => 'http_fallback(this); return false;',
             'icon' => 'fa-globe',

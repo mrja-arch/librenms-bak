@@ -108,6 +108,8 @@ return [
         'HUAWEI-BASE-TRAP-MIB::hwCPUUtilizationResume' => LibreNMS\Snmptrap\Handlers\HuaweiAlarmTrap::class,
         'HUAWEI-LDT-MIB::hwLdtPortLoopDetect' => LibreNMS\Snmptrap\Handlers\HuaweiLdtPortLoopDetect::class,
         'HUAWEI-LDT-MIB::hwLdtPortLoopDetectRecovery' => LibreNMS\Snmptrap\Handlers\HuaweiLdtPortLoopDetectRecovery::class,
+        'HUAWEI-IF-EXT-MIB::hwPhysicalAdminIfDown' => LibreNMS\Snmptrap\Handlers\HuaweiPhysicalAdminIfDown::class,
+        'HUAWEI-IF-EXT-MIB::hwPhysicalAdminIfUp' => LibreNMS\Snmptrap\Handlers\HuaweiPhysicalAdminIfUp::class,
         'HUAWEI-BASE-TRAP-MIB::hwStorageUtilizationRisingAlarm' => LibreNMS\Snmptrap\Handlers\HuaweiAlarmTrap::class,
         'HUAWEI-BASE-TRAP-MIB::hwStorageUtilizationResume' => LibreNMS\Snmptrap\Handlers\HuaweiAlarmTrap::class,
         'ISM-HUAWEI-MIB::hwIsmAlarmReporting' => LibreNMS\Snmptrap\Handlers\HuaweiAlarmTrap::class,

@@ -57,6 +57,7 @@ class Trap
 
         // parse the oid data
         $this->oid_data = (new Collection($lines))->mapWithKeys(function ($line) {
+            $line = rtrim($line, "\r");
             [$oid, $data] = explode(' ', $line, 2);
 
             return [$oid => trim($data, '"')];

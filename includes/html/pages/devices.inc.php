@@ -346,6 +346,14 @@ if ($format == 'graph') {
             ajax: true,
             rowCount: [50, 100, 250, -1],
             columnSelection: true,
+            labels: <?php echo json_encode([
+                'all' => __('All'),
+                'infos' => __('Showing {{ctx.start}} to {{ctx.end}} of {{ctx.total}} entries'),
+                'loading' => __('Loading...'),
+                'noResults' => __('No results found'),
+                'refresh' => __('Refresh'),
+                'search' => __('Search'),
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>,
             formatters: {
                 "status": function (column, row) {
                     return "<span title=\"Status: " + row.status + " : " + row.extra.replace(/^label-/,'') + "\" class=\"<?php echo $detailed ? 'alert-status' : 'alert-status-small' ?> " + row.extra + "\"></span>";
@@ -414,8 +422,8 @@ if ($format == 'graph') {
             "<div class='form-group'><select name='location' id='location' class='form-control'></select></div>" +
             "<div class='form-group'><select name='type' id='device-type' class='form-control'></select></div>" +
             "<input type='submit' class='btn btn-info' value='<?= __('Search') ?>'>" +
-            "<a href='<?php echo Url::generate(array_diff_key($vars, ['_token' => 1])) ?>' title='Update the browser URL to reflect the search criteria.' class='btn btn-default'><?= __('Update URL') ?></a>" +
-            "<a href='<?php echo Url::generate(['page' => 'devices', 'section' => $vars['section'] ?? '', 'bare' => $vars['bare'] ?? '']) ?>' title='Reset criteria to default.' class='btn btn-default'><?= __('Reset') ?></a>" +
+            "<a href='<?php echo Url::generate(array_diff_key($vars, ['_token' => 1])) ?>' title='<?= addslashes(__('Update the browser URL to reflect the search criteria.')) ?>' class='btn btn-default'><?= __('Update URL') ?></a>" +
+            "<a href='<?php echo Url::generate(['page' => 'devices', 'section' => $vars['section'] ?? '', 'bare' => $vars['bare'] ?? '']) ?>' title='<?= addslashes(__('Reset criteria to default.')) ?>' class='btn btn-default'><?= __('Reset') ?></a>" +
             "</form>" +
             "</div>"
         );

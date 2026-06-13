@@ -86,8 +86,8 @@ class EditPortsController extends TableController
         return [
             'ifIndex' => $model->ifIndex,
             'ifName' => htmlentities($model->getLabel()),
-            'ifAdminStatus' => htmlentities($ifAdminStatus),
-            'ifOperStatus' => '<span id="operstatus_' . $model->port_id . '" ' . $out_of_sync . '>' . htmlentities($ifOperStatus) . '</span>',
+            'ifAdminStatus' => htmlentities(__($ifAdminStatus)),
+            'ifOperStatus' => '<span id="operstatus_' . $model->port_id . '" data-status="' . htmlentities($ifOperStatus) . '" ' . $out_of_sync . '>' . htmlentities(__($ifOperStatus)) . '</span>',
             'disabled' => '<input type="checkbox" class="disable-check" data-size="small" name="disabled_' . $model->port_id . '"' . ($model->disabled ? 'checked' : '') . '>
                                <input type="hidden" name="olddis_' . $model->port_id . '" value="' . ($model->disabled ? 1 : 0) . '"">',
             'ignore' => '<input type="checkbox" class="ignore-check" data-size="small" name="ignore_' . $model->port_id . '"' . ($model->ignore ? 'checked' : '') . '>

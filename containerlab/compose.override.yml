@@ -16,6 +16,11 @@ services:
     networks:
       default:
       campus-mgmt:
+  snmptrapd:
+    networks:
+      default:
+      campus-mgmt:
+        ipv4_address: 172.31.255.99
 
 networks:
   campus-mgmt:

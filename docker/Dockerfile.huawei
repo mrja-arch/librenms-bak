@@ -42,9 +42,14 @@ RUN composer install \
 USER root
 
 RUN chmod +x scripts/huawei-mib-workflow.php \
+    && php scripts/huawei-mib-workflow.php trap-modules > mibs/huawei-trap-modules.list \
+    && php scripts/huawei-mib-workflow.php trap-handler-map > mibs/huawei-trap-handler-map.json \
     && printf '{"version":"%s","source_commit":"%s","source_tree":"/opt/librenms"}\n' \
         "${CUSTOM_VERSION}" "${SOURCE_COMMIT}" > /opt/librenms/.custom-build.json \
-    && chown librenms:librenms /opt/librenms/.custom-build.json
+    && chown librenms:librenms \
+        /opt/librenms/.custom-build.json \
+        /opt/librenms/mibs/huawei-trap-modules.list \
+        /opt/librenms/mibs/huawei-trap-handler-map.json
 
 LABEL org.opencontainers.image.title="LibreNMS Huawei Custom"
 LABEL org.opencontainers.image.version="${CUSTOM_VERSION}"
