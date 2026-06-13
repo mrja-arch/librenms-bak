@@ -2,5 +2,4 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-containerlab destroy --topo "$ROOT/campus.clab.yml" --cleanup
-
+"$ROOT/scripts/clab.sh" destroy --topo "$ROOT/campus.clab.yml" --cleanup

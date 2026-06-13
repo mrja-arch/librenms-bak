@@ -3,7 +3,8 @@
         <thead><tr>
             <th>ID</th><th>{{ __('Networks') }}</th><th>{{ __('Status') }}</th>
             <th>{{ __('Progress') }}</th><th>{{ __('Candidates') }}</th>
-            <th>{{ __('Started By') }}</th><th>{{ __('Created') }}</th><th>{{ __('Error') }}</th>
+            <th>{{ __('Started By') }}</th><th>{{ __('Created') }}</th>
+            <th>{{ __('Completed') }}</th><th>{{ __('Error') }}</th>
         </tr></thead>
         <tbody>
         @forelse($scans as $scan)
@@ -15,10 +16,11 @@
                 <td>{{ $scan->candidates_found }}</td>
                 <td>{{ $scan->requester?->username ?: '-' }}</td>
                 <td>{{ $scan->created_at }}</td>
+                <td>{{ $scan->completed_at ?: '-' }}</td>
                 <td class="text-danger">{{ $scan->error }}</td>
             </tr>
         @empty
-            <tr><td colspan="8" class="text-center text-muted">{{ __('No scan records.') }}</td></tr>
+            <tr><td colspan="9" class="text-center text-muted">{{ __('No scan records.') }}</td></tr>
         @endforelse
         </tbody>
     </table>

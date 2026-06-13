@@ -162,9 +162,13 @@ services:
       - "${OXIDIZED_PORT:-8888}:8888"
     environment:
       CONFIG_RELOAD_INTERVAL: ${OXIDIZED_CONFIG_RELOAD_INTERVAL:-600}
+      OXIDIZED_USERNAME: ${OXIDIZED_USERNAME:-admin}
+      OXIDIZED_PASSWORD: ${OXIDIZED_PASSWORD:-admin}
+      OXIDIZED_API_TOKEN: ${OXIDIZED_API_TOKEN:-}
     volumes:
-      - ./oxidized:/root/.config/oxidized
-      - oxidized-output:/root/.config/oxidized/output
+      - ./oxidized/config:/etc/oxidized/config.template:ro
+      - ./oxidized/init-config.sh:/etc/my_init.d/10-oxidized-config.sh:ro
+      - oxidized-output:/home/oxidized/.config/oxidized/output
     restart: unless-stopped
 
 volumes:

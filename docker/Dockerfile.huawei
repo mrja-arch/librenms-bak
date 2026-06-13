@@ -14,7 +14,12 @@ RUN cp /opt/librenms/.env /tmp/librenms-runtime.env \
     && rm -rf /opt/librenms
 COPY --chown=librenms:librenms . /opt/librenms
 
-RUN mkdir -p \
+RUN find /opt/librenms -type f -exec sh -c '\
+        for file do \
+            IFS= read -r first_line < "$file" || true; \
+            case "$first_line" in "#!"*) sed -i "s/\r$//" "$file" ;; esac; \
+        done' sh {} + \
+    && mkdir -p \
         bootstrap/cache \
         config.d \
         storage/framework/cache/data \

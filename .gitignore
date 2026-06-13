@@ -8,6 +8,7 @@
 !/.github/
 !/.mention-bot
 !/.env.example
+!/docker/.env.example
 
 # Others #
 ##########

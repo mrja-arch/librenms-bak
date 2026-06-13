@@ -36,7 +36,10 @@
                             <i class="fa fa-search" aria-hidden="true"></i> {{ __('Start Scan') }}
                         </button>
                     </form>
-                    <p class="help-block">{{ __('Only networks in the global nets setting may be scanned. Maximum 4096 addresses per scan.') }}</p>
+                    <p class="help-block">
+                        {{ __('Only networks in the global nets setting may be scanned. Maximum 4096 addresses per scan.') }}
+                        {{ __('The scan uses the global SNMP credentials and only keeps SNMP-responsive devices.') }}
+                    </p>
                 </div>
                 <div class="col-md-4 text-right">
                     <a class="btn btn-default" href="{{ route('operations.index') }}">

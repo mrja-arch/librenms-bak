@@ -1,7 +1,7 @@
 ---
-username: "replace-me"
-password: "replace-me"
-model: "ios"
+username: "__OXIDIZED_USERNAME__"
+password: "__OXIDIZED_PASSWORD__"
+model: "vrp"
 interval: 3600
 use_syslog: false
 debug: false
@@ -9,25 +9,24 @@ threads: 30
 timeout: 20
 retries: 3
 prompt: !ruby/regexp /^([\w.@()-]+[#>]\s?)$/
-rest: 127.0.0.1:8888
+rest: 0.0.0.0:8888
 next_adds_job: true
 vars: {}
 source:
   default: http
   debug: false
   http:
-    url: http://librenms/api/v0/oxidized
+    url: http://librenms:8000/api/v0/oxidized
     map:
       name: hostname
       model: os
       group: group
     headers:
-      X-Auth-Token: "replace-with-librenms-api-token"
+      X-Auth-Token: "__OXIDIZED_API_TOKEN__"
 output:
   default: git
   git:
     user: LibreNMS
     email: librenms@example.invalid
-repo:
-  default: /root/.config/oxidized/output/configs.git
+    repo: /home/oxidized/.config/oxidized/output/configs.git
 hooks: {}

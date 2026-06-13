@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class ProbeDiscoveryCandidate implements ShouldQueue
@@ -30,7 +31,9 @@ class ProbeDiscoveryCandidate implements ShouldQueue
 
         try {
             $candidate->fill($probe->execute($candidate->ip))->save();
-            if (! $candidate->ping_status && ! $candidate->snmp_status && $candidate->source_methods === ['SNMP SCAN']) {
+            $scanOnly = count((array) $candidate->source_methods) === 1
+                && in_array('SNMP SCAN', (array) $candidate->source_methods, true);
+            if ($scanOnly && ! $candidate->snmp_status) {
                 $candidate->delete();
             }
         } catch (Throwable $e) {
@@ -39,14 +42,14 @@ class ProbeDiscoveryCandidate implements ShouldQueue
             $scan = DeviceDiscoveryScan::find($this->scanId);
             if ($scan) {
                 $scan->increment('processed_hosts');
-                if ($candidate->ping_status || $candidate->snmp_status) {
+                if ($candidate->snmp_status) {
                     $scan->increment('candidates_found');
                 }
                 $scan->refresh();
                 if ($scan->processed_hosts >= $scan->total_hosts) {
                     $scan->update([
                         'status' => OperationTaskStatus::Succeeded,
-                        'completed_at' => now(),
+                        'completed_at' => DB::scalar('SELECT CURRENT_TIMESTAMP'),
                     ]);
                 }
             }

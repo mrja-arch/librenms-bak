@@ -53,6 +53,7 @@ function importVendorZip(string $zipPath, string $expectedSha256, string $huawei
     }
 
     $actualSha256 = hash_file('sha256', $zipPath);
+    $sourceVersion = sourceVersionFromFilename($zipPath);
     if ($expectedSha256 !== '' && ! hash_equals(strtolower($expectedSha256), strtolower($actualSha256))) {
         throw new RuntimeException("Huawei MIB ZIP checksum mismatch. Expected {$expectedSha256}, got {$actualSha256}.");
     }
@@ -89,11 +90,12 @@ function importVendorZip(string $zipPath, string $expectedSha256, string $huawei
     }
 
     $zip->close();
+    file_put_contents(dirname($huaweiDir) . '/huawei-source-version.txt', $sourceVersion . PHP_EOL);
     sort($imported);
 
     return [
         'source_file' => basename($zipPath),
-        'source_version' => 'V600R025C00SPC600',
+        'source_version' => $sourceVersion,
         'sha256' => $actualSha256,
         'policy' => 'Import HUAWEI-*.mib only; preserve all other LibreNMS 26.5.1 MIB files.',
         'imported_count' => count($imported),
@@ -104,6 +106,7 @@ function importVendorZip(string $zipPath, string $expectedSha256, string $huawei
 function buildManifest(string $root, string $huaweiDir): array
 {
     $references = scanCodeReferences($root);
+    $sourceVersion = activeSourceVersion(dirname($huaweiDir));
     $modules = [];
 
     foreach (sortedMibFiles($huaweiDir) as $file) {
@@ -113,7 +116,7 @@ function buildManifest(string $root, string $huaweiDir): array
             'file' => 'mibs/huawei/' . $name,
             'mib_name' => extractMibName($file),
             'status' => moduleStatus($name),
-            'source_version' => moduleSourceVersion($name),
+            'source_version' => moduleSourceVersion($name, $sourceVersion),
             'sha256' => hash_file('sha256', $file),
             'device_families' => $families,
             'references' => $references[$name] ?? moduleReferences($families, $name),
@@ -485,9 +488,33 @@ function moduleStatus(string $module): string
     return 'current';
 }
 
-function moduleSourceVersion(string $module): string
+function moduleSourceVersion(string $module, string $activeSourceVersion): string
 {
-    return in_array($module, compatibilityModules(), true) ? 'repo-compat' : 'V600R025C00SPC600';
+    return in_array($module, compatibilityModules(), true) ? 'repo-compat' : $activeSourceVersion;
+}
+
+function sourceVersionFromFilename(string $path): string
+{
+    if (preg_match('/(V\d{3}R\d{3}C\d{2}SPC\d{3})/i', basename($path), $matches)) {
+        return strtoupper($matches[1]);
+    }
+
+    throw new InvalidArgumentException(
+        'Unable to detect Huawei source version from ZIP filename. Expected a name such as V600R025C00SPC600_MIB.zip.'
+    );
+}
+
+function activeSourceVersion(string $mibRoot): string
+{
+    $versionFile = $mibRoot . '/huawei-source-version.txt';
+    if (is_file($versionFile)) {
+        $version = trim((string) file_get_contents($versionFile));
+        if ($version !== '') {
+            return $version;
+        }
+    }
+
+    return 'V600R025C00SPC600';
 }
 
 function compatibilityModules(): array

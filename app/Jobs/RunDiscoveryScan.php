@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use LibreNMS\Util\IP;
 use RuntimeException;
 use Throwable;
@@ -28,15 +29,19 @@ class RunDiscoveryScan implements ShouldQueue
 
     public function handle(DeviceDiscoveryCandidateService $candidates): void
     {
+        // Queue workers are long-lived and may retain settings from before the
+        // administrator updated the global discovery networks.
+        LibrenmsConfig::invalidateAndReload();
+
         $scan = DeviceDiscoveryScan::findOrFail($this->scanId);
-        $scan->update(['status' => OperationTaskStatus::Running, 'started_at' => now()]);
+        $scan->update(['status' => OperationTaskStatus::Running, 'started_at' => DB::scalar('SELECT CURRENT_TIMESTAMP')]);
 
         try {
             $hosts = $this->expandNetworks((array) $scan->networks);
             $scan->update(['total_hosts' => count($hosts)]);
 
             if ($hosts === []) {
-                $scan->update(['status' => OperationTaskStatus::Succeeded, 'completed_at' => now()]);
+                $scan->update(['status' => OperationTaskStatus::Succeeded, 'completed_at' => DB::scalar('SELECT CURRENT_TIMESTAMP')]);
 
                 return;
             }
@@ -48,7 +53,7 @@ class RunDiscoveryScan implements ShouldQueue
         } catch (Throwable $e) {
             $scan->update([
                 'status' => OperationTaskStatus::Failed,
-                'completed_at' => now(),
+                'completed_at' => DB::scalar('SELECT CURRENT_TIMESTAMP'),
                 'error' => $e->getMessage(),
             ]);
         }

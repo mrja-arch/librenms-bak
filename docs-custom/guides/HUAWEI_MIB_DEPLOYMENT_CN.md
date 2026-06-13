@@ -6,6 +6,7 @@
 - 原始归档目录：`mib-archives/huawei`
 - 机器清单：`mibs/huawei-manifest.json`
 - Trap 模块清单：`mibs/huawei-trap-modules.list`
+- 当前厂家来源版本：`mibs/huawei-source-version.txt`
 - 差异报告模板：`docs-custom/templates/HUAWEI_MIB_DIFF_TEMPLATE.md`
 - 差异报告输出目录：`docs-custom/reports/huawei/`
 - 工作流脚本：`scripts/huawei-mib-workflow.php`
@@ -57,32 +58,77 @@ MIB 只负责：
 
 ## 5. 升级流程
 
-1. 将厂家原始 ZIP 保存在仓库外，记录版本和 SHA-256，不把原始包提交到 Git。
-2. 使用工作流脚本校验并导入 Huawei 私有模块：
+1. 将厂家原始 ZIP 保存在仓库外，文件名保留版本号，例如
+   `V800R025C00SPC600_MIB.zip`。记录 SHA-256，不把原始包提交到 Git。
+2. 在 PowerShell 中计算校验值：
 
-```bash
-php scripts/huawei-mib-workflow.php import /path/to/V600R025C00SPC600_MIB.zip 45e88df40f1fb0238bb585bd388451a0fbada6f932de5290bf090ed25fce200f
+```powershell
+Get-FileHash -Algorithm SHA256 C:\MIB\V800R025C00SPC600_MIB.zip
+```
+
+3. 使用 LibreNMS 镜像中的 PHP 执行导入。将 ZIP 目录只读挂载为 `/vendor`：
+
+```powershell
+docker run --rm --entrypoint /bin/sh `
+  -v "${PWD}:/work" -v "C:\MIB:/vendor:ro" -w /work `
+  mrja/librenms:26.5.1-custom -lc `
+  "php scripts/huawei-mib-workflow.php import /vendor/V800R025C00SPC600_MIB.zip <SHA256>"
 ```
 
 导入命令只更新 `HUAWEI-*.mib`，不会用厂家包中的标准依赖 MIB 覆盖 LibreNMS 基线，也不会删除厂家包中没有提供的兼容模块。
+脚本从 ZIP 文件名识别版本，并更新 `mibs/huawei-source-version.txt`。
 
-3. 运行差异报告模板：
+4. 运行差异报告模板：
 
-```bash
-php scripts/huawei-mib-workflow.php diff-template V600R025C00SPC600 V800R025C00SPC600 > docs-custom/reports/huawei/HUAWEI_MIB_DIFF_V600_TO_V800.md
+```powershell
+docker run --rm --entrypoint /bin/sh -v "${PWD}:/work" -w /work `
+  mrja/librenms:26.5.1-custom -lc `
+  "php scripts/huawei-mib-workflow.php diff-template V600R025C00SPC600 V800R025C00SPC600 > docs-custom/reports/huawei/HUAWEI_MIB_DIFF_V600_TO_V800.md"
 ```
 
-4. 对模块、OID、Trap、VarBind 变更做差异审计
-5. 运行审计脚本检查 YAML、PHP、Trap handler 引用：
+5. 对新增、删除和变化的模块、OID、Trap、VarBind 做差异审计。新版包缺失但旧设备仍使用的模块，不要直接删除，应标记并保留为兼容模块。
+6. 运行审计并重新生成机器清单与 Trap 模块清单：
 
-```bash
-php scripts/huawei-mib-workflow.php audit
-php scripts/huawei-mib-workflow.php manifest > mibs/huawei-manifest.json
-php scripts/huawei-mib-workflow.php trap-modules > mibs/huawei-trap-modules.list
+```powershell
+docker run --rm --entrypoint /bin/sh -v "${PWD}:/work" -w /work `
+  mrja/librenms:26.5.1-custom -lc `
+  "php scripts/huawei-mib-workflow.php audit &&
+   php scripts/huawei-mib-workflow.php manifest > mibs/huawei-manifest.json &&
+   php scripts/huawei-mib-workflow.php trap-modules > mibs/huawei-trap-modules.list"
 ```
 
-6. 校验 discovery、polling、Trap 回归
-7. 仅把验证通过的模块合并到 `mibs/huawei`
+审计结果中的 `duplicate_files_in_huawei_dir` 和 `missing_referenced_modules` 均应为空。
+
+7. 重建自定义 LibreNMS 镜像。MIB 位于镜像的 `/opt/librenms/mibs/huawei`，
+   不是运行时宿主目录挂载，因此只执行 `restart` 不会载入新文件：
+
+```powershell
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml build librenms
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml up -d --force-recreate `
+  librenms dispatcher operations-worker snmptrapd
+```
+
+启用了 `syslog` profile 时，也要重建 `syslogng`。
+
+8. 校验宿主与容器文件数量、关键文件哈希和 MIB 搜索路径：
+
+```powershell
+(Get-ChildItem -File mibs/huawei).Count
+Get-FileHash -Algorithm SHA256 mibs/huawei/HUAWEI-MIB
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml exec librenms `
+  sh -lc 'echo "$SNMP_EXTRA_MIB_DIRS"; find /opt/librenms/mibs/huawei -type f | wc -l; sha256sum /opt/librenms/mibs/huawei/HUAWEI-MIB'
+```
+
+9. 使用 Huawei 目录和 LibreNMS 标准 MIB 根目录共同做符号解析：
+
+```powershell
+docker compose -f docker/compose.yml -f containerlab/compose.override.yml exec librenms `
+  snmptranslate -M /opt/librenms/mibs:/opt/librenms/mibs/huawei:/usr/share/snmp/mibs `
+  -m HUAWEI-MIB -On HUAWEI-MIB::hwDatacomm
+```
+
+10. 对测试设备执行 discovery、poller 和实际 OID 查询，并发送至少一条已知 Trap，
+    检查设备识别、传感器、端口、事件日志及 Trap handler。新增 OID 或 Trap 时，还要同步修改第 3 节列出的代码和定义文件。
 
 ## 6. Trap 运行策略
 
@@ -102,5 +148,6 @@ lnms config:set snmptraps.eventlog_detailed true
 
 1. 回退本次替换的 `mibs/huawei` 模块
 2. 恢复上一个 `mibs/huawei-manifest.json`
-3. 重新生成 `mibs/huawei-trap-modules.list`
-4. 重启 LibreNMS 与 snmptrapd sidecar
+3. 恢复上一个 `mibs/huawei-source-version.txt`
+4. 重新生成 `mibs/huawei-trap-modules.list`
+5. 重建自定义镜像并强制重建 LibreNMS 与 snmptrapd sidecar

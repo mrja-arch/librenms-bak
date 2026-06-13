@@ -29,6 +29,13 @@ class DeviceDiscoveryController extends Controller
 
         return view('device.discovery.index', [
             'candidates' => DeviceDiscoveryCandidate::with(['sourceDevice', 'managedDevice'])
+                ->where(function ($query): void {
+                    $query->where('snmp_status', true)
+                        ->orWhereRaw(
+                            "NOT (JSON_LENGTH(source_methods) = 1 AND JSON_UNQUOTE(JSON_EXTRACT(source_methods, '$[0]')) = ?)",
+                            ['SNMP SCAN']
+                        );
+                })
                 ->latest('last_seen_at')->paginate(25, ['*'], 'candidates_page'),
             'scans' => DeviceDiscoveryScan::with('requester')->latest()->limit(25)->get(),
             'tasks' => OperationTask::with(['device', 'requester'])->latest()->limit(50)->get(),

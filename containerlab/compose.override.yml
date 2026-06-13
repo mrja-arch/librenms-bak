@@ -12,9 +12,12 @@ services:
     networks:
       default:
       campus-mgmt:
+  oxidized:
+    networks:
+      default:
+      campus-mgmt:
 
 networks:
   campus-mgmt:
     external: true
     name: campus-mgmt
-

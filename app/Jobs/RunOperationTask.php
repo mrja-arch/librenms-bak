@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use LibreNMS\Util\ModuleList;
 use RuntimeException;
 use Throwable;
@@ -30,7 +31,7 @@ class RunOperationTask implements ShouldQueue
     public function handle(DeviceIsPingable $ping): void
     {
         $task = OperationTask::with('device')->findOrFail($this->taskId);
-        $task->update(['status' => OperationTaskStatus::Running, 'started_at' => now()]);
+        $task->update(['status' => OperationTaskStatus::Running, 'started_at' => DB::scalar('SELECT CURRENT_TIMESTAMP')]);
 
         try {
             $type = OperationTaskType::from((string) $task->getRawOriginal('type'));
@@ -45,13 +46,13 @@ class RunOperationTask implements ShouldQueue
             $task->update([
                 'status' => OperationTaskStatus::Succeeded,
                 'output' => $output,
-                'completed_at' => now(),
+                'completed_at' => DB::scalar('SELECT CURRENT_TIMESTAMP'),
             ]);
         } catch (Throwable $e) {
             $task->update([
                 'status' => OperationTaskStatus::Failed,
                 'error' => $e->getMessage(),
-                'completed_at' => now(),
+                'completed_at' => DB::scalar('SELECT CURRENT_TIMESTAMP'),
             ]);
         }
     }
