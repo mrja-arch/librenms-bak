@@ -725,7 +725,7 @@
                                 <li><a href="{{ route('api-access.index') }}"><i class="fa fa-cog fa-fw fa-lg"
                                                                          aria-hidden="true"></i> {{ __('API Tokens') }}
                                     </a></li>
-                                <li><a href="https://docs.librenms.org/API/" target="_blank" rel="noopener"><i
+                                <li><a href="{{ route('help.topic', 'api') }}"><i
                                             class="fa fa-book fa-fw fa-lg" aria-hidden="true"></i> {{ __('API Docs') }}</a>
                                 </li>
                             </ul>

@@ -622,8 +622,11 @@ dashboards:
     - { Field: user_id, Type: 'int unsigned', 'Null': false, Extra: '', Default: '0' }
     - { Field: dashboard_name, Type: varchar(255), 'Null': false, Extra: '' }
     - { Field: access, Type: tinyint, 'Null': false, Extra: '', Default: '0' }
+    - { Field: built_in_key, Type: varchar(64), 'Null': true, Extra: '' }
+    - { Field: built_in_version, Type: 'int unsigned', 'Null': true, Extra: '' }
   Indexes:
     PRIMARY: { Name: PRIMARY, Columns: [dashboard_id], Unique: true, Type: BTREE }
+    dashboards_built_in_key_unique: { Name: dashboards_built_in_key_unique, Columns: [built_in_key], Unique: true, Type: BTREE }
 devices:
   Columns:
     - { Field: device_id, Type: 'int unsigned', 'Null': false, Extra: auto_increment }

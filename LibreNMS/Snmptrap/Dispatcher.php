@@ -49,7 +49,7 @@ class Dispatcher
             // Even the TrapOid is not properly converted to text, so snmptrapd is probably not
             // configured with any MIBs (-M and/or -m).
             // LibreNMS snmptraps code cannot process received data. Let's inform the user.
-            Eventlog::log('Misconfigured MIBS or MIBDIRS for snmptrapd, check https://docs.librenms.org/Extensions/SNMP-Trap-Handler/ : ' . $trap->raw, $trap->getDevice(), 'system');
+            Eventlog::log('Misconfigured MIBS or MIBDIRS for snmptrapd, check local help /help/huawei-mib : ' . $trap->raw, $trap->getDevice(), 'system');
 
             return false;
         }

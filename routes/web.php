@@ -21,6 +21,7 @@ use App\Http\Controllers\GraphController;
 use App\Http\Controllers\Install;
 use App\Http\Controllers\LegacyController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LocalHelpController;
 use App\Http\Controllers\Maps;
 use App\Http\Controllers\Maps\CustomMapBackgroundController;
 use App\Http\Controllers\Maps\CustomMapController;
@@ -80,6 +81,8 @@ use Illuminate\Support\Facades\Route;
 // Auth
 AuthFacade::routes(['register' => false, 'reset' => false, 'verify' => false]);
 
+Route::get('help/support', [LocalHelpController::class, 'publicSupport'])->name('help.public');
+
 // Socialite
 Route::prefix('auth')->name('socialite.')->group(function (): void {
     Route::post('{provider}/redirect', [SocialiteController::class, 'redirect'])->name('redirect');
@@ -94,6 +97,9 @@ Route::get('graph/{path?}', GraphController::class)
 // WebUI
 Route::middleware(['auth'])->group(function (): void {
     // pages
+    Route::get('help', [LocalHelpController::class, 'index'])->name('help.index');
+    Route::get('help/{topic}', [LocalHelpController::class, 'show'])
+        ->where('topic', '[a-z0-9-]+')->name('help.topic');
     Route::post('alert/{alert}/ack', [AlertController::class, 'ack'])->name('alert.ack');
     Route::resource('device-groups', DeviceGroupController::class);
     Route::any('inventory', App\Http\Controllers\InventoryController::class)->name('inventory');
@@ -430,6 +436,7 @@ Route::middleware(['auth'])->group(function (): void {
             Route::post('health-sensors', Widgets\HealthSensorsController::class);
             Route::post('placeholder', Widgets\PlaceholderController::class);
             Route::post('notes', Widgets\NotesController::class);
+            Route::post('operations-shortcuts', Widgets\OperationsShortcutsController::class);
             Route::post('server-stats', Widgets\ServerStatsController::class);
             Route::post('syslog', Widgets\SyslogController::class);
             Route::post('top-devices', Widgets\TopDevicesController::class);

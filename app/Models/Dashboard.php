@@ -11,7 +11,7 @@ class Dashboard extends Model
 {
     public $timestamps = false;
     protected $primaryKey = 'dashboard_id';
-    protected $fillable = ['user_id', 'dashboard_name', 'access'];
+    protected $fillable = ['user_id', 'dashboard_name', 'access', 'built_in_key', 'built_in_version'];
 
     // ---- Query scopes ----
 

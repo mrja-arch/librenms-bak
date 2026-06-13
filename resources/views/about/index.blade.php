@@ -69,9 +69,9 @@
             {{ __('Please feel free to join us and contribute code, documentation, and bug reports:') }}
             <br />
             <a target="_blank" href="https://www.librenms.org/">{{ __('Web site') }}</a> |
-            <a target="_blank" href="https://docs.librenms.org/">{{ __('Docs') }}</a> |
+            <a href="{{ route('help.index') }}">{{ __('Docs') }}</a> |
             <a target="_blank" href="https://github.com/librenms/">{{ __('GitHub') }}</a> |
-            <a target="_blank" href="https://community.librenms.org/c/help">{{ __('Bug tracker') }}</a> |
+            <a href="{{ route('help.public') }}">{{ __('Bug tracker') }}</a> |
             <a target="_blank" href="https://www.librenms.org/shop">{{ __('Merch Shop') }}</a> |
             <a target="_blank" href="https://community.librenms.org">{{ __('Community Forum') }}</a> |
             <a target="_blank" href="https://twitter.com/librenms">{{ __('Twitter') }}</a> |

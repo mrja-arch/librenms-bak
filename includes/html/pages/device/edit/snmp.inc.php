@@ -328,7 +328,7 @@ foreach (\LibreNMS\SNMPCapabilities::authAlgorithms() as $algo => $enabled) {
 echo '</select>';
 
 if (! \LibreNMS\SNMPCapabilities::supportsSHA2()) {
-    echo '<label class="text-left"><small>Some options are disabled. <a href="https://docs.librenms.org/Support/FAQ/#optional-requirements-for-snmpv3-sha2-auth">Read more here</a></small></label>';
+    echo '<label class="text-left"><small>Some options are disabled. <a href="' . route('help.topic', 'snmp') . '#snmpv3">Read more here</a></small></label>';
 }
 echo "
     </div>
@@ -350,7 +350,7 @@ foreach (\LibreNMS\SNMPCapabilities::cryptoAlgoritms() as $algo => $enabled) {
 echo '</select>
     ';
 if (! \LibreNMS\SNMPCapabilities::supportsAES256()) {
-    echo '<label class="text-left"><small>Some options are disabled. <a href="https://docs.librenms.org/Support/FAQ/#optional-requirements-for-snmpv3-sha2-auth">Read more here</a></small></label>';
+    echo '<label class="text-left"><small>Some options are disabled. <a href="' . route('help.topic', 'snmp') . '#snmpv3">Read more here</a></small></label>';
 }
     echo '
     </div>

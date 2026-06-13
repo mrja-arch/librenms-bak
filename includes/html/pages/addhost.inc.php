@@ -243,7 +243,7 @@ foreach (PortAssociationMode::getModes() as $mode) {
                   ?>
               </select>
               <?php if (! \LibreNMS\SNMPCapabilities::supportsSHA2()) {?>
-              <label class="text-left"><small><?= __('Some options are disabled.') ?> <a href="https://docs.librenms.org/Support/FAQ/#optional-requirements-for-snmpv3-sha2-auth"><?= __('Read more here') ?></a></small></label>
+              <label class="text-left"><small><?= __('Some options are disabled.') ?> <a href="<?= route('help.topic', 'snmp') ?>#snmpv3"><?= __('Read more here') ?></a></small></label>
               <?php } ?>
             </div>
           </div>
@@ -265,7 +265,7 @@ foreach (PortAssociationMode::getModes() as $mode) {
                   ?>
               </select>
               <?php if (! \LibreNMS\SNMPCapabilities::supportsAES256()) {?>
-              <label class="text-left"><small><?= __('Some options are disabled.') ?> <a href="https://docs.librenms.org/Support/FAQ/#optional-requirements-for-snmpv3-sha2-auth"><?= __('Read more here') ?></a></small></label>
+              <label class="text-left"><small><?= __('Some options are disabled.') ?> <a href="<?= route('help.topic', 'snmp') ?>#snmpv3"><?= __('Read more here') ?></a></small></label>
               <?php } ?>
             </div>
           </div>

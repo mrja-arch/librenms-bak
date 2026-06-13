@@ -21,7 +21,7 @@ use LibreNMS\Alert\Transport;
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h5 class="modal-title" id="Edit-transport"><?= __('Alert Transport') ?> :: <a target="_blank" href="https://docs.librenms.org/Alerting/"><?= __('Docs') ?> <i class="fa fa-book fa-1x"></i></a> </h5>
+                    <h5 class="modal-title" id="Edit-transport"><?= __('Alert Transport') ?> :: <a href="<?= route('help.topic', 'alerting') ?>#通知方式"><?= __('Docs') ?> <i class="fa fa-book fa-1x"></i></a> </h5>
                 </div>
                 <div class="modal-body">
                     <form method="post" role="form" id="transports" class="form-horizontal transports-form">

@@ -11,6 +11,7 @@ WORKDIR /opt/librenms
 # Keep Docker-runtime configuration outside the Git source replacement.
 RUN cp /opt/librenms/.env /tmp/librenms-runtime.env \
     && cp /opt/librenms/config.php /tmp/librenms-runtime-config.php \
+    && cp -a /opt/librenms/vendor /tmp/librenms-vendor \
     && rm -rf /opt/librenms
 COPY --chown=librenms:librenms . /opt/librenms
 
@@ -26,6 +27,8 @@ RUN find /opt/librenms -type f -exec sh -c '\
         storage/framework/sessions \
         storage/framework/views \
         storage/logs \
+    && rm -rf /opt/librenms/vendor \
+    && mv /tmp/librenms-vendor /opt/librenms/vendor \
     && cp /tmp/librenms-runtime.env /opt/librenms/.env \
     && cp /tmp/librenms-runtime-config.php /opt/librenms/config.php \
     && chown -R librenms:librenms /opt/librenms

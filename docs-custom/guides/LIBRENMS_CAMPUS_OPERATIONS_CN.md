@@ -864,3 +864,50 @@ Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php validate.php"
 Invoke-Expression "$dc logs --tail 300 operations-worker dispatcher snmptrapd"
 Invoke-Expression "$dc exec -T librenms s6-setuidgid librenms php artisan maintenance:cleanup-topology-diagnostics"
 ```
+
+## 22. 内置园区运维总览与本地帮助
+
+### 22.1 园区运维总览
+
+系统内置共享只读 Dashboard“园区运维总览”，并将其设置为全局默认。用户已经设置的个人默认 Dashboard 优先级更高，不会被全局默认覆盖。
+
+默认组件包括：
+
+- 常用功能快捷入口；
+- 设备与端口汇总；
+- 设备可用性地图；
+- 当前告警；
+- 最近事件；
+- 流量最高接口；
+- 轮询耗时最高设备。
+
+普通用户可以查看或复制共享模板，但不能直接修改模板。管理员可以维护模板。复制出的个人 Dashboard 不带内置模板标识，后续模板升级不会覆盖个人副本。
+
+内置模板使用 `dashboards.built_in_key=campus-operations` 标识，并通过 `built_in_version` 控制升级。初始化服务可重复执行；同一版本不会重复创建 Dashboard 或组件。模板版本提升时只同步内置共享模板。
+
+### 22.2 常用功能权限
+
+快捷入口根据当前账号权限动态显示。普通用户可以看到设备、端口、拓扑、自动发现、运维任务、告警、事件、轮询器、Oxidized 和本地帮助。全局设置、配置检验、已发现链路管理和诊断收集仅向管理员显示。
+
+### 22.3 本地中文帮助中心
+
+登录后访问 `/help`。帮助中心只搜索仓库内白名单文档，不访问互联网，也不允许通过 URL 读取任意文件。
+
+未登录时只开放 `/help/support`，内容不包含实验地址、凭据和内部目录。完整园区运维、设备纳管、Huawei MIB、告警、API、SNMP、轮询器和数据库文档必须登录后查看。
+
+业务页面中的文档入口均指向本地帮助主题。官方英文文档只在帮助中心页脚作为可选外部参考。
+
+### 22.4 升级后检查
+
+```powershell
+$dc = "docker compose -f docker/compose.yml -f containerlab/compose.override.yml"
+Invoke-Expression "$dc exec -T -u librenms librenms php artisan migrate:status"
+Invoke-Expression "$dc exec -T -u librenms librenms php validate.php -g database"
+```
+
+确认数据库存在且仅存在一个 `built_in_key=campus-operations` 的 Dashboard，并且组件数为 7：
+
+```powershell
+$sql = "SELECT dashboard_id,dashboard_name,built_in_version,(SELECT COUNT(*) FROM users_widgets w WHERE w.dashboard_id=d.dashboard_id) widget_count FROM dashboards d WHERE built_in_key='campus-operations';"
+Invoke-Expression "$dc exec -T db mariadb -ulibrenms -plibrenms librenms -e `"$sql`""
+```

@@ -30,7 +30,7 @@ $default_invert_map = LibrenmsConfig::get('alert_rule.invert_map');
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h5 class="modal-title" id="Create"><?= __('Alert Rule') ?> :: <a target="_blank" href="https://docs.librenms.org/Alerting/"><i class="fa fa-book fa-1x"></i> <?= __('Docs') ?></a> </h5>
+                    <h5 class="modal-title" id="Create"><?= __('Alert Rule') ?> :: <a href="<?= route('help.topic', 'alerting') ?>#告警规则"><i class="fa fa-book fa-1x"></i> <?= __('Docs') ?></a> </h5>
                 </div>
                 <div class="modal-body">
                     <ul class="nav nav-tabs" role="tablist">

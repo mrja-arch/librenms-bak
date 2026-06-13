@@ -31,6 +31,7 @@ use App\Models\Dashboard;
 use App\Models\User;
 use App\Models\UserPref;
 use App\Models\UserWidget;
+use App\Services\BuiltInDashboardService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -60,6 +61,9 @@ class DashboardController extends Controller
         ]);
 
         $user = $request->user();
+        if ($user->can('admin')) {
+            app(BuiltInDashboardService::class)->ensure($user);
+        }
         $dashboards = $this->getAvailableDashboards($user);
 
         // specific dashboard
@@ -208,6 +212,8 @@ class DashboardController extends Controller
         $dashboard_copy = $dashboard->replicate()->fill([
             'user_id' => $target_user_id,
             'dashboard_name' => $dashboard->dashboard_name . '_' . Auth::user()->username,
+            'built_in_key' => null,
+            'built_in_version' => null,
         ]);
 
         if ($dashboard_copy->save()) {

@@ -33,7 +33,26 @@ class ValidateController extends Controller
         $validator = new Validator();
         $validator->validate($group ? [$group] : []);
 
-        return response()->json($validator->toArray());
+        $results = $validator->toArray();
+        array_walk_recursive($results, function (&$value): void {
+            if (! is_string($value)) {
+                return;
+            }
+
+            $value = str_replace(
+                [
+                    'https://community.librenms.org/t/new-default-database-charset-collation/14956',
+                    'https://docs.librenms.org/Installation/Install-LibreNMS/#configure-php-fpm',
+                ],
+                [
+                    route('help.topic', 'database') . '#字符集与排序规则',
+                    route('help.public') . '#文件权限或空白页面',
+                ],
+                $value
+            );
+        });
+
+        return response()->json($results);
     }
 
     public function runFixer(Request $request): JsonResponse

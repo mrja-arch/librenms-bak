@@ -17,7 +17,7 @@
 <div class="row">
     <div class="col-sm-12">
 <?php
-print_error('Documentation for the API is available <a href="https://docs.librenms.org/API/" target="_blank" rel="noopener">here</a>.');
+print_error('API 使用说明请查看<a href="' . route('help.topic', 'api') . '">本地中文帮助</a>。');
 ?>
     </div>
 </div>
